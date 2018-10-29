@@ -1,0 +1,34 @@
+[user]
+	email = chrisc@fugue.co
+	name = Chris Clark
+[core]
+	editor = emacs
+	excludesfile = $HOME/.gitignore_global
+[help]
+	autocorrect = 1
+[color]
+	ui = auto
+[push]
+	default = simple
+[merge]
+	tool = emerge
+[diff]
+	compactionHeuristic = true
+[url "git@luminal:LuminalHQ"]
+	insteadOf = https://github.com/LuminalHQ
+[url "git@luminal:LuminalHQ"]
+	insteadOf = git@github.com:LuminalHQ
+[url "git@luminal:Rac84476"]
+	insteadOf = https://github.com/Rac84476
+[url "git@luminal:Rac84476"]
+	insteadOf = git@github.com:Rac84476
+[url "git@luminal"]
+	insteadOf = git@gist.github.com
+[url "git@luminal:Fugue-QA"]
+	insteadOf = https://github.com/Fugue-QA
+[url "git@luminal:Fugue-QA"]
+	insteadOf = git@github.com:Fugue-QA
+[url "git@luminal:fugue"]
+	insteadOf = git@github.com:fugue
+[url "git@luminal:fugue"]
+	insteadOf = https://github.com/fugue
