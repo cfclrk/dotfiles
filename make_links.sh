@@ -2,6 +2,11 @@
 
 set -eu -o pipefail
 
+# Update emacs Prelude
+cd ~/.emacs.d/
+git pull
+
+# Ensure dotfiles project exists
 DOTFILES_DIR=$HOME/Projects/dotfiles
 cd "$DOTFILES_DIR"
 
