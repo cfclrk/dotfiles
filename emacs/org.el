@@ -1,8 +1,6 @@
 (require 'org)
 (require 'prelude-org)
 
-(prelude-require-packages '(org-tree-slide))
-
 (with-eval-after-load "org-tree-slide"
   (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
   (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree))
@@ -48,10 +46,6 @@
 
   (require 'org-bullets)
   (org-bullets-mode 1)
-
-  ;; org-tree-slide
-  (define-key org-mode-map (kbd "<f8>") 'org-tree-slide-mode)
-  (define-key org-mode-map (kbd "S-<f8>") 'org-tree-slide-skip-done-toggle)
 
   ;; babel
   (setq org-export-babel-evaluate nil)

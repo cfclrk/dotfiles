@@ -1,5 +1,3 @@
-Notes
-
 tmux
 ----
 
