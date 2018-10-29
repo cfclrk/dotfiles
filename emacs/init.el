@@ -164,6 +164,14 @@
 
 (add-hook 'clojure-mode-hook 'my-clojure-mode-hook)
 
+;; Elisp
+;; -----
+
+(defun my-emacs-lisp-mode-hook ()
+  (setq sentence-end-double-space nil))
+
+(add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
+
 ;; Fish
 ;; ----
 
