@@ -82,9 +82,6 @@ function npmex --description "Run a command with node_modules/.bin in the PATH"
 end
 
 
-alias gotestpkg="go test ./..."
-
-
 function godocwkspc --description 'Serve godoc http for the current Go workspace'
 
     for p in (string split : (go env GOPATH))
