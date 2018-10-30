@@ -94,7 +94,7 @@
   (message (buffer-file-name)))
 
 ;; C-c z to see full path of file in the current buffer
-(global-set-key (kbd "C-c z") 'show-buffer-file-name)
+(global-set-key (kbd "C-c z") 'cfc/show-buffer-file-name)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Display
