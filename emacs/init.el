@@ -83,16 +83,17 @@
 ;;; Useful functions
 ;;; ----------------------------------------------------------------------------
 
-;; kill all buffers other than current buffer
-(defun only-current-buffer ()
+(defun cfc/kill-all-other-buffers ()
+  "Kill all buffers other than current buffer."
   (interactive)
   (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
 
-;; C-c z to see full path of file in the current buffer
-(defun show-buffer-file-name ()
-  "Show the full path to the file in this buffer"
+(defun cfc/show-buffer-file-name ()
+  "Show the full path to the file in this buffer."
   (interactive)
   (message (buffer-file-name)))
+
+;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'show-buffer-file-name)
 
 ;;; ----------------------------------------------------------------------------
@@ -228,7 +229,7 @@
 
 (defun my-python-mode-hook ()
   (setq fill-column 110
-        whitespace-line-column 100  ;; bug with whitespace mode
+        whitespace-line-column 110  ;; bug with whitespace mode not using fill-column
         python-fill-docstring-style 'django
         python-shell-interpreter "ipython"
         python-shell-interpreter-args "--simple-prompt -i"))
