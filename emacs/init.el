@@ -55,6 +55,24 @@
 ;; C-c d to open dired for the current directory
 (define-key prelude-mode-map (kbd "C-c d") 'dired-jump)
 
+
+;;; ----------------------------------------------------------------------------
+;;; Font
+;;; ----------------------------------------------------------------------------
+
+(set-face-attribute 'default nil
+                    :family "Source Code Pro"
+                    :height 110
+                    :weight 'normal
+                    :width 'normal)
+
+(set-face-attribute 'mode-line nil :height 130)
+
+(when window-system
+  (if (> (x-display-pixel-width) 1600)
+      (set-face-attribute 'default nil :height 130)))
+
+
 ;;; ----------------------------------------------------------------------------
 ;;; Packages
 ;;; ----------------------------------------------------------------------------
@@ -102,15 +120,6 @@
 
 ;; Remove some UI features
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-
-;; Default font size. Point value is x/10 so 100 = 10pt font, etc
-(set-face-attribute 'default nil :height 110)
-(set-face-attribute 'mode-line nil :height 130)
-
-;; Use a bigger font on big screens
-(when window-system
-  (if (> (x-display-pixel-width) 1600)
-      (set-face-attribute 'default nil :height 130)))
 
 ;; Render ^L (page break) as a nice line across the buffer
 (global-page-break-lines-mode)
