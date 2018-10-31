@@ -67,12 +67,19 @@ function export_aws --description 'Extract credentials from ~/.aws/credentials a
     end
 end
 
+
 function clear_aws
     set -e AWS_ACCESS_KEY_ID
     set -e AWS_SECRET_ACCESS_KEY
     set -e AWS_DEFAULT_REGION
     set -e AWS_DEFAULT_PROFILE
     set -e AWS_PROFILE
+end
+
+
+function myip --description "What is my ip address?"
+    # Another good one with a little more info is ifconfig.co
+    curl https://checkip.amazonaws.com/
 end
 
 
