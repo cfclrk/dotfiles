@@ -42,8 +42,7 @@ function fish_prompt --description 'Defines the prompt'
     "$__fish_prompt_normal"
 end
 
-
-function man --description 'wrapper for man'
+function man --description 'Colorize man'
     set -x LESS_TERMCAP_md (set_color -o red)
     set -x LESS_TERMCAP_us (set_color -o magenta)
     set -x LESS_TERMCAP_ue (set_color normal)
@@ -51,22 +50,9 @@ function man --description 'wrapper for man'
     env man $argv
 end
 
-
-function ssh_decrypt --description 'decrypt password-protected ssh key IN and write to OUT'
+function ssh_decrypt --description 'Decrypt password-protected ssh key'
     openssl rsa -in $argv[1] -out $argv[2]
 end
-
-
-function export_aws --description 'Extract credentials from ~/.aws/credentials and export them as env vars'
-    set profile "\[$argv[1]\]"
-    set creds (grep "\[chrisc\]" -A 3 ~/.aws/credentials | tail -n 3 | string match -r '.+' | string trim | string split = | string trim)
-    set -gx (echo $creds[1] | tr '[:lower:]' '[:upper:]') (echo $creds[2])
-    set -gx (echo $creds[3] | tr '[:lower:]' '[:upper:]') (echo $creds[4])
-    if count $creds == 6
-        set -gx (echo $creds[5] | tr '[:lower:]' '[:upper:]') (echo $creds[6])
-    end
-end
-
 
 function clear_aws
     set -e AWS_ACCESS_KEY_ID
@@ -76,23 +62,18 @@ function clear_aws
     set -e AWS_PROFILE
 end
 
-
 function myip --description "What is my ip address?"
     # Another good one with a little more info is ifconfig.co
     curl https://checkip.amazonaws.com/
 end
-
 
 function npmex --description "Run a command with node_modules/.bin in the PATH"
     set -lx PATH (npm bin) $PATH
     eval $argv
 end
 
-
 function godocwkspc --description 'Serve godoc http for the current Go workspace'
-
     for p in (string split : (go env GOPATH))
-
         if string match --regex $p* (pwd)
             echo "Current Go workspace is: $p"
             echo "Visit: http://localhost:8000/pkg/"
