@@ -92,6 +92,7 @@
                             markdown-mode
                             org-bullets
                             page-break-lines
+                            powershell
                             racket-mode
                             restclient
                             toml-mode
