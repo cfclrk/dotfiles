@@ -18,12 +18,6 @@
 	insteadOf = https://github.com/LuminalHQ
 [url "git@luminal:LuminalHQ"]
 	insteadOf = git@github.com:LuminalHQ
-[url "git@luminal:Rac84476"]
-	insteadOf = https://github.com/Rac84476
-[url "git@luminal:Rac84476"]
-	insteadOf = git@github.com:Rac84476
-[url "git@luminal"]
-	insteadOf = git@gist.github.com
 [url "git@luminal:Fugue-QA"]
 	insteadOf = https://github.com/Fugue-QA
 [url "git@luminal:Fugue-QA"]
@@ -32,3 +26,12 @@
 	insteadOf = git@github.com:fugue
 [url "git@luminal:fugue"]
 	insteadOf = https://github.com/fugue
+
+##### Gists ######
+# Figure something out here. For now, uncomment one or the other
+
+# [url "git@luminal"]
+# 	insteadOf = git@gist.github.com
+
+[url "git@github.com"]
+	insteadOf = git@gist.github.com
