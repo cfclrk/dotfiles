@@ -3,7 +3,7 @@
 	name = Chris Clark
 [core]
 	editor = emacs
-	excludesfile = $HOME/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [help]
 	autocorrect = 1
 [color]

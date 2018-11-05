@@ -16,6 +16,7 @@ dot_files=(".bash_logout"
            ".functions.fish"
            ".functions.sh"
            ".gitconfig"
+           ".gitignore_global"
            ".profile"
            ".tmux.conf"
            ".vimrc")
