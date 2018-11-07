@@ -32,13 +32,14 @@
 (setq custom-file (expand-file-name "personal/custm.el" user-emacs-directory))
 (load custom-file)
 
-(setq-default fill-column 80)      ; default line length for text wrapping
+(setq-default fill-column 80)      ; Default line length for text wrapping
 
-(setq mark-ring-max 10             ; num items to keep in mark ring
-      toggle-debug-on-error t      ; show stack trace on any Emacs error
-      ns-pop-up-frames nil         ; don't open files in new frame
-      whitespace-line-column nil   ; ensure whitespace-mode uses fill-column
-      prelude-tips nil)            ; don't show prelude tips at startup
+(setq mark-ring-max 10             ; Num items to keep in mark ring
+      toggle-debug-on-error t      ; Show stack trace on any Emacs error
+      ns-pop-up-frames nil         ; Don't open files in new frame
+      whitespace-line-column nil   ; Ensure whitespace-mode uses fill-column
+      prelude-guru nil             ; Turn off little how-to-use-emacs tips
+      prelude-tips nil)            ; Don't show prelude tips at startup
 
 ;; cmd as meta and alt as super on MacOS
 (when (eq system-type 'darwin)
@@ -62,12 +63,14 @@
 
 (set-face-attribute 'default nil
                     :family "Source Code Pro"
-                    :height 110
+                    :height 120
                     :weight 'normal
                     :width 'normal)
 
+;; Use a larger font in the mode line
 (set-face-attribute 'mode-line nil :height 130)
 
+;; Use a larger font on huge monitors
 (when window-system
   (if (> (x-display-pixel-width) 1600)
       (set-face-attribute 'default nil :height 130)))
@@ -334,8 +337,3 @@
 
 ;; org mode config
 (load-file (expand-file-name "personal/org.el" user-emacs-directory))
-
-
-;; Local Variables:
-;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
-;; End:
