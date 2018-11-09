@@ -70,6 +70,21 @@ function tmuxinit --description 'Initialize tmux'
     tmux new-window -dk -n chrisc-alt -t 4
 end
 
+function kvAll --description 'All keyvault keys and secrets'
+    set secretIds (az keyvault secret list --vault-name $argv[1] --query "[].id" -o tsv)
+    for i in $secretIds
+        set val (az keyvault secret show --id $i --query "value" -o tsv)
+        echo ""
+        echo $i
+        printf "%b\n" "$val"
+    end
+end
+
+function rand --description 'Some ways to create a decent random string'
+    openssl rand -base64 32
+    ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'
+end
+
 function ssh_decrypt --description 'Decrypt password-protected ssh key'
     openssl rsa -in $argv[1] -out $argv[2]
 end
