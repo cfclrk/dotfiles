@@ -30,3 +30,5 @@ ln -svf "$DOTFILES_DIR/.config/fish/config.fish" "$HOME/.config/fish/config.fish
 ln -svf "$DOTFILES_DIR/emacs/init.el" "$HOME/.emacs.d/personal/init.el"
 
 ln -svf "$DOTFILES_DIR/emacs/org.el" "$HOME/.emacs.d/personal/org.el"
+
+ln -svf "$DOTFILES_DIR/.ssh/config" "$HOME/.ssh/config"
