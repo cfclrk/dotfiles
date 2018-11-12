@@ -156,11 +156,14 @@
         ("magit.*: " display-buffer-use-some-window)
         ("\\*Python\\*" display-buffer-same-window)
         ("\\*Help\\*" display-buffer-same-window)
-        ("\\*Occur\\*" display-buffer-same-window)
         ("\\*.el.gz" display-buffer-same-window)
         ;("\\*go-guru-output\\*" display-buffer-same-window)
         ("\\*Go .*" display-buffer-same-window)
         ("\\*godoc .*" display-buffer-same-window)))
+
+(add-hook 'occur-hook
+          '(lambda ()
+             (switch-to-buffer-other-window "*Occur*")))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Programming languages
