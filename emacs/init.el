@@ -83,7 +83,8 @@
 ;; Packages to install in addition to those already defined in prelude-packages
 ;; and in each prelude language module at the head of this file.
 
-(prelude-require-packages '(clj-refactor
+(prelude-require-packages '(bats-mode
+                            clj-refactor
                             csv-mode
                             dockerfile-mode
                             exec-path-from-shell
