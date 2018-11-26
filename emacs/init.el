@@ -177,9 +177,9 @@
 (setq cider-repl-use-pretty-printing t)
 
 (defun my-clojure-mode-hook ()
+  "Customize clojure-mode."
   (clj-refactor-mode 1)
-  (yas-minor-mode 1) ; for adding require/use/import statements
-  ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+  (yas-minor-mode 1)
   (cljr-add-keybindings-with-prefix "C-c C-m"))
 
 (add-hook 'clojure-mode-hook 'my-clojure-mode-hook)
@@ -188,6 +188,7 @@
 ;; -----
 
 (defun my-emacs-lisp-mode-hook ()
+  "Customize emacs-lisp mode."
   (setq sentence-end-double-space nil))
 
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
