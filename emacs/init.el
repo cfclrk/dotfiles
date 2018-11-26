@@ -201,10 +201,14 @@
 ;; ------
 
 (defun my-go-mode-hook ()
+  "Customize go-mode."
+
   (setq tab-width 4
         fill-column 80
         go-test-args "-v"
         company-mode t)
+
+  (global-set-key (kbd "M-.") 'godef-jump-other-window)
 
   ;; Don't highlight lines longer than fill-column
   ;; Mnually toggle with "M-x whitespace-toggle-options L"
