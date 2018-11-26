@@ -120,7 +120,7 @@
 (global-set-key (kbd "C-c z") 'cfc/show-buffer-file-name)
 
 ;;; ----------------------------------------------------------------------------
-;;; Display
+;;; Cosmetics
 ;;; ----------------------------------------------------------------------------
 
 ;; Remove some UI features
@@ -164,6 +164,8 @@
 (add-hook 'occur-hook
           '(lambda ()
              (switch-to-buffer-other-window "*Occur*")))
+
+(setq split-height-threshold 100)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Programming languages
