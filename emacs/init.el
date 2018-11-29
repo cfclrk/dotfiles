@@ -41,7 +41,7 @@
       prelude-guru nil             ; Turn off little how-to-use-emacs tips
       prelude-tips nil)            ; Don't show prelude tips at startup
 
-;; cmd as meta and alt as super on MacOS
+;; ⌘ as Meta and ⎇ as Super on MacOS
 (when (eq system-type 'darwin)
   (setq ns-command-modifier 'meta
         ns-alternate-modifier 'super))
@@ -63,7 +63,7 @@
 
 (set-face-attribute 'default nil
                     :family "Source Code Pro"
-                    :height 120
+                    :height 110
                     :weight 'normal
                     :width 'normal)
 
@@ -100,6 +100,7 @@
                             racket-mode
                             restclient
                             toml-mode
+                            visual-fill-column
                             yapfify))
 
 ;;; ----------------------------------------------------------------------------
@@ -114,7 +115,8 @@
 (defun cfc/show-buffer-file-name ()
   "Show the full path to the file in this buffer."
   (interactive)
-  (message (buffer-file-name)))
+  (message (buffer-file-name))
+  (kill-new (buffer-file-name)))
 
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'cfc/show-buffer-file-name)
