@@ -56,6 +56,8 @@
 ;; C-c d to open dired for the current directory
 (define-key prelude-mode-map (kbd "C-c d") 'dired-jump)
 
+;; M-o to run occur
+(define-key prelude-mode-map (kbd "M-o") 'occur)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Font
