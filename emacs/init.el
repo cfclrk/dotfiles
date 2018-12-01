@@ -174,6 +174,29 @@
 (setq split-height-threshold 100)
 
 ;;; ----------------------------------------------------------------------------
+;;; Scratch text buffer (WIP)
+;;; ----------------------------------------------------------------------------
+
+;; Keybinding/function to create a *scratch-text* buffer, not backed by a file
+
+;; Make C-a and C-e go to beginning/end of visual line instead of beginning of
+;; actual line
+
+;; Spell check
+
+;; Thesaurus for word at point
+
+(defun my-visual-line-mode-hook ()
+  "Set options suitable for writing without newlines."
+  (visual-fill-column-mode)
+
+  ;; not sure of a way to explicitly disable
+  ;; whitespace mode, only toggle it
+  (whitespace-mode 'toggle))
+
+(add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
+
+;;; ----------------------------------------------------------------------------
 ;;; Programming languages
 ;;; ----------------------------------------------------------------------------
 
