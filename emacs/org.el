@@ -1,9 +1,7 @@
 (require 'org)
 (require 'prelude-org)
 
-(with-eval-after-load "org-tree-slide"
-  (define-key org-tree-slide-mode-map (kbd "<f9>") 'org-tree-slide-move-previous-tree)
-  (define-key org-tree-slide-mode-map (kbd "<f10>") 'org-tree-slide-move-next-tree))
+(prelude-require-packages '(htmlize))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Global org settings
