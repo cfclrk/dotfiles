@@ -25,6 +25,14 @@
 (require 'prelude-yaml)
 
 ;;; ----------------------------------------------------------------------------
+;;; TODO
+;;; ----------------------------------------------------------------------------
+
+;; A Keybinding and function preview current markdown file in browser.
+;; Just a passthrough to grip (brew install grip) that errors out nicely if
+;; grip is not installed
+
+;;; ----------------------------------------------------------------------------
 ;;; General
 ;;; ----------------------------------------------------------------------------
 
