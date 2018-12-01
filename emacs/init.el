@@ -65,7 +65,7 @@
 
 (set-face-attribute 'default nil
                     :family "Source Code Pro"
-                    :height 110
+                    :height 100
                     :weight 'normal
                     :width 'normal)
 
@@ -115,7 +115,9 @@
   (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
 
 (defun cfc/show-buffer-file-name ()
-  "Show the full path to the file in this buffer."
+  "Copy and display the full path to the current file.
+
+  You can also do this with \\[easy-kill-on-buffer-file-name] (M-w b)"
   (interactive)
   (message (buffer-file-name))
   (kill-new (buffer-file-name)))
