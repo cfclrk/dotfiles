@@ -17,10 +17,8 @@
 (require 'prelude-js)
 (require 'prelude-lisp)
 (require 'prelude-python)
-(require 'prelude-ruby)
 (require 'prelude-rust)
 (require 'prelude-shell)
-(require 'prelude-scss)
 (require 'prelude-xml)
 (require 'prelude-yaml)
 
