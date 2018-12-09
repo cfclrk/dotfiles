@@ -10,13 +10,12 @@ PATH=$PATH:$HOME/.cask/bin
 PATH=$PATH:$HOME/.cargo/bin
 
 # golang
-export GOPATH=$HOME/go
-PATH=$GOPATH/bin:$PATH
+PATH=$(go env GOPATH)/bin:$PATH
 
 # ludwig
 export LUDWIG_PATH=lib:compositions
 
-if $(which pyenv > /dev/null); then
+if which pyenv > /dev/null; then
    eval "$(pyenv init -)"
    eval "$(pyenv virtualenv-init -)"
 fi
