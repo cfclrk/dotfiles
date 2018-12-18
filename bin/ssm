@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+
+set -eu -o pipefail
+
+showHelp() {
+    cat <<- END
+Usage: $(basename "$0") <command> [<name> [<value>]]
+
+AWS SSM easy wrapper
+
+Commands:
+  ls      List secrets
+  get     Get value for given key
+  put     Create new secret
+  rm      Remove secret
+  update  Update existing secret value
+
+The value for 'put' and 'update' may use 'file://...' syntax to read file
+contents. This is the recommended way of uploading private keys.
+END
+}
+
+printAccountInfo() {
+    ac=$($aws sts get-caller-identity --query Account --output text) || exit
+    alias=$($aws iam list-account-aliases --query AccountAliases --output text)
+    echo "account=$ac region=$region alias=$alias"
+    echo ""
+}
+
+while getopts :hr:p: arg; do
+    case ${arg} in
+        h)
+            showHelp
+            exit 0
+            ;;
+        r)
+            region="$OPTARG"
+            ;;
+        p)
+            profile="$OPTARG"
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            exit 1
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument" >&2
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND -1))
+
+# Defaults
+profile=${profile:="qa-infra"}
+region=${region:="us-east-1"}
+
+aws="aws --profile $profile --region $region"
+printAccountInfo
+
+cmd=${1-}
+name=${2-}
+value=${3-}
+
+ssm="$aws ssm"
+key=alias/aws/ssm
+
+case $cmd in
+    ls|list)
+        filter="Key=KeyId,Values=$key"
+        $ssm describe-parameters --parameter-filters $filter |
+            jq -r ".Parameters[].Name"
+        ;;
+    rm)
+        $ssm delete-parameter --name "$name"
+        ;;
+    get)
+        $ssm get-parameter --with-decryption --name "$name"
+        ;;
+    put|update)
+        mode=--no-overwrite
+        test "$cmd" = update && mode=--overwrite
+        $ssm put-parameter \
+             --name "$name" \
+             --value "$value" \
+             --type SecureString \
+             --key-id $key \
+             $mode
+        ;;
+    *)
+        showHelp
+        ;;
+esac

@@ -37,7 +37,8 @@ ln -svf "$DOTFILES_DIR/emacs/org.el" "$HOME/.emacs.d/personal/org.el"
 ln -svf "$DOTFILES_DIR/.ssh/config" "$HOME/.ssh/config"
 
 # Link to all executables in bin/ from $HOME/bin/
-script_files=("tmuxinit.sh")
+script_files=("tmuxinit.sh"
+              "ssm")
 for f in ${script_files[*]}; do
     ln -svf "$DOTFILES_DIR/bin/$f" "$HOME/bin/$f"
 done
