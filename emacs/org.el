@@ -4,8 +4,6 @@
 (prelude-require-packages '(htmlize))
 
 ;;; ----------------------------------------------------------------------------
-;;; Global org settings
-;;; ----------------------------------------------------------------------------
 
 ;; I have keep some configuration defined globally (instead of inside
 ;; my-org-mode-hook) because of how org-mode caches some settings.

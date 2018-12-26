@@ -209,7 +209,8 @@
 (setq cider-repl-use-pretty-printing t)
 
 (defun my-clojure-mode-hook ()
-  "Customize clojure-mode."
+  "Customize `clojure-mode'."
+
   (clj-refactor-mode 1)
   (yas-minor-mode 1)
   (cljr-add-keybindings-with-prefix "C-c C-m"))
@@ -221,6 +222,7 @@
 
 (defun my-emacs-lisp-mode-hook ()
   "Customize emacs-lisp mode."
+
   (setq sentence-end-double-space nil))
 
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
@@ -234,7 +236,7 @@
 ;; ------
 
 (defun my-go-mode-hook ()
-  "Customize go-mode."
+  "Customize `go-mode'."
 
   (setq tab-width 4
         fill-column 80
@@ -284,6 +286,8 @@
 (require 'flycheck-mypy)  ; use with M-x flycheck-select-checker
 
 (defun my-python-mode-hook ()
+  "Customize `python-mode'."
+
   (setq fill-column 110
         whitespace-line-column 110  ;; bug with whitespace mode not using fill-column
         python-fill-docstring-style 'django
