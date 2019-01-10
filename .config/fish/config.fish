@@ -1,7 +1,10 @@
-if status is-interactive
-and not set -q TMUX
-
+if not set -q TMUX
     set -gx EDITOR emacs
+
+    # Removed the following entries from /etc/paths because of
+    # https://github.com/fish-shell/fish-shell/pull/4852:
+    # /usr/local/bin /usr/bin /bin /usr/sbin /sbin $PATH
+    set PATH /usr/local/bin $PATH
 
     # PATH
     set PATH $PATH $HOME/bin
@@ -11,10 +14,11 @@ and not set -q TMUX
         set PATH $PATH $i/bin
     end
 
-    # jenv (java version management)
-    #source (jenv init - | psub)
+    # pyenv
+    source (pyenv init - | psub)
+    source (pyenv virtualenv-init - | psub)
 
-    # pyinstaller config
+    # pyinstaller
     set os (uname)
     switch $os
         case Darwin
@@ -22,17 +26,6 @@ and not set -q TMUX
         case '*'
             echo "Yo you need to set PYTHON_CONFIGURE_OPTS"
     end
-end
-
-if status --is-interactive
-    # pyenv (python version management). I used to have this in the "and not set
-    # -q TMUX" block, but that was broken by some updates for path_helper
-    # (https://github.com/fish-shell/fish-shell/pull/4852). Now that fish
-    # prepends shit to $PAH in every new subshell, I need to force pyenv stuff
-    # to come first in every new subshell. And UGGGH, it takes looonger to
-    # initilze a bunch of shells now!
-    source (pyenv init - | psub)
-    source (pyenv virtualenv-init - | psub)
 end
 
 alias emacs "/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
