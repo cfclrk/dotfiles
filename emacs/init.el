@@ -290,9 +290,7 @@
 
   (setq fill-column 110
         whitespace-line-column 110  ;; bug with whitespace mode not using fill-column
-        python-fill-docstring-style 'django
-        python-shell-interpreter "ipython"
-        python-shell-interpreter-args "--simple-prompt -i"))
+        python-fill-docstring-style 'django))
 
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 
