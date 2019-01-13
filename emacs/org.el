@@ -1,5 +1,6 @@
 (require 'org)
 (require 'prelude-org)
+(require 'org-tempo)
 
 (prelude-require-packages '(htmlize))
 
