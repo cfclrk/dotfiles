@@ -68,7 +68,7 @@
 
 (set-face-attribute 'default nil
                     :family "Source Code Pro"
-                    :height 100
+                    :height 110
                     :weight 'normal
                     :width 'normal)
 
@@ -163,12 +163,12 @@
       '(("\\*compilation\\*" display-buffer-same-window)
         ("\\*cider.*" display-buffer-use-some-window)
         ("magit.*: " display-buffer-use-some-window)
-        ("\\*Python\\*" display-buffer-same-window)
+        ("\\*Python\\*" display-buffer-use-some-window)
         ("\\*Help\\*" display-buffer-same-window)
         ("\\*.el.gz" display-buffer-same-window)
         ;("\\*go-guru-output\\*" display-buffer-same-window)
         ("\\*Go .*" display-buffer-same-window)
-        ("\\*godoc .*" display-buffer-same-window)))
+        ("\\*godoc*" display-buffer-same-window)))
 
 (add-hook 'occur-hook
           '(lambda ()
@@ -321,7 +321,7 @@
 (add-to-list 'auto-mode-alist '("credentials\\'" . conf-mode))
 
 ;; dired
-(define-key prelude-mode-map (kbd "C-c d") 'dired-jump)
+(define-key prelude-mode-map (kbd "C-c d") 'dired-jump-other-window)
 (setq dired-dwim-target t
       dired-listing-switches "-alh")
 
