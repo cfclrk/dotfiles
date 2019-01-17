@@ -2,7 +2,9 @@
 
 set -eu -o pipefail
 
-# Update emacs Prelude
+# Install or update emacs Prelude
+# Check if .emacs.d exists and get remote points to prelude.
+# If yes:
 cd ~/.emacs.d/
 git pull
 

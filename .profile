@@ -21,5 +21,3 @@ if which pyenv > /dev/null; then
 fi
 
 . ~/.bashrc
-
-export PATH="$HOME/.cargo/bin:$PATH"

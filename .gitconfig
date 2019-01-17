@@ -30,8 +30,10 @@
 ##### Gists ######
 # Figure something out here. For now, uncomment one or the other
 
-# [url "git@luminal"]
-# 	insteadOf = git@gist.github.com
-
-[url "git@github.com"]
+[url "git@luminal"]
 	insteadOf = git@gist.github.com
+
+# [url "git@github.com"]
+# 	insteadOf = git@gist.github.com
+[github]
+	user = chrisc-fugue

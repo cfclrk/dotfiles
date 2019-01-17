@@ -181,6 +181,7 @@
 ;;; ----------------------------------------------------------------------------
 
 ;; Keybinding/function to create a *scratch-text* buffer, not backed by a file
+;; (see generate-new-buffer)
 
 ;; Make C-a and C-e go to beginning/end of visual line instead of beginning of
 ;; actual line
@@ -245,6 +246,9 @@
 
   (global-set-key (kbd "M-.") 'godef-jump-other-window)
 
+  ;; Requires running go get -u github.com/zmb3/gogetdoc
+  (setq godoc-at-point-function 'godoc-gogetdoc)
+
   ;; Don't highlight lines longer than fill-column
   ;; Mnually toggle with "M-x whitespace-toggle-options L"
   (whitespace-toggle-options '(lines-tail))
@@ -277,6 +281,8 @@
 (setq json-reformat:indent-width 2)
 (add-hook 'js2-mode-hook (lambda ()
                            (set-fill-column 110)
+                           (setq js2-strict-missing-semi-warning nil)
+                           (setq js2-missing-semi-one-line-override t)
                            ;; TODO shouldn't need this
                            (setq whitespace-line-column 110)))
 
@@ -317,6 +323,9 @@
 
 ;; aws
 (add-to-list 'auto-mode-alist '("credentials\\'" . conf-mode))
+
+;; company
+(setq company-global-modes '(not org-mode))
 
 ;; dired
 (define-key prelude-mode-map (kbd "C-c d") 'dired-jump-other-window)

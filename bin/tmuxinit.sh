@@ -17,11 +17,8 @@ tmux new-window -dk -n rust -t 1
 
 tmux new-session -d -s Work
 tmux new-window -dk -n local -t 1
-
-tmux new-window -dk -n fugue-ansible -t 2
-# TODO: set cwd
-tmux new-window -dk -n qa-harness -t 3
-# TODO: set cwd
+tmux new-window -dk -n cloudcover -t 2
+tmux new-window -dk -n platform -t 3
 
 ####################
 # Session: QA-AWS

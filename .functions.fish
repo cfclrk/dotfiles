@@ -49,6 +49,10 @@ function man --description 'Colorize man'
     env man $argv
 end
 
+function grep --description 'Override grep'
+    command egrep --color=auto $argv
+end
+
 function tmuxinit --description 'Initialize tmux'
     # https://github.com/tmux-plugins/tmux-copycat/issues/116
     tmux unbind -n n \; unbind -n N
@@ -115,4 +119,8 @@ function godocwkspc --description 'Serve godoc http for the current Go workspace
             godoc -http=localhost:8000 -goroot $p
         end
     end
+end
+
+function mygotools
+    go get -u github.com/zmb3/gogetdoc  # used in emacs godoc-at-point-function
 end
