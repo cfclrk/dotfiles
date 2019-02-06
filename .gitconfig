@@ -1,5 +1,5 @@
 [user]
-	email = chrisc@fugue.co
+	email = cfclrk@gmail.com
 	name = Chris Clark
 [core]
 	editor = emacs
@@ -14,26 +14,3 @@
 	tool = emerge
 [diff]
 	compactionHeuristic = true
-[url "git@luminal:LuminalHQ"]
-	insteadOf = https://github.com/LuminalHQ
-[url "git@luminal:LuminalHQ"]
-	insteadOf = git@github.com:LuminalHQ
-[url "git@luminal:Fugue-QA"]
-	insteadOf = https://github.com/Fugue-QA
-[url "git@luminal:Fugue-QA"]
-	insteadOf = git@github.com:Fugue-QA
-[url "git@luminal:fugue"]
-	insteadOf = git@github.com:fugue
-[url "git@luminal:fugue"]
-	insteadOf = https://github.com/fugue
-
-##### Gists ######
-# Figure something out here. For now, uncomment one or the other
-
-[url "git@luminal"]
-	insteadOf = git@gist.github.com
-
-# [url "git@github.com"]
-# 	insteadOf = git@gist.github.com
-[github]
-	user = chrisc-fugue
