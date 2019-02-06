@@ -1,38 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Sesison Home
+# ------------
+
+tmux new-session -d -s Home
+tmux new-window -d -n clojure -t 1
+tmux new-window -d -n rust -t 2
+# TODO: set cwd
+
+# Session Work
+# ------------
+
+tmux new-session -d -s Work
+tmux new-window -d -n base -t 1
+tmux new-window -d -n cloudcover -t 2
+
+# Session AWS
+# -----------
+
+tmux new-session -d -s AWS
+tmux new-window -d -n home -t 1
+tmux new-window -d -n elenapon -t 2
 
 # https://github.com/tmux-plugins/tmux-copycat/issues/116
 tmux unbind -n n \; unbind -n N
-
-###################
-# Sesison: Projects
-####################
-
-tmux new-session -d -s Projects
-tmux new-window -dk -n rust -t 1
-# TODO: set cwd
-
-####################
-# Session: Work
-####################
-
-tmux new-session -d -s Work
-tmux new-window -dk -n local -t 1
-tmux new-window -dk -n cloudcover -t 2
-tmux new-window -dk -n platform -t 3
-
-####################
-# Session: QA-AWS
-####################
-
-tmux new-session -d -s QA-AWS
-tmux new-window -dk -n chrisc -t 1
-# TODO: set AWS creds
-
-tmux new-window -dk -n chrisc-qa-0 -t 2
-# TODO: set AWS creds
-
-tmux new-window -dk -n chrisc-qa-1 -t 3
-# TODO: set AWS creds
-
-tmux new-window -dk -n chrisc-alt -t 4
-# TODO: set AWS creds
