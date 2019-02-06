@@ -20,8 +20,8 @@ alias grep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-alias ll='ls -AlhF'
-alias la='ls -A'
+alias ll='ls -Alh'
+alias la='ls -alh'
 alias l='ls -CF'
 alias cls='printf "\033c"'
 
