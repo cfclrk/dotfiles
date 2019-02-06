@@ -1,9 +1,8 @@
 tmux
 ----
 
-`prefix I`: fetch plugins and source them
-
-`prefix R`: reload .tmux.conf
+  - `prefix` + <kbd>I</kbd>: Install plugins
+  - `prefix` + <kbd>U</kbd>: Update plugins
 
 pyenv
 -----
