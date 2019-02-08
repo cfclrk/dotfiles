@@ -6,7 +6,6 @@
 tmux new-session -d -s Home
 tmux new-window -d -n clojure -t 1
 tmux new-window -d -n rust -t 2
-# TODO: set cwd
 
 # Session Work
 # ------------
