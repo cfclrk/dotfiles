@@ -8,6 +8,8 @@ DOTFILES_DIR=~/Projects/dotfiles
 cd "$DOTFILES_DIR"
 
 # Link to all top-level dot-files files from $HOME
+mkdir -p ~/.lein
+mkdir -p ~/.config/fish
 dotFiles=(".bash_logout"
           ".bash_aliases"
           ".bashrc"
@@ -17,14 +19,12 @@ dotFiles=(".bash_logout"
           ".gitignore_global"
           ".profile"
           ".tmux.conf"
-          ".vimrc")
+          ".vimrc"
+          ".lein/profiles.clj"
+          ".config/fish/config.fish")
 for f in ${dotFiles[*]}; do
     ln -svf "$DOTFILES_DIR/$f" "$HOME/$f"
 done
-
-# Fish
-mkdir -p ~/.config/fish
-ln -svf "$DOTFILES_DIR/.config/fish/config.fish" "$HOME/.config/fish/config.fish"
 
 # Emacs
 if [[ ! -d ~/.emacs.d ]]; then
