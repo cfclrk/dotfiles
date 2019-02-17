@@ -7,8 +7,8 @@ DOTFILES_DIR=~/Projects/dotfiles
 # Ensure dotfiles project exists
 cd "$DOTFILES_DIR"
 
-# Link to all top-level dot-files files from $HOME
 mkdir -p ~/.lein
+mkdir -p ~/.ssh
 mkdir -p ~/.config/fish
 dotFiles=(".bash_logout"
           ".bash_aliases"
@@ -21,6 +21,7 @@ dotFiles=(".bash_logout"
           ".tmux.conf"
           ".vimrc"
           ".lein/profiles.clj"
+          ".ssh/config"
           ".config/fish/config.fish")
 for f in ${dotFiles[*]}; do
     ln -svf "$DOTFILES_DIR/$f" "$HOME/$f"
@@ -34,10 +35,6 @@ fi
 ln -svf "$DOTFILES_DIR/emacs/init.el" ~/.emacs.d/personal/init.el
 ln -svf "$DOTFILES_DIR/emacs/org.el" ~/.emacs.d/personal/org.el
 
-# SSH config
-mkdir -p ~/.ssh
-ln -svf "$DOTFILES_DIR/.ssh/config" ~/.ssh/config
-
 # ~/bin
 mkdir -p ~/bin
 scriptFiles=$(ls $DOTFILES_DIR/bin)
@@ -47,7 +44,7 @@ done
 
 # tmux
 if [[ ! -d ~/.tmux/plugins/tpm ]]; then
-    echo "No ~/.tmux/plugins/tpm directory found. Installing tmux package manager!"
+    echo "Tmux package manager is not installed. Installing!"
+    mkdir -p ~/.tmux/plugins
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-    exit 1
 fi
