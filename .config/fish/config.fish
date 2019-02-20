@@ -4,6 +4,7 @@ if not set -q TMUX
     # Removed the following entries from /etc/paths because of
     # https://github.com/fish-shell/fish-shell/pull/4852:
     # /usr/local/bin /usr/bin /bin /usr/sbin /sbin
+    # N.B. Delete those entries again after every OS upgrade!
     set PATH /usr/local/bin $PATH
 
     # PATH

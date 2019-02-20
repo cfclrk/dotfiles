@@ -52,25 +52,17 @@ function grep --description 'Override grep'
     command egrep --color=auto $argv
 end
 
-function tmuxinit --description 'Initialize tmux'
-    # https://github.com/tmux-plugins/tmux-copycat/issues/116
-    tmux unbind -n n \; unbind -n N
+function cljrepl
+    clj -Sdeps '{:deps {cider/cider-nrepl {:mvn/version "RELEASE"}}}' \
+    -m nrepl.cmdline \
+    --middleware "[cider.nrepl/cider-middleware]"
+end
 
-    # Sesison: Projects
-    tmux new-session -d -s Projects
-    tmux new-window -dk -n rust -t 1
-
-    # Session: Work
-    tmux new-session -d -s Work
-    tmux new-window -dk -n local -t 1
-    tmux new-window -dk -n cloudcover -t 2
-
-    # Session: QA-AWS
-    tmux new-session -d -s QA-AWS
-    tmux new-window -dk -n chrisc -t 1
-    tmux new-window -dk -n chrisc-qa-0 -t 2
-    tmux new-window -dk -n chrisc-qa-1 -t 3
-    tmux new-window -dk -n chrisc-alt -t 4
+function cljnew
+    clj -Sdeps '{:deps {seancorfield/clj-new {:mvn/version "RELEASE"}}}' \
+    -m clj-new.create \
+    app \
+    myname/myapp
 end
 
 function kvAll --description 'All keyvault keys and secrets'
@@ -105,11 +97,6 @@ function myip --description "What is my ip address?"
     curl https://checkip.amazonaws.com/
 end
 
-function npmex --description "Run a command with node_modules/.bin in the PATH"
-    set -lx PATH (npm bin) $PATH
-    eval $argv
-end
-
 function godocwkspc --description 'Serve godoc http for the current Go workspace'
     for p in (string split : (go env GOPATH))
         if string match --regex $p* (pwd)
@@ -120,6 +107,6 @@ function godocwkspc --description 'Serve godoc http for the current Go workspace
     end
 end
 
-function mygotools
+function get_go_tools
     go get -u github.com/zmb3/gogetdoc  # used in emacs godoc-at-point-function
 end
