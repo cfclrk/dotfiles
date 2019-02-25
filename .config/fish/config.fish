@@ -19,6 +19,9 @@ if not set -q TMUX
     source (pyenv init - | psub)
     source (pyenv virtualenv-init - | psub)
 
+    # rbenv
+    source (rbenv init - | psub)
+
     # pyinstaller
     set os (uname)
     switch $os

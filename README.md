@@ -14,3 +14,9 @@ pyenv
     pyenv global foobar            # Use 'foobar' env unless otherwise specified
     pyenv versions                 # List installed virtualenvs and Pythons
     pyenv version                  # Show current Python/virtualenv and why
+
+rbenv
+-----
+
+    rbenv install -l
+    rbenv install 2.6.1
