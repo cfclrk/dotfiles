@@ -14,3 +14,7 @@
 	tool = emerge
 [diff]
 	compactionHeuristic = true
+[url "git@ironnet:IronNetCybersecurity"]
+	insteadOf = git@github.com:IronNetCybersecurity
+[url "git@ironnet:IronNetCybersecurity"]
+	insteadOf = https://github.com/IronNetCybersecurity/
