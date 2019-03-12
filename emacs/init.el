@@ -88,6 +88,8 @@
 ;; Packages to install in addition to those already defined in prelude-packages
 ;; and in each prelude language module at the head of this file.
 
+(setq package-pinned-packages '((org . "org")))
+
 (prelude-require-packages '(bats-mode
                             clj-refactor
                             csv-mode
@@ -99,6 +101,7 @@
                             helm-descbinds
                             key-chord
                             markdown-mode
+                            org
                             org-bullets
                             page-break-lines
                             powershell
