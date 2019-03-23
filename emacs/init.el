@@ -91,10 +91,10 @@
 (setq package-pinned-packages '((org . "org")))
 
 (prelude-require-packages '(bats-mode
+                            blacken
                             clj-refactor
                             csv-mode
                             dockerfile-mode
-                            exec-path-from-shell
                             fish-mode
                             flycheck-mypy
                             geiser
