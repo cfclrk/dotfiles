@@ -4,7 +4,7 @@ source $HOME/bin/colors.sh
 
 case "$TERM" in
     xterm*|rxvt*|screen*)
-        PS1="${Blue}\w ${Cyan}≫${Color_Off} "
+        PS1="${Blue}\w ${Cyan}≫ ${Color_Off}"
         ;;
     *)
         # term is probably dumb, e.g. doing an scp operation
