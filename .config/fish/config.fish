@@ -15,6 +15,9 @@ if not set -q TMUX
         set PATH $PATH $i/bin
     end
 
+    # GNU programs installed with brew take precedence over pre-existing programs
+    set PATH "/usr/local/opt/make/libexec/gnubin" $PATH
+
     # pyenv
     source (pyenv init - | psub)
     source (pyenv virtualenv-init - | psub)
