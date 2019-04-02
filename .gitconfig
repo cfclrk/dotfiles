@@ -18,3 +18,7 @@
 	insteadOf = git@github.com:IronNetCybersecurity
 [url "git@ironnet:IronNetCybersecurity"]
 	insteadOf = https://github.com/IronNetCybersecurity/
+[url "git@ironnet:patrickpierson"]
+	insteadOf = git@github.com:patrickpierson
+[url "git@ironnet:chrisc-ironnet"]
+	insteadOf = git@github.com:chrisc-ironnet
