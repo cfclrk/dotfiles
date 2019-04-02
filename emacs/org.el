@@ -68,9 +68,9 @@
   (setq org-publish-project-alist
 
         '(("Blog"
-           :base-directory "~/Projects/blog/src/"
-           :publishing-directory "~/Projects/blog/dist/"
-           :recursive t
+           :base-directory "~/Projects/jekyll/blog/org/posts/"
+           :publishing-directory "~/Projects/jekyll/blog/_posts/"
+           base-extension "org"
            :publishing-function org-html-publish-to-html
            :body-only t)
 
