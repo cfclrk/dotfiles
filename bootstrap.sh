@@ -23,7 +23,8 @@ dotFiles=(".bash_logout"
           ".lein/profiles.clj"
           ".ssh/config"
           ".config/fish/config.fish"
-          ".config/tidyrc")
+          ".config/tidyrc"
+          ".pyenv/default-packages")
 for f in ${dotFiles[*]}; do
     ln -svf "$DOTFILES_DIR/$f" "$HOME/$f"
 done
