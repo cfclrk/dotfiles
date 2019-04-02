@@ -52,6 +52,12 @@ function grep --description 'Override grep'
     command egrep --color=auto $argv
 end
 
+function uninstall_gems
+    for gem in (gem list --no-versions)
+        gem uninstall $gem -aIx
+    end
+end
+
 function cljrepl
     clj -Sdeps '{:deps {cider/cider-nrepl {:mvn/version "RELEASE"}}}' \
     -m nrepl.cmdline \
