@@ -342,6 +342,10 @@
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
 
+;; html
+(setq flycheck-tidyrc (expand-file-name "~/.config/tidyrc"))
+(setq-default flycheck-disabled-checkers '(html-tidy)) ; too noisy
+
 ;; key-chord
 (key-chord-mode +1)
 (setq key-chord-two-keys-delay 0.03

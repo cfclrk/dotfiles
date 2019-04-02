@@ -1,0 +1,4 @@
+indent: auto
+show-body-only: auto
+gnu-emacs: yes
+show-body-only: yes

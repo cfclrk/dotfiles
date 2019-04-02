@@ -22,7 +22,8 @@ dotFiles=(".bash_logout"
           ".vimrc"
           ".lein/profiles.clj"
           ".ssh/config"
-          ".config/fish/config.fish")
+          ".config/fish/config.fish"
+          ".config/tidyrc")
 for f in ${dotFiles[*]}; do
     ln -svf "$DOTFILES_DIR/$f" "$HOME/$f"
 done
