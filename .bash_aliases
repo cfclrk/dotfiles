@@ -6,6 +6,7 @@
 if [ $(uname -s) = 'Darwin' ]; then
     alias ls='ls -G'
     alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+    alias md5sum='md5 -r'
 else
     alias ls='ls --color=auto'
 
