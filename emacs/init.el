@@ -347,6 +347,9 @@
 (key-chord-define-global "hl" 'avy-goto-line)
 (key-chord-define-global "hx" 'helm-M-x)
 
+;; make
+(add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
+
 ;; smartparens
 
 ;; wrapping
