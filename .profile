@@ -13,9 +13,15 @@ PATH="$HOME/.cargo/bin:$PATH"
 # GNU programs installed with brew take precedence over pre-existing programs
 PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
-if which pyenv > /dev/null; then
+# pyenv
+if command -v pyenv > /dev/null; then
    eval "$(pyenv init -)"
    eval "$(pyenv virtualenv-init -)"
+fi
+
+# direnv
+if command -v direnv > /dev/null; then
+    eval "$(direnv hook bash)"
 fi
 
 . ~/.bashrc

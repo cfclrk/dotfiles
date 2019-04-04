@@ -19,8 +19,15 @@ if not set -q TMUX
     set PATH "/usr/local/opt/make/libexec/gnubin" $PATH
 
     # pyenv
-    source (pyenv init - | psub)
-    source (pyenv virtualenv-init - | psub)
+    if command -v pyenv > /dev/null
+        source (pyenv init - | psub)
+        source (pyenv virtualenv-init - | psub)
+    end
+
+    # direnv
+    if command -v direnv > /dev/null
+        direnv hook fish | source
+    end
 
     # rbenv
     source (rbenv init - | psub)
