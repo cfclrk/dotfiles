@@ -1,6 +1,9 @@
 [user]
-	email = cfclrk@gmail.com
 	name = Chris Clark
+[includeIf "gitdir:~/"]
+	path = .gitconfig-personal
+[includeIf "gitdir:~/IronNet/"]
+	path = .gitconfig-ironnet
 [core]
 	editor = emacs
 	excludesfile = ~/.gitignore_global
