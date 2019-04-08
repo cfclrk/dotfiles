@@ -24,11 +24,6 @@ if not set -q TMUX
         source (pyenv virtualenv-init - | psub)
     end
 
-    # direnv
-    if command -v direnv > /dev/null
-        direnv hook fish | source
-    end
-
     # rbenv
     source (rbenv init - | psub)
 

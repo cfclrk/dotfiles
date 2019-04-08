@@ -19,9 +19,4 @@ if command -v pyenv > /dev/null; then
    eval "$(pyenv virtualenv-init -)"
 fi
 
-# direnv
-if command -v direnv > /dev/null; then
-    eval "$(direnv hook bash)"
-fi
-
 . ~/.bashrc
