@@ -3,9 +3,13 @@
 
 (prelude-require-packages '(htmlize))
 
+;; This variable needs to be set before org.el is loaded.
+(if (not (member 'md org-export-backends))
+    (add-to-list 'org-export-backends 'md))
+
 ;;; ----------------------------------------------------------------------------
 
-;; I have keep some configuration defined globally (instead of inside
+;; I have to keep some configuration defined globally (instead of inside
 ;; my-org-mode-hook) because of how org-mode caches some settings.
 ;;
 ;; When these settings are in my-org-mode-hook, they can still work if you force
