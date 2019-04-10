@@ -52,7 +52,7 @@ done
 shift $((OPTIND -1))
 
 # Defaults
-profile=${profile:="qa-infra"}
+profile=${profile:="main"}
 region=${region:="us-east-1"}
 
 aws="aws --profile $profile --region $region"
