@@ -98,6 +98,16 @@ function clear_aws
     set -e AWS_PROFILE
 end
 
+function export_aws --description 'Extract credentials from ~/.aws/credentials and export them as env vars'
+    set profile "\[$argv[1]\]"
+    set creds (grep "$profile" -A 3 ~/.aws/credentials | tail -n 3 | string match -r '.+' | string trim | string split = | string trim)
+    set -gx (echo $creds[1] | tr '[:lower:]' '[:upper:]') (echo $creds[2])
+    set -gx (echo $creds[3] | tr '[:lower:]' '[:upper:]') (echo $creds[4])
+    if test (count $creds) -eq 6
+        set -gx (echo $creds[5] | tr '[:lower:]' '[:upper:]') (echo $creds[6])
+    end
+end
+
 function myip --description "What is my ip address?"
     # Another good one with a little more info is ifconfig.co
     curl https://checkip.amazonaws.com/
