@@ -48,8 +48,7 @@
   (org-bullets-mode 1)
 
   ;; babel
-  (setq org-export-babel-evaluate nil
-        org-confirm-babel-evaluate nil
+  (setq org-confirm-babel-evaluate nil
         org-babel-clojure-backend 'cider)
   (org-babel-do-load-languages
    'org-babel-load-languages
