@@ -123,6 +123,31 @@ function godocwkspc --description 'Serve godoc http for the current Go workspace
     end
 end
 
+# TODO:
+#  - Add a --prefix and --all option.
+#  - List buckets that will be clearend and confirm.
+#  - Probably better as a bash script in !/bin. More portable.
+function clearBuckets --description "Clear all S3 Buckets"
+    set buckets (aws s3api list-buckets | jq -r .Buckets[].Name)
+
+    for bucket in $buckets
+        echo Checking bucket $bucket
+        set objects (aws s3api list-objects-v2 --bucket $bucket --delimiter /)
+
+        if count $objects > /dev/null
+            set_color red
+            echo "There is shit in this S3 bucket. Deleting shit."
+            set_color normal
+            aws s3api delete-bucket-policy --bucket $bucket
+            aws s3 rm --recursive s3://$bucket
+        else
+            set_color green
+            echo "S3 bucket good to go."
+            set_color normal
+        end
+    end
+end
+
 function get_go_tools
     go get -u github.com/zmb3/gogetdoc  # used in emacs godoc-at-point-function
 end
