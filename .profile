@@ -9,6 +9,7 @@ PATH=$HOME/bin:$PATH
 PATH=$HOME/.cargo/bin:$PATH
 PATH=$(go env GOPATH)/bin:$PATH
 PATH="$HOME/.cargo/bin:$PATH"
+PATH="$HOME/.poetry/bin:$PATH"
 
 # GNU programs installed with brew take precedence over pre-existing programs
 PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
