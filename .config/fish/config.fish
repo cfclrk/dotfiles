@@ -25,6 +25,9 @@ if not set -q TMUX
         source (pyenv virtualenv-init - | psub)
     end
 
+    # pipenv
+    set -gx PIPENV_IGNORE_VIRTUALENVS 1
+
     # rbenv
     source (rbenv init - | psub)
 
@@ -39,7 +42,6 @@ if not set -q TMUX
         case '*'
             echo "Yo you need to set PYTHON_CONFIGURE_OPTS"
     end
-
 end
 
 source ~/.functions.fish

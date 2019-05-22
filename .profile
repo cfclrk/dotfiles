@@ -20,4 +20,8 @@ if command -v pyenv > /dev/null; then
    eval "$(pyenv virtualenv-init -)"
 fi
 
+# pipenv
+export PIPENV_IGNORE_VIRTUALENVS=1
+
 . ~/.bashrc
+[[ -s ~/.ironkube/bashrc ]] && source ~/.ironkube/bashrc
