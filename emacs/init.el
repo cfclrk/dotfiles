@@ -104,7 +104,10 @@
                             org
                             org-bullets
                             page-break-lines
+                            pipenv
+                            py-isort
                             powershell
+                            python-pytest
                             racket-mode
                             restclient
                             toml-mode
@@ -284,6 +287,7 @@
 ;; ------
 
 (require 'flycheck-mypy)  ; use with M-x flycheck-select-checker
+(add-to-list 'auto-mode-alist '("Pipfile\\'" . toml-mode))
 
 (defun my-python-mode-hook ()
   "Customize `python-mode'."
