@@ -10,6 +10,7 @@ cd "$DOTFILES_DIR"
 mkdir -p ~/.lein
 mkdir -p ~/.ssh
 mkdir -p ~/.config/fish
+mkdir -p ~/.clojure
 dotFiles=(".bash_logout"
           ".bash_aliases"
           ".bashrc"
@@ -22,6 +23,7 @@ dotFiles=(".bash_logout"
           ".profile"
           ".tmux.conf"
           ".vimrc"
+          ".clojure/deps.edn"
           ".lein/profiles.clj"
           ".ssh/config"
           ".config/fish/config.fish"
