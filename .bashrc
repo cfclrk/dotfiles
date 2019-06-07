@@ -42,8 +42,5 @@ if [ -e ~/.extras.sh ]; then
     . ~/.extras.sh
 fi
 
-# added by travis gem
-[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
-
 # aws CLI yumminess
 complete -C aws_completer aws
