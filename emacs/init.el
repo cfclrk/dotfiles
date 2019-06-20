@@ -11,11 +11,11 @@
 (require 'prelude-company)
 (require 'prelude-css)
 (require 'prelude-emacs-lisp)
-(require 'prelude-go)
 (require 'prelude-haskell)
 (require 'prelude-helm)
 (require 'prelude-js)
 (require 'prelude-lisp)
+(require 'prelude-lsp)
 (require 'prelude-python)
 (require 'prelude-rust)
 (require 'prelude-shell)
@@ -112,7 +112,8 @@
                             restclient
                             toml-mode
                             visual-fill-column
-                            yapfify))
+                            yapfify
+                            yasnippet))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Useful functions
@@ -236,29 +237,22 @@
 (defun my-go-mode-hook ()
   "Customize `go-mode'."
 
+  ;; Force yasnippet to be loaded before lsp-mode
+  (require 'yasnippet)
+
   (setq tab-width 4
         fill-column 80
-        go-test-args "-v"
-        company-mode t)
+        go-test-args "-v")
 
-  (global-set-key (kbd "M-.") 'godef-jump-other-window)
-
-  ;; Requires running go get -u github.com/zmb3/gogetdoc
-  (setq godoc-at-point-function 'godoc-gogetdoc)
+  ;; Don't highlight tabs
+  (whitespace-toggle-options '(tabs))
 
   ;; Don't highlight lines longer than fill-column
-  ;; Mnually toggle with "M-x whitespace-toggle-options L"
-  (whitespace-toggle-options '(lines-tail))
+  ;; Note: Mnually toggle with "M-x whitespace-toggle-options L"
+  (whitespace-toggle-options '(lines-tail)))
 
-  ;; I don't like that prelude overrode C-h f to run godoc-at-point
-  (define-key go-mode-map (kbd "C-h f") 'helm-apropos)
-  (global-set-key (kbd "s-g") 'godoc-at-point))
-
-;; Run my-go-mode-hook after the prelude go mode hook, because my hook overrides
-;; some things in the prelude hook.
-(setq prelude-go-mode-hook '(prelude-go-mode-defaults
-                             my-go-mode-hook
-                             go-guru-hl-identifier-mode))
+(add-hook 'go-mode-hook #'lsp)
+(add-hook 'go-mode-hook 'my-go-mode-hook)
 
 ;; Haskell
 ;; -------
