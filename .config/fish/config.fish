@@ -34,15 +34,15 @@ if not set -q TMUX
     set os (uname)
     switch $os
         case Darwin
-            alias emacs "/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
-            alias md5sum "md5 -r"
-
             # pyinstaller
             set -gx PYTHON_CONFIGURE_OPTS "--enable-framework"
         case '*'
             echo "Yo you need to set PYTHON_CONFIGURE_OPTS"
     end
 end
+
+alias emacs "/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+alias md5sum "md5 -r"
 
 source ~/.functions.fish
 source ~/.extras.fish
