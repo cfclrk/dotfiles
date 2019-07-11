@@ -215,6 +215,7 @@
 ;; -----------------
 
 (setq cider-repl-use-pretty-printing t)
+(add-hook 'clojure-mode-hook 'lisp-smartparens-hook)
 
 ;; Elisp
 ;; -----
@@ -225,6 +226,7 @@
   (setq sentence-end-double-space nil))
 
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
+(add-hook 'emacs-lisp-mode-hook 'lisp-smartparens-hook)
 
 ;; Fish
 ;; ----
@@ -350,46 +352,44 @@
 
 ;; smartparens
 
-;; wrapping
-(define-prefix-command 'sp-wrap-key-map)
-(define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
-(define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
-(define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
-(define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
-(define-key smartparens-mode-map (kbd "M-r") sp-wrap-key-map)
+(defun lisp-smartparens-hook ()
+  "Extra smartparens settings to apply in lisp modes"
 
-;; slurping and barfing
-(define-key smartparens-mode-map (kbd "S-<right>") 'sp-forward-slurp-sexp)
-(define-key smartparens-mode-map (kbd "S-<left>") 'sp-forward-barf-sexp)
-(define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-backward-barf-sexp)
-(define-key smartparens-mode-map (kbd "C-S-<left>") 'sp-backward-slurp-sexp)
+  ;; wrapping
+  (define-prefix-command 'sp-wrap-key-map)
+  (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
+  (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
+  (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
+  (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
+  (define-key smartparens-mode-map (kbd "M-r") sp-wrap-key-map)
 
-;; splicing
-(define-prefix-command 'splice-key-map)
-(define-key splice-key-map (kbd "s") 'sp-splice-sexp)
-(define-key splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
-(define-key splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
-(define-key splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
-(define-key smartparens-mode-map (kbd "M-s") splice-key-map)
+  ;; slurping and barfing
+  (define-key smartparens-mode-map (kbd "S-<right>") 'sp-forward-slurp-sexp)
+  (define-key smartparens-mode-map (kbd "S-<left>") 'sp-forward-barf-sexp)
+  (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-backward-barf-sexp)
+  (define-key smartparens-mode-map (kbd "C-S-<left>") 'sp-backward-slurp-sexp)
 
-;; selection
-(define-prefix-command 'sp-select-key-map)
-(define-key sp-select-key-map (kbd "n") 'sp-select-next-thing)
-(define-key sp-select-key-map (kbd "p") 'sp-select-previous-thing-exchange)
-(define-key smartparens-mode-map (kbd "M-c") sp-select-key-map)
+  ;; splicing
+  (define-prefix-command 'splice-key-map)
+  (define-key splice-key-map (kbd "s") 'sp-splice-sexp)
+  (define-key splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
+  (define-key splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
+  (define-key splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
+  (define-key smartparens-mode-map (kbd "M-s") splice-key-map)
 
-;; movement
-;; (remove? So far I never use these)
-(define-key smartparens-mode-map (kbd "M-<down>") 'sp-down-sexp)
-(define-key smartparens-mode-map (kbd "M-<up>") 'sp-backward-up-sexp)
+  ;; selection
+  (define-prefix-command 'sp-select-key-map)
+  (define-key sp-select-key-map (kbd "n") 'sp-select-next-thing)
+  (define-key sp-select-key-map (kbd "p") 'sp-select-previous-thing-exchange)
+  (define-key smartparens-mode-map (kbd "M-c") sp-select-key-map)
 
-;; In non-lisp modes, I'd rather have this sp-forward-sexp and sp-backward-sexp
-;; TODO: add this to a  lisp mode hook
-(define-key smartparens-mode-map (kbd "M-f") 'sp-next-sexp)
-(define-key smartparens-mode-map (kbd "M-b") 'sp-previous-sexp)
-
-(define-key smartparens-mode-map (kbd "M-a") 'sp-beginning-of-sexp)
-(define-key smartparens-mode-map (kbd "M-e") 'sp-end-of-sexp)
+  ;; movement
+  (define-key smartparens-mode-map (kbd "M-<down>") 'sp-down-sexp)
+  (define-key smartparens-mode-map (kbd "M-<up>") 'sp-backward-up-sexp)
+  (define-key smartparens-mode-map (kbd "M-f") 'sp-next-sexp)
+  (define-key smartparens-mode-map (kbd "M-b") 'sp-previous-sexp)
+  (define-key smartparens-mode-map (kbd "M-a") 'sp-beginning-of-sexp)
+  (define-key smartparens-mode-map (kbd "M-e") 'sp-end-of-sexp))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Load other files
