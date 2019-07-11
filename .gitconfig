@@ -1,9 +1,5 @@
 [user]
 	name = Chris Clark
-[includeIf "gitdir:~/"]
-	path = .gitconfig-personal
-[includeIf "gitdir:~/IronNet/"]
-	path = .gitconfig-ironnet
 [core]
 	editor = emacs
 	excludesfile = ~/.gitignore_global
@@ -18,23 +14,8 @@
 [diff]
 	compactionHeuristic = true
 
-[url "git@ironnet:IronNetCybersecurity"]
-	insteadOf = git@github.com:IronNetCybersecurity
-	
-[url "git@ironnet:patrickpierson"]
-	insteadOf = git@github.com:patrickpierson
-	
-[url "git@ironnet:chrisc-ironnet"]
-	insteadOf = git@github.com:chrisc-ironnet
-
-[url "git@ironnet:eddiechristian"]
-	insteadOf = git@github.com:eddiechristian
-
-[url "git@ironnet:jonathanburkert"]
-	insteadOf = git@github.com:jonathanburkert
-
-[url "git@ironnet:ian-perry-ironnet"]
-	insteadOf = git@github.com:ian-perry-ironnet
-
-[url "git@ironnet:davis-x"]
-	insteadOf = git@github.com:davis-x
+# Include more config depending on the current directory
+[includeIf "gitdir:~/"]
+	path = .gitconfig-personal
+[includeIf "gitdir:~/IronNet/"]
+	path = .gitconfig-ironnet

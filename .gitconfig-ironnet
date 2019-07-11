@@ -1,2 +1,14 @@
 [user]
         email = chris.clark@ironnetcybersecurity.com
+
+[url "git@ironnet:IronNetCybersecurity"]
+	insteadOf = git@github.com:IronNetCybersecurity
+
+[url "git@ironnet:patrickpierson"]
+	insteadOf = git@github.com:patrickpierson
+
+[url "git@ironnet:chrisc-ironnet"]
+	insteadOf = git@github.com:chrisc-ironnet
+
+[url "git@ironnet:davis-x"]
+	insteadOf = git@github.com:davis-x
