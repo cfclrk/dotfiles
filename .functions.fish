@@ -154,3 +154,15 @@ function get_go_tools
     go get -u github.com/mdempsky/gocode  # auto completion
     go get -u golang.org/x/tools/cmd/...
 end
+
+# Kubernetes stuff
+
+# Use a namespace in the current context
+alias kcn "kubectl config set-context (kubectl config current-context) --namespace"
+
+# Takes one arg: version, like "1.10.11"
+function install_kubectl
+    set ver $argv1
+    curl -LO \
+    https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
+end
