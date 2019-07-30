@@ -160,15 +160,16 @@ end
 alias k "kubectl"
 alias kn "kubectl config set-context (kubectl config current-context) --namespace"
 
-# Takes one arg: version, like "1.10.11"
+# Takes one arg: a kubectl version, like "1.10.11"
 function install_kubectl
-    set ver $argv1
-    curl -LO \
+    set ver $argv[1]
+    curl -o ~/bin/.kubectl/kubectl-$ver \
     https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
 end
 
-function use_kube
-    set kube_version $argv[1]
+# Takes one arg: a kubectl version, like "1.10.11"
+function use_kubectl
+    set ver $argv[1]
     rm ~/bin/kubectl
-    ln -s ~/bin/.kubectl/kubectl-$kube_version ~/bin/kubectl
+    ln -s ~/bin/.kubectl/kubectl-$ver ~/bin/kubectl
 end
