@@ -109,7 +109,7 @@ function export_aws --description 'Extract credentials from ~/.aws/credentials a
 end
 
 function myip --description "What is my ip address?"
-    # Another good one with a little more info is ifconfig.co
+    # Another good one with a little more info is ifconfig.co (or ifconfig.io)
     curl https://checkip.amazonaws.com/
 end
 
@@ -157,12 +157,18 @@ end
 
 # Kubernetes stuff
 
-# Use a namespace in the current context
-alias kcn "kubectl config set-context (kubectl config current-context) --namespace"
+alias k "kubectl"
+alias kn "kubectl config set-context (kubectl config current-context) --namespace"
 
 # Takes one arg: version, like "1.10.11"
 function install_kubectl
     set ver $argv1
     curl -LO \
     https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
+end
+
+function use_kube
+    set kube_version $argv[1]
+    rm ~/bin/kubectl
+    ln -s ~/bin/.kubectl/kubectl-$kube_version ~/bin/kubectl
 end
