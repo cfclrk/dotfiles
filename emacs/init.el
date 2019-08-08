@@ -15,7 +15,6 @@
 (require 'prelude-helm)
 (require 'prelude-js)
 (require 'prelude-lisp)
-(require 'prelude-lsp)
 (require 'prelude-python)
 (require 'prelude-rust)
 (require 'prelude-shell)
