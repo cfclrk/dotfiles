@@ -109,7 +109,9 @@ function export_aws --description 'Extract credentials from ~/.aws/credentials a
 end
 
 function myip --description "What is my ip address?"
-    # Another good one with a little more info is ifconfig.co (or ifconfig.io)
+    # curl ifconfig.co
+    # curl icanhazip.com
+    # for more info: http -b ifconfig.co/json
     curl https://checkip.amazonaws.com/
 end
 
