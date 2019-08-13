@@ -46,3 +46,5 @@ alias md5sum "md5 -r"
 
 source ~/.functions.fish
 source ~/.extras.fish
+
+set -gx REQUESTS_CA_BUNDLE ~/IronNet/certificates/ironnet_ca_bundle.pem

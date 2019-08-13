@@ -44,3 +44,7 @@ fi
 
 # aws CLI yumminess
 complete -C aws_completer aws
+
+[[ -s ~/.ironkube/bashrc ]] && source ~/.ironkube/bashrc
+
+export REQUESTS_CA_BUNDLE=~/IronNet/certificates/ironnet_ca_bundle.pem
