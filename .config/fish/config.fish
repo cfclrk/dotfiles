@@ -6,15 +6,23 @@ if not set -q TMUX
     # /usr/local/bin /usr/bin /bin /usr/sbin /sbin
     # N.B. Delete those entries again after every OS upgrade!
     set PATH /usr/local/bin $PATH
+    set PATH /usr/local/sbin $PATH
+
+    # Go workspaces
+    set -gx GOPATH $HOME/IronNet/go
 
     # PATH
-    set PATH $PATH $HOME/bin
-    set PATH $PATH $HOME/.local/bin
-    set PATH $PATH $HOME/.cargo/bin
+    set PATH $HOME/bin $PATH
+    set PATH $HOME/.local/bin $PATH
+    set PATH $HOME/.cargo/bin $PATH
+    set PATH $HOME/.cabal/bin $PATH
     for i in (string split : (go env GOPATH))
         set PATH $PATH $i/bin
     end
     set PATH $PATH $HOME/.poetry/bin
+
+    # IronNet
+    set PATH $HOME/IronNet/bin $PATH
 
     # GNU programs installed with brew take precedence over pre-existing programs
     set PATH "/usr/local/opt/make/libexec/gnubin" $PATH
