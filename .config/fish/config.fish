@@ -10,6 +10,7 @@ if not set -q TMUX
 
     # Go workspaces
     set -gx GOPATH $HOME/IronNet/go
+    set -gx IGO $HOME/IronNet/go/src/github.com/ironnetcybersecurity
 
     # PATH
     set PATH $HOME/bin $PATH
