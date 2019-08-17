@@ -11,6 +11,7 @@
 (require 'prelude-company)
 (require 'prelude-css)
 (require 'prelude-emacs-lisp)
+(require 'prelude-go)
 (require 'prelude-haskell)
 (require 'prelude-helm)
 (require 'prelude-js)
@@ -28,6 +29,9 @@
 ;; A Keybinding and function preview current markdown file in browser.
 ;; Just a passthrough to grip (brew install grip) that errors out nicely if
 ;; grip is not installed
+
+;; Figure out how to include this in my repo instead of the prelude repo:
+;; ((magit-log:magit-log-mode "-n256" "--graph" "--color" "--decorate"))
 
 ;;; ----------------------------------------------------------------------------
 ;;; General
@@ -92,6 +96,7 @@
 (prelude-require-packages '(bats-mode
                             blacken
                             clj-refactor
+                            company-lsp
                             csv-mode
                             dockerfile-mode
                             fish-mode
@@ -99,6 +104,7 @@
                             geiser
                             helm-descbinds
                             key-chord
+                            lsp-mode
                             markdown-mode
                             org
                             org-bullets
@@ -244,9 +250,6 @@
   (setq tab-width 4
         fill-column 80
         go-test-args "-v")
-
-  ;; Don't highlight tabs
-  (whitespace-toggle-options '(tabs))
 
   ;; Don't highlight lines longer than fill-column
   ;; Note: Mnually toggle with "M-x whitespace-toggle-options L"
