@@ -19,8 +19,10 @@
 ;; I'm not entirely clear on how org-mode caches these settings. For some more
 ;; info, see: https://emacs.stackexchange.com/a/30623/6769
 
-(setq org-startup-folded 'content)
 (add-to-list 'org-modules 'org-habit)
+
+;; initial visibility (depth)
+(setq org-startup-folded 't)
 
 ;; clock time
 (setq org-clock-persist 'history)
