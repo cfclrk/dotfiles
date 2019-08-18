@@ -19,3 +19,5 @@
 	path = .gitconfig-personal
 [includeIf "gitdir:~/IronNet/"]
 	path = .gitconfig-ironnet
+[includeIf "gitdir:~/go/"]
+	path = .gitconfig-ironnet

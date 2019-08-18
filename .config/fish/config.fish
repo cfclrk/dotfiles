@@ -8,10 +8,6 @@ if not set -q TMUX
     set PATH /usr/local/bin $PATH
     set PATH /usr/local/sbin $PATH
 
-    # Go workspaces
-    set -gx GOPATH $HOME/IronNet/go
-    set -gx IGO $HOME/IronNet/go/src/github.com/ironnetcybersecurity
-
     # PATH
     set PATH $HOME/bin $PATH
     set PATH $HOME/.local/bin $PATH
@@ -24,6 +20,7 @@ if not set -q TMUX
 
     # IronNet
     set PATH $HOME/IronNet/bin $PATH
+    set -gx IGO $HOME/go/src/github.com/ironnetcybersecurity
 
     # GNU programs installed with brew take precedence over pre-existing programs
     set PATH "/usr/local/opt/make/libexec/gnubin" $PATH
