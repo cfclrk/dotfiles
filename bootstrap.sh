@@ -11,6 +11,7 @@ mkdir -p ~/.lein
 mkdir -p ~/.ssh
 mkdir -p ~/.config/fish
 mkdir -p ~/.clojure
+mkdir -p ~/.pyenv
 dotFiles=(".bash_logout"
           ".bash_aliases"
           ".bashrc"
@@ -34,8 +35,8 @@ for f in ${dotFiles[*]}; do
 done
 
 # Emacs
-if [[ ! -d ~/.emacs.d ]]; then
-    echo "No ~/.emacs.d directory. Install Prelude!"
+if [[ ! -d ~/.emacs.d/personal ]]; then
+    printf "\nNo ~/.emacs.d/personal directory. Install Prelude!\n"
     exit 1
 fi
 ln -svf "$DOTFILES_DIR/emacs/init.el" ~/.emacs.d/personal/init.el
