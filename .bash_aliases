@@ -9,8 +9,6 @@ if [ "$(uname -s)" = 'Darwin' ]; then
     alias md5sum="md5 -r"
 else
     alias ls='ls --color=auto'
-
-    # alias to start e  macs in the terminal
     alias emacs='emacs -nw'
 
     # Add an "alert" alias for long running commands. Use like: `sleep 10; alert`

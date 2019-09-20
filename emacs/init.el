@@ -69,16 +69,14 @@
 ;;; Font
 ;;; ----------------------------------------------------------------------------
 
-;; Use Source Code Pro on Darwin. Installing fonts on Ubuntu is hard.
-(when (eq system-type 'darwin)
-  (set-face-attribute 'default nil
-                     :family "Source Code Pro"
-                     :height 120
-                     :weight 'normal
-                     :width 'normal))
+(set-face-attribute 'default nil
+                    :family "Source Code Pro"
+                    :height 120
+                    :weight 'normal
+                    :width 'normal)
 
 ;; Use a larger font in the mode line
-(set-face-attribute 'mode-line nil :height 130)
+(set-face-attribute 'mode-line nil :height 120)
 
 ;; Use a larger font on huge monitors
 (when window-system
