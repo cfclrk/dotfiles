@@ -107,6 +107,7 @@
                             dockerfile-mode
                             fish-mode
                             flycheck-mypy
+                            forge
                             geiser
                             github-browse-file
                             helm-descbinds
@@ -352,6 +353,18 @@
 (setq dired-dwim-target t
       dired-listing-switches "-alh")
 
+;; gitconfig
+(add-to-list 'auto-mode-alist '("gitconfig" . gitconfig-mode))
+
+;; magit
+(with-eval-after-load 'magit
+  (progn
+    (require 'forge)
+    (add-to-list 'forge-alist '("ironnet" "api.github.com" "github.com" forge-github-repository))))
+
+;; markdown
+(setq markdown-command "grip --export -")
+
 ;; helm
 (require 'prelude-helm-everywhere)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
@@ -375,9 +388,8 @@
 (add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
 
 ;; smartparens
-
 (defun lisp-smartparens-hook ()
-  "Extra smartparens settings to apply in lisp modes"
+  "Extra smartparens settings to apply in Lisp modes."
 
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
