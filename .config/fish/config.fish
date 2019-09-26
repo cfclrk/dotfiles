@@ -29,10 +29,14 @@ if not set -q TMUX
     end
 
     # pipenv
-    set -gx PIPENV_IGNORE_VIRTUALENVS 1
+    if command -v pipenv
+        set -gx PIPENV_IGNORE_VIRTUALENVS 1
+    end
 
     # rbenv
-    source (rbenv init - | psub)
+    if command -v pyenv > /dev/null
+        source (rbenv init - | psub)
+    end
 
     set os (uname)
     switch $os
