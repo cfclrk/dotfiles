@@ -71,24 +71,16 @@
 ;;; Font
 ;;; ----------------------------------------------------------------------------
 
-(set-face-attribute 'default nil
-                    :family "Source Code Pro"
-                    :height 120
-                    :weight 'normal
-                    :width 'normal)
+;; Source Code Pro is nice in MacOS but not Ubuntu
+(when (eq system-type 'darwin)
+  (set-face-attribute 'default nil
+                      :family "Source Code Pro"
+                      :height 120
+                      :weight 'normal
+                      :width 'normal))
 
 ;; Use a larger font in the mode line
 (set-face-attribute 'mode-line nil :height 120)
-
-;; Use a larger font on huge monitors
-;; TODO: x-display-pixel-width doesn't seem right. Try:
-;;   (nth 4 (assq 'geometry (car (display-monitor-attributes-list))))
-(when window-system
-  (if (> (x-display-pixel-width) 1600)
-      (progn
-        (set-face-attribute 'default nil :height 150)
-        (set-face-attribute 'mode-line nil :height 150))))
-
 
 ;;; ----------------------------------------------------------------------------
 ;;; Packages
