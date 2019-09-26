@@ -17,10 +17,7 @@ if not set -q TMUX
         set PATH $PATH $i/bin
     end
     set PATH $PATH $HOME/.poetry/bin
-
-    # IronNet
     set PATH $HOME/IronNet/bin $PATH
-    set -gx IGO $HOME/go/src/github.com/ironnetcybersecurity
 
     # GNU programs installed with brew take precedence over pre-existing programs
     set PATH "/usr/local/opt/make/libexec/gnubin" $PATH

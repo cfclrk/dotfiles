@@ -65,6 +65,8 @@
 ;; M-o to run occur
 (define-key prelude-mode-map (kbd "M-o") 'occur)
 
+(setenv "REQUESTS_CA_BUNDLE" "/Users/chris.clark/IronNet/certificates/ironnet_ca_bundle.pem")
+
 ;;; ----------------------------------------------------------------------------
 ;;; Font
 ;;; ----------------------------------------------------------------------------
@@ -79,9 +81,13 @@
 (set-face-attribute 'mode-line nil :height 120)
 
 ;; Use a larger font on huge monitors
+;; TODO: x-display-pixel-width doesn't seem right. Try:
+;;   (nth 4 (assq 'geometry (car (display-monitor-attributes-list))))
 (when window-system
   (if (> (x-display-pixel-width) 1600)
-      (set-face-attribute 'default nil :height 130)))
+      (progn
+        (set-face-attribute 'default nil :height 150)
+        (set-face-attribute 'mode-line nil :height 150))))
 
 
 ;;; ----------------------------------------------------------------------------
@@ -91,8 +97,6 @@
 ;; Packages to install in addition to those already defined in prelude-packages
 ;; and in each prelude language module at the head of this file.
 
-(setq package-pinned-packages '((org . "org")))
-
 (prelude-require-packages '(bats-mode
                             blacken
                             clj-refactor
@@ -101,7 +105,9 @@
                             dockerfile-mode
                             fish-mode
                             flycheck-mypy
+                            forge
                             geiser
+                            github-browse-file
                             helm-descbinds
                             key-chord
                             lsp-mode
@@ -248,7 +254,8 @@
         fill-column 80
         go-test-args "-v")
 
-  (global-set-key (kbd "M-.") 'godef-jump-other-window)
+  (global-set-key (kbd "M-.") 'godef-jump)
+  (global-set-key (kbd "M-p") 'godef-jump-other-window)
 
   ;; Load yasnippets
   (let ((d (expand-file-name "snippets/yasnippet-go" user-emacs-directory)))
@@ -269,8 +276,8 @@
 ;; some things in the prelude hook.
 (setq prelude-go-mode-hook '(prelude-go-mode-defaults
                              yas-minor-mode
-                             my-go-mode-hook
-                             go-guru-hl-identifier-mode))
+                             go-guru-hl-identifier-mode
+                             my-go-mode-hook))
 
 ;; Haskell
 ;; -------
@@ -344,6 +351,18 @@
 (setq dired-dwim-target t
       dired-listing-switches "-alh")
 
+;; gitconfig
+(add-to-list 'auto-mode-alist '("gitconfig" . gitconfig-mode))
+
+;; magit
+(with-eval-after-load 'magit
+  (progn
+    (require 'forge)
+    (add-to-list 'forge-alist '("ironnet" "api.github.com" "github.com" forge-github-repository))))
+
+;; markdown
+(setq markdown-command "grip --export -")
+
 ;; helm
 (require 'prelude-helm-everywhere)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
@@ -367,9 +386,8 @@
 (add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
 
 ;; smartparens
-
 (defun lisp-smartparens-hook ()
-  "Extra smartparens settings to apply in lisp modes"
+  "Extra smartparens settings to apply in Lisp modes."
 
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)

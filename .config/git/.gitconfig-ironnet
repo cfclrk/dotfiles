@@ -1,5 +1,7 @@
 [user]
-        email = chris.clark@ironnetcybersecurity.com
+	email = chris.clark@ironnetcybersecurity.com
+[github]
+	user = chrisc-ironnet
 
 [url "git@ironnet:IronNetCybersecurity"]
 	insteadOf = git@github.com:IronNetCybersecurity

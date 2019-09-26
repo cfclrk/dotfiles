@@ -10,6 +10,7 @@ cd "$DOTFILES_DIR"
 mkdir -p ~/.lein
 mkdir -p ~/.ssh
 mkdir -p ~/.config/fish
+mkdir -p ~/.config/git
 mkdir -p ~/.clojure
 mkdir -p ~/.pyenv
 dotFiles=(".bash_logout"
@@ -17,9 +18,6 @@ dotFiles=(".bash_logout"
           ".bashrc"
           ".functions.fish"
           ".functions.sh"
-          ".gitconfig"
-          ".gitconfig-personal"
-          ".gitconfig-ironnet"
           ".gitignore_global"
           ".profile"
           ".tmux.conf"
@@ -29,6 +27,9 @@ dotFiles=(".bash_logout"
           ".ssh/config"
           ".config/fish/config.fish"
           ".config/tidyrc"
+          ".config/git/config"
+          ".config/git/.gitconfig-personal"
+          ".config/git/.gitconfig-ironnet"
           ".pyenv/default-packages")
 for f in ${dotFiles[*]}; do
     ln -svf "$DOTFILES_DIR/$f" "$HOME/$f"
