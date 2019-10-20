@@ -347,10 +347,11 @@
 (add-to-list 'auto-mode-alist '("gitconfig" . gitconfig-mode))
 
 ;; magit
+(setq magit-diff-refine-hunk 'all)
 (with-eval-after-load 'magit
   (progn
     (require 'forge)
-    (add-to-list 'forge-alist '("ironnet" "api.github.com" "github.com" forge-github-repository))))
+    (add-to-list 'forge-alist '("homegithub" "api.github.com" "github.com" forge-github-repository))))
 
 ;; markdown
 (setq markdown-command "grip --export -")
