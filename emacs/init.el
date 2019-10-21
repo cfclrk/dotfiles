@@ -79,6 +79,15 @@
                       :weight 'normal
                       :width 'normal))
 
+;; Use a larger font on bigger screens
+;; TODO: x-display-pixel-width doesn't seem right. Try:
+;;   (nth 4 (assq 'geometry (car (display-monitor-attributes-list))))
+(when window-system
+  (if (> (x-display-pixel-width) 1600)
+      (progn
+        (set-face-attribute 'default nil :height 140)
+        (set-face-attribute 'mode-line nil :height 140))))
+
 ;; Use a larger font in the mode line
 (set-face-attribute 'mode-line nil :height 120)
 
