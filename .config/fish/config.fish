@@ -34,7 +34,7 @@ if not set -q TMUX
     end
 
     # rbenv
-    if command -v pyenv > /dev/null
+    if command -v rbenv > /dev/null
         source (rbenv init - | psub)
     end
 
