@@ -125,29 +125,26 @@ function godocwkspc --description 'Serve godoc http for the current Go workspace
     end
 end
 
-# TODO:
-#  - Add a --prefix and --all option.
-#  - List buckets that will be clearend and confirm.
-#  - Probably better as a bash script in !/bin. More portable.
+function clearBucket --description "Clear one S3 bucket"
+    set bucket $argv[1]
+    echo Checking bucket $bucket
+    set objects (aws s3api list-objects-v2 --bucket $bucket --delimiter /)
+    if count $objects > /dev/null
+        set_color red
+        echo "$bucket - has objects. Deleting..."
+        set_color normal
+        aws s3api delete-bucket-policy --bucket $bucket
+        aws s3 rm --recursive s3://$bucket
+    else
+        set_color green
+        echo "$bucket - good to go."
+        set_color normal
+    end
+end
+
 function clearBuckets --description "Clear all S3 Buckets"
     set buckets (aws s3api list-buckets | jq -r .Buckets[].Name)
-
-    for bucket in $buckets
-        echo Checking bucket $bucket
-        set objects (aws s3api list-objects-v2 --bucket $bucket --delimiter /)
-
-        if count $objects > /dev/null
-            set_color red
-            echo "There is shit in this S3 bucket. Deleting shit."
-            set_color normal
-            aws s3api delete-bucket-policy --bucket $bucket
-            aws s3 rm --recursive s3://$bucket
-        else
-            set_color green
-            echo "S3 bucket good to go."
-            set_color normal
-        end
-    end
+    echo $buckets | xargs -n 1 -P (count $buckets) -I {} fish -c 'clearBucket {}'
 end
 
 function get_go_tools
@@ -161,6 +158,7 @@ end
 
 alias k "kubectl"
 alias kn "kubectl config set-context (kubectl config current-context) --namespace"
+alias rk "rancher kubectl"
 
 # Takes one arg: a kubectl version, like "1.10.11"
 function install_kubectl
