@@ -52,4 +52,6 @@ alias emacs "/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 alias md5sum "md5 -r"
 
 source ~/.functions.fish
-source ~/.extras.fish
+if test -e ~/.extras.fish
+    source ~/.extras.fish
+end
