@@ -314,7 +314,7 @@
 
   (setq fill-column 88
         whitespace-line-column 88  ;; bug with whitespace mode not using fill-column
-        python-fill-docstring-style 'django
+        python-fill-docstring-style 'pep-257-nn
         python-shell-interpreter "ipython"
         python-shell-interpreter-args "--simple-prompt -i"))
 
