@@ -22,7 +22,9 @@ shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
-shopt -s globstar
+
+# Note: Apple bash does not support globstar
+#shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -36,7 +38,7 @@ fi
 
 case "$TERM" in
     xterm*|rxvt*|screen*)
-        PS1="${Blue}\w ${Cyan}\$${Color_Off} "
+        PS1="${Blue}\w ${Cyan}\$ ${Color_Off}"
         ;;
     *)
         # term is probably dumb, e.g. doing an scp operation

@@ -142,7 +142,7 @@ function clearBucket --description "Clear one S3 bucket"
     end
 end
 
-function clearBuckets --description "Clear all S3 Buckets"
+function clearBuckets --description "Clear all S3 Buckets in parallel"
     set buckets (aws s3api list-buckets | jq -r .Buckets[].Name)
     echo $buckets | xargs -n 1 -P (count $buckets) -I {} fish -c 'clearBucket {}'
 end
@@ -165,6 +165,7 @@ function install_kubectl
     set ver $argv[1]
     curl -o ~/bin/.kubectl/kubectl-$ver \
     https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
+    chmod a+x ~/bin/.kubectl/kubectl-$ver
 end
 
 # Takes one arg: a kubectl version, like "1.10.11"

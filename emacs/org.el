@@ -5,7 +5,7 @@
 
 ;; This variable needs to be set before org.el is loaded.
 (if (not (member 'md org-export-backends))
-    (add-to-list 'org-export-backends 'md))
+    (add-to-list 'org-export-backends 'ox-gfm))
 
 ;;; ----------------------------------------------------------------------------
 
@@ -49,14 +49,19 @@
   (require 'org-bullets)
   (org-bullets-mode 1)
 
+  (require 'ox-gfm)
+
   ;; babel
-  (setq org-confirm-babel-evaluate nil
-        org-babel-clojure-backend 'cider)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((clojure . t)
      (python . t)
      (shell . t)))
+  (setq org-confirm-babel-evaluate nil)
+
+  ;; ob-clojure
+  (require 'cider)
+  (setq org-babel-clojure-backend 'cider)
 
   ;; exporting
   (require 'ox-html)
