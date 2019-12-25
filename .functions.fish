@@ -65,10 +65,8 @@ function cljrepl
 end
 
 function cljnew
-    clj -Sdeps '{:deps {seancorfield/clj-new {:mvn/version "RELEASE"}}}' \
-    -m clj-new.create \
-    app \
-    myname/myapp
+    set projectName $argv[1]
+    clj -A:new lib cfclrk/$projectName
 end
 
 function kvAll --description 'All keyvault keys and secrets'

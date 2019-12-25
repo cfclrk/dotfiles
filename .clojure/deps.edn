@@ -33,7 +33,12 @@
   ;; :aliases {
   ;;   :deps {:extra-deps {org.clojure/tools.deps.alpha {:mvn/version "0.6.496"}}}
   ;;   :test {:extra-paths ["test"]}
-  ;; }
+ ;; }
+
+ :aliases
+ {:new {:extra-deps {seancorfield/clj-new
+                     {:mvn/version "RELEASE"}}
+        :main-opts ["-m" "clj-new.create"]}}
 
   ;; Provider attributes
 
