@@ -22,6 +22,7 @@
 (require 'prelude-xml)
 (require 'prelude-yaml)
 
+
 ;;; ----------------------------------------------------------------------------
 ;;; TODO
 ;;; ----------------------------------------------------------------------------
@@ -65,7 +66,11 @@
 ;; M-o to run occur
 (define-key prelude-mode-map (kbd "M-o") 'occur)
 
+;; ca certs
 (setenv "REQUESTS_CA_BUNDLE" "/Users/chris.clark/IronNet/certificates/ironnet_ca_bundle.pem")
+(with-eval-after-load "gnutls"
+  (add-to-list 'gnutls-trustfiles "/Users/chris.clark/IronNet/certificates/ironnet_ca_bundle.pem"))
+
 
 ;;; ----------------------------------------------------------------------------
 ;;; Font
