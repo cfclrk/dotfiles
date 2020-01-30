@@ -40,14 +40,6 @@ function fish_prompt --description 'Defines the prompt'
     "$__fish_prompt_normal"
 end
 
-function man --description 'Colorize man'
-    set -x LESS_TERMCAP_md (set_color -o red)
-    set -x LESS_TERMCAP_us (set_color -o magenta)
-    set -x LESS_TERMCAP_ue (set_color normal)
-    set -x LESS_TERMCAP_me (set_color normal)
-    env man $argv
-end
-
 function grep --description 'Override grep'
     command egrep --color=auto $argv
 end
