@@ -144,7 +144,8 @@ function get_go_tools
     go get -u golang.org/x/tools/cmd/...
 end
 
-# Kubernetes stuff
+# Kubernetes
+# -----------------------------------------------------------------------------
 
 alias k "kubectl"
 alias kn "kubectl config set-context (kubectl config current-context) --namespace"
@@ -154,8 +155,15 @@ alias rk "rancher kubectl"
 function install_kubectl
     set ver $argv[1]
     curl -o ~/bin/.kubectl/kubectl-$ver \
-    https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
+        https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
     chmod a+x ~/bin/.kubectl/kubectl-$ver
+end
+
+function install_helm
+    set ver $argv[1]
+
+    # put this in a temp file, extract it and just pull the helm binary
+    curl -o ~/.local/lib/helm/helm-$ver.tar.gz https://get.helm.sh/helm-v$ver-darwin-amd64.tar.gz
 end
 
 # Takes one arg: a kubectl version, like "1.10.11"
@@ -163,4 +171,18 @@ function use_kubectl
     set ver $argv[1]
     rm ~/bin/kubectl
     ln -s ~/bin/.kubectl/kubectl-$ver ~/bin/kubectl
+end
+
+# Azure
+# -----------------------------------------------------------------------------
+
+function getVmLimit --description "Get a quota limit in the given region"
+    set location $argv[1]
+    set limit (az vm list-usage --location $location -o json | jq -r '.[] | select(.localName == "Total Regional vCPUs") | .limit')
+    echo "$location: $limit"
+end
+
+function getAllVmLimits --description "Get all Total Region vCPU limits"
+    set locations (az account list-locations | jq -r '.[].name')
+    echo $locations | xargs -n 1 -P (count $locations) -I {} fish -c 'getVmLimit {}'
 end
