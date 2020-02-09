@@ -90,11 +90,11 @@
 (when window-system
   (if (> (x-display-pixel-width) 1600)
       (progn
-        (set-face-attribute 'default nil :height 140)
-        (set-face-attribute 'mode-line nil :height 140))))
+        (set-face-attribute 'default nil :height 150)
+        (set-face-attribute 'mode-line nil :height 150))))
 
 ;; Use a larger font in the mode line
-(set-face-attribute 'mode-line nil :height 120)
+;(set-face-attribute 'mode-line nil :height 120)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Packages
@@ -305,7 +305,6 @@
                            (set-fill-column 110)
                            (setq js2-strict-missing-semi-warning nil)
                            (setq js2-missing-semi-one-line-override t)
-                           ;; TODO shouldn't need this
                            (setq whitespace-line-column 110)))
 
 ;; Python
@@ -318,7 +317,7 @@
   "Customize `python-mode'."
 
   (setq fill-column 88
-        whitespace-line-column 88  ;; bug with whitespace mode not using fill-column
+        whitespace-line-column 88
         python-fill-docstring-style 'pep-257-nn
         python-shell-interpreter "ipython"
         python-shell-interpreter-args "--simple-prompt -i"))
@@ -335,7 +334,6 @@
 
 (add-hook 'rust-mode-hook (lambda ()
                             (set-fill-column 100)
-                            ;; TODO shouldn't need this
                             (setq whitespace-line-column 100)))
 
 ;;; ----------------------------------------------------------------------------

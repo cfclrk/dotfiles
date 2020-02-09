@@ -56,7 +56,8 @@
    'org-babel-load-languages
    '((clojure . t)
      (python . t)
-     (shell . t)))
+     (shell . t)
+     (dot . t)))
   (setq org-confirm-babel-evaluate nil)
 
   ;; ob-clojure
