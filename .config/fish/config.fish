@@ -22,10 +22,8 @@ if not set -q TMUX
     # GNU programs installed with brew take precedence over pre-existing programs
     set PATH "/usr/local/opt/make/libexec/gnubin" $PATH
 
-    set -x LESS_TERMCAP_md (set_color -o red)     # begin bold
     set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
-    set -x LESS_TERMCAP_ue (set_color normal)      # reset bold/blink
-    set -x LESS_TERMCAP_me (set_color normal)      # reset underline
+    set -x LESS_TERMCAP_ue (set_color normal)      # reset underline
 
     # pyenv
     if command -v pyenv > /dev/null
@@ -34,7 +32,7 @@ if not set -q TMUX
     end
 
     # pipenv
-    if command -v pipenv
+    if command -v pipenv > /dev/null
         set -gx PIPENV_IGNORE_VIRTUALENVS 1
     end
 
