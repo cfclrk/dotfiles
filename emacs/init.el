@@ -59,7 +59,10 @@
 ; highlight color for marked region
 (set-face-attribute 'region nil :background "#7070A0")
 
-; utf-8 stuff
+;; keep marked regions highlighted in non-selected windows
+(setq highlight-nonselected-windows t)
+
+;; utf-8 stuff
 (set-language-environment "UTF-8")
 (prefer-coding-system 'utf-8)
 
@@ -109,6 +112,7 @@
                             company-lsp
                             csv-mode
                             dockerfile-mode
+                            emmet-mode
                             fish-mode
                             flycheck-mypy
                             forge
