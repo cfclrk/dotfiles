@@ -44,33 +44,6 @@ function grep --description 'Override grep'
     command egrep --color=auto $argv
 end
 
-function uninstall_gems
-    for gem in (gem list --no-versions)
-        gem uninstall $gem -aIx
-    end
-end
-
-function cljrepl
-    clj -Sdeps '{:deps {cider/cider-nrepl {:mvn/version "RELEASE"}}}' \
-    -m nrepl.cmdline \
-    --middleware "[cider.nrepl/cider-middleware]"
-end
-
-function cljnew
-    set projectName $argv[1]
-    clj -A:new lib cfclrk/$projectName
-end
-
-function kvAll --description 'All keyvault keys and secrets'
-    set secretIds (az keyvault secret list --vault-name $argv[1] --query "[].id" -o tsv)
-    for i in $secretIds
-        set val (az keyvault secret show --id $i --query "value" -o tsv)
-        echo ""
-        echo $i
-        printf "%b\n" "$val"
-    end
-end
-
 function rand --description 'Some ways to create a decent random string'
     openssl rand -base64 32
     ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'
@@ -79,6 +52,74 @@ end
 function ssh_decrypt --description 'Decrypt password-protected ssh key'
     openssl rsa -in $argv[1] -out $argv[2]
 end
+
+function myip --description "What is my ip address?"
+    # curl ifconfig.co
+    # curl icanhazip.com
+    # for more info: http -b ifconfig.co/json
+    curl https://checkip.amazonaws.com/
+end
+
+function caff
+    nohup caffeinate -d -i -m -s -u -w (pgrep -x Slack) &
+end
+
+# Ruby
+# -----------------------------------------------------------------------------
+
+function uninstall_gems
+    for gem in (gem list --no-versions)
+        gem uninstall $gem -aIx
+    end
+end
+
+# Clojure
+# -----------------------------------------------------------------------------
+
+function cljrepl
+    clj -Sdeps '{:deps {cider/cider-nrepl {:mvn/version "RELEASE"}}}' \
+        -m nrepl.cmdline \
+        --middleware "[cider.nrepl/cider-middleware]"
+end
+
+function cljnew
+    set projectName $argv[1]
+    clj -A:new lib cfclrk/$projectName
+end
+
+# Golang
+# -----------------------------------------------------------------------------
+
+function godocwkspc --description 'Serve godoc http for the current Go workspace'
+    for p in (string split : (go env GOPATH))
+        if string match --regex $p* (pwd)
+            echo "Current Go workspace is: $p"
+            echo "Visit: http://localhost:8000/pkg/"
+            godoc -http=localhost:8000 -goroot $p
+        end
+    end
+end
+
+function get_go_tools
+    go get -u github.com/zmb3/gogetdoc  # Used in emacs godoc-at-point-function
+    go get -u github.com/rogpeppe/godef  # Find symbol information in Go source
+    go get -u github.com/mdempsky/gocode  # Editor auto completion
+    go get -u golang.org/x/tools/cmd/...  # godoc, goimports, so much more
+end
+
+# Python
+# -----------------------------------------------------------------------------
+
+function newenv --description "Destroy and re-create a venv"
+    deactivate \
+        && rm -rf .venv \
+        && python -m venv .venv \
+        && source .venv/bin/activate.fish \
+        && pip install -U pip setuptools
+end
+
+# AWS
+# -----------------------------------------------------------------------------
 
 function clear_aws
     set -e AWS_ACCESS_KEY_ID
@@ -95,23 +136,6 @@ function export_aws --description 'Extract credentials from ~/.aws/credentials a
     set -gx (echo $creds[3] | tr '[:lower:]' '[:upper:]') (echo $creds[4])
     if test (count $creds) -eq 6
         set -gx (echo $creds[5] | tr '[:lower:]' '[:upper:]') (echo $creds[6])
-    end
-end
-
-function myip --description "What is my ip address?"
-    # curl ifconfig.co
-    # curl icanhazip.com
-    # for more info: http -b ifconfig.co/json
-    curl https://checkip.amazonaws.com/
-end
-
-function godocwkspc --description 'Serve godoc http for the current Go workspace'
-    for p in (string split : (go env GOPATH))
-        if string match --regex $p* (pwd)
-            echo "Current Go workspace is: $p"
-            echo "Visit: http://localhost:8000/pkg/"
-            godoc -http=localhost:8000 -goroot $p
-        end
     end
 end
 
@@ -137,11 +161,31 @@ function clearBuckets --description "Clear all S3 Buckets in parallel"
     echo $buckets | xargs -n 1 -P (count $buckets) -I {} fish -c 'clearBucket {}'
 end
 
-function get_go_tools
-    go get -u github.com/zmb3/gogetdoc  # used in emacs godoc-at-point-function
-    go get -u github.com/rogpeppe/godef  # find symbol information in Go source
-    go get -u github.com/mdempsky/gocode  # auto completion
-    go get -u golang.org/x/tools/cmd/...
+function ssoRefresh --description "Refresh credentials for an AWS account using AWS SSO"
+    # TODO: check for token expiration. If expired, run "aws sso login".
+
+    test -z "$argv[1]"; and echo "arg1 must be an AWS account num"; and return
+    set accountId $argv[1]
+
+    set r us-east-1
+    set tokenFile ~/.aws/sso/cache/bc340e54782a2aa31c5a3116c25dfa13dabaa7d3.json
+    set token (cat $tokenFile | jq -r '.accessToken')
+
+    set roles (aws --region us-east-1 sso list-account-roles \
+        --account-id $accountId \
+        --access-token $token \
+        | jq -r '.roleList[].roleName')
+
+    # TODO: prompt to select role
+    set role $roles[1]
+    echo $role
+
+    set creds (aws --region $r sso get-role-credentials \
+        --role-name $role \
+        --account-id $accountId \
+        --access-token $token)
+
+    echo $creds
 end
 
 # Kubernetes
@@ -160,6 +204,8 @@ function install_kubectl
 end
 
 function install_helm
+    test -z "$argv[1]"; and echo "arg1 must be a helm version"; and return
+
     set ver $argv[1]
 
     # put this in a temp file, extract it and just pull the helm binary
@@ -175,6 +221,16 @@ end
 
 # Azure
 # -----------------------------------------------------------------------------
+
+function kvAll --description 'All keyvault keys and secrets'
+    set secretIds (az keyvault secret list --vault-name $argv[1] --query "[].id" -o tsv)
+    for i in $secretIds
+        set val (az keyvault secret show --id $i --query "value" -o tsv)
+        echo ""
+        echo $i
+        printf "%b\n" "$val"
+    end
+end
 
 function getVmLimit --description "Get a quota limit in the given region"
     set location $argv[1]
