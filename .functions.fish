@@ -104,7 +104,7 @@ function get_go_tools
     go get -u github.com/zmb3/gogetdoc  # Used in emacs godoc-at-point-function
     go get -u github.com/rogpeppe/godef  # Find symbol information in Go source
     go get -u github.com/mdempsky/gocode  # Editor auto completion
-    go get -u golang.org/x/tools/cmd/...  # godoc, goimports, so much more
+    go get -u golang.org/x/tools/...  # godoc, gopls, goimports, gorename, etc
 end
 
 # Python
