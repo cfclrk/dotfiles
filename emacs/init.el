@@ -27,16 +27,17 @@
 ;;; TODO
 ;;; ----------------------------------------------------------------------------
 
-;; A Keybinding and function preview current markdown file in browser.
-;; Just a passthrough to grip (brew install grip) that errors out nicely if
-;; grip is not installed
-
 ;; Figure out how to include this in my repo instead of the prelude repo:
 ;; ((magit-log:magit-log-mode "-n256" "--graph" "--color" "--decorate"))
 
 ;;; ----------------------------------------------------------------------------
 ;;; General
 ;;; ----------------------------------------------------------------------------
+
+;; Raise the number of bytes of consing between garbage collections
+(setq gc-cons-threshold 100000000)
+
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
 
 ;; customize: don't touch init.el
 (setq custom-file (expand-file-name "personal/custm.el" user-emacs-directory))
@@ -433,10 +434,3 @@
   (define-key smartparens-mode-map (kbd "M-b") 'sp-previous-sexp)
   (define-key smartparens-mode-map (kbd "M-a") 'sp-beginning-of-sexp)
   (define-key smartparens-mode-map (kbd "M-e") 'sp-end-of-sexp))
-
-;;; ----------------------------------------------------------------------------
-;;; Load other files
-;;; ----------------------------------------------------------------------------
-
-;; org mode config
-(load-file (expand-file-name "personal/org.el" user-emacs-directory))
