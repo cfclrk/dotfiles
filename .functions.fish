@@ -198,29 +198,44 @@ alias rk "rancher kubectl"
 
 # Example: install_kubectl 1.16.7
 function install_kubectl --description "Download and use the given kubectl version"
-    set ver $argv[1]
-    set path ~/.local/lib/kubectl/kubectl-$ver
-    set url https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
+    test -z "$argv[1]"; and echo "arg1 must be a kubectl version"; and return
+    set progVersion $argv[1]
+
+    set progName kubectl
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set binPath ~/.local/bin/$progName
+    set url https://storage.googleapis.com/kubernetes-release/release/v$progVersion/bin/darwin/amd64/kubectl
     curl -s -o $path $url
     chmod +x $path
-    rm -f ~/.local/bin/kubectl
-    ln -s $path kubectl
+    rm -f $binPath
+    ln -s $libPath $binPath
+    la $binPath
 end
 
+# Example: install_helm 3.1.2
 function install_helm
     test -z "$argv[1]"; and echo "arg1 must be a helm version"; and return
+    set progVersion $argv[1]
 
-    set ver $argv[1]
-
-    # put this in a temp file, extract it and just pull the helm binary
-    curl -o ~/.local/lib/helm/helm-$ver.tar.gz https://get.helm.sh/helm-v$ver-darwin-amd64.tar.gz
+    set progName helm
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set binPath ~/.local/bin/$progName
+    set url https://get.helm.sh/helm-v$progVersion-darwin-amd64.tar.gz
+    curl -s $url | tar xvz - -C /tmp
+    cp /tmp/darwin-amd64/helm $libPath
+    rm -f $binPath
+    ln -s $libPath $binPath
+    la $binPath
 end
 
-# Takes one arg: a kubectl version, like "1.10.11"
-function use_kubectl
-    set ver $argv[1]
-    rm ~/bin/kubectl
-    ln -s ~/bin/.kubectl/kubectl-$ver ~/bin/kubectl
+# Example: use helm 2.9.1
+function use
+    set progName $argv[1]
+    set progVersion $argv[2]
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set binPath ~/.local/bin/$progName
+    rm -f $binPath
+    ln -s $libPath $binPath
 end
 
 # Azure
