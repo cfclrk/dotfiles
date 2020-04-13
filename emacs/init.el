@@ -122,7 +122,6 @@
                             helm-descbinds
                             key-chord
                             lsp-mode
-                            markdown-mode
                             org
                             org-bullets
                             page-break-lines
@@ -366,12 +365,12 @@
 ;; magit
 (setq magit-diff-refine-hunk 'all)
 (with-eval-after-load 'magit
-  (progn
-    (require 'forge)
-    (add-to-list 'forge-alist '("homegithub" "api.github.com" "github.com" forge-github-repository))))
+  ;; forge
+  (require 'forge)
+  (add-to-list 'forge-alist '("homegithub" "api.github.com" "github.com" forge-github-repository))
 
-;; markdown
-(setq markdown-command "grip --export -")
+  ;; automatically refresh the magit buffer after saving a file
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
 ;; helm
 (require 'prelude-helm-everywhere)
