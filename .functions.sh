@@ -11,3 +11,8 @@ export_aws() {
     export $(echo ${creds_array[0]} | tr '[:lower:]' '[:upper:]')=$(echo ${creds_array[1]})
     export $(echo ${creds_array[2]} | tr '[:lower:]' '[:upper:]')=$(echo ${creds_array[3]})
 }
+
+function concatPdf {
+    gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \
+       -sOutputFile=output.pdf file1.pdf file2.pdf
+}

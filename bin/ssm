@@ -2,9 +2,12 @@
 
 set -eu -o pipefail
 
+# TODO:
+# -o table to show values in ls
+
 showHelp() {
     cat <<- END
-Usage: $(basename "$0") <command> [<name> [<value>]]
+Usage: $(basename "$0") [-p AWS_PROFILE] [-r REGION] <command> [<name> [<value>]]
 
 AWS SSM easy wrapper
 
@@ -63,13 +66,19 @@ name=${2-}
 value=${3-}
 
 ssm="$aws ssm"
-key=alias/aws/ssm
+
+# This filter will get the default KMS key
+filter="Key=KeyId,Values=alias/aws/ssm"
+
+# This filter will get all values at /foo/bar/*. If you just do /foo, it will
+# not get values nested in /foo/bar, only those at /foo.
+filter="Key=Path,Values=/foo/bar"
 
 case $cmd in
     ls|list)
-        filter="Key=KeyId,Values=$key"
-        $ssm describe-parameters --parameter-filters $filter |
-            jq -r ".Parameters[].Name"
+        #   --parameter-filters $filter \
+        $ssm describe-parameters \
+            | jq -r ".Parameters[].Name"
         ;;
     rm)
         $ssm delete-parameter --name "$name"

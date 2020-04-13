@@ -100,11 +100,12 @@ function godocwkspc --description 'Serve godoc http for the current Go workspace
     end
 end
 
-function get_go_tools
+function go_get_tools
     go get -u github.com/zmb3/gogetdoc  # Used in emacs godoc-at-point-function
     go get -u github.com/rogpeppe/godef  # Find symbol information in Go source
     go get -u github.com/mdempsky/gocode  # Editor auto completion
     go get -u golang.org/x/tools/...  # godoc, gopls, goimports, gorename, etc
+    go get -u honnef.co/go/tools/...  # staticcheck, structlayout, rdeps, keyify
 end
 
 # Python
@@ -180,7 +181,7 @@ function ssoRefresh --description "Refresh credentials for an AWS account using 
     set role $roles[1]
     echo $role
 
-    set creds (aws --region $r sso get-role-credentials \
+   set  creds (aws --region $r sso get-role-credentials \
         --role-name $role \
         --account-id $accountId \
         --access-token $token)
@@ -195,12 +196,15 @@ alias k "kubectl"
 alias kn "kubectl config set-context (kubectl config current-context) --namespace"
 alias rk "rancher kubectl"
 
-# Takes one arg: a kubectl version, like "1.10.11"
-function install_kubectl
+# Example: install_kubectl 1.16.7
+function install_kubectl --description "Download and use the given kubectl version"
     set ver $argv[1]
-    curl -o ~/bin/.kubectl/kubectl-$ver \
-        https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
-    chmod a+x ~/bin/.kubectl/kubectl-$ver
+    set path ~/.local/lib/kubectl/kubectl-$ver
+    set url https://storage.googleapis.com/kubernetes-release/release/v$ver/bin/darwin/amd64/kubectl
+    curl -s -o $path $url
+    chmod +x $path
+    rm -f ~/.local/bin/kubectl
+    ln -s $path kubectl
 end
 
 function install_helm
