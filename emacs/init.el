@@ -394,6 +394,9 @@
 ;; make
 (add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
 
+;; projectile
+(add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
+
 ;; smartparens
 (defun lisp-smartparens-hook ()
   "Extra smartparens settings to apply in Lisp modes."
