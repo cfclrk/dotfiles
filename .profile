@@ -25,5 +25,8 @@ fi
 # pipenv
 export PIPENV_IGNORE_VIRTUALENVS=1
 
+# Homebrew: do not run cleanup every 30 days. I like to `brew switch`.
+export HOMEBREW_NO_INSTALL_CLEANUP=1
+
 . ~/.bashrc
 [[ -s ~/.ironkube/bashrc ]] && source ~/.ironkube/bashrc

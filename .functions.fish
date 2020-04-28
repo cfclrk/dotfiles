@@ -60,7 +60,13 @@ function myip --description "What is my ip address?"
     curl https://checkip.amazonaws.com/
 end
 
-function caff
+# Do not let computer go to sleep while Slack is running.
+# Notes:
+#  - Slack needs to *already be running*
+#  - This command starts a process that stops when Slack is closed
+#
+# So, if I must re-run this command every time I open Slack.
+function caff --description "caffeinate while Slack is running"
     nohup caffeinate -d -i -m -s -u -w (pgrep -x Slack) &
 end
 
@@ -106,17 +112,18 @@ function go_get_tools
     go get -u github.com/mdempsky/gocode  # Editor auto completion
     go get -u golang.org/x/tools/...  # godoc, gopls, goimports, gorename, etc
     go get -u honnef.co/go/tools/...  # staticcheck, structlayout, rdeps, keyify
+    go get -u golang.org/x/lint/golint  # golint
 end
 
 # Python
 # -----------------------------------------------------------------------------
 
 function newenv --description "Destroy and re-create a venv"
-    deactivate \
-        && rm -rf .venv \
-        && python -m venv .venv \
-        && source .venv/bin/activate.fish \
-        && pip install -U pip setuptools
+    deactivate && \
+        rm -rf .venv && \
+        python -m venv .venv && \
+        source .venv/bin/activate.fish && \
+        pip install -U pip setuptools
 end
 
 # AWS
@@ -130,9 +137,14 @@ function clear_aws
     set -e AWS_PROFILE
 end
 
-function export_aws --description 'Extract credentials from ~/.aws/credentials and export them as env vars'
+function export_aws --description "Export credentials from a profile in ~/.aws/credentials"
     set profile "\[$argv[1]\]"
-    set creds (grep "$profile" -A 3 ~/.aws/credentials | tail -n 3 | string match -r '.+' | string trim | string split = | string trim)
+    set creds (grep "$profile" -A 3 ~/.aws/credentials \
+        | tail -n 3 \
+        | string match -r '.+' \
+        | string trim \
+        | string split = \
+        | string trim)
     set -gx (echo $creds[1] | tr '[:lower:]' '[:upper:]') (echo $creds[2])
     set -gx (echo $creds[3] | tr '[:lower:]' '[:upper:]') (echo $creds[4])
     if test (count $creds) -eq 6
@@ -157,13 +169,17 @@ function clearBucket --description "Clear one S3 bucket"
     end
 end
 
-function clearBuckets --description "Clear all S3 Buckets in parallel"
+function clearBuckets --description "Clear all S3 buckets"
     set buckets (aws s3api list-buckets | jq -r .Buckets[].Name)
     echo $buckets | xargs -n 1 -P (count $buckets) -I {} fish -c 'clearBucket {}'
 end
 
 function ssoRefresh --description "Refresh credentials for an AWS account using AWS SSO"
-    # TODO: check for token expiration. If expired, run "aws sso login".
+    # This doesn't work, just throwing down some stuff.
+
+    # TODO:
+    # - Look up token file
+    # - Check for token expiration; if expired, run "aws sso login"
 
     test -z "$argv[1]"; and echo "arg1 must be an AWS account num"; and return
     set accountId $argv[1]
@@ -197,7 +213,7 @@ alias kn "kubectl config set-context (kubectl config current-context) --namespac
 alias rk "rancher kubectl"
 
 # Example: install_kubectl 1.16.7
-function install_kubectl --description "Download and use the given kubectl version"
+function install_kubectl --description "Download a kubectl binary"
     test -z "$argv[1]"; and echo "arg1 must be a kubectl version"; and return
     set progVersion $argv[1]
 
@@ -213,7 +229,7 @@ function install_kubectl --description "Download and use the given kubectl versi
 end
 
 # Example: install_helm 3.1.2
-function install_helm
+function install_helm --description "Download a helm binary"
     test -z "$argv[1]"; and echo "arg1 must be a helm version"; and return
     set progVersion $argv[1]
 
@@ -229,7 +245,7 @@ function install_helm
 end
 
 # Example: use helm 2.9.1
-function use
+function use --description "Create symlink on $PATH to this installed program"
     set progName $argv[1]
     set progVersion $argv[2]
     set libPath ~/.local/lib/$progName/$progName-$progVersion
@@ -253,7 +269,10 @@ end
 
 function getVmLimit --description "Get a quota limit in the given region"
     set location $argv[1]
-    set limit (az vm list-usage --location $location -o json | jq -r '.[] | select(.localName == "Total Regional vCPUs") | .limit')
+    set limit (az vm list-usage \
+        --location $location \
+        -o json \
+        | jq -r '.[] | select(.localName == "Total Regional vCPUs") | .limit')
     echo "$location: $limit"
 end
 
