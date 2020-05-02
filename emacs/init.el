@@ -396,6 +396,8 @@
 
 ;; projectile
 (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
+(add-to-list 'projectile-globally-ignored-directories "*logs")
+(add-to-list 'projectile-globally-ignored-directories "*_output")
 
 ;; smartparens
 (defun lisp-smartparens-hook ()
