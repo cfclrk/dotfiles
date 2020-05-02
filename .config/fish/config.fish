@@ -58,3 +58,6 @@ source ~/.functions.fish
 if test -e ~/.extras.fish
     source ~/.extras.fish
 end
+
+# Source env vars I need for work stuff
+s ~/.env/work

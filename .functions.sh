@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+s() {
+    [[ -n "$1" ]] || {
+        echo "Error: arg1 must be a file path."
+        return 1
+    }
+    envFile="$1"
+    export $(cat "$envFile" | xargs -L 1)
+}
+
 export_aws() {
     [[ -n "$1" ]] || {
         echo "Error: AWS profile name is required."

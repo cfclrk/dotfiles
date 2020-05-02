@@ -29,4 +29,3 @@ export PIPENV_IGNORE_VIRTUALENVS=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 
 . ~/.bashrc
-[[ -s ~/.ironkube/bashrc ]] && source ~/.ironkube/bashrc

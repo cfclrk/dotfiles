@@ -68,7 +68,6 @@ fi
 # aws CLI yumminess
 complete -C aws_completer aws
 
-if [ $(hostname) != "envy" ]; then
-    export REQUESTS_CA_BUNDLE=~/IronNet/certificates/ironnet_ca_bundle.pem
-fi
+s ~/.env/work
+
 [[ -s ~/.ironkube/bashrc ]] && source ~/.ironkube/bashrc

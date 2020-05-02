@@ -40,6 +40,12 @@ function fish_prompt --description 'Defines the prompt'
     "$__fish_prompt_normal"
 end
 
+function s --description "Export variables in a .env file"
+    test -z "$argv[1]"; and echo "Error: arg1 must be a file path"; and return
+    set envFile $argv[1]
+    export (cat $envFile | xargs -L 1)
+end
+
 function grep --description 'Override grep'
     command egrep --color=auto $argv
 end
@@ -68,6 +74,10 @@ end
 # So, if I must re-run this command every time I open Slack.
 function caff --description "caffeinate while Slack is running"
     nohup caffeinate -d -i -m -s -u -w (pgrep -x Slack) &
+end
+
+function rlogin
+    rancher login $RANCHER_URL --token $RANCHER_TOKEN
 end
 
 # Ruby
