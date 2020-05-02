@@ -156,6 +156,29 @@
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'cfc/show-buffer-file-name)
 
+(defun cfc/split-lines-by-equals (line)
+  "Split string LINE on the first = character."
+  (mapcar '(lambda (x) (split-string x "=")) lines))
+
+(defun cfc/export-pairs (env-pairs)
+  "Export pairs of values as environment variables.
+
+  ENV-PAIRS is a list of pairs. The first element of each pair is
+  the environment variable name, and the second element is the
+  value."
+  (mapc '(lambda (a) (setenv (car a) (car (cdr a)))) env-pairs))
+
+(defvar env-dir (expand-file-name "~/.env/")
+  "Directory with env files.")
+
+(defun cfc/s (f)
+  "Set environment variables from the env file F."
+  (interactive (list (read-file-name "ENV file: " env-dir)))
+  (with-temp-buffer
+    (insert-file-contents f)
+    (let ((lines (split-string (buffer-string) "\n" t)))
+      (cfc/export-pairs (cfc/split-lines-by-equals lines)))))
+
 ;;; ----------------------------------------------------------------------------
 ;;; Cosmetics
 ;;; ----------------------------------------------------------------------------
