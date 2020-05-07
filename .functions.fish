@@ -40,15 +40,6 @@ function fish_prompt --description 'Defines the prompt'
     "$__fish_prompt_normal"
 end
 
-# Works if env file has only key=value pairs, but will not interpolate values
-# (i.e. cannot have key=$value pairs)
-
-# function s --description "Export variables in a .env file"
-#     test -z "$argv[1]"; and echo "Error: arg1 must be a file path"; and return
-#     set envFile $argv[1]
-#     export (cat $envFile | xargs -L 1)
-# end
-
 function s --description "Export variables in a .env file"
     test -z "$argv[1]"; and echo "Error: arg1 must be a file path"; and return 1
     set envFile $argv[1]

@@ -6,7 +6,12 @@ s() {
         return 1
     }
     envFile="$1"
-    export $(cat "$envFile" | xargs -L 1)
+
+    while read line; do
+        if test -n "$line"; then
+            eval "export $line"
+        fi
+    done <"$envFile"
 }
 
 export_aws() {
