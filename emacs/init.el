@@ -156,8 +156,11 @@
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'cfc/show-buffer-file-name)
 
-(defun cfc/split-lines-by-equals (line)
-  "Split string LINE on the first = character."
+(defvar env-dir (expand-file-name "~/.env/")
+  "Directory with env files.")
+
+(defun cfc/split-lines-by-equals (lines)
+  "Split string LINES on the first = character."
   (mapcar '(lambda (x) (split-string x "=")) lines))
 
 (defun cfc/export-pairs (env-pairs)
@@ -166,10 +169,8 @@
   ENV-PAIRS is a list of pairs. The first element of each pair is
   the environment variable name, and the second element is the
   value."
-  (mapc '(lambda (a) (setenv (car a) (car (cdr a)))) env-pairs))
-
-(defvar env-dir (expand-file-name "~/.env/")
-  "Directory with env files.")
+  (mapc '(lambda (a) (setenv (car a) (substitute-env-vars (car (cdr a)))))
+        env-pairs))
 
 (defun cfc/s (f)
   "Set environment variables from the env file F."
