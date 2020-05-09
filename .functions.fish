@@ -148,6 +148,7 @@ end
 function clear_aws
     set -e AWS_ACCESS_KEY_ID
     set -e AWS_SECRET_ACCESS_KEY
+    set -e AWS_SESSION_TOKEN
     set -e AWS_DEFAULT_REGION
     set -e AWS_DEFAULT_PROFILE
     set -e AWS_PROFILE
@@ -190,18 +191,16 @@ function clearBuckets --description "Clear all S3 buckets"
     echo $buckets | xargs -n 1 -P (count $buckets) -I {} fish -c 'clearBucket {}'
 end
 
-function ssoRefresh --description "Refresh credentials for an AWS account using AWS SSO"
-    # This doesn't work, just throwing down some stuff.
-
-    # TODO:
-    # - Look up token file
-    # - Check for token expiration; if expired, run "aws sso login"
-
+function sso --description "Set credentials for an AWS account using AWS SSO"
     test -z "$argv[1]"; and echo "arg1 must be an AWS account num"; and return
     set accountId $argv[1]
 
-    set r us-east-1
+    # TODO: sup with those .aws/cli/cache/*.json files?
+
+    # TODO: Look up token file
     set tokenFile ~/.aws/sso/cache/bc340e54782a2aa31c5a3116c25dfa13dabaa7d3.json
+
+    # TODO: Check for token expiration; if expired, run "aws sso login"
     set token (cat $tokenFile | jq -r '.accessToken')
 
     set roles (aws --region us-east-1 sso list-account-roles \
@@ -211,14 +210,21 @@ function ssoRefresh --description "Refresh credentials for an AWS account using 
 
     # TODO: prompt to select role
     set role $roles[1]
-    echo $role
 
-   set  creds (aws --region $r sso get-role-credentials \
+    set creds (aws --region us-east-1 sso get-role-credentials \
         --role-name $role \
         --account-id $accountId \
         --access-token $token)
 
-    echo $creds
+    set -l accessKey (echo $creds | jq -r '.roleCredentials.accessKeyId')
+    set -l secretKey (echo $creds | jq -r '.roleCredentials.secretAccessKey')
+    set -l sessionToken (echo $creds | jq -r '.roleCredentials.sessionToken')
+
+    source (echo "\
+set -gx AWS_ACCESS_KEY_ID \"$accessKey\"
+set -gx AWS_SECRET_ACCESS_KEY \"$secretKey\"
+set -gx AWS_SESSION_TOKEN \"$sessionToken\"\
+" | psub)
 end
 
 # Kubernetes
