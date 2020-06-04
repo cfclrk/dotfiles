@@ -38,7 +38,9 @@
       ns-pop-up-frames nil         ; Don't open files in new frame
       whitespace-line-column nil   ; Ensure whitespace-mode uses fill-column
       prelude-guru nil             ; Turn off little how-to-use-emacs tips
-      prelude-tips nil)            ; Don't show prelude tips at startup
+      prelude-tips nil             ; Don't show prelude tips at startup
+      help-window-select t         ; Always select a help window when it opens
+      history-delete-duplicates t) ; Don't keep duplicate commands in history
 
 ;; ⌘ as Meta and ⎇ as Super on MacOS
 (when (eq system-type 'darwin)
