@@ -73,7 +73,7 @@
                       :width 'normal))
 
 ;; Use a larger font on bigger screens
-;; TODO: x-display-pixel-width doesn't seem right. Try:
+;; TODO: x-display-pixel-width doesn't seem to work (anymore?). Maybe try:
 ;;   (nth 4 (assq 'geometry (car (display-monitor-attributes-list))))
 (when window-system
   (if (> (x-display-pixel-width) 1600)
@@ -483,3 +483,6 @@ variables defined in file F."
   (define-key smartparens-mode-map (kbd "M-b") 'sp-previous-sexp)
   (define-key smartparens-mode-map (kbd "M-a") 'sp-beginning-of-sexp)
   (define-key smartparens-mode-map (kbd "M-e") 'sp-end-of-sexp))
+
+
+;;; init.el ends here
