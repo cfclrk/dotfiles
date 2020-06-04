@@ -46,7 +46,7 @@ function s --description "Export variables in a .env file"
 
     for line in (cat $envFile)
         if test -n $line
-            set -l v (string split -m 1 "=" -- $line | string join " ")
+            set -l v (string replace "=" " " -- $line)
             eval set -gx $v
         end
     end
@@ -194,10 +194,6 @@ end
 function sso --description "Set credentials for an AWS account using AWS SSO"
     test -z "$argv[1]"; and echo "arg1 must be an AWS account num"; and return
     set accountId $argv[1]
-
-    # TODO: sup with those .aws/cli/cache/*.json files?
-
-    # TODO: Look up token file
     set tokenFile ~/.aws/sso/cache/bc340e54782a2aa31c5a3116c25dfa13dabaa7d3.json
 
     # TODO: Check for token expiration; if expired, run "aws sso login"
