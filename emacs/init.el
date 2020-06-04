@@ -144,8 +144,12 @@
   "Directory with env files.")
 
 (defun cfc/split-lines-by-equals (lines)
-  "Split string LINES on the first = character."
-  (mapcar '(lambda (x) (split-string x "=")) lines))
+  "Split each string in LINES on the first = character.
+
+LINES is a list of strings like ('FOO=foo' 'BAR=bar').
+
+Return a list of pairs, like (('FOO' 'foo') ('BAR' 'bar'))."
+  (mapcar '(lambda (line) (split-string line "=")) lines))
 
 (defun cfc/export-pair (env-pair)
   "Set or unset an environment variable.
