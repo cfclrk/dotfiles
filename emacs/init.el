@@ -60,12 +60,6 @@
 ;; M-o to run occur
 (define-key prelude-mode-map (kbd "M-o") 'occur)
 
-;; ca certs
-(setenv "REQUESTS_CA_BUNDLE" "/Users/chris.clark/IronNet/certificates/ironnet_ca_bundle.pem")
-(with-eval-after-load "gnutls"
-  (add-to-list 'gnutls-trustfiles "/Users/chris.clark/IronNet/certificates/ironnet_ca_bundle.pem"))
-
-
 ;;; ----------------------------------------------------------------------------
 ;;; Font
 ;;; ----------------------------------------------------------------------------
@@ -153,17 +147,54 @@
   "Split string LINES on the first = character."
   (mapcar '(lambda (x) (split-string x "=")) lines))
 
+(defun cfc/export-pair (env-pair)
+  "Set or unset an environment variable.
+
+ENV-PAIR is a list of size 2, where first element is an
+environment variable name and the second element is the value.
+
+If `current-prefix-arg' is set, unset the environment variable with
+the given name.
+
+If the second element (the value) begins with a ~, treat it as a
+file path and expand it."
+  (let* ((envName (car pair))
+         (val (car (cdr pair)))
+         (envVal (if (string-prefix-p "~" val)
+                     (expand-file-name val)
+                   val)))
+    (if current-prefix-arg
+        (setenv envName nil)
+      (setenv envName envVal t))))
+
 (defun cfc/export-pairs (env-pairs)
   "Export pairs of values as environment variables.
 
-  ENV-PAIRS is a list of pairs. The first element of each pair is
-  the environment variable name, and the second element is the
-  value."
-  (mapc '(lambda (a) (setenv (car a) (substitute-env-vars (car (cdr a)))))
-        env-pairs))
+ENV-PAIRS is a list of pairs, where first element of each pair is
+an environment variable name and the second element is the
+value."
+  (mapc '(lambda (pair) (cfc/export-pair pair)) env-pairs))
 
 (defun cfc/s (f)
-  "Set environment variables from the env file F."
+  "Set or unset environment variables from the env file F.
+
+As a convenience the env file F may define simple bash-like
+variables, and tildes are expanded if they are the first
+character of the value. However, other shell-isms will not work.
+
+For example, an env file F with the following will set BAR to the
+absolute path of $HOME/foo/bar:
+
+    FOO=~/foo
+    BAR=$FOO/bar
+
+However an env file with the following will probably not do what
+you want:
+
+    FOO=../mydir
+
+Prefixed with one \\[universal-argument], unset the environment
+variables defined in file F."
   (interactive (list (read-file-name "ENV file: " env-dir)))
   (with-temp-buffer
     (insert-file-contents f)
