@@ -1,6 +1,3 @@
-;; This is meant to be used with emacs Prelude. Put this file in
-;; ~/.emacs.d/personal/init.el
-
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")))
@@ -22,14 +19,6 @@
 (require 'prelude-xml)
 (require 'prelude-yaml)
 
-
-;;; ----------------------------------------------------------------------------
-;;; TODO
-;;; ----------------------------------------------------------------------------
-
-;; Figure out how to include this in my repo instead of the prelude repo:
-;; ((magit-log:magit-log-mode "-n256" "--graph" "--color" "--decorate"))
-
 ;;; ----------------------------------------------------------------------------
 ;;; General
 ;;; ----------------------------------------------------------------------------
@@ -37,11 +26,10 @@
 ;; Raise the number of bytes of consing between garbage collections
 (setq gc-cons-threshold 100000000)
 
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-
-;; customize: don't touch init.el
-(setq custom-file (expand-file-name "personal/custm.el" user-emacs-directory))
-(load custom-file)
+;; [Emacs 27] Number of bytes that can be read from a sub-process in one read
+;; operation. Good for dealing with high-throughput sub-processes like, ehem, an
+;; LSP server.
+(setq read-process-output-max (* 1024 1024)) ;; 1 MiB (default is 4 KiB)
 
 (setq-default fill-column 80)      ; Default line length for text wrapping
 
