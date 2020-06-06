@@ -1,3 +1,9 @@
+;;; init.el -- My emacs setup  -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")))
