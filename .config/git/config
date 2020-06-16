@@ -3,21 +3,22 @@
 [core]
 	editor = emacs
 	excludesfile = ~/.gitignore_global
-[help]
-	autocorrect = 1
-[color]
-	ui = auto
+[pull]
+	ff = only
 [push]
 	default = simple
 [merge]
 	tool = emerge
 [diff]
 	compactionHeuristic = true
+[color]
+	ui = auto
+[help]
+	autocorrect = 1
 
-# Include more config depending on the current directory
 [includeIf "gitdir:~/"]
-	path = .gitconfig-personal
+	path = config-home
 [includeIf "gitdir:~/IronNet/"]
-	path = .gitconfig-ironnet
+	path = config-work
 [includeIf "gitdir:~/go/"]
-	path = .gitconfig-ironnet
+	path = config-work
