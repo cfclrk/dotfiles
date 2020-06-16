@@ -52,9 +52,6 @@
   (setq ns-command-modifier 'meta
         ns-alternate-modifier 'super))
 
-; highlight color for marked region
-(set-face-attribute 'region nil :background "#7070A0")
-
 ;; keep marked regions highlighted in non-selected windows
 (setq highlight-nonselected-windows t)
 
@@ -68,9 +65,8 @@
 ;; M-o to run occur
 (define-key prelude-mode-map (kbd "M-o") 'occur)
 
-;; whitespace mode
-(makunbound 'whitespace-line-column)
-(setq whitespace-style '(face tabs trailing lines-tail))
+;; Make whitespace-mode use `fill-column'
+(setq-default whitespace-line-column nil)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Packages
@@ -79,13 +75,15 @@
 ;; Packages to install in addition to those already defined in prelude-packages
 ;; and in each prelude language module at the head of this file.
 
-(prelude-require-packages '(bats-mode
+(prelude-require-packages '(all-the-icons
+                            bats-mode
                             blacken
                             clj-refactor
                             company-lsp
                             csv-mode
                             dockerfile-mode
                             doom-modeline
+                            doom-themes
                             emmet-mode
                             fish-mode
                             flycheck-mypy
@@ -107,6 +105,7 @@
                             restclient
                             toml-mode
                             visual-fill-column
+                            writeroom-mode
                             yapfify
                             yasnippet))
 
@@ -159,20 +158,21 @@
 ;;; Cosmetics
 ;;; ----------------------------------------------------------------------------
 
+;; Icons
+;;(require 'all-the-icons)
+
 ;; Remove some UI features
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; Doom modeline, oooooh yeah!
 (doom-modeline-mode 1)
+(setq doom-modeline-buffer-encoding nil)
 
 ;; Render ^L (page break) as a nice line across the buffer
 (global-page-break-lines-mode)
 
-;; Theme customization
-(custom-theme-set-faces 'zenburn)
-
 ;;; ----------------------------------------------------------------------------
-;;; Window and frame control
+;;; window and frame control
 ;;; ----------------------------------------------------------------------------
 
 ;; TODO: for several of these I'd rather they be in other windows but switch
@@ -209,15 +209,13 @@
 
 ;; Thesaurus for word at point
 
-;; https://github.com/joostkremers/writeroom-mode
+;; See:
+;; https://github.com/hlissner/doom-emacs/tree/develop/modules/ui/zen
+;; https://github.com/hlissner/doom-emacs/tree/develop/modules/checkers
 
 (defun my-visual-line-mode-hook ()
   "Set options suitable for writing without newlines."
-  (visual-fill-column-mode)
-
-  ;; not sure of a way to explicitly disable
-  ;; whitespace mode, only toggle it
-  (whitespace-mode 'toggle))
+  (visual-fill-column-mode))
 
 (add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
 
@@ -315,7 +313,11 @@
   (setq fill-column 88
         python-fill-docstring-style 'pep-257-nn
         python-shell-interpreter "ipython"
-        python-shell-interpreter-args "--simple-prompt -i"))
+        python-shell-interpreter-args "--simple-prompt -i")
+
+  ;; Restart whitespace-mode so that it properly uses `fill-column'
+  (whitespace-mode -1)
+  (whitespace-mode +1))
 
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 
