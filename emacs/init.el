@@ -42,7 +42,6 @@
 (setq mark-ring-max 10             ; Num items to keep in mark ring
       toggle-debug-on-error t      ; Show stack trace on any Emacs error
       ns-pop-up-frames nil         ; Don't open files in new frame
-      whitespace-line-column nil   ; Ensure whitespace-mode uses fill-column
       prelude-guru nil             ; Turn off little how-to-use-emacs tips
       prelude-tips nil             ; Don't show prelude tips at startup
       help-window-select t         ; Always select a help window when it opens
@@ -62,9 +61,54 @@
 ;; utf-8 stuff
 (set-language-environment "UTF-8")
 (prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
 
 ;; M-o to run occur
 (define-key prelude-mode-map (kbd "M-o") 'occur)
+
+;; whitespace mode
+(makunbound 'whitespace-line-column)
+(setq whitespace-style '(face tabs trailing lines-tail))
+
+;;; ----------------------------------------------------------------------------
+;;; Packages
+;;; ----------------------------------------------------------------------------
+
+;; Packages to install in addition to those already defined in prelude-packages
+;; and in each prelude language module at the head of this file.
+
+(prelude-require-packages '(bats-mode
+                            blacken
+                            clj-refactor
+                            company-lsp
+                            csv-mode
+                            dockerfile-mode
+                            doom-modeline
+                            emmet-mode
+                            fish-mode
+                            flycheck-mypy
+                            flycheck-package
+                            forge
+                            geiser
+                            github-browse-file
+                            helm-descbinds
+                            key-chord
+                            lsp-mode
+                            org
+                            org-bullets
+                            page-break-lines
+                            pipenv
+                            py-isort
+                            powershell
+                            python-pytest
+                            racket-mode
+                            restclient
+                            toml-mode
+                            visual-fill-column
+                            yapfify
+                            yasnippet))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Font
@@ -91,42 +135,6 @@
 ;(set-face-attribute 'mode-line nil :height 120)
 
 ;;; ----------------------------------------------------------------------------
-;;; Packages
-;;; ----------------------------------------------------------------------------
-
-;; Packages to install in addition to those already defined in prelude-packages
-;; and in each prelude language module at the head of this file.
-
-(prelude-require-packages '(bats-mode
-                            blacken
-                            clj-refactor
-                            company-lsp
-                            csv-mode
-                            dockerfile-mode
-                            emmet-mode
-                            fish-mode
-                            flycheck-mypy
-                            forge
-                            geiser
-                            github-browse-file
-                            helm-descbinds
-                            key-chord
-                            lsp-mode
-                            org
-                            org-bullets
-                            page-break-lines
-                            pipenv
-                            py-isort
-                            powershell
-                            python-pytest
-                            racket-mode
-                            restclient
-                            toml-mode
-                            visual-fill-column
-                            yapfify
-                            yasnippet))
-
-;;; ----------------------------------------------------------------------------
 ;;; Useful functions
 ;;; ----------------------------------------------------------------------------
 
@@ -146,70 +154,6 @@
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'cfc/show-buffer-file-name)
 
-(defvar env-dir (expand-file-name "~/.env/")
-  "Directory with env files.")
-
-(defun cfc/split-lines-by-equals (lines)
-  "Split each string in LINES on the first = character.
-
-LINES is a list of strings like ('FOO=foo' 'BAR=bar').
-
-Return a list of pairs, like (('FOO' 'foo') ('BAR' 'bar'))."
-  (mapcar '(lambda (line) (split-string line "=")) lines))
-
-(defun cfc/export-pair (env-pair)
-  "Set or unset an environment variable.
-
-ENV-PAIR is a list of size 2, where first element is an
-environment variable name and the second element is the value.
-
-If `current-prefix-arg' is set, unset the environment variable with
-the given name.
-
-If the second element (the value) begins with a ~, treat it as a
-file path and expand it."
-  (let* ((envName (car pair))
-         (val (car (cdr pair)))
-         (envVal (if (string-prefix-p "~" val)
-                     (expand-file-name val)
-                   val)))
-    (if current-prefix-arg
-        (setenv envName nil)
-      (setenv envName envVal t))))
-
-(defun cfc/export-pairs (env-pairs)
-  "Export pairs of values as environment variables.
-
-ENV-PAIRS is a list of pairs, where first element of each pair is
-an environment variable name and the second element is the
-value."
-  (mapc '(lambda (pair) (cfc/export-pair pair)) env-pairs))
-
-(defun cfc/s (f)
-  "Set or unset environment variables from the env file F.
-
-As a convenience the env file F may define simple bash-like
-variables, and tildes are expanded if they are the first
-character of the value. However, other shell-isms will not work.
-
-For example, an env file F with the following will set BAR to the
-absolute path of $HOME/foo/bar:
-
-    FOO=~/foo
-    BAR=$FOO/bar
-
-However an env file with the following will probably not do what
-you want:
-
-    FOO=../mydir
-
-Prefixed with one \\[universal-argument], unset the environment
-variables defined in file F."
-  (interactive (list (read-file-name "ENV file: " env-dir)))
-  (with-temp-buffer
-    (insert-file-contents f)
-    (let ((lines (split-string (buffer-string) "\n" t)))
-      (cfc/export-pairs (cfc/split-lines-by-equals lines)))))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Cosmetics
@@ -218,22 +162,14 @@ variables defined in file F."
 ;; Remove some UI features
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+;; Doom modeline, oooooh yeah!
+(doom-modeline-mode 1)
+
 ;; Render ^L (page break) as a nice line across the buffer
 (global-page-break-lines-mode)
 
 ;; Theme customization
-(custom-theme-set-faces
- 'zenburn
-
- ;; outline-mode
- `(outline-1 ((t (:height 1.1 :foreground "#268bd2" :weight bold))))
- `(outline-2 ((t (:height 1.0 :foreground "#2aa198" :weight bold))))
- `(outline-3 ((t (:foreground "#b58900" :weight bold))))
-
- ;; org-mode
- `(org-level-1 ((t (:inherit outline-1 :weight bold))))
- `(org-level-2 ((t (:inherit outline-2 :weight bold))))
- `(org-level-3 ((t (:inherit outline-3 :weight bold)))))
+(custom-theme-set-faces 'zenburn)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Window and frame control
@@ -272,6 +208,8 @@ variables defined in file F."
 ;; Spell check
 
 ;; Thesaurus for word at point
+
+;; https://github.com/joostkremers/writeroom-mode
 
 (defun my-visual-line-mode-hook ()
   "Set options suitable for writing without newlines."
@@ -363,8 +301,7 @@ variables defined in file F."
 (add-hook 'js2-mode-hook (lambda ()
                            (set-fill-column 110)
                            (setq js2-strict-missing-semi-warning nil)
-                           (setq js2-missing-semi-one-line-override t)
-                           (setq whitespace-line-column 110)))
+                           (setq js2-missing-semi-one-line-override t)))
 
 ;; Python
 ;; ------
@@ -376,12 +313,15 @@ variables defined in file F."
   "Customize `python-mode'."
 
   (setq fill-column 88
-        whitespace-line-column 88
         python-fill-docstring-style 'pep-257-nn
         python-shell-interpreter "ipython"
         python-shell-interpreter-args "--simple-prompt -i"))
 
 (add-hook 'python-mode-hook 'my-python-mode-hook)
+
+;; TODO: get rid of this. For some reason my setup.cfg stuff is not being used
+;; correctly.
+(setq flycheck-python-mypy-args "--ignore-missing-imports")
 
 ;; Racket
 ;; ------
@@ -392,8 +332,7 @@ variables defined in file F."
 ;; ----
 
 (add-hook 'rust-mode-hook (lambda ()
-                            (set-fill-column 100)
-                            (setq whitespace-line-column 100)))
+                            (set-fill-column 100)))
 
 ;;; ----------------------------------------------------------------------------
 ;;; Modes
@@ -414,6 +353,9 @@ variables defined in file F."
 (setq dired-dwim-target t
       dired-listing-switches "-alh")
 
+;; flycheck
+(setq flycheck-emacs-lisp-load-path 'inherit)
+
 ;; gitconfig
 (add-to-list 'auto-mode-alist '("gitconfig" . gitconfig-mode))
 
@@ -422,7 +364,10 @@ variables defined in file F."
 (with-eval-after-load 'magit
   ;; forge
   (require 'forge)
-  (add-to-list 'forge-alist '("homegithub" "api.github.com" "github.com" forge-github-repository))
+  (add-to-list 'forge-alist '("github-home"
+                              "api.github.com"
+                              "github.com"
+                              forge-github-repository))
 
   ;; automatically refresh the magit buffer after saving a file
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
@@ -438,13 +383,18 @@ variables defined in file F."
 
 ;; key-chord
 (key-chord-mode +1)
-(setq key-chord-two-keys-delay 0.03
+(setq key-chord-two-keys-delay 0.02
       key-chord-one-key-delay 0.15)
-(key-chord-define-global "hy" 'helm-show-kill-ring)
 (key-chord-define-global "hu" 'undo-tree-visualize)
-(key-chord-define-global "hw" 'avy-goto-word-1)
-(key-chord-define-global "hl" 'avy-goto-line)
-(key-chord-define-global "hx" 'helm-M-x)
+(key-chord-define-global "pb" 'blacken-buffer)
+(key-chord-define-global "is" 'py-isort-buffer)
+
+; in python, chord for blacken and isort
+
+;(key-chord-define-global "et" 'helm-show-kill-ring)
+;(key-chord-define-global "on" 'helm-all-mark-rings)
+;(key-chord-define-global "aw" 'avy-goto-word-1)
+;(key-chord-define-global "al" 'avy-goto-line)
 
 ;; make
 (add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
@@ -453,6 +403,10 @@ variables defined in file F."
 (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
 (add-to-list 'projectile-globally-ignored-directories "*logs")
 (add-to-list 'projectile-globally-ignored-directories "*_output")
+
+;; setenv-file
+(load (expand-file-name "~/Projects/setenv-file/setenv-file.el"))
+(setq setenv-file-dir (expand-file-name "~/.env/"))
 
 ;; smartparens
 (defun lisp-smartparens-hook ()
