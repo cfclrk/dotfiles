@@ -16,11 +16,12 @@ if not set -q TMUX
     for i in (string split : (go env GOPATH))
         set PATH $PATH $i/bin
     end
-    set PATH $PATH $HOME/.poetry/bin
     set PATH $HOME/IronNet/bin $PATH
 
-    # GNU programs installed with brew take precedence over pre-existing programs
+    # Conflicting programs installed with brew take precedence over
+    # pre-installed programs
     set PATH "/usr/local/opt/make/libexec/gnubin" $PATH
+    set PATH "/usr/local/opt/texinfo/bin" $PATH
 
     set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
     set -x LESS_TERMCAP_ue (set_color normal)      # reset underline
@@ -55,9 +56,7 @@ alias emacs "/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 alias md5sum "md5 -r"
 
 source ~/.functions.fish
-if test -e ~/.extras.fish
-    source ~/.extras.fish
-end
 
 # Source env vars I need for work stuff
+# s is defined in ~/.functions.fish
 s ~/.env/work
