@@ -171,7 +171,7 @@ end
 
 function clearBucket --description "Clear one S3 bucket"
     set bucket $argv[1]
-    echo Checking bucket $bucket
+    echo "Checking bucket $bucket"
     set objects (aws s3api list-objects-v2 --bucket $bucket --delimiter /)
     if count $objects > /dev/null
         set_color red
@@ -188,13 +188,17 @@ end
 
 function clearBuckets --description "Clear all S3 buckets"
     set buckets (aws s3api list-buckets | jq -r .Buckets[].Name)
+
+    # To filter to those buckets that start with prefix
+    # aws s3api list-buckets | jq -r '.Buckets[] | select(.Name | startswith("prefix")).Name'
+
     echo $buckets | xargs -n 1 -P (count $buckets) -I {} fish -c 'clearBucket {}'
 end
 
 function sso --description "Set credentials for an AWS account using AWS SSO"
     test -z "$argv[1]"; and echo "arg1 must be an AWS account num"; and return
     set accountId $argv[1]
-    set tokenFile ~/.aws/sso/cache/bc340e54782a2aa31c5a3116c25dfa13dabaa7d3.json
+    set tokenFile ~/.aws/sso/cache/b9d131856200283be9603e59dc49f1dc50aa7c62.json
 
     # TODO: Check for token expiration; if expired, run "aws sso login"
     set token (cat $tokenFile | jq -r '.accessToken')
