@@ -158,15 +158,13 @@
 ;;; Cosmetics
 ;;; ----------------------------------------------------------------------------
 
-;; Icons
-;;(require 'all-the-icons)
-
 ;; Remove some UI features
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; Doom modeline, oooooh yeah!
 (doom-modeline-mode 1)
 (setq doom-modeline-buffer-encoding nil)
+(setq doom-modeline-height 40)
 
 ;; Render ^L (page break) as a nice line across the buffer
 (global-page-break-lines-mode)
