@@ -3,3 +3,7 @@
 [github]
 	user = chrisc-ironnet
 
+# [url "git@github-work:IronNetCybersecurity"]
+# 	insteadOf = git@github.com:IronNetCybersecurity
+# [url "git@github-work:IronNetCybersecurity"]
+# 	insteadOf = https://github.com/IronNetCybersecurity

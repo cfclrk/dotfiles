@@ -3,8 +3,7 @@
 [github]
 	user = cfclrk
 
-# [url "git@homegithub:cfclrk"]
-# 	insteadOf = git@github.com:cfclrk
-
-# [url "git@homegithub:cfclrk"]
-# 	insteadOf = https://github.com/cfclrk
+[url "git@github-home:cfclrk"]
+	insteadOf = git@github.com:cfclrk
+[url "git@github-home:cfclrk"]
+	insteadOf = https://github.com/cfclrk
