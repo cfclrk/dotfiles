@@ -114,7 +114,3 @@
     (cfc/on-every-src-block 'org-babel-remove-result)))
 
 (add-hook 'org-mode-hook 'my-org-mode-hook)
-
-;; Local Variables:
-;; flycheck-disabled-checkers: (emacs-lisp-checkdoc)
-;; End:

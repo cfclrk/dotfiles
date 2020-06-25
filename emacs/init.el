@@ -4,9 +4,9 @@
 
 ;;; Code:
 
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")))
+(require 'package)
+(add-to-list 'package-archives
+             '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 
 (require 'prelude-c)
@@ -126,9 +126,7 @@
 ;;   (nth 4 (assq 'geometry (car (display-monitor-attributes-list))))
 (when window-system
   (if (> (x-display-pixel-width) 1600)
-      (progn
-        (set-face-attribute 'default nil :height 150)
-        (set-face-attribute 'mode-line nil :height 150))))
+      (set-face-attribute 'default nil :height 160)))
 
 ;; Use a larger font in the mode line
 ;(set-face-attribute 'mode-line nil :height 120)
@@ -182,8 +180,6 @@
         ("magit.*: " display-buffer-use-some-window)
         ("\\*Python\\*" display-buffer-use-some-window)
         ("\\*Help\\*" display-buffer-same-window)
-        ("\\*.el.gz" display-buffer-same-window)
-        ;("\\*go-guru-output\\*" display-buffer-same-window)
         ("\\*Go .*" display-buffer-same-window)
         ("\\*godoc*" display-buffer-same-window)))
 
