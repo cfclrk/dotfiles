@@ -45,6 +45,9 @@
 ;;; ----------------------------------------------------------------------------
 
 (defun my-org-mode-hook ()
+  "Customize org mode."
+
+  (setq org-src-window-setup 'split-window-below)
 
   (require 'org-bullets)
   (org-bullets-mode 1)

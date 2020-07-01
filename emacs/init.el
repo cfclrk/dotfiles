@@ -55,12 +55,12 @@
 ;; keep marked regions highlighted in non-selected windows
 (setq highlight-nonselected-windows t)
 
-;; utf-8 stuff
-(set-language-environment "UTF-8")
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
+;; UTF-8 stuff - check if I can remove this now
+;; (set-language-environment "UTF-8")
+;; (prefer-coding-system 'utf-8)
+;; (set-default-coding-systems 'utf-8)
+;; (set-terminal-coding-system 'utf-8)
+;; (set-keyboard-coding-system 'utf-8)
 
 ;; M-o to run occur
 (define-key prelude-mode-map (kbd "M-o") 'occur)
@@ -383,13 +383,10 @@
       key-chord-one-key-delay 0.15)
 (key-chord-define-global "hu" 'undo-tree-visualize)
 (key-chord-define-global "pb" 'blacken-buffer)
-(key-chord-define-global "is" 'py-isort-buffer)
-
-; in python, chord for blacken and isort
 
 ;(key-chord-define-global "et" 'helm-show-kill-ring)
 ;(key-chord-define-global "on" 'helm-all-mark-rings)
-;(key-chord-define-global "aw" 'avy-goto-word-1)
+(key-chord-define-global "vw" 'avy-goto-word-1)
 ;(key-chord-define-global "al" 'avy-goto-line)
 
 ;; make
@@ -399,6 +396,7 @@
 (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
 (add-to-list 'projectile-globally-ignored-directories "*logs")
 (add-to-list 'projectile-globally-ignored-directories "*_output")
+;;(add-to-list 'projectile-globally-ignored-directories ".terraform")
 
 ;; setenv-file
 (load (expand-file-name "~/Projects/setenv-file/setenv-file.el"))

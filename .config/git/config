@@ -11,10 +11,10 @@
 	tool = emerge
 [diff]
 	compactionHeuristic = true
+[transfer]
+	fsckObjects = true
 [color]
 	ui = auto
-[help]
-	autocorrect = 1
 
 [includeIf "gitdir:~/"]
 	path = config-home
