@@ -56,7 +56,3 @@ alias emacs "/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 alias md5sum "md5 -r"
 
 source ~/.functions.fish
-
-# Source env vars I need for work stuff
-# s is defined in ~/.functions.fish
-s ~/.env/work
