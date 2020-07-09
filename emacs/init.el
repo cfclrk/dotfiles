@@ -5,8 +5,10 @@
 ;;; Code:
 
 (require 'package)
-(add-to-list 'package-archives
-             '("org" . "https://orgmode.org/elpa/") t)
+(setq package-archives
+      '(("gnu" . "http://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")
+        ("org" . "https://orgmode.org/elpa/")))
 
 (require 'prelude-c)
 (require 'prelude-clojure)
@@ -27,6 +29,10 @@
 ;;; ----------------------------------------------------------------------------
 ;;; General
 ;;; ----------------------------------------------------------------------------
+
+;; When I compile Emacs myself and run from /Applications, this is set to "/".
+;; How is this set in the publicly distributed dmg emacs?
+(setq default-directory (expand-file-name "~/"))
 
 ;; Raise the number of bytes of consing between garbage collections
 (setq gc-cons-threshold 100000000)
@@ -55,11 +61,12 @@
 (setq highlight-nonselected-windows t)
 
 ;; UTF-8 stuff - check if I can remove this now
-;; (set-language-environment "UTF-8")
+(set-language-environment "UTF-8")
 ;; (prefer-coding-system 'utf-8)
 ;; (set-default-coding-systems 'utf-8)
 ;; (set-terminal-coding-system 'utf-8)
 ;; (set-keyboard-coding-system 'utf-8)
+(setq what-cursor-show-names t)
 
 ;; M-o to run occur
 (define-key prelude-mode-map (kbd "M-o") 'occur)
@@ -93,8 +100,6 @@
                             helm-descbinds
                             key-chord
                             lsp-mode
-                            org
-                            org-bullets
                             page-break-lines
                             pipenv
                             py-isort
@@ -393,12 +398,14 @@
 
 ;; projectile
 (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
+(add-to-list 'projectile-globally-ignored-directories "*.pytest_cache")
 (add-to-list 'projectile-globally-ignored-directories "*logs")
 (add-to-list 'projectile-globally-ignored-directories "*_output")
 ;;(add-to-list 'projectile-globally-ignored-directories ".terraform")
 
 ;; setenv-file
-(load (expand-file-name "~/Projects/setenv-file/setenv-file.el"))
+(load (expand-file-name "~/Projects/elisp/setenv-file/setenv-file.el"))
+(add-to-list 'Info-directory-list (expand-file-name "~/Projects/elisp/setenv-file/doc/"))
 (setq setenv-file-dir (expand-file-name "~/.env/"))
 
 ;; smartparens

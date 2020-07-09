@@ -1,11 +1,20 @@
+;;; org.el -- Org mode customization  -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
 (require 'org)
 (require 'prelude-org)
 
-(prelude-require-packages '(htmlize))
+(prelude-require-packages '(htmlize
+                            org
+                            org-bullets
+                            ox-hugo))
 
 ;; This variable needs to be set before org.el is loaded.
-(if (not (member 'md org-export-backends))
-    (add-to-list 'org-export-backends 'ox-gfm))
+;; (if (not (member 'md org-export-backends))
+;;     (add-to-list 'org-export-backends 'ox-gfm))
 
 ;;; ----------------------------------------------------------------------------
 
@@ -21,14 +30,10 @@
 
 (add-to-list 'org-modules 'org-habit)
 
-;; initial visibility (depth)
+;; Set initial visibility (depth)
 (setq org-startup-folded 't)
 
-;; clock time
-(setq org-clock-persist 'history)
-(org-clock-persistence-insinuate)
-
-;; agenda
+;; Agenda
 (setq org-agenda-window-setup 'current-window)
 (setq org-agenda-files (list "~/notes"))
 
@@ -49,7 +54,8 @@
 
   (setq org-src-window-setup 'split-window-below)
 
-  (require 'org-bullets)
+  ;; Use UTF8 bullets in Org mode headings
+  ;; (require 'org-bullets)
   (org-bullets-mode 1)
 
   (require 'ox-gfm)
