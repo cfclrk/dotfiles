@@ -56,3 +56,9 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
     mkdir -p ~/.tmux/plugins
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
+
+# MacOS setup
+os=$(uname -s)
+if [[ "$os" == "Darwin" ]]; then
+   ./macos.sh
+fi

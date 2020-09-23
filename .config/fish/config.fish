@@ -1,28 +1,25 @@
 if not set -q TMUX
     set -gx EDITOR emacs
 
-    # Removed the following entries from /etc/paths because of
-    # https://github.com/fish-shell/fish-shell/pull/4852:
-    # /usr/local/bin /usr/bin /bin /usr/sbin /sbin
-    # N.B. Delete those entries again after every OS upgrade!
-    set PATH /usr/local/bin $PATH
-    set PATH /usr/local/sbin $PATH
-
     # PATH
-    set PATH $HOME/bin $PATH
-    set PATH $HOME/.local/bin $PATH
-    set PATH $HOME/.cargo/bin $PATH
-    set PATH $HOME/.cabal/bin $PATH
-    for i in (string split : (go env GOPATH))
-        set PATH $PATH $i/bin
+    set PATH $HOME/bin \
+        $HOME/.local/bin \
+        $HOME/.cargo/bin \
+        $HOME/.cabal/bin \
+        $HOME/IronNet/bin \
+        $PATH
+    for goPath in (string split : (go env GOPATH))
+        set PATH $goPath/bin $PATH
     end
-    set PATH $HOME/IronNet/bin $PATH
 
     # Conflicting programs installed with brew take precedence over
     # pre-installed programs
-    set PATH "/usr/local/opt/make/libexec/gnubin" $PATH
-    set PATH "/usr/local/opt/texinfo/bin" $PATH
+    set PATH /usr/local/opt/make/libexec/gnubin \
+        /usr/local/opt/texinfo/bin \
+        /usr/local/opt/openjdk/bin \
+        $PATH
 
+    # colors in less (makes man pages look nicer)
     set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
     set -x LESS_TERMCAP_ue (set_color normal)      # reset underline
 
@@ -54,5 +51,4 @@ end
 
 alias emacs "/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 alias md5sum "md5 -r"
-
 source ~/.functions.fish
