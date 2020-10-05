@@ -6,7 +6,7 @@
 
 (require 'package)
 (setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
+      '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
         ("melpa" . "https://melpa.org/packages/")
         ("org" . "https://orgmode.org/elpa/")))
 
@@ -32,10 +32,7 @@
 
 ;; When I compile Emacs myself and run from /Applications, this is set to "/".
 ;; How is this set in the publicly distributed dmg emacs?
-(setq default-directory (expand-file-name "~/"))
-
-;; Raise the number of bytes of consing between garbage collections
-(setq gc-cons-threshold 100000000)
+;(setq default-directory (expand-file-name "~/"))
 
 ;; [Emacs 27] Number of bytes that can be read from a sub-process in one read
 ;; operation. Good for dealing with high-throughput sub-processes like, ehem, an
@@ -54,8 +51,8 @@
 
 ;; ⌘ as Meta and ⎇ as Super on MacOS
 (when (eq system-type 'darwin)
-  (setq ns-command-modifier 'meta
-        ns-alternate-modifier 'super))
+  (setq mac-command-modifier 'meta
+        mac-option-modifier 'super))
 
 ;; keep marked regions highlighted in non-selected windows
 (setq highlight-nonselected-windows t)

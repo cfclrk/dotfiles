@@ -6,15 +6,13 @@
 
 (require 'org)
 (require 'prelude-org)
+(require 'ox-html)
+(require 'ob-clojure)
 
 (prelude-require-packages '(htmlize
                             org
                             org-bullets
                             ox-hugo))
-
-;; This variable needs to be set before org.el is loaded.
-;; (if (not (member 'md org-export-backends))
-;;     (add-to-list 'org-export-backends 'ox-gfm))
 
 ;;; ----------------------------------------------------------------------------
 
@@ -28,22 +26,12 @@
 ;; I'm not entirely clear on how org-mode caches these settings. For some more
 ;; info, see: https://emacs.stackexchange.com/a/30623/6769
 
-(add-to-list 'org-modules 'org-habit)
-
 ;; Set initial visibility (depth)
 (setq org-startup-folded 't)
 
-;; Agenda
-(setq org-agenda-window-setup 'current-window)
-(setq org-agenda-files (list "~/notes"))
-
 ;; todo
-(setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "DONE")))
+(setq org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "DONE")))
 (setq org-enforce-todo-dependencies t)
-(setq org-todo-keyword-faces
-      '(("TODO" . org-warning)
-        ("IN-PROGRESS" . (:foreground "#ff39a3" :weight bold))))
 
 ;;; ----------------------------------------------------------------------------
 ;;; my-org-mode-hook
@@ -55,9 +43,9 @@
   (setq org-src-window-setup 'split-window-below)
 
   ;; Use UTF8 bullets in Org mode headings
-  ;; (require 'org-bullets)
   (org-bullets-mode 1)
 
+  ;; GitHub Flavored Markdown exporter
   (require 'ox-gfm)
 
   ;; babel
@@ -70,11 +58,9 @@
   (setq org-confirm-babel-evaluate nil)
 
   ;; ob-clojure
-  (require 'cider)
   (setq org-babel-clojure-backend 'cider)
 
   ;; exporting
-  (require 'ox-html)
   (setq org-html-doctype "html5"
         org-html-html5-fancy t
         org-export-with-sub-superscripts nil
