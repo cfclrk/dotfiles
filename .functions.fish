@@ -236,15 +236,15 @@ alias rk "rancher kubectl"
 
 # Example: install_kubectl 1.16.7
 function install_kubectl --description "Download a kubectl binary"
-    test -z "$argv[1]"; and echo "arg1 must be a kubectl version"; and return
+    test -z "$argv[1]"; and echo "arg1 must be a version"; and return
     set progVersion $argv[1]
 
     set progName kubectl
     set libPath ~/.local/lib/$progName/$progName-$progVersion
     set binPath ~/.local/bin/$progName
     set url https://storage.googleapis.com/kubernetes-release/release/v$progVersion/bin/darwin/amd64/kubectl
-    curl -s -o $path $url
-    chmod +x $path
+    curl -s -o $libPath $url
+    chmod +x $libPath
     rm -f $binPath
     ln -s $libPath $binPath
     la $binPath
@@ -252,7 +252,7 @@ end
 
 # Example: install_helm 3.1.2
 function install_helm --description "Download a helm binary"
-    test -z "$argv[1]"; and echo "arg1 must be a helm version"; and return
+    test -z "$argv[1]"; and echo "arg1 must be a version"; and return
     set progVersion $argv[1]
 
     set progName helm
