@@ -36,9 +36,16 @@
  ;; }
 
  :aliases
- {:new {:extra-deps {seancorfield/clj-new
-                     {:mvn/version "RELEASE"}}
-        :main-opts ["-m" "clj-new.create"]}}
+
+ ;; Run like: clojure -X:new-lib :name cfclrk/mylib
+ {:new-app {:extra-deps {seancorfield/clj-new
+                         {:mvn/version "RELEASE"}}
+            :exec-fn clj-new/create
+            :exec-args {:template "app"}}
+  :new-lib {:extra-deps {seancorfield/clj-new
+                         {:mvn/version "RELEASE"}}
+            :exec-fn clj-new/create
+            :exec-args {:template "lib"}}}
 
   ;; Provider attributes
 

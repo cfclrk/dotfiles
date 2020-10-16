@@ -17,7 +17,7 @@
 (require 'prelude-emacs-lisp)
 (require 'prelude-go)
 (require 'prelude-haskell)
-(require 'prelude-helm)
+(require 'prelude-ivy)
 (require 'prelude-js)
 (require 'prelude-lisp)
 (require 'prelude-python)
@@ -94,7 +94,6 @@
                             forge
                             geiser
                             github-browse-file
-                            helm-descbinds
                             key-chord
                             lsp-mode
                             page-break-lines
@@ -261,7 +260,7 @@
   (setq godoc-at-point-function 'godoc-gogetdoc)
 
   ;; I don't like that prelude overrode C-h f to run godoc-at-point
-  (define-key go-mode-map (kbd "C-h f") 'helm-apropos)
+  ;(define-key go-mode-map (kbd "C-h f") 'helm-apropos)
   (global-set-key (kbd "s-g") 'godoc-at-point)
 
   ;; Don't highlight lines longer than fill-column
@@ -369,14 +368,14 @@
   ;; automatically refresh the magit buffer after saving a file
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
-;; helm
-(require 'prelude-helm-everywhere)
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
-
 ;; html
 (setq flycheck-tidyrc (expand-file-name "~/.config/tidyrc"))
 (setq-default flycheck-disabled-checkers '(html-tidy)) ; too noisy
+
+;; ivy
+(setq ivy-height 20
+      ivy-wrap t)
+(setq ivy-count-format "(%d/%d) ")
 
 ;; key-chord
 (key-chord-mode +1)

@@ -5,48 +5,25 @@
 ;;; Code:
 
 (require 'org)
-(require 'prelude-org)
-(require 'ox-html)
 (require 'ob-clojure)
+(require 'ox-gfm)
+(require 'ox-html)
+(require 'prelude-org)
 
 (prelude-require-packages '(htmlize
                             org
-                            org-bullets
-                            ox-hugo))
+                            org-bullets))
 
-;;; ----------------------------------------------------------------------------
-
-;; I have to keep some configuration defined globally (instead of inside
-;; my-org-mode-hook) because of how org-mode caches some settings.
-;;
-;; When these settings are in my-org-mode-hook, they can still work if you force
-;; org-mode to be loaded twice on it's first load (using revert-buffer or
-;; org-mode-restart).
-;;
-;; I'm not entirely clear on how org-mode caches these settings. For some more
-;; info, see: https://emacs.stackexchange.com/a/30623/6769
-
-;; Set initial visibility (depth)
-(setq org-startup-folded 't)
-
-;; todo
-(setq org-todo-keywords '((sequence "TODO" "IN-PROGRESS" "DONE")))
+(setq org-startup-folded t)
 (setq org-enforce-todo-dependencies t)
-
-;;; ----------------------------------------------------------------------------
-;;; my-org-mode-hook
-;;; ----------------------------------------------------------------------------
 
 (defun my-org-mode-hook ()
   "Customize org mode."
 
-  (setq org-src-window-setup 'split-window-below)
+  (setq org-src-window-setup 'split-window-below
+        org-adapt-indentation nil)
 
-  ;; Use UTF8 bullets in Org mode headings
   (org-bullets-mode 1)
-
-  ;; GitHub Flavored Markdown exporter
-  (require 'ox-gfm)
 
   ;; babel
   (org-babel-do-load-languages
@@ -55,10 +32,9 @@
      (dot . t)
      (python . t)
      (shell . t)))
-  (setq org-confirm-babel-evaluate nil)
 
-  ;; ob-clojure
-  (setq org-babel-clojure-backend 'cider)
+  (setq org-confirm-babel-evaluate nil
+        org-babel-clojure-backend 'cider)
 
   ;; exporting
   (setq org-html-doctype "html5"
@@ -106,6 +82,7 @@
   (defun cfc/org-remove-results ()
     "Remove all RESULTS blocks in an org file."
     (interactive)
-    (cfc/on-every-src-block 'org-babel-remove-result)))
+    (cfc/on-every-src-block 'org-babel-remove-result))
+  )
 
 (add-hook 'org-mode-hook 'my-org-mode-hook)
