@@ -79,6 +79,7 @@
 ;; and in each prelude language module at the head of this file.
 
 (prelude-require-packages '(all-the-icons
+                            all-the-icons-ivy-rich
                             bats-mode
                             blacken
                             clj-refactor
@@ -94,6 +95,7 @@
                             forge
                             geiser
                             github-browse-file
+                            ivy-rich
                             key-chord
                             lsp-mode
                             page-break-lines
@@ -373,9 +375,12 @@
 (setq-default flycheck-disabled-checkers '(html-tidy)) ; too noisy
 
 ;; ivy
-(setq ivy-height 20
+(setq ivy-count-format "(%d/%d) "
+      ivy-height 20
       ivy-wrap t)
-(setq ivy-count-format "(%d/%d) ")
+(all-the-icons-ivy-rich-mode t)
+(ivy-rich-mode t)
+(setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 
 ;; key-chord
 (key-chord-mode +1)
