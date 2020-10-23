@@ -10,6 +10,13 @@
         ("melpa" . "https://melpa.org/packages/")
         ("org" . "https://orgmode.org/elpa/")))
 
+;;; ----------------------------------------------------------------------------
+;;; Packages
+;;; ----------------------------------------------------------------------------
+
+;; Packages to install in addition to those already defined in prelude-packages
+;; and in each prelude language module at the head of this file.
+
 (require 'prelude-c)
 (require 'prelude-clojure)
 (require 'prelude-company)
@@ -20,11 +27,44 @@
 (require 'prelude-ivy)
 (require 'prelude-js)
 (require 'prelude-lisp)
+(require 'prelude-lsp)
 (require 'prelude-python)
 (require 'prelude-rust)
 (require 'prelude-shell)
 (require 'prelude-xml)
 (require 'prelude-yaml)
+
+(prelude-require-packages '(all-the-icons
+                            all-the-icons-ivy-rich
+                            bats-mode
+                            blacken
+                            clj-refactor
+                            csv-mode
+                            dockerfile-mode
+                            doom-modeline
+                            doom-themes
+                            emmet-mode
+                            fish-mode
+                            flycheck-mypy
+                            flycheck-package
+                            forge
+                            geiser
+                            github-browse-file
+                            ivy-rich
+                            key-chord
+                            lsp-mode
+                            page-break-lines
+                            pipenv
+                            py-isort
+                            powershell
+                            python-pytest
+                            racket-mode
+                            restclient
+                            toml-mode
+                            visual-fill-column
+                            writeroom-mode
+                            yapfify
+                            yasnippet))
 
 ;;; ----------------------------------------------------------------------------
 ;;; General
@@ -65,51 +105,11 @@
 ;; (set-keyboard-coding-system 'utf-8)
 (setq what-cursor-show-names t)
 
-;; M-o to run occur
-(define-key prelude-mode-map (kbd "M-o") 'occur)
-
 ;; Make whitespace-mode use `fill-column'
 (setq-default whitespace-line-column nil)
 
-;;; ----------------------------------------------------------------------------
-;;; Packages
-;;; ----------------------------------------------------------------------------
-
-;; Packages to install in addition to those already defined in prelude-packages
-;; and in each prelude language module at the head of this file.
-
-(prelude-require-packages '(all-the-icons
-                            all-the-icons-ivy-rich
-                            bats-mode
-                            blacken
-                            clj-refactor
-                            company-lsp
-                            csv-mode
-                            dockerfile-mode
-                            doom-modeline
-                            doom-themes
-                            emmet-mode
-                            fish-mode
-                            flycheck-mypy
-                            flycheck-package
-                            forge
-                            geiser
-                            github-browse-file
-                            ivy-rich
-                            key-chord
-                            lsp-mode
-                            page-break-lines
-                            pipenv
-                            py-isort
-                            powershell
-                            python-pytest
-                            racket-mode
-                            restclient
-                            toml-mode
-                            visual-fill-column
-                            writeroom-mode
-                            yapfify
-                            yasnippet))
+;; Remap C-h g from `describe-gnu-project' to `github-browse-file'
+(global-set-key (kbd "C-h g") 'github-browse-file)
 
 ;;; ----------------------------------------------------------------------------
 ;;; Font
@@ -388,11 +388,10 @@
       key-chord-one-key-delay 0.15)
 (key-chord-define-global "hu" 'undo-tree-visualize)
 (key-chord-define-global "pb" 'blacken-buffer)
-
-;(key-chord-define-global "et" 'helm-show-kill-ring)
-;(key-chord-define-global "on" 'helm-all-mark-rings)
 (key-chord-define-global "vw" 'avy-goto-word-1)
-;(key-chord-define-global "al" 'avy-goto-line)
+
+;; lsp
+(add-hook 'yaml-mode-hook #'lsp)
 
 ;; make
 (add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
@@ -408,6 +407,9 @@
 (load (expand-file-name "~/Projects/elisp/setenv-file/setenv-file.el"))
 (add-to-list 'Info-directory-list (expand-file-name "~/Projects/elisp/setenv-file/doc/"))
 (setq setenv-file-dir (expand-file-name "~/.env/"))
+
+;; swiper
+(global-set-key (kbd "C-s") 'swiper-isearch)
 
 ;; smartparens
 (defun lisp-smartparens-hook ()
@@ -449,5 +451,10 @@
   (define-key smartparens-mode-map (kbd "M-a") 'sp-beginning-of-sexp)
   (define-key smartparens-mode-map (kbd "M-e") 'sp-end-of-sexp))
 
+;; yasnippet
+(require 'yasnippet)
+(setq yas-indent-line 'fixed) ;; probably do this in a yaml-mode-hook
+(load (f-join user-emacs-directory "snippets/aws-snippets/aws-snippets.el"))
+(yas-global-mode t)
 
 ;;; init.el ends here
