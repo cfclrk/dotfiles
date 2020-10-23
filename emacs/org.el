@@ -4,15 +4,16 @@
 
 ;;; Code:
 
+(prelude-require-packages '(htmlize
+                            org
+                            org-bullets
+                            ox-gfm))
+
 (require 'org)
 (require 'ob-clojure)
 (require 'ox-gfm)
 (require 'ox-html)
 (require 'prelude-org)
-
-(prelude-require-packages '(htmlize
-                            org
-                            org-bullets))
 
 (setq org-startup-folded t)
 (setq org-enforce-todo-dependencies t)
