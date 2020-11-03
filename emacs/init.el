@@ -4,18 +4,17 @@
 
 ;;; Code:
 
+;;; Packages
+;;  ----------------------------------------------------------------------------
+
+;; Packages to install in addition to those already defined in prelude-packages
+;; and in each prelude language module at the head of this file.
+
 (require 'package)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
         ("melpa" . "https://melpa.org/packages/")
         ("org" . "https://orgmode.org/elpa/")))
-
-;;; ----------------------------------------------------------------------------
-;;; Packages
-;;; ----------------------------------------------------------------------------
-
-;; Packages to install in addition to those already defined in prelude-packages
-;; and in each prelude language module at the head of this file.
 
 (require 'prelude-c)
 (require 'prelude-clojure)
@@ -34,9 +33,13 @@
 (require 'prelude-xml)
 (require 'prelude-yaml)
 
+(setq package-pinned-packages
+      '((org . "org")))
+
 (prelude-require-packages '(all-the-icons
                             all-the-icons-ivy-rich
                             bats-mode
+                            bicycle
                             blacken
                             clj-refactor
                             csv-mode
@@ -56,23 +59,24 @@
                             page-break-lines
                             pipenv
                             py-isort
-                            powershell
                             python-pytest
                             racket-mode
                             restclient
+                            terraform-mode
                             toml-mode
+                            use-package
                             visual-fill-column
                             writeroom-mode
                             yapfify
                             yasnippet))
 
-;;; ----------------------------------------------------------------------------
 ;;; General
-;;; ----------------------------------------------------------------------------
+;;  ----------------------------------------------------------------------------
 
 ;; When I compile Emacs myself and run from /Applications, this is set to "/".
 ;; How is this set in the publicly distributed dmg emacs?
-;(setq default-directory (expand-file-name "~/"))
+
+;; (setq default-directory (expand-file-name "~/"))
 
 ;; [Emacs 27] Number of bytes that can be read from a sub-process in one read
 ;; operation. Good for dealing with high-throughput sub-processes like, ehem, an
@@ -82,7 +86,6 @@
 (setq-default fill-column 80)      ; Default line length for text wrapping
 
 (setq mark-ring-max 10             ; Num items to keep in mark ring
-      toggle-debug-on-error t      ; Show stack trace on any Emacs error
       ns-pop-up-frames nil         ; Don't open files in new frame
       prelude-guru nil             ; Turn off little how-to-use-emacs tips
       prelude-tips nil             ; Don't show prelude tips at startup
@@ -94,7 +97,7 @@
   (setq mac-command-modifier 'meta
         mac-option-modifier 'super))
 
-;; keep marked regions highlighted in non-selected windows
+;; Keep marked regions highlighted in non-selected windows
 (setq highlight-nonselected-windows t)
 
 ;; UTF-8 stuff - check if I can remove this now
@@ -111,9 +114,8 @@
 ;; Remap C-h g from `describe-gnu-project' to `github-browse-file'
 (global-set-key (kbd "C-h g") 'github-browse-file)
 
-;;; ----------------------------------------------------------------------------
-;;; Font
-;;; ----------------------------------------------------------------------------
+;;; Fonts
+;;  ----------------------------------------------------------------------------
 
 ;; Source Code Pro is nice in MacOS but not Ubuntu
 (when (eq system-type 'darwin)
@@ -124,18 +126,19 @@
                       :width 'normal))
 
 ;; Use a larger font on bigger screens
-;; TODO: x-display-pixel-width doesn't seem to work (anymore?). Maybe try:
-;;   (nth 4 (assq 'geometry (car (display-monitor-attributes-list))))
 (when window-system
-  (if (> (x-display-pixel-width) 1600)
-      (set-face-attribute 'default nil :height 160)))
+  (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
+      (set-face-attribute 'default nil :height 170)))
 
-;; Use a larger font in the mode line
-;(set-face-attribute 'mode-line nil :height 120)
+;;; My functions
+;;  ----------------------------------------------------------------------------
 
-;;; ----------------------------------------------------------------------------
-;;; Useful functions
-;;; ----------------------------------------------------------------------------
+(defun cfc/set-font-size (font-size)
+  "Set font size to the given height.
+TODO: Resize the frame."
+  (interactive "nFont Size: ")
+  (set-face-attribute 'default nil :height font-size)
+  (set-face-attribute 'mode-line nil :height font-size))
 
 (defun cfc/kill-all-other-buffers ()
   "Kill all buffers other than current buffer."
@@ -153,10 +156,8 @@
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'cfc/show-buffer-file-name)
 
-
-;;; ----------------------------------------------------------------------------
 ;;; Cosmetics
-;;; ----------------------------------------------------------------------------
+;;  ----------------------------------------------------------------------------
 
 ;; Remove some UI features
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -169,9 +170,8 @@
 ;; Render ^L (page break) as a nice line across the buffer
 (global-page-break-lines-mode)
 
-;;; ----------------------------------------------------------------------------
-;;; window and frame control
-;;; ----------------------------------------------------------------------------
+;;; Window and Frame Control
+;;  ----------------------------------------------------------------------------
 
 ;; TODO: for several of these I'd rather they be in other windows but switch
 ;; focus to that window automatically.
@@ -191,9 +191,8 @@
 
 (setq split-height-threshold 100)
 
-;;; ----------------------------------------------------------------------------
-;;; Scratch text buffer (WIP)
-;;; ----------------------------------------------------------------------------
+;;; WIP: Scratch text buffer
+;;  ----------------------------------------------------------------------------
 
 ;; Keybinding/function to create a *scratch-text* buffer, not backed by a file
 ;; (see generate-new-buffer)
@@ -215,34 +214,41 @@
 
 (add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
 
-;;; ----------------------------------------------------------------------------
 ;;; Programming languages
-;;; ----------------------------------------------------------------------------
+;;  ----------------------------------------------------------------------------
 
-;; Clojure and cider
-;; -----------------
+(use-package bicycle
+             :after outline
+             :bind (:map outline-minor-mode-map
+                         ([C-tab] . bicycle-cycle)
+                         ([S-tab] . bicycle-cycle-global)))
+
+(use-package prog-mode
+  :config
+  (add-hook 'prog-mode-hook 'outline-minor-mode)
+  (add-hook 'prog-mode-hook 'hs-minor-mode))
+
+;;;; Clojure and cider
 
 (setq cider-repl-use-pretty-printing t)
 (add-hook 'clojure-mode-hook 'lisp-smartparens-hook)
 
-;; Elisp
-;; -----
+;;;; Elisp
 
 (defun my-emacs-lisp-mode-hook ()
   "Customize emacs-lisp mode."
-
+  (outline-minor-mode)
   (setq sentence-end-double-space nil))
 
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
 (add-hook 'emacs-lisp-mode-hook 'lisp-smartparens-hook)
+(add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
 
-;; Fish
-;; ----
+;;;; Fish
 
 (add-hook 'fish-mode-hook (lambda () (setq tab-width 4)))
 
-;; Golang
-;; ------
+;;;; Golang
 
 (defun my-go-mode-hook ()
   "Customize `go-mode'."
@@ -276,8 +282,7 @@
                              go-guru-hl-identifier-mode
                              my-go-mode-hook))
 
-;; Haskell
-;; -------
+;;;; Haskell
 
 (require 'haskell-interactive-mode)
 (require 'haskell-process)
@@ -287,8 +292,7 @@
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t))
 
-;; Javascript
-;; ----------
+;;;; Javascript
 
 (setq js-indent-level 2)
 (setq json-reformat:indent-width 2)
@@ -297,8 +301,7 @@
                            (setq js2-strict-missing-semi-warning nil)
                            (setq js2-missing-semi-one-line-override t)))
 
-;; Python
-;; ------
+;;;; Python
 
 (require 'flycheck-mypy)  ; use with M-x flycheck-select-checker
 (add-to-list 'auto-mode-alist '("Pipfile\\'" . toml-mode))
@@ -321,43 +324,47 @@
 ;; correctly.
 (setq flycheck-python-mypy-args "--ignore-missing-imports")
 
-;; Racket
-;; ------
+;;;; Racket
 
 (add-hook 'racket-mode-hook (lambda () (run-hooks 'prelude-lisp-coding-hook)))
 
-;; Rust
-;; ----
+;;;; Rust
 
 (add-hook 'rust-mode-hook (lambda ()
                             (set-fill-column 100)))
 
-;;; ----------------------------------------------------------------------------
 ;;; Modes
-;;; ----------------------------------------------------------------------------
+;;  ----------------------------------------------------------------------------
 
-;; avy
+;;;; avy
+
 (global-set-key (kbd "M-l") 'ace-window)
 (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
 
-;; aws
+;;;; aws
+
 (add-to-list 'auto-mode-alist '("credentials\\'" . conf-mode))
 
-;; company
+;;;; company
+
 (setq company-global-modes '(not org-mode))
 
-;; dired
+;;;; dired
+
 (define-key prelude-mode-map (kbd "C-c d") 'dired-jump-other-window)
 (setq dired-dwim-target t
       dired-listing-switches "-alh")
 
-;; flycheck
+;;;; flycheck
+
 (setq flycheck-emacs-lisp-load-path 'inherit)
 
-;; gitconfig
+;;;; gitconfig
+
 (add-to-list 'auto-mode-alist '("gitconfig" . gitconfig-mode))
 
-;; magit
+;;;; magit
+
 (setq magit-diff-refine-hunk 'all)
 (with-eval-after-load 'magit
   ;; forge
@@ -370,11 +377,12 @@
   ;; automatically refresh the magit buffer after saving a file
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
-;; html
+;;;; HTML
+
 (setq flycheck-tidyrc (expand-file-name "~/.config/tidyrc"))
 (setq-default flycheck-disabled-checkers '(html-tidy)) ; too noisy
 
-;; ivy
+;;;; ivy
 (setq ivy-count-format "(%d/%d) "
       ivy-height 20
       ivy-wrap t)
@@ -382,7 +390,8 @@
 (ivy-rich-mode t)
 (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
 
-;; key-chord
+;;;; key-chord
+
 (key-chord-mode +1)
 (setq key-chord-two-keys-delay 0.02
       key-chord-one-key-delay 0.15)
@@ -390,28 +399,34 @@
 (key-chord-define-global "pb" 'blacken-buffer)
 (key-chord-define-global "vw" 'avy-goto-word-1)
 
-;; lsp
-(add-hook 'yaml-mode-hook #'lsp)
+;;;; LSP
 
-;; make
+;; (add-hook 'yaml-mode-hook #'lsp)
+
+;;;; make
+
 (add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
 
-;; projectile
+;;;; projectile
+
 (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
 (add-to-list 'projectile-globally-ignored-directories "*.pytest_cache")
 (add-to-list 'projectile-globally-ignored-directories "*logs")
 (add-to-list 'projectile-globally-ignored-directories "*_output")
 ;;(add-to-list 'projectile-globally-ignored-directories ".terraform")
 
-;; setenv-file
+;;;; setenv-file
+
 (load (expand-file-name "~/Projects/elisp/setenv-file/setenv-file.el"))
 (add-to-list 'Info-directory-list (expand-file-name "~/Projects/elisp/setenv-file/doc/"))
 (setq setenv-file-dir (expand-file-name "~/.env/"))
 
-;; swiper
+;;;; swiper
+
 (global-set-key (kbd "C-s") 'swiper-isearch)
 
-;; smartparens
+;;;; smartparens
+
 (defun lisp-smartparens-hook ()
   "Extra smartparens settings to apply in Lisp modes."
 
@@ -451,7 +466,8 @@
   (define-key smartparens-mode-map (kbd "M-a") 'sp-beginning-of-sexp)
   (define-key smartparens-mode-map (kbd "M-e") 'sp-end-of-sexp))
 
-;; yasnippet
+;;;; yasnippet
+
 (require 'yasnippet)
 (setq yas-indent-line 'fixed) ;; probably do this in a yaml-mode-hook
 (load (f-join user-emacs-directory "snippets/aws-snippets/aws-snippets.el"))
