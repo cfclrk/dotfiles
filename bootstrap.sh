@@ -9,7 +9,6 @@ cd "$DOTFILES_DIR"
 
 mkdir -p ~/.lein
 mkdir -p ~/.ssh
-mkdir -p ~/.config/emacs
 mkdir -p ~/.config/fish
 mkdir -p ~/.config/git
 mkdir -p ~/.clojure
@@ -37,12 +36,18 @@ for f in ${dotFiles[*]}; do
 done
 
 # Emacs
+mkdir -p ~/.config/emacs
+mkdir -p ~/.config/emacs/babel
 if [[ ! -d ~/.config/emacs/personal ]]; then
     printf "\nNo ~/.config/emacs/personal directory. Install Prelude!\n"
     exit 1
 fi
 ln -svf "$DOTFILES_DIR/emacs/init.el" ~/.config/emacs/personal/init.el
 ln -svf "$DOTFILES_DIR/emacs/org.el" ~/.config/emacs/personal/org.el
+ln -svf "$DOTFILES_DIR/emacs/library-of-babel.org" \
+   ~/.config/emacs/babel/library-of-babel.org
+ln -svf "$DOTFILES_DIR/emacs/prelude-pinned-packages.el" \
+   ~/.config/emacs/prelude-pinned-packages.el
 
 # ~/bin
 mkdir -p ~/bin

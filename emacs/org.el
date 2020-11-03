@@ -18,8 +18,15 @@
 (setq org-startup-folded t)
 (setq org-enforce-todo-dependencies t)
 
+(defun my-org-src-mode-hook ()
+  "Customize `org-src-mode' in buffers created by `org-edit-special'."
+
+  (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (outline-minor-mode nil))
+(add-hook 'org-src-mode-hook 'my-org-src-mode-hook)
+
 (defun my-org-mode-hook ()
-  "Customize org mode."
+  "Customize `org-mode'."
 
   (setq org-src-window-setup 'split-window-below
         org-adapt-indentation nil)
@@ -33,6 +40,9 @@
      (dot . t)
      (python . t)
      (shell . t)))
+
+  (org-babel-lob-ingest (f-join user-emacs-directory
+                                "babel/library-of-babel.org"))
 
   (setq org-confirm-babel-evaluate nil
         org-babel-clojure-backend 'cider)
