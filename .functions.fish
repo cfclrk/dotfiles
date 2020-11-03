@@ -57,8 +57,8 @@ function grep --description 'Override grep'
 end
 
 function rand --description 'Some ways to create a decent random string'
-    openssl rand -base64 32
     ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'
+    # openssl rand -base64 32
 end
 
 function ssh_decrypt --description 'Decrypt password-protected ssh key'
@@ -245,9 +245,7 @@ function install_kubectl --description "Download a kubectl binary"
     set url https://storage.googleapis.com/kubernetes-release/release/v$progVersion/bin/darwin/amd64/kubectl
     curl -s -o $libPath $url
     chmod +x $libPath
-    rm -f $binPath
-    ln -s $libPath $binPath
-    la $binPath
+    use kubectl $progVersion
 end
 
 # Example: install_helm 3.1.2
@@ -261,9 +259,7 @@ function install_helm --description "Download a helm binary"
     set url https://get.helm.sh/helm-v$progVersion-darwin-amd64.tar.gz
     curl -s $url | tar xvz - -C /tmp
     cp /tmp/darwin-amd64/helm $libPath
-    rm -f $binPath
-    ln -s $libPath $binPath
-    la $binPath
+    use helm $progVersion
 end
 
 # Example: use helm 2.9.1
@@ -274,6 +270,7 @@ function use --description "Create symlink on $PATH to this installed program"
     set binPath ~/.local/bin/$progName
     rm -f $binPath
     ln -s $libPath $binPath
+    la $binPath
 end
 
 # Azure
