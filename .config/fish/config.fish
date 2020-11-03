@@ -1,25 +1,28 @@
 if not set -q TMUX
-    set -gx EDITOR emacs
+    set -gx EMACS "~/Projects/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
+    set -gx EDITOR "begin; set -lx XDG_CONFIG_HOME ~/.config/emacs_minimal; $EMACS; end"
 
-    # PATH
-    set PATH $HOME/bin \
+    set PATH \
+        $HOME/bin \
         $HOME/.local/bin \
         $HOME/.cargo/bin \
         $HOME/.cabal/bin \
         $HOME/IronNet/bin \
+        /usr/local/sbin \
         $PATH
+
     for goPath in (string split : (go env GOPATH))
         set PATH $goPath/bin $PATH
     end
 
-    # Conflicting programs installed with brew take precedence over
-    # pre-installed programs
-    set PATH /usr/local/opt/make/libexec/gnubin \
+    # Programs installed with brew take precedence over pre-installed programs
+    set PATH \
+        /usr/local/opt/make/libexec/gnubin \
         /usr/local/opt/texinfo/bin \
         /usr/local/opt/openjdk/bin \
         $PATH
 
-    # colors in less (makes man pages look nicer)
+    # Colors in less (makes man pages look nicer)
     set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
     set -x LESS_TERMCAP_ue (set_color normal)      # reset underline
 
@@ -49,6 +52,5 @@ if not set -q TMUX
     end
 end
 
-alias emacs "/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 alias md5sum "md5 -r"
 source ~/.functions.fish
