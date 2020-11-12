@@ -20,11 +20,49 @@
 (setq org-startup-folded t)
 (setq org-enforce-todo-dependencies t)
 
+;;; Functions
+
+(defun cfc/org-md ()
+  "Export an org file to GitHub Flavored Markdown and format."
+  (interactive)
+  (let* ((org-file-name (buffer-file-name))
+         (md-file-name (f-swap-ext org-file-name "md")))
+
+    ;; Export org to GitHub Flavored Markdown
+    (org-export-to-file 'gfm md-file-name)
+
+    ;; Format the markdown
+    (with-temp-buffer
+      (insert-file-contents md-file-name)
+      (markdown-mode)
+      (let ((fill-column 80))
+        (fill-region (point-min) (point-max)))
+      (write-file md-file-name))))
+
+(defun cfc/on-every-src-block (fn)
+  "Visit every SRC block and evaluate FN."
+  (save-excursion
+    (goto-char (point-min))
+    (let ((case-fold-search t))
+      (while (re-search-forward "^\s*#[+]BEGIN_SRC" nil t)
+        (let ((element (org-element-at-point)))
+          (when (eq (org-element-type element) 'src-block)
+            (funcall fn element)))))
+    (save-buffer)))
+
+(defun cfc/org-remove-results ()
+  "Remove all RESULTS blocks in an org file."
+  (interactive)
+  (cfc/on-every-src-block 'org-babel-remove-result))
+
+
+;;; Hooks
+
 (defun my-org-src-mode-hook ()
   "Customize `org-src-mode' in buffers created by `org-edit-special'."
-
   (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   (outline-minor-mode nil))
+
 (add-hook 'org-src-mode-hook 'my-org-src-mode-hook)
 
 (defun my-org-mode-hook ()
@@ -73,29 +111,8 @@
            :publishing-directory "~/Luminal/orgtests/dist/"
            :recursive t
            :publishing-function org-html-publish-to-html
-           :body-only t)))
-
-  (defun cfc/wrap-with-vue-template ()
-    (with-temp-buffer
-      (insert-file-contents "~/cat.txt")
-      (write-region
-       (concat "<template><div>" (buffer-string) "</div></template>") nil "~/cat2.txt")))
-
-  (defun cfc/on-every-src-block (fn)
-    "Visit every SRC block and evaluate FN."
-    (save-excursion
-      (goto-char (point-min))
-      (let ((case-fold-search t))
-        (while (re-search-forward "^\s*#[+]BEGIN_SRC" nil t)
-          (let ((element (org-element-at-point)))
-            (when (eq (org-element-type element) 'src-block)
-              (funcall fn element)))))
-      (save-buffer)))
-
-  (defun cfc/org-remove-results ()
-    "Remove all RESULTS blocks in an org file."
-    (interactive)
-    (cfc/on-every-src-block 'org-babel-remove-result))
-  )
+           :body-only t))))
 
 (add-hook 'org-mode-hook 'my-org-mode-hook)
+
+;;; org.el ends here

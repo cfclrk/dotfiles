@@ -144,26 +144,6 @@ TODO: Resize the frame."
   (set-face-attribute 'default nil :height font-size)
   (set-face-attribute 'mode-line nil :height font-size))
 
-(defun cfc/org-md ()
-  "Export an org file to GitHub Flavored Markdown and format."
-  (interactive)
-  (let* ((org-buffer (current-buffer))
-         (org-file-name (buffer-file-name))
-         (md-file-name (f-swap-ext org-file-name "md")))
-
-    ;; Export org to GitHub Flavored Markdown
-    (with-temp-buffer
-     (insert-buffer org-buffer)
-     (org-export-to-file 'gfm md-file-name))
-
-    ;; Format the markdown
-    (with-temp-buffer
-      (insert-file-contents md-file-name)
-      (markdown-mode)
-      (let ((fill-column 80))
-        (fill-region (point-min) (point-max)))
-      (write-file md-file-name))))
-
 (defun cfc/kill-all-other-buffers ()
   "Kill all buffers other than current buffer."
   (interactive)
