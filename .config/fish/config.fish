@@ -1,5 +1,5 @@
 if not set -q TMUX
-    set -gx EMACS "~/Projects/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
+    set -gx EMACS "$HOME/Projects/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
     set -gx EDITOR "begin; set -lx XDG_CONFIG_HOME ~/.config/emacs_minimal; $EMACS; end"
 
     set PATH \
