@@ -5,11 +5,13 @@
 ;;; Code:
 
 (prelude-require-packages '(htmlize
+                            ob-async
                             org
                             org-bullets
                             ox-gfm))
 
 (require 'org)
+(require 'ob-async)
 (require 'ob-clojure)
 (require 'ox-gfm)
 (require 'ox-html)

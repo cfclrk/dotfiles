@@ -114,6 +114,10 @@
 ;; Remap C-h g from `describe-gnu-project' to `github-browse-file'
 (global-set-key (kbd "C-h g") 'github-browse-file)
 
+;; Not sure I really want this yet
+(setq vc-follow-symlinks t)
+
+
 ;;; Fonts
 ;;  ----------------------------------------------------------------------------
 
@@ -139,6 +143,26 @@ TODO: Resize the frame."
   (interactive "nFont Size: ")
   (set-face-attribute 'default nil :height font-size)
   (set-face-attribute 'mode-line nil :height font-size))
+
+(defun cfc/org-md ()
+  "Export an org file to GitHub Flavored Markdown and format."
+  (interactive)
+  (let* ((org-buffer (current-buffer))
+         (org-file-name (buffer-file-name))
+         (md-file-name (f-swap-ext org-file-name "md")))
+
+    ;; Export org to GitHub Flavored Markdown
+    (with-temp-buffer
+     (insert-buffer org-buffer)
+     (org-export-to-file 'gfm md-file-name))
+
+    ;; Format the markdown
+    (with-temp-buffer
+      (insert-file-contents md-file-name)
+      (markdown-mode)
+      (let ((fill-column 80))
+        (fill-region (point-min) (point-max)))
+      (write-file md-file-name))))
 
 (defun cfc/kill-all-other-buffers ()
   "Kill all buffers other than current buffer."
@@ -208,11 +232,22 @@ TODO: Resize the frame."
 ;; https://github.com/hlissner/doom-emacs/tree/develop/modules/ui/zen
 ;; https://github.com/hlissner/doom-emacs/tree/develop/modules/checkers
 
+;;; WIP: CloudFormation Mode
+;;  ----------------------------------------------------------------------------
+
+;; Disable flyspell (or load a dictionary with all possible keys?)
+;; Use cloudformation yasnippets
+;; YAML schema validation?
+;;  - What about SAM templates?
+;; cfn-lint on save?
+
 (defun my-visual-line-mode-hook ()
   "Set options suitable for writing without newlines."
   (visual-fill-column-mode))
 
-(add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
+;; TODO: Review these modes. Disable visual-fill-column-mode when visual-line
+;; mode is disabled.
+;; (add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
 
 ;;; Programming languages
 ;;  ----------------------------------------------------------------------------
@@ -382,13 +417,18 @@ TODO: Resize the frame."
 (setq flycheck-tidyrc (expand-file-name "~/.config/tidyrc"))
 (setq-default flycheck-disabled-checkers '(html-tidy)) ; too noisy
 
-;;;; ivy
+;;;; ivy/counsel/swiper
 (setq ivy-count-format "(%d/%d) "
       ivy-height 20
       ivy-wrap t)
+
+;; Fun icons
 (all-the-icons-ivy-rich-mode t)
 (ivy-rich-mode t)
 (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+
+;; Don't start all M-x searches with "^"
+(setf (alist-get 'counsel-M-x ivy-initial-inputs-alist) "")
 
 ;;;; key-chord
 
@@ -406,6 +446,7 @@ TODO: Resize the frame."
 ;;;; make
 
 (add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
+(add-to-list 'prelude-indent-sensitive-modes 'snippet-mode)
 
 ;;;; projectile
 
