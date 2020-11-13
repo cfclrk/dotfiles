@@ -15,6 +15,7 @@
 (require 'ob-clojure)
 (require 'ox-gfm)
 (require 'ox-html)
+(require 'ox-org)
 (require 'prelude-org)
 
 (setq org-startup-folded t)
@@ -98,13 +99,18 @@
   ;; publishing
   (require 'ox-publish)
   (setq org-publish-project-alist
+        '(("cloudformation-org"
+           :base-directory "~/Projects/codenotes/aws/cloudformation/org/"
+           :publishing-directory "~/Projects/codenotes/aws/cloudformation/gen_org/"
+           :publishing-function org-org-publish-to-org)
 
-        '(("Blog"
-           :base-directory "~/Projects/jekyll/blog/org/posts/"
-           :publishing-directory "~/Projects/jekyll/blog/_posts/"
-           base-extension "org"
-           :publishing-function org-html-publish-to-html
-           :body-only t)
+          ("cloudformation-yaml"
+           :base-directory "~/Projects/codenotes/aws/cloudformation/gen_org/"
+           :publishing-directory "~/Projects/codenotes/aws/cloudformation/gen_yaml/"
+           :publishing-function org-babel-tangle-publish)
+
+          ("cf"
+           :components ("cloudformation-org" "cloudformation-yaml"))
 
           ("orgtests"
            :base-directory "~/Luminal/orgtests/org/"
