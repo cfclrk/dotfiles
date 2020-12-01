@@ -3,9 +3,8 @@
 set -eu -o pipefail
 
 DOTFILES_DIR=~/Projects/dotfiles
-
-# Ensure dotfiles project exists
-cd "$DOTFILES_DIR"
+mkdir -p $DOTFILES_DIR
+cd $DOTFILES_DIR
 
 mkdir -p ~/.lein
 mkdir -p ~/.ssh

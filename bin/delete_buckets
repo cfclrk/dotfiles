@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+
 """
-Usage: delete_buckets.py [regex]
+Usage: delete_buckets [regex]
 """
 
 import argparse
@@ -15,7 +17,7 @@ def buckets(match=None):
     if match:
         filter = re.compile(match)
     for bucket in buckets.values():
-        name = bucket['value']['bucket']['Name']
+        name = bucket["value"]["bucket"]["Name"]
         if filter is None or filter.match(name):
             yield name
 
@@ -26,23 +28,25 @@ def delete_bucket(s3, name):
     try:
         while True:
             rsp = s3.list_objects_v2(Bucket=name)
-            contents = rsp.get('Contents')
+            contents = rsp.get("Contents")
             if contents:
-                objs = [{'Key': o['Key']} for o in contents]
-                print('deleting', len(objs), 'objects')
-                s3.delete_objects(Bucket=name, Delete={'Objects': objs, 'Quiet': True})
-            if not rsp['IsTruncated']:
+                objs = [{"Key": o["Key"]} for o in contents]
+                print("deleting", len(objs), "objects")
+                s3.delete_objects(Bucket=name, Delete={"Objects": objs, "Quiet": True})
+            if not rsp["IsTruncated"]:
                 break
         while True:
             rsp = s3.list_object_versions(Bucket=name)
-            versions = rsp.get('Versions')
+            versions = rsp.get("Versions")
             if versions:
-                objs = [{'Key': o['Key'], 'VersionId': o['VersionId']} for o in versions]
-                print('deleting', len(objs), 'object versions')
-                s3.delete_objects(Bucket=name, Delete={'Objects': objs, 'Quiet': True})
-            if not rsp['IsTruncated']:
+                objs = [
+                    {"Key": o["Key"], "VersionId": o["VersionId"]} for o in versions
+                ]
+                print("deleting", len(objs), "object versions")
+                s3.delete_objects(Bucket=name, Delete={"Objects": objs, "Quiet": True})
+            if not rsp["IsTruncated"]:
                 break
-        print('deleting bucket')
+        print("deleting bucket")
         s3.delete_bucket(Bucket=name)
     except s3.exceptions.NoSuchBucket:
         pass
@@ -55,176 +59,214 @@ def delete_bucket_retry(s3, name, tries):
             return
         except s3.exceptions.ClientError as ex:
             tries -= 1
-            if ex.response['Error']['Code'] != 'BucketNotEmpty' or tries <= 0:
+            if ex.response["Error"]["Code"] != "BucketNotEmpty" or tries <= 0:
                 raise
 
 
 def get_args():
     p = argparse.ArgumentParser()
-    p.add_argument('--dry-run', action='store_true',
-                   help='print bucket names without deleting them')
-    p.add_argument('--match', metavar='REGEX',
-                   help='delete only those buckets that match the regex')
+    p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="print bucket names without deleting them",
+    )
+    p.add_argument(
+        "--match",
+        metavar="REGEX",
+        help="delete only those buckets that match the regex",
+    )
     return p.parse_args()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = get_args()
     sess = botocore.session.get_session()
-    s3 = sess.create_client('s3')
+    s3 = sess.create_client("s3")
     for bucket in buckets(args.match):
-        print('==>', bucket)
+        print("==>", bucket)
         if not args.dry_run:
             delete_bucket_retry(s3, bucket, 3)
-
 
 
 # From reinvent lab
 def script_handler(event, context):
 
-    s3_client = boto3.client('s3')
-    s3_resource = boto3.resource('s3')
+    s3_client = boto3.client("s3")
+    s3_resource = boto3.resource("s3")
 
     response = s3_client.list_buckets()
     print(response)
 
-    for bucket in response.get('Buckets', []):
-        bucket_name = bucket['Name']
+    for bucket in response.get("Buckets", []):
+        bucket_name = bucket["Name"]
         print(bucket_name)
         try:
 
-                    # delete the bucket policy
+            # delete the bucket policy
 
-            s3_client.delete_bucket_policy(Bucket=bucket['Name'])
+            s3_client.delete_bucket_policy(Bucket=bucket["Name"])
 
-                    # delete objects
+            # delete objects
 
-            this_bucket = s3_resource.Bucket(bucket['Name'])
+            this_bucket = s3_resource.Bucket(bucket["Name"])
             this_bucket.objects.all().delete()
             this_bucket.object_versions.all().delete()
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == 'NoSuchBucket' \
-                or e.response['Error']['Code'] == 'OperationAborted':
+            if (
+                e.response["Error"]["Code"] == "NoSuchBucket"
+                or e.response["Error"]["Code"] == "OperationAborted"
+            ):
 
-                        # it's possible that if the reaper gets invoked for multiple regions, that two or more invocations
-                        # will try to delete the same s3 buckets at the same time and one of them will fail with this
-                        # exception if it tried deleting after the fact, so we check here and move on
+                # it's possible that if the reaper gets invoked for multiple regions, that two or more invocations
+                # will try to delete the same s3 buckets at the same time and one of them will fail with this
+                # exception if it tried deleting after the fact, so we check here and move on
 
-                print ('Bucket {} not found or operation aborted, seems like it was already deleted. Kthxbai.'.format(bucket_name),
-                       e)
-            elif e.response['Error']['Code'] == 'AccessDenied':
+                print(
+                    "Bucket {} not found or operation aborted, seems like it was already deleted. Kthxbai.".format(
+                        bucket_name
+                    ),
+                    e,
+                )
+            elif e.response["Error"]["Code"] == "AccessDenied":
 
-                        # it is possible for customers to create bucket policies that lock all access to a bucket and only
-                        # allow access from a VPC, for example, and if this happens then there's nothing we can do except ignore
-                        # the bucket and continue
+                # it is possible for customers to create bucket policies that lock all access to a bucket and only
+                # allow access from a VPC, for example, and if this happens then there's nothing we can do except ignore
+                # the bucket and continue
 
-                print ('Access Denied on Bucket {}. Probably locked out by Bucket Policy. Oh well.'.format(bucket_name),
-                       e)
+                print(
+                    "Access Denied on Bucket {}. Probably locked out by Bucket Policy. Oh well.".format(
+                        bucket_name
+                    ),
+                    e,
+                )
             else:
                 raise e
 
     check_if_deleted = s3_client.list_buckets()
 
-    for bucket in check_if_deleted.get('Buckets', []):
-        bucket_name = bucket['Name']
+    for bucket in check_if_deleted.get("Buckets", []):
+        bucket_name = bucket["Name"]
         try:
             objects = s3_client.list_objects_v2(Bucket=bucket_name)
-            if 'Contents' in objects and len(objects['Contents']) > 0:
-                print('Still have objects... not finished')
-                print(list(map(lambda o: o['Key'], objects['Contents'])))
-                return {'all_deleted': False}
+            if "Contents" in objects and len(objects["Contents"]) > 0:
+                print("Still have objects... not finished")
+                print(list(map(lambda o: o["Key"], objects["Contents"])))
+                return {"all_deleted": False}
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == 'NoSuchBucket' \
-                or e.response['Error']['Code'] == 'OperationAborted':
+            if (
+                e.response["Error"]["Code"] == "NoSuchBucket"
+                or e.response["Error"]["Code"] == "OperationAborted"
+            ):
 
-                        # it's possible that if the reaper gets invoked for multiple regions, that two or more invocations
-                        # will try to delete the same s3 buckets at the same time and one of them will fail with this
-                        # exception if it tried deleting after the fact, so we check here and move on
+                # it's possible that if the reaper gets invoked for multiple regions, that two or more invocations
+                # will try to delete the same s3 buckets at the same time and one of them will fail with this
+                # exception if it tried deleting after the fact, so we check here and move on
 
-                print ('Bucket {} not found or operation aborted, seems like it was already deleted. Kthxbai.'.format(bucket_name),
-                       e)
-            elif e.response['Error']['Code'] == 'AccessDenied':
+                print(
+                    "Bucket {} not found or operation aborted, seems like it was already deleted. Kthxbai.".format(
+                        bucket_name
+                    ),
+                    e,
+                )
+            elif e.response["Error"]["Code"] == "AccessDenied":
 
-                        # it is possible for customers to create bucket policies that lock all access to a bucket and only
-                        # allow access from a VPC, for example, and if this happens then there's nothing we can do except ignore
-                        # the bucket and continue
+                # it is possible for customers to create bucket policies that lock all access to a bucket and only
+                # allow access from a VPC, for example, and if this happens then there's nothing we can do except ignore
+                # the bucket and continue
 
-                print ('Access Denied on Bucket {}. Probably locked out by Bucket Policy. Oh well.'.format(bucket_name),
-                       e)
+                print(
+                    "Access Denied on Bucket {}. Probably locked out by Bucket Policy. Oh well.".format(
+                        bucket_name
+                    ),
+                    e,
+                )
             else:
                 raise e
 
-    return {'all_deleted': True}
-
+    return {"all_deleted": True}
 
 
 def script_handler(event, context):
 
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client("s3")
 
-            # list all buckets
+    # list all buckets
 
     response = s3_client.list_buckets()
 
-            # #########################
-            # REGION MATCH APPROACH  #
-            # #########################
-            # # figure out region match (us-east-1 = empty string, for no good reason)
-            # # https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETlocation.html
-            # match_region = region = event['region']
-            # if match_region == 'us-east-1':
-            #     match_region = ''
-            # # loop over buckets and delete if region matches
-            # for bucket in response['Buckets']:
-            #     bucket_name = bucket['Name']
-            #     # check if region match
-            #     if s3_client.get_bucket_location(Bucket=bucket_name)['LocationConstraint'] == match_region:
-            #         print(bucket_name)
-            #         # delete bucket
-            #         s3_client.delete_bucket(Bucket=bucket_name)
+    # #########################
+    # REGION MATCH APPROACH  #
+    # #########################
+    # # figure out region match (us-east-1 = empty string, for no good reason)
+    # # https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETlocation.html
+    # match_region = region = event['region']
+    # if match_region == 'us-east-1':
+    #     match_region = ''
+    # # loop over buckets and delete if region matches
+    # for bucket in response['Buckets']:
+    #     bucket_name = bucket['Name']
+    #     # check if region match
+    #     if s3_client.get_bucket_location(Bucket=bucket_name)['LocationConstraint'] == match_region:
+    #         print(bucket_name)
+    #         # delete bucket
+    #         s3_client.delete_bucket(Bucket=bucket_name)
 
-            # #####################
-            # NUKE ALL APPROACH  #
-            # #####################
-            # this is the preferred approach beacuse it cleans all the regions, not just the target one
-            # this is easy to do because S3 buckets are global and in a single list command we can get all bucket
-            # loop over all buckets and delete (don't care what region, delete them all)
+    # #####################
+    # NUKE ALL APPROACH  #
+    # #####################
+    # this is the preferred approach beacuse it cleans all the regions, not just the target one
+    # this is easy to do because S3 buckets are global and in a single list command we can get all bucket
+    # loop over all buckets and delete (don't care what region, delete them all)
 
-    for bucket in response.get('Buckets', []):
-        bucket_name = bucket['Name']
+    for bucket in response.get("Buckets", []):
+        bucket_name = bucket["Name"]
         try:
 
-                    # delete the bucket
+            # delete the bucket
 
             s3_client.delete_bucket(Bucket=bucket_name)
-            print('Deleted {} bucket'.format(bucket_name))
+            print("Deleted {} bucket".format(bucket_name))
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == 'NoSuchBucket' \
-                or e.response['Error']['Code'] == 'OperationAborted':
+            if (
+                e.response["Error"]["Code"] == "NoSuchBucket"
+                or e.response["Error"]["Code"] == "OperationAborted"
+            ):
 
-                        # it's possible that if the reaper gets invoked for multiple regions, that two or more invocations
-                        # will try to delete the same s3 buckets at the same time and one of them will fail with this
-                        # exception if it tried deleting after the fact, so we check here and move on
+                # it's possible that if the reaper gets invoked for multiple regions, that two or more invocations
+                # will try to delete the same s3 buckets at the same time and one of them will fail with this
+                # exception if it tried deleting after the fact, so we check here and move on
 
-                print ('Bucket {} not found or operation aborted, seems like it was already deleted. Kthxbai.'.format(bucket_name),
-                       e)
-            elif e.response['Error']['Code'] == 'AccessDenied':
+                print(
+                    "Bucket {} not found or operation aborted, seems like it was already deleted. Kthxbai.".format(
+                        bucket_name
+                    ),
+                    e,
+                )
+            elif e.response["Error"]["Code"] == "AccessDenied":
 
-                        # it is possible for customers to create bucket policies that lock all access to a bucket and only
-                        # allow access from a VPC, for example, and if this happens then there's nothing we can do except ignore
-                        # the bucket and continue
+                # it is possible for customers to create bucket policies that lock all access to a bucket and only
+                # allow access from a VPC, for example, and if this happens then there's nothing we can do except ignore
+                # the bucket and continue
 
-                print ('Access Denied on Bucket {}. Probably locked out by Bucket Policy. Oh well.'.format(bucket_name),
-                       e)
-            elif e.response['Error']['Code'] == 'BucketNotEmpty':
+                print(
+                    "Access Denied on Bucket {}. Probably locked out by Bucket Policy. Oh well.".format(
+                        bucket_name
+                    ),
+                    e,
+                )
+            elif e.response["Error"]["Code"] == "BucketNotEmpty":
 
-                        # this is also possible when we are unable to delete items from the bucket, which happens
-                        # when module developer lock us out of buckets and there's nothing we can do. Usually this is
-                        # caused by the AccessDenied exception in the cleanup_s3_objects step (see notes there)
-                        # for now, we are going to log this and ignore it
+                # this is also possible when we are unable to delete items from the bucket, which happens
+                # when module developer lock us out of buckets and there's nothing we can do. Usually this is
+                # caused by the AccessDenied exception in the cleanup_s3_objects step (see notes there)
+                # for now, we are going to log this and ignore it
 
-                print ("Bucket {} Not Empty. Probably locked out of bucket and can't clean it.".format(bucket_name),
-                       e)
+                print(
+                    "Bucket {} Not Empty. Probably locked out of bucket and can't clean it.".format(
+                        bucket_name
+                    ),
+                    e,
+                )
             else:
                 raise e
 
@@ -235,4 +277,4 @@ def script_handler(event, context):
             # if len(check_if_deleted.get('Buckets', [])) > 0:
             #     return { 'all_deleted': False }
 
-    return {'all_deleted': True}
+    return {"all_deleted": True}

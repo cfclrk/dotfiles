@@ -1,8 +1,8 @@
 tmux
 ----
 
-  - `prefix` + <kbd>I</kbd>: Install plugins
-  - `prefix` + <kbd>U</kbd>: Update plugins
+- `prefix` + <kbd>I</kbd>: Install plugins
+- `prefix` + <kbd>U</kbd>: Update plugins
 
 pyenv
 -----
