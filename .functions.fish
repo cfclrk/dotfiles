@@ -51,9 +51,8 @@ function s --description "Export environment variables from a file"
 
     for line in (cat $envFile)
         if test -n $line
-            #set -l v (string replace "=" " " -- $line)
-            #eval set -gx $v
-            eval "env $line"
+            set -l v (string replace "=" " " -- $line)
+            eval set -gx $v
         end
     end
 end
