@@ -27,8 +27,8 @@ dotFiles=(".bash_logout"
           ".config/fish/config.fish"
           ".config/tidyrc"
           ".config/git/config"
-          ".config/git/config-home"
-          ".config/git/config-work"
+          ".config/git/home.gitconfig"
+          ".config/git/work.gitconfig"
           ".pyenv/default-packages")
 for f in ${dotFiles[*]}; do
     ln -svf "$DOTFILES_DIR/$f" "$HOME/$f"

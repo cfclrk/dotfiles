@@ -17,8 +17,8 @@
 	ui = auto
 
 [includeIf "gitdir:~/"]
-	path = config-home
+	path = home.gitconfig
 [includeIf "gitdir:~/IronNet/"]
-	path = config-work
+	path = work.gitconfig
 [includeIf "gitdir:~/go/"]
-	path = config-work
+	path = work.gitconfig
