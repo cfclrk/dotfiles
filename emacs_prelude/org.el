@@ -7,19 +7,22 @@
 (prelude-require-packages '(htmlize
                             ob-async
                             org
-                            org-bullets
-                            ox-gfm))
+                            org-bullets))
 
 (require 'org)
 (require 'ob-async)
 (require 'ob-clojure)
-(require 'ox-gfm)
 (require 'ox-html)
 (require 'ox-org)
 (require 'prelude-org)
 
 (setq org-startup-folded t)
 (setq org-enforce-todo-dependencies t)
+
+;; Add ox-gfm to load path
+(add-to-list 'load-path
+             (f-expand "vendor/ox-gfm" (f-canonical user-emacs-directory)))
+(require 'ox-gfm)
 
 ;;; Functions
 
@@ -82,8 +85,8 @@
      (python . t)
      (shell . t)))
 
-  (org-babel-lob-ingest (f-join user-emacs-directory
-                                "babel/library-of-babel.org"))
+  ;; (org-babel-lob-ingest (f-join user-emacs-directory
+  ;;                               "personal/babel/library-of-babel.org"))
 
   (setq org-confirm-babel-evaluate nil
         org-babel-clojure-backend 'cider)
@@ -99,25 +102,23 @@
   ;; publishing
   (require 'ox-publish)
   (setq org-publish-project-alist
-        '(("cloudformation-org"
-           :base-directory "~/Projects/codenotes/aws/cloudformation/org/"
-           :publishing-directory "~/Projects/codenotes/aws/cloudformation/gen_org/"
+        '(("cf-export-org"
+           :base-directory "~/Projects/cloudformation/org/"
+           :publishing-directory "~/Projects/cloudformation/export_org/"
            :publishing-function org-org-publish-to-org)
 
-          ("cloudformation-yaml"
-           :base-directory "~/Projects/codenotes/aws/cloudformation/gen_org/"
-           :publishing-directory "~/Projects/codenotes/aws/cloudformation/gen_yaml/"
+          ("cf-export-hugo"
+           :base-directory "~/Projects/cloudformation/org/"
+           :publishing-directory "~/Projects/cloudformation/export_org/"
+           :publishing-function org-org-publish-to-org)
+
+          ("cf-tangle"
+           :base-directory "~/Projects/cloudformation/export_org/"
+           :publishing-directory "~/Projects/cloudformation/yaml/"
            :publishing-function org-babel-tangle-publish)
 
           ("cf"
-           :components ("cloudformation-org" "cloudformation-yaml"))
-
-          ("orgtests"
-           :base-directory "~/Luminal/orgtests/org/"
-           :publishing-directory "~/Luminal/orgtests/dist/"
-           :recursive t
-           :publishing-function org-html-publish-to-html
-           :body-only t))))
+           :components ("cf-export-org" "cf-export-hugo")))))
 
 (add-hook 'org-mode-hook 'my-org-mode-hook)
 

@@ -1,0 +1,14 @@
+* Usage
+** Before git is set up
+
+1. Download the repo archive as a zip
+2. Extract the zip
+3. Run =bootstrap.sh=
+
+** If git is set up
+
+#+begin_src sh
+  mkdir -p ~/Projects
+  git clone git@github.com:cfclrk/skel.git ~/Projects/skel
+  cd ~/Projects/skel && ./bootstrap.sh
+#+end_src

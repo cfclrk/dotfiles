@@ -59,6 +59,7 @@
                             page-break-lines
                             pipenv
                             py-isort
+                            pyenv-mode
                             python-pytest
                             racket-mode
                             restclient
@@ -232,17 +233,6 @@ TODO: Resize the frame."
 ;;; Programming languages
 ;;  ----------------------------------------------------------------------------
 
-(use-package bicycle
-             :after outline
-             :bind (:map outline-minor-mode-map
-                         ([C-tab] . bicycle-cycle)
-                         ([S-tab] . bicycle-cycle-global)))
-
-(use-package prog-mode
-  :config
-  (add-hook 'prog-mode-hook 'outline-minor-mode)
-  (add-hook 'prog-mode-hook 'hs-minor-mode))
-
 ;;;; Clojure and cider
 
 (setq cider-repl-use-pretty-printing t)
@@ -265,37 +255,40 @@ TODO: Resize the frame."
 
 ;;;; Golang
 
-(defun my-go-mode-hook ()
-  "Customize `go-mode'."
+(add-hook 'go-mode-hook #'lsp)
+;;(add-hook 'go-mode-hook 'my-go-mode-hook)
 
-  (setq tab-width 4
-        fill-column 80
-        go-test-args "-v")
+;; (defun my-go-mode-hook ()
+;;   "Customize `go-mode'."
 
-  (global-set-key (kbd "M-.") 'godef-jump)
-  (global-set-key (kbd "M-p") 'godef-jump-other-window)
+;;   (setq tab-width 4
+;;         fill-column 80
+;;         go-test-args "-v")
 
-  ;; Load yasnippets
-  (let ((d (expand-file-name "snippets/yasnippet-go" user-emacs-directory)))
-    (add-to-list 'yas-snippet-dirs d))
+;;   (global-set-key (kbd "M-.") 'godef-jump)
+;;   (global-set-key (kbd "M-p") 'godef-jump-other-window)
 
-  ;; Requires running go get -u github.com/zmb3/gogetdoc
-  (setq godoc-at-point-function 'godoc-gogetdoc)
+;;   ;; Load yasnippets
+;;   (let ((d (expand-file-name "snippets/yasnippet-go" user-emacs-directory)))
+;;     (add-to-list 'yas-snippet-dirs d))
 
-  ;; I don't like that prelude overrode C-h f to run godoc-at-point
-  ;(define-key go-mode-map (kbd "C-h f") 'helm-apropos)
-  (global-set-key (kbd "s-g") 'godoc-at-point)
+;;   ;; Requires running go get -u github.com/zmb3/gogetdoc
+;;   (setq godoc-at-point-function 'godoc-gogetdoc)
 
-  ;; Don't highlight lines longer than fill-column
-  ;; Note: Mnually toggle with "M-x whitespace-toggle-options L"
-  (whitespace-toggle-options '(lines-tail)))
+;;   ;; I don't like that prelude overrode C-h f to run godoc-at-point
+;;   ;(define-key go-mode-map (kbd "C-h f") 'helm-apropos)
+;;   (global-set-key (kbd "s-g") 'godoc-at-point)
 
-;; Run my-go-mode-hook after the prelude go mode hook, because my hook overrides
-;; some things in the prelude hook.
-(setq prelude-go-mode-hook '(prelude-go-mode-defaults
-                             yas-minor-mode
-                             go-guru-hl-identifier-mode
-                             my-go-mode-hook))
+;;   ;; Don't highlight lines longer than fill-column
+;;   ;; Note: Mnually toggle with "M-x whitespace-toggle-options L"
+;;   (whitespace-toggle-options '(lines-tail)))
+
+;; ;; Run my-go-mode-hook after the prelude go mode hook, because my hook overrides
+;; ;; some things in the prelude hook.
+;; (setq prelude-go-mode-hook '(prelude-go-mode-defaults
+;;                              yas-minor-mode
+;;                              go-guru-hl-identifier-mode
+;;                              my-go-mode-hook))
 
 ;;;; Haskell
 
@@ -323,7 +316,6 @@ TODO: Resize the frame."
 
 (defun my-python-mode-hook ()
   "Customize `python-mode'."
-
   (setq fill-column 88
         python-fill-docstring-style 'pep-257-nn
         python-shell-interpreter "ipython"
@@ -334,6 +326,18 @@ TODO: Resize the frame."
   (whitespace-mode +1))
 
 (add-hook 'python-mode-hook 'my-python-mode-hook)
+
+(require 'pyenv-mode)
+
+(defun projectile-pyenv-mode-set ()
+  "Set pyenv version matching project name."
+  (let ((project (projectile-project-name)))
+    (if (member project (pyenv-mode-versions))
+        (pyenv-mode-set project)
+      (pyenv-mode-unset))))
+
+;; Set pyenv version whenever switching projects with C-c p p.
+(add-hook 'projectile-after-switch-project-hook 'projectile-pyenv-mode-set)
 
 ;; TODO: get rid of this. For some reason my setup.cfg stuff is not being used
 ;; correctly.
@@ -360,6 +364,18 @@ TODO: Resize the frame."
 
 (add-to-list 'auto-mode-alist '("credentials\\'" . conf-mode))
 
+
+;;;; bicycle
+
+(use-package bicycle
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global)))
+
+(add-hook 'prog-mode-hook 'outline-minor-mode)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
 ;;;; company
 
 (setq company-global-modes '(not org-mode))
@@ -373,10 +389,6 @@ TODO: Resize the frame."
 ;;;; flycheck
 
 (setq flycheck-emacs-lisp-load-path 'inherit)
-
-;;;; gitconfig
-
-(add-to-list 'auto-mode-alist '("gitconfig" . gitconfig-mode))
 
 ;;;; magit
 

@@ -1,0 +1,8 @@
+{
+  "default": true,
+  "single-title": false,
+  "no-inline-html": {
+    "allowed_elements": ["kbd"]
+  },
+  "first-line-heading": false
+}

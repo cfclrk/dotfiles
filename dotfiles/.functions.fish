@@ -41,7 +41,7 @@ function fish_prompt --description 'Defines the prompt'
 end
 
 function emacs
-    set -lx XDG_CONFIG_HOME ~/.config/emacs_minimal
+    set -lx XDG_CONFIG_HOME ~/emacs_minimal
     eval $EMACS
 end
 
@@ -278,11 +278,21 @@ function use --description "Create symlink on $PATH to this installed program"
     la $binPath
 end
 
+function latest_python
+    pyenv install --list \
+        | grep "^  3" \
+        | grep -v "src|dev" \
+        | tail -1 \
+        | tr -d '[:space:]'
+end
+
 # Azure
 # -----------------------------------------------------------------------------
 
-function kvAll --description 'All keyvault keys and secrets'
-    set secretIds (az keyvault secret list --vault-name $argv[1] --query "[].id" -o tsv)
+function kvAll --description "All Keyvault keys and secrets"
+    set secretIds (az keyvault secret list \
+        --vault-name $argv[1] \
+        --query "[].id" -o tsv)
     for i in $secretIds
         set val (az keyvault secret show --id $i --query "value" -o tsv)
         echo ""

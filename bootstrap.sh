@@ -2,68 +2,67 @@
 
 set -eu -o pipefail
 
-DOTFILES_DIR=~/Projects/dotfiles
-mkdir -p $DOTFILES_DIR
-cd $DOTFILES_DIR
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-mkdir -p ~/.lein
-mkdir -p ~/.ssh
-mkdir -p ~/.config/fish
-mkdir -p ~/.config/git
-mkdir -p ~/.clojure
-mkdir -p ~/.pyenv
-dotFiles=(".bash_logout"
-          ".bash_aliases"
-          ".bashrc"
-          ".functions.fish"
-          ".functions.sh"
-          ".gitignore_global"
-          ".profile"
-          ".tmux.conf"
-          ".vimrc"
-          ".clojure/deps.edn"
-          ".lein/profiles.clj"
-          ".ssh/config"
-          ".config/fish/config.fish"
-          ".config/tidyrc"
-          ".config/git/config"
-          ".config/git/home.gitconfig"
-          ".config/git/work.gitconfig"
-          ".pyenv/default-packages")
-for f in ${dotFiles[*]}; do
-    ln -svf "$DOTFILES_DIR/$f" "$HOME/$f"
-done
-
-# Emacs
-mkdir -p ~/.config/emacs
-mkdir -p ~/.config/emacs/babel
-if [[ ! -d ~/.config/emacs/personal ]]; then
-    printf "\nNo ~/.config/emacs/personal directory. Install Prelude!\n"
-    exit 1
+# MacOS
+os=$(uname -s)
+if [[ "$os" == "Darwin" ]]; then
+   ./macos.sh
 fi
-ln -svf "$DOTFILES_DIR/emacs/init.el" ~/.config/emacs/personal/init.el
-ln -svf "$DOTFILES_DIR/emacs/org.el" ~/.config/emacs/personal/org.el
-ln -svf "$DOTFILES_DIR/emacs/library-of-babel.org" \
-   ~/.config/emacs/babel/library-of-babel.org
-ln -svf "$DOTFILES_DIR/emacs/prelude-pinned-packages.el" \
-   ~/.config/emacs/prelude-pinned-packages.el
+
+# Dotfiles
+dotFiles=$(ls -A "$DIR/dotfiles")
+for f in $dotFiles; do
+    ln -svf "$DIR/dotfiles/$f" "$HOME/$f"
+done
 
 # ~/bin
 mkdir -p ~/bin
-scriptFiles=$(ls $DOTFILES_DIR/bin)
+scriptFiles=$(ls -A "$DIR/bin")
 for f in $scriptFiles; do
-    ln -svf "$DOTFILES_DIR/bin/$f" "$HOME/bin/$f"
+    ln -svf "$DIR/bin/$f" "$HOME/bin/$f"
 done
 
-# tmux
+# XDG config dir
+mkdir -p ~/.config
+xdgConfigs=$(ls -A "$DIR/xdg_config")
+for f in $xdgConfigs; do
+    ln -svfh "$DIR/xdg_config/$f" "$HOME/.config/$f"
+done
+
+# Emacs Prelude
+mkdir -p ~/emacs
+PRELUDE_DIR=~/emacs/emacs_prelude
+if [[ ! -d $PRELUDE_DIR ]]; then
+    printf "\nEmacs Prelude not found. Installing Prelude...\n"
+    export PRELUDE_INSTALL_DIR="$PRELUDE_DIR"
+    curl -L https://git.io/epre | sh
+fi
+ln -svf "$DIR/emacs_prelude/init.el" $PRELUDE_DIR/personal/init.el
+ln -svf "$DIR/emacs_prelude/org.el" $PRELUDE_DIR/personal/org.el
+mkdir -p $PRELUDE_DIR/personal/preload
+ln -svf "$DIR/emacs_prelude/preload/init.el" $PRELUDE_DIR/personal/preload/init.el
+mkdir -p $PRELUDE_DIR/personal/babel
+ln -svf "$DIR/emacs_prelude/personal/babel/library-of-babel.org" $PRELUDE_DIR/personal/babel/library-of-babel.org
+
+# Emacs minimal
+MINIMAL_DIR=~/emacs/emacs_minimal
+ln -svfh "$DIR/emacs_minimal" $MINIMAL_DIR
+
+# Make Prelude the default
+ln -svfh $PRELUDE_DIR "$HOME/.config/emacs"
+
+# Tmux
 if [[ ! -d ~/.tmux/plugins/tpm ]]; then
     echo "Tmux package manager is not installed. Installing!"
     mkdir -p ~/.tmux/plugins
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
-# MacOS setup
-os=$(uname -s)
-if [[ "$os" == "Darwin" ]]; then
-   ./macos.sh
-fi
+# Pyenv
+mkdir -p ~/.pyenv
+ln -svf "$DIR/.pyenv/default_packages" ~/.pyenv/default-packages
+
+# SSH
+mkdir -p ~/.ssh
+ln -svf "$DIR/.ssh/config" ~/.ssh/config
