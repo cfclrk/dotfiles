@@ -16,7 +16,7 @@
 [color]
 	ui = auto
 
-[includeIf "gitdir:~/"]
+[includeIf "gitdir:/"]
 	path = home.gitconfig
 [includeIf "gitdir:~/IronNet/"]
 	path = work.gitconfig

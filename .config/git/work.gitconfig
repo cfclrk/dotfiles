@@ -7,3 +7,5 @@
 	insteadOf = git@github.com:IronNetCybersecurity
 [url "git@github-work:IronNetCybersecurity"]
 	insteadOf = https://github.com/IronNetCybersecurity
+[url "git@gist-work"]
+	insteadOf = git@gist.github.com

@@ -7,3 +7,5 @@
 	insteadOf = git@github.com:cfclrk
 [url "git@github-home:cfclrk"]
 	insteadOf = https://github.com/cfclrk
+[url "git@gist-home"]
+	insteadOf = git@gist.github.com
