@@ -13,7 +13,7 @@ fi
 # Dotfiles
 dotFiles=$(ls -A "$DIR/dotfiles")
 for f in $dotFiles; do
-    ln -svf "$DIR/dotfiles/$f" "$HOME/$f"
+    ln -svfh "$DIR/dotfiles/$f" "$HOME/$f"
 done
 
 # ~/bin
