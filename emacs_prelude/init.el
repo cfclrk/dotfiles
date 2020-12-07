@@ -139,11 +139,17 @@
 ;;  ----------------------------------------------------------------------------
 
 (defun cfc/set-font-size (font-size)
-  "Set font size to the given height.
-TODO: Resize the frame."
+  "Set font height to the given FONT-SIZE.
+
+Get the current font height:
+
+    (face-attribute 'default :height)
+
+TODO: display current font size in prompt."
   (interactive "nFont Size: ")
-  (set-face-attribute 'default nil :height font-size)
-  (set-face-attribute 'mode-line nil :height font-size))
+  (let ((frame-inhibit-implied-resize t))
+    (set-face-attribute 'default nil :height font-size)
+    (set-face-attribute 'mode-line nil :height font-size)))
 
 (defun cfc/kill-all-other-buffers ()
   "Kill all buffers other than current buffer."
