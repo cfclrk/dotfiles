@@ -317,11 +317,15 @@ TODO: display current font size in prompt."
 
 ;;;; Python
 
-(require 'flycheck-mypy)  ; use with M-x flycheck-select-checker
 (add-to-list 'auto-mode-alist '("Pipfile\\'" . toml-mode))
 
 (defun my-python-mode-hook ()
   "Customize `python-mode'."
+  (prelude-require-package 'lsp-python-ms)
+
+  (require 'lsp-python-ms)
+  (setq lsp-python-ms-auto-install-server t)
+
   (setq fill-column 88
         python-fill-docstring-style 'pep-257-nn
         python-shell-interpreter "ipython"
@@ -329,11 +333,14 @@ TODO: display current font size in prompt."
 
   ;; Restart whitespace-mode so that it properly uses `fill-column'
   (whitespace-mode -1)
-  (whitespace-mode +1))
+  (whitespace-mode +1)
 
-(add-hook 'python-mode-hook 'my-python-mode-hook)
+  (require 'flycheck-mypy)  ;; Use with M-x flycheck-select-checker
+  (require 'pyenv-mode))
 
-(require 'pyenv-mode)
+(setq prelude-python-mode-hook '(prelude-python-mode-defaults
+                                 my-python-mode-hook
+                                 lsp))
 
 (defun projectile-pyenv-mode-set ()
   "Set pyenv version matching project name."
@@ -436,10 +443,6 @@ TODO: display current font size in prompt."
 (key-chord-define-global "hu" 'undo-tree-visualize)
 (key-chord-define-global "pb" 'blacken-buffer)
 (key-chord-define-global "vw" 'avy-goto-word-1)
-
-;;;; LSP
-
-;; (add-hook 'yaml-mode-hook #'lsp)
 
 ;;;; make
 
