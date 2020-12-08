@@ -40,15 +40,13 @@
                             all-the-icons-ivy-rich
                             bats-mode
                             bicycle
-                            blacken
-                            clj-refactor
                             csv-mode
+                            dap-mode
                             dockerfile-mode
                             doom-modeline
                             doom-themes
                             emmet-mode
                             fish-mode
-                            flycheck-mypy
                             flycheck-package
                             forge
                             geiser
@@ -57,10 +55,6 @@
                             key-chord
                             lsp-mode
                             page-break-lines
-                            pipenv
-                            py-isort
-                            pyenv-mode
-                            python-pytest
                             racket-mode
                             restclient
                             terraform-mode
@@ -68,7 +62,6 @@
                             use-package
                             visual-fill-column
                             writeroom-mode
-                            yapfify
                             yasnippet))
 
 ;;; General
@@ -241,8 +234,13 @@ TODO: display current font size in prompt."
 
 ;;;; Clojure and cider
 
-(setq cider-repl-use-pretty-printing t)
-(add-hook 'clojure-mode-hook 'lisp-smartparens-hook)
+(defun my-clojure-mode-hook ()
+  "Customize `clojure-mode'."
+  (prelude-require-packages '(clj-refactor))
+  (setq cider-repl-use-pretty-printing t))
+
+(setq prelude-clojure-mode-hook '(my-clojure-mode-hook
+                                  lisp-smartparens-hook))
 
 ;;;; Elisp
 
@@ -251,9 +249,10 @@ TODO: display current font size in prompt."
   (outline-minor-mode)
   (setq sentence-end-double-space nil))
 
-(add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook)
-(add-hook 'emacs-lisp-mode-hook 'lisp-smartparens-hook)
-(add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+(setq prelude-emacs-lisp-mode-hook '(prelude-emacs-lisp-mode-defaults
+                                     my-emacs-lisp-mode-hook
+                                     lisp-smartparens-hook
+                                     outline-minor-mode))
 
 ;;;; Fish
 
@@ -308,12 +307,14 @@ TODO: display current font size in prompt."
 
 ;;;; Javascript
 
-(setq js-indent-level 2)
-(setq json-reformat:indent-width 2)
-(add-hook 'js2-mode-hook (lambda ()
-                           (set-fill-column 110)
-                           (setq js2-strict-missing-semi-warning nil)
-                           (setq js2-missing-semi-one-line-override t)))
+(defun my-js2-mode-hook ()
+  "Customize `js2-mode'."
+  (setq js-indent-level 2
+        json-reformat:indent-width 2
+        js2-strict-missing-semi-warning nil
+        js2-missing-semi-one-line-override t))
+
+(add-hook 'js2-mode-hook 'my-js2-mode-hook)
 
 ;;;; Python
 
@@ -321,7 +322,12 @@ TODO: display current font size in prompt."
 
 (defun my-python-mode-hook ()
   "Customize `python-mode'."
-  (prelude-require-package 'lsp-python-ms)
+  (prelude-require-packages '(blacken
+                              lsp-python-ms
+                              pipenv
+                              py-isort
+                              pyenv-mode
+                              python-pytest))
 
   (require 'lsp-python-ms)
   (setq lsp-python-ms-auto-install-server t)
@@ -335,22 +341,20 @@ TODO: display current font size in prompt."
   (whitespace-mode -1)
   (whitespace-mode +1)
 
-  (require 'flycheck-mypy)  ;; Use with M-x flycheck-select-checker
   (require 'pyenv-mode))
 
 (setq prelude-python-mode-hook '(prelude-python-mode-defaults
                                  my-python-mode-hook
                                  lsp))
 
-(defun projectile-pyenv-mode-set ()
-  "Set pyenv version matching project name."
-  (let ((project (projectile-project-name)))
-    (if (member project (pyenv-mode-versions))
-        (pyenv-mode-set project)
-      (pyenv-mode-unset))))
-
-;; Set pyenv version whenever switching projects with C-c p p.
-(add-hook 'projectile-after-switch-project-hook 'projectile-pyenv-mode-set)
+;; ;; Set pyenv version whenever switching projects with C-c p p.
+;; (defun projectile-pyenv-mode-set ()
+;;   "Set pyenv version matching project name."
+;;   (let ((project (projectile-project-name)))
+;;     (if (member project (pyenv-mode-versions))
+;;         (pyenv-mode-set project)
+;;       (pyenv-mode-unset))))
+;; (add-hook 'projectile-after-switch-project-hook 'projectile-pyenv-mode-set)
 
 ;; TODO: get rid of this. For some reason my setup.cfg stuff is not being used
 ;; correctly.
@@ -438,8 +442,7 @@ TODO: display current font size in prompt."
 ;;;; key-chord
 
 (key-chord-mode +1)
-(setq key-chord-two-keys-delay 0.02
-      key-chord-one-key-delay 0.15)
+(setq key-chord-one-key-delay 0.15)
 (key-chord-define-global "hu" 'undo-tree-visualize)
 (key-chord-define-global "pb" 'blacken-buffer)
 (key-chord-define-global "vw" 'avy-goto-word-1)
@@ -470,7 +473,7 @@ TODO: display current font size in prompt."
 ;;;; smartparens
 
 (defun lisp-smartparens-hook ()
-  "Extra smartparens settings to apply in Lisp modes."
+  "Smartparens settings to apply in Lisp modes."
 
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
