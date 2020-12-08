@@ -22,7 +22,6 @@
 (require 'prelude-css)
 (require 'prelude-emacs-lisp)
 (require 'prelude-go)
-(require 'prelude-haskell)
 (require 'prelude-ivy)
 (require 'prelude-js)
 (require 'prelude-lisp)
@@ -294,16 +293,6 @@ TODO: display current font size in prompt."
 ;;                              yas-minor-mode
 ;;                              go-guru-hl-identifier-mode
 ;;                              my-go-mode-hook))
-
-;;;; Haskell
-
-(require 'haskell-interactive-mode)
-(require 'haskell-process)
-(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-(custom-set-variables
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t))
 
 ;;;; Javascript
 
