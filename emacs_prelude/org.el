@@ -2,29 +2,32 @@
 
 ;;; Commentary:
 
+;; My customization for org-mode.
+
 ;;; Code:
+
+;;; Packages
+;;  ----------------------------------------------------------------------------
 
 (prelude-require-packages '(htmlize
                             ob-async
                             org
                             org-bullets))
 
-(require 'org)
-(require 'ob-async)
-(require 'ob-clojure)
-(require 'ox-html)
-(require 'ox-org)
-(require 'prelude-org)
-
-(setq org-startup-folded t)
-(setq org-enforce-todo-dependencies t)
-
 ;; Add ox-gfm to load path
 (add-to-list 'load-path
              (f-expand "vendor/ox-gfm" (f-canonical user-emacs-directory)))
-(require 'ox-gfm)
+
+(require 'org)
+(require 'ob-async)
+(require 'prelude-org)
+
+;; I believe these must be specified before the org-mode-hook is run?
+(setq org-startup-folded t)
+(setq org-enforce-todo-dependencies t)
 
 ;;; Functions
+;;  ----------------------------------------------------------------------------
 
 (defun cfc/org-md ()
   "Export an org file to GitHub Flavored Markdown and format."
@@ -44,7 +47,7 @@
       (write-file md-file-name))))
 
 (defun cfc/on-every-src-block (fn)
-  "Visit every SRC block and evaluate FN."
+  "Visit every source block and evaluate FN."
   (save-excursion
     (goto-char (point-min))
     (let ((case-fold-search t))
@@ -61,6 +64,7 @@
 
 
 ;;; Hooks
+;;  ----------------------------------------------------------------------------
 
 (defun my-org-src-mode-hook ()
   "Customize `org-src-mode' in buffers created by `org-edit-special'."
@@ -75,23 +79,34 @@
   (setq org-src-window-setup 'split-window-below
         org-adapt-indentation nil)
 
+  ;; Make bullets look pretty
   (org-bullets-mode 1)
 
-  ;; babel
+  ;; Don't highlight lines longer than fill-column
+  (whitespace-toggle-options '(lines-tail))
+
+  ;; Babel languages to load
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((clojure . t)
      (dot . t)
+     (emacs-lisp . t)
+     (plantuml . t)
      (python . t)
      (shell . t)))
 
-  ;; (org-babel-lob-ingest (f-join user-emacs-directory
-  ;;                               "personal/babel/library-of-babel.org"))
+  ;; Load Library of Babel functions
+  (org-babel-lob-ingest (f-join user-emacs-directory
+                                "personal/babel/library-of-babel.org"))
 
+  (require 'ob-clojure)
   (setq org-confirm-babel-evaluate nil
         org-babel-clojure-backend 'cider)
 
-  ;; exporting
+  ;; Exporting
+  (require 'ox-gfm)
+  (require 'ox-html)
+  (require 'ox-org)
   (setq org-html-doctype "html5"
         org-html-html5-fancy t
         org-export-with-sub-superscripts nil
@@ -99,7 +114,7 @@
         org-html-postamble nil
         org-html-head nil)
 
-  ;; publishing
+  ;; Publishing
   (require 'ox-publish)
   (setq org-publish-project-alist
         '(("cf-export-org"

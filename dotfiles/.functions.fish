@@ -41,7 +41,7 @@ function fish_prompt --description 'Defines the prompt'
 end
 
 function emacs
-    set -lx XDG_CONFIG_HOME ~/emacs_minimal
+    set -lx XDG_CONFIG_HOME ~/emacs/emacs_minimal
     eval $EMACS
 end
 

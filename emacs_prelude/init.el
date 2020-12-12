@@ -38,7 +38,6 @@
 (prelude-require-packages '(all-the-icons
                             all-the-icons-ivy-rich
                             bats-mode
-                            bicycle
                             csv-mode
                             dap-mode
                             dockerfile-mode
@@ -47,11 +46,9 @@
                             emmet-mode
                             fish-mode
                             flycheck-package
-                            forge
                             geiser
                             github-browse-file
                             ivy-rich
-                            key-chord
                             lsp-mode
                             page-break-lines
                             racket-mode
@@ -259,8 +256,12 @@ TODO: display current font size in prompt."
 
 ;;;; Golang
 
+(defun my-go-mode-hook ()
+  "Customize `go-mode'."
+  (setq tab-width 4))
+
+(add-hook 'go-mode-hook 'my-go-mode-hook)
 (add-hook 'go-mode-hook #'lsp)
-;;(add-hook 'go-mode-hook 'my-go-mode-hook)
 
 ;; (defun my-go-mode-hook ()
 ;;   "Customize `go-mode'."
@@ -294,13 +295,13 @@ TODO: display current font size in prompt."
 ;;                              go-guru-hl-identifier-mode
 ;;                              my-go-mode-hook))
 
+;;(add-hook 'go-mode-hook 'my-go-mode-hook)
+
 ;;;; Javascript
 
 (defun my-js2-mode-hook ()
   "Customize `js2-mode'."
-  (setq js-indent-level 2
-        json-reformat:indent-width 2
-        js2-strict-missing-semi-warning nil
+  (setq js2-strict-missing-semi-warning nil
         js2-missing-semi-one-line-override t))
 
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
@@ -375,6 +376,7 @@ TODO: display current font size in prompt."
 
 (use-package bicycle
   :after outline
+  :ensure t
   :bind (:map outline-minor-mode-map
               ([C-tab] . bicycle-cycle)
               ([S-tab] . bicycle-cycle-global)))
@@ -396,18 +398,19 @@ TODO: display current font size in prompt."
 
 (setq flycheck-emacs-lisp-load-path 'inherit)
 
-;;;; magit
+;;;; git
+
+(prelude-require-packages '(forge
+                            gitconfig-mode))
 
 (setq magit-diff-refine-hunk 'all)
+
 (with-eval-after-load 'magit
-  ;; forge
   (require 'forge)
   (add-to-list 'forge-alist '("github-home"
                               "api.github.com"
                               "github.com"
                               forge-github-repository))
-
-  ;; automatically refresh the magit buffer after saving a file
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
 ;;;; HTML
@@ -428,7 +431,19 @@ TODO: display current font size in prompt."
 ;; Don't start all M-x searches with "^"
 (setf (alist-get 'counsel-M-x ivy-initial-inputs-alist) "")
 
+;;;; json-mode
+
+(defun my-json-mode-hook ()
+  "Customize `json-mode'."
+  (setq-local js-indent-level 2
+              js2-basic-offset 2))
+
+(add-hook 'json-mode-hook 'my-json-mode-hook)
+
 ;;;; key-chord
+
+(prelude-require-package 'key-chord)
+(require 'key-chord)
 
 (key-chord-mode +1)
 (setq key-chord-one-key-delay 0.15)
@@ -441,6 +456,13 @@ TODO: display current font size in prompt."
 (add-to-list 'prelude-indent-sensitive-modes 'makefile-bsdmake-mode)
 (add-to-list 'prelude-indent-sensitive-modes 'snippet-mode)
 
+;;;; markdown
+
+(defun my-markdown-mode-hook ()
+  "Customize `markdown-mode'."
+  (whitespace-toggle-options '(lines-tail)))
+(add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
+
 ;;;; projectile
 
 (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
@@ -451,9 +473,10 @@ TODO: display current font size in prompt."
 
 ;;;; setenv-file
 
-(load (expand-file-name "~/Projects/elisp/setenv-file/setenv-file.el"))
-(add-to-list 'Info-directory-list (expand-file-name "~/Projects/elisp/setenv-file/doc/"))
-(setq setenv-file-dir (expand-file-name "~/.env/"))
+(let ((setenv-file-proj (expand-file-name "~/Projects/elisp/setenv-file/")))
+  (load (f-join setenv-file-proj "setenv-file.el"))
+  (add-to-list 'Info-directory-list (f-join setenv-file-proj "doc/"))
+  (setq setenv-file-dir (expand-file-name "~/.env/")))
 
 ;;;; swiper
 

@@ -11,16 +11,18 @@ if not set -q TMUX
         /usr/local/sbin \
         $PATH
 
-    for goPath in (string split : (go env GOPATH))
-        set PATH $goPath/bin $PATH
-    end
-
     # Programs installed with brew take precedence over pre-installed programs
     set PATH \
         /usr/local/opt/make/libexec/gnubin \
         /usr/local/opt/texinfo/bin \
         /usr/local/opt/openjdk/bin \
         $PATH
+
+    # Golang
+    set -gx GO111MODULE on
+    for goPath in (string split : (go env GOPATH))
+        set PATH $goPath/bin $PATH
+    end
 
     # Colors in less (makes man pages look nicer)
     set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline

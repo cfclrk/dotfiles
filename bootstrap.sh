@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
 
 # MacOS
 os=$(uname -s)
@@ -23,7 +23,7 @@ for f in $scriptFiles; do
     ln -svf "$DIR/bin/$f" "$HOME/bin/$f"
 done
 
-# XDG config dir
+# XDG config: ~/.config
 mkdir -p ~/.config
 xdgConfigs=$(ls -A "$DIR/xdg_config")
 for f in $xdgConfigs; do
