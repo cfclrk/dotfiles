@@ -4,13 +4,37 @@
 
 ;;; Code:
 
-;;; Packages
+;;; Startup
+;;  ----------------------------------------------------------------------------
+
+;; I make ~/.emacs.d a symlink to my Emacs configuration. By following the
+;; symlink, I can update my ~/.emacs.d symlink while Emacs is running without
+;; affecting an already-running Emacs. See:
+;; https://emacs.stackexchange.com/a/5470/6769
+(setq user-emacs-directory (file-truename "~/.emacs.d/"))
+
+;; Number of bytes that can be read from a sub-process in one read operation.
+;; Good for dealing with high-throughput sub-processes like, ehem, an LSP
+;; server.
+(setq read-process-output-max (* 3 1024 1024)) ;; 3 MiB (default is 8 KiB)
+
+(defun my-startup-hook ()
+  "Show me some Emacs startup stats."
+  (message "*** Emacs loaded in %s with %d garbage collections."
+           (format "%.2f seconds"
+                   (float-time
+                    (time-subtract after-init-time before-init-time)))
+           gcs-done))
+(add-hook 'emacs-startup-hook 'my-startup-hook)
+
+;;; Package Management
 ;;  ----------------------------------------------------------------------------
 
 ;; Packages to install in addition to those already defined in prelude-packages
 ;; and in each prelude language module at the head of this file.
 
 (require 'package)
+
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
         ("melpa" . "https://melpa.org/packages/")
@@ -60,6 +84,10 @@
                             writeroom-mode
                             yasnippet))
 
+;; So that I don't have to say ":ensure t" in every declaration
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
 ;;; General
 ;;  ----------------------------------------------------------------------------
 
@@ -67,11 +95,6 @@
 ;; How is this set in the publicly distributed dmg emacs?
 
 ;; (setq default-directory (expand-file-name "~/"))
-
-;; [Emacs 27] Number of bytes that can be read from a sub-process in one read
-;; operation. Good for dealing with high-throughput sub-processes like, ehem, an
-;; LSP server.
-(setq read-process-output-max (* 1024 1024)) ;; 1 MiB (default is 4 KiB)
 
 (setq-default fill-column 80)      ; Default line length for text wrapping
 
@@ -107,11 +130,10 @@
 ;; Not sure I really want this yet
 (setq vc-follow-symlinks t)
 
-
 ;;; Fonts
 ;;  ----------------------------------------------------------------------------
 
-;; Source Code Pro is nice in MacOS but not Ubuntu
+;; Source Code Pro looks nice in MacOS but not in Ubuntu
 (when (eq system-type 'darwin)
   (set-face-attribute 'default nil
                       :family "Source Code Pro"
@@ -123,6 +145,13 @@
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
       (set-face-attribute 'default nil :height 170)))
+
+;; Set the variable pitch face
+(set-face-attribute 'variable-pitch nil
+                    :family "Source Sans Pro"
+                    :height 245
+                    :weight 'normal
+                    :width 'normal)
 
 ;;; My functions
 ;;  ----------------------------------------------------------------------------
@@ -169,6 +198,9 @@ TODO: display current font size in prompt."
 
 ;; Render ^L (page break) as a nice line across the buffer
 (global-page-break-lines-mode)
+
+;; Make help buffers prettier and more helpful
+(use-package helpful)
 
 ;;; Window and Frame Control
 ;;  ----------------------------------------------------------------------------
@@ -376,7 +408,6 @@ TODO: display current font size in prompt."
 
 (use-package bicycle
   :after outline
-  :ensure t
   :bind (:map outline-minor-mode-map
               ([C-tab] . bicycle-cycle)
               ([S-tab] . bicycle-cycle-global)))
@@ -411,6 +442,10 @@ TODO: display current font size in prompt."
                               "api.github.com"
                               "github.com"
                               forge-github-repository))
+  (add-to-list 'forge-alist '("github-work"
+                              "api.github.com"
+                              "github.com"
+                              forge-github-repository))
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
 ;;;; HTML
@@ -431,7 +466,9 @@ TODO: display current font size in prompt."
 ;; Don't start all M-x searches with "^"
 (setf (alist-get 'counsel-M-x ivy-initial-inputs-alist) "")
 
-;;;; json-mode
+;;;; json-mode and jq
+
+(prelude-require-package 'counsel-jq)
 
 (defun my-json-mode-hook ()
   "Customize `json-mode'."
@@ -450,6 +487,17 @@ TODO: display current font size in prompt."
 (key-chord-define-global "hu" 'undo-tree-visualize)
 (key-chord-define-global "pb" 'blacken-buffer)
 (key-chord-define-global "vw" 'avy-goto-word-1)
+
+;;;; LSP
+
+;; (global-unset-key (kbd "C-c l"))
+;; (setq lsp-keymap-prefix "C-c l")
+;; (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+
+;; (defun my-lsp-mode-hook ()
+;;   "Customize `lsp-mode'."
+;;   (lsp-enable-which-key-integration))
+;; (add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
 
 ;;;; make
 
