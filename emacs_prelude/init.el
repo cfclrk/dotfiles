@@ -199,9 +199,6 @@ TODO: display current font size in prompt."
 ;; Render ^L (page break) as a nice line across the buffer
 (global-page-break-lines-mode)
 
-;; Make help buffers prettier and more helpful
-(use-package helpful)
-
 ;;; Window and Frame Control
 ;;  ----------------------------------------------------------------------------
 
@@ -447,6 +444,17 @@ TODO: display current font size in prompt."
                               "github.com"
                               forge-github-repository))
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
+
+;;;; helpful
+
+(prelude-require-package 'helpful)
+
+(setq counsel-describe-function-function #'helpful-callable
+      counsel-describe-variable-function #'helpful-symbol)
+
+;; By default, C-h C is bound to describe `describe-coding-system'
+(global-set-key (kbd "C-h C") #'helpful-command)
+(global-set-key (kbd "C-h k") #'helpful-key)
 
 ;;;; HTML
 
