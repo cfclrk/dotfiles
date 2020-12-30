@@ -330,7 +330,8 @@ TODO: display current font size in prompt."
 
 (defun my-js2-mode-hook ()
   "Customize `js2-mode'."
-  (setq js2-strict-missing-semi-warning nil
+  (setq js-indent-level 2
+        js2-strict-missing-semi-warning nil
         js2-missing-semi-one-line-override t))
 
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
