@@ -287,7 +287,11 @@ TODO: display current font size in prompt."
 
 (defun my-go-mode-hook ()
   "Customize `go-mode'."
-  (setq tab-width 4))
+  (setq tab-width 4)
+
+  ;; Don't highlight lines longer than fill-column.Mnually toggle with:
+  ;; "M-x whitespace-toggle-options L"
+  (whitespace-toggle-options '(lines-tail)))
 
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 (add-hook 'go-mode-hook #'lsp)
@@ -313,8 +317,6 @@ TODO: display current font size in prompt."
 ;;   ;(define-key go-mode-map (kbd "C-h f") 'helm-apropos)
 ;;   (global-set-key (kbd "s-g") 'godoc-at-point)
 
-;;   ;; Don't highlight lines longer than fill-column
-;;   ;; Note: Mnually toggle with "M-x whitespace-toggle-options L"
 ;;   (whitespace-toggle-options '(lines-tail)))
 
 ;; ;; Run my-go-mode-hook after the prelude go mode hook, because my hook overrides
@@ -342,15 +344,24 @@ TODO: display current font size in prompt."
 
 (defun my-python-mode-hook ()
   "Customize `python-mode'."
-  (prelude-require-packages '(blacken
-                              lsp-python-ms
-                              pipenv
-                              py-isort
+  (prelude-require-packages '(pipenv
                               pyenv-mode
                               python-pytest))
 
-  (require 'lsp-python-ms)
-  (setq lsp-python-ms-auto-install-server t)
+  ;; LSP using the pyls (Palantir) language server
+  (lsp-register-custom-settings
+   '(("pyls.plugins.pyls_mypy.enabled" t t)
+     ("pyls.plugins.pyls_mypy.live_mode" nil t)
+     ("pyls.plugins.pyls_black.enabled" t t)
+     ("pyls.plugins.pyls_isort.enabled" t t)
+     ("pyls.plugins.yapf.enabled" nil t)
+     ("pyls.plugins.pydocstyple.enabled" t t)
+
+     ;; Disable these as they duplicate flake8 functionality
+     ("pyls.plugins.mccabe.enabled" nil t)
+     ("pyls.plugins.pyflakes.enabled" nil t)))
+
+  (setq lsp-pyls-plugins-flake8-enabled t)
 
   (setq fill-column 88
         python-fill-docstring-style 'pep-257-nn
@@ -365,7 +376,7 @@ TODO: display current font size in prompt."
 
 (setq prelude-python-mode-hook '(prelude-python-mode-defaults
                                  my-python-mode-hook
-                                 lsp))
+                                 lsp-deferred))
 
 ;; ;; Set pyenv version whenever switching projects with C-c p p.
 ;; (defun projectile-pyenv-mode-set ()
@@ -388,6 +399,17 @@ TODO: display current font size in prompt."
 
 (add-hook 'rust-mode-hook (lambda ()
                             (set-fill-column 100)))
+
+;;;; Typescript
+
+(prelude-require-package 'typescript-mode)
+
+(defun my-typescript-mode-hook ()
+  "Customize `typescript-mode'."
+  (setq typescript-indent-level 2))
+
+(add-hook 'typescript-mode-hook #'lsp-deferred 0)
+(add-hook 'typescript-mode-hook 'my-typescript-mode-hook 1)
 
 ;;; Modes
 ;;  ----------------------------------------------------------------------------
@@ -415,7 +437,10 @@ TODO: display current font size in prompt."
 
 ;;;; company
 
+(prelude-require-packages '(company))
+
 (setq company-global-modes '(not org-mode))
+(define-key company-active-map (kbd "<tab>") 'company-complete-selection)
 
 ;;;; dired
 
@@ -475,7 +500,7 @@ TODO: display current font size in prompt."
 ;; Don't start all M-x searches with "^"
 (setf (alist-get 'counsel-M-x ivy-initial-inputs-alist) "")
 
-;;;; json-mode and jq
+;;;; JSON and jq
 
 (prelude-require-package 'counsel-jq)
 
@@ -499,14 +524,15 @@ TODO: display current font size in prompt."
 
 ;;;; LSP
 
-;; (global-unset-key (kbd "C-c l"))
-;; (setq lsp-keymap-prefix "C-c l")
-;; (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-
 ;; (defun my-lsp-mode-hook ()
 ;;   "Customize `lsp-mode'."
 ;;   (lsp-enable-which-key-integration))
 ;; (add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
+
+(add-hook 'lsp-ui-mode-hook '(lambda ()
+                               (setq lsp-ui-doc-position 'bottom)))
+
+(add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
 
 ;;;; make
 
