@@ -62,6 +62,33 @@
   (interactive)
   (cfc/on-every-src-block 'org-babel-remove-result))
 
+;;; Presentations
+;;  ----------------------------------------------------------------------------
+
+(use-package org-tree-slide
+  :custom
+  (org-image-actual-width nil))
+
+
+;;; Publishing
+;;  ----------------------------------------------------------------------------
+
+(require 'ox-publish)
+(setq org-publish-project-alist
+      '(("export-org"
+         :recursive t
+         :base-directory "~/Projects/cloudformation/org/"
+         :publishing-directory "~/Projects/cloudformation/exported_org/"
+         :publishing-function org-org-publish-to-org)
+
+        ("tangle-cf"
+         :recursive t
+         :base-directory "~/Projects/cloudformation/exported_org/"
+         :publishing-directory "~/Projects/cloudformation/tangled_cf/"
+         :publishing-function org-babel-tangle-publish)
+
+        ("cf"
+         :components ("export-org" "tangle-cf"))))
 
 ;;; Hooks
 ;;  ----------------------------------------------------------------------------
@@ -96,8 +123,8 @@
      (shell . t)))
 
   ;; Load Library of Babel functions
-  (org-babel-lob-ingest (f-join user-emacs-directory
-                                "personal/babel/library-of-babel.org"))
+  (org-babel-lob-ingest
+   (f-join user-emacs-directory "personal/babel/library-of-babel.org"))
 
   (require 'ob-clojure)
   (setq org-confirm-babel-evaluate nil
@@ -112,28 +139,7 @@
         org-export-with-sub-superscripts nil
         org-html-preamble nil
         org-html-postamble nil
-        org-html-head nil)
-
-  ;; Publishing
-  (require 'ox-publish)
-  (setq org-publish-project-alist
-        '(("cf-export-org"
-           :base-directory "~/Projects/cloudformation/org/"
-           :publishing-directory "~/Projects/cloudformation/export_org/"
-           :publishing-function org-org-publish-to-org)
-
-          ("cf-export-hugo"
-           :base-directory "~/Projects/cloudformation/org/"
-           :publishing-directory "~/Projects/cloudformation/export_org/"
-           :publishing-function org-org-publish-to-org)
-
-          ("cf-tangle"
-           :base-directory "~/Projects/cloudformation/export_org/"
-           :publishing-directory "~/Projects/cloudformation/yaml/"
-           :publishing-function org-babel-tangle-publish)
-
-          ("cf"
-           :components ("cf-export-org" "cf-export-hugo")))))
+        org-html-head nil))
 
 (add-hook 'org-mode-hook 'my-org-mode-hook)
 

@@ -14,8 +14,7 @@
 (setq user-emacs-directory (file-truename "~/.emacs.d/"))
 
 ;; Number of bytes that can be read from a sub-process in one read operation.
-;; Good for dealing with high-throughput sub-processes like, ehem, an LSP
-;; server.
+;; Good for dealing with verbose sub-processes like, ehem, an LSP server.
 (setq read-process-output-max (* 3 1024 1024)) ;; 3 MiB (default is 8 KiB)
 
 (defun my-startup-hook ()
@@ -27,14 +26,7 @@
            gcs-done))
 (add-hook 'emacs-startup-hook 'my-startup-hook)
 
-;;; Package Management
-;;  ----------------------------------------------------------------------------
-
-;; Packages to install in addition to those already defined in prelude-packages
-;; and in each prelude language module at the head of this file.
-
 (require 'package)
-
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
         ("melpa" . "https://melpa.org/packages/")
@@ -50,7 +42,6 @@
 (require 'prelude-js)
 (require 'prelude-lisp)
 (require 'prelude-lsp)
-(require 'prelude-python)
 (require 'prelude-rust)
 (require 'prelude-shell)
 (require 'prelude-xml)
@@ -74,7 +65,6 @@
                             github-browse-file
                             ivy-rich
                             lsp-mode
-                            page-break-lines
                             racket-mode
                             restclient
                             terraform-mode
@@ -84,20 +74,14 @@
                             writeroom-mode
                             yasnippet))
 
+;;; General
+;;  ----------------------------------------------------------------------------
+
 ;; So that I don't have to say ":ensure t" in every declaration
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-;;; General
-;;  ----------------------------------------------------------------------------
-
-;; When I compile Emacs myself and run from /Applications, this is set to "/".
-;; How is this set in the publicly distributed dmg emacs?
-
-;; (setq default-directory (expand-file-name "~/"))
-
 (setq-default fill-column 80)      ; Default line length for text wrapping
-
 (setq mark-ring-max 10             ; Num items to keep in mark ring
       ns-pop-up-frames nil         ; Don't open files in new frame
       prelude-guru nil             ; Turn off little how-to-use-emacs tips
@@ -197,9 +181,10 @@ TODO: display current font size in prompt."
 (setq doom-modeline-height 40)
 
 ;; Render ^L (page break) as a nice line across the buffer
-(global-page-break-lines-mode)
+;; (prelude-require-package 'page-break-lines)
+;; (global-page-break-lines-mode)
 
-;;; Window and Frame Control
+;;; window and Frame Control
 ;;  ----------------------------------------------------------------------------
 
 ;; TODO: for several of these I'd rather they be in other windows but switch
@@ -348,7 +333,7 @@ TODO: display current font size in prompt."
                               pyenv-mode
                               python-pytest))
 
-  ;; LSP using the pyls (Palantir) language server
+  ;; LSP using the pyls (Palantir) language server. The Microsoft one sucks.
   (lsp-register-custom-settings
    '(("pyls.plugins.pyls_mypy.enabled" t t)
      ("pyls.plugins.pyls_mypy.live_mode" nil t)
@@ -371,6 +356,9 @@ TODO: display current font size in prompt."
   ;; Restart whitespace-mode so that it properly uses `fill-column'
   (whitespace-mode -1)
   (whitespace-mode +1)
+
+  (subword-mode +1)
+  (eldoc-mode +1)
 
   (require 'pyenv-mode))
 
