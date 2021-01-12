@@ -22,3 +22,5 @@
 	path = work.gitconfig
 [includeIf "gitdir:/"]
 	path = home.gitconfig
+[init]
+	defaultBranch = main
