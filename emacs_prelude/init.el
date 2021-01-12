@@ -20,7 +20,7 @@
 (defun my-startup-hook ()
   "Show me some Emacs startup stats."
   (message "*** Emacs loaded in %s with %d garbage collections."
-           (format "%.2f seconds"
+           (format "%.1f seconds"
                    (float-time
                     (time-subtract after-init-time before-init-time)))
            gcs-done))
@@ -56,8 +56,8 @@
                             csv-mode
                             dap-mode
                             dockerfile-mode
-                            doom-modeline
                             doom-themes
+                            doom-modeline
                             emmet-mode
                             fish-mode
                             flycheck-package
@@ -97,12 +97,10 @@
 ;; Keep marked regions highlighted in non-selected windows
 (setq highlight-nonselected-windows t)
 
-;; UTF-8 stuff - check if I can remove this now
 (set-language-environment "UTF-8")
-;; (prefer-coding-system 'utf-8)
-;; (set-default-coding-systems 'utf-8)
-;; (set-terminal-coding-system 'utf-8)
-;; (set-keyboard-coding-system 'utf-8)
+
+;; M-x what-cursor-position (C-x =) is like a lightweight describe-char. This
+;; adds the char name.
 (setq what-cursor-show-names t)
 
 ;; Make whitespace-mode use `fill-column'
@@ -114,8 +112,21 @@
 ;; Not sure I really want this yet
 (setq vc-follow-symlinks t)
 
+;;; Keymaps
+;;  ----------------------------------------------------------------------------
+
+;; Rebind C-t from `transpose-chars' to `recenter-top-bottom'. I don't think
+;; I've ever used `transpose-chars' except by accident.
+(global-set-key (kbd "C-t") 'recenter-top-bottom)
+
+;; TODO
+
+;; M-g l -> go to line. Get rid of M-g M-n and M-g M-p.
+;; New keymap C-r for rectangle commands. Unbind all rectangle commands in C-x r.
+
 ;;; Fonts
 ;;  ----------------------------------------------------------------------------
+
 
 ;; Source Code Pro looks nice in MacOS but not in Ubuntu
 (when (eq system-type 'darwin)
@@ -228,7 +239,7 @@ TODO: display current font size in prompt."
 ;; Disable flyspell (or load a dictionary with all possible keys?)
 ;; Use cloudformation yasnippets
 ;; YAML schema validation?
-;;  - What about SAM templates?
+;;  - What about SAM templates or transformations?
 ;; cfn-lint on save?
 
 (defun my-visual-line-mode-hook ()
@@ -327,11 +338,22 @@ TODO: display current font size in prompt."
 
 (add-to-list 'auto-mode-alist '("Pipfile\\'" . toml-mode))
 
+(projectile-register-project-type 'python-cfclrk '("setup.py")
+                                  :project-file "setup.py"
+                                  :src-dir "src"
+                                  :test-dir "tests"
+                                  :compile "make dev"
+                                  :test "make test"
+                                  :test-prefix "test"
+                                  :test-suffix"_test")
+
 (defun my-python-mode-hook ()
   "Customize `python-mode'."
   (prelude-require-packages '(pipenv
                               pyenv-mode
                               python-pytest))
+
+  (setq python-pytest-executable "pytest -s")
 
   ;; LSP using the pyls (Palantir) language server. The Microsoft one sucks.
   (lsp-register-custom-settings
@@ -362,9 +384,8 @@ TODO: display current font size in prompt."
 
   (require 'pyenv-mode))
 
-(setq prelude-python-mode-hook '(prelude-python-mode-defaults
-                                 my-python-mode-hook
-                                 lsp-deferred))
+(add-hook 'python-mode-hook 'my-python-mode-hook)
+(add-hook 'python-mode-hook #'lsp-deferred)
 
 ;; ;; Set pyenv version whenever switching projects with C-c p p.
 ;; (defun projectile-pyenv-mode-set ()
@@ -377,7 +398,7 @@ TODO: display current font size in prompt."
 
 ;; TODO: get rid of this. For some reason my setup.cfg stuff is not being used
 ;; correctly.
-(setq flycheck-python-mypy-args "--ignore-missing-imports")
+;; (setq flycheck-python-mypy-args "--ignore-missing-imports")
 
 ;;;; Racket
 
@@ -435,6 +456,10 @@ TODO: display current font size in prompt."
 (define-key prelude-mode-map (kbd "C-c d") 'dired-jump-other-window)
 (setq dired-dwim-target t
       dired-listing-switches "-alh")
+
+;;;; eshell
+
+(use-package eshell-git-prompt)
 
 ;;;; flycheck
 
@@ -505,10 +530,11 @@ TODO: display current font size in prompt."
 (require 'key-chord)
 
 (key-chord-mode +1)
-(setq key-chord-one-key-delay 0.15)
-(key-chord-define-global "hu" 'undo-tree-visualize)
-(key-chord-define-global "pb" 'blacken-buffer)
-(key-chord-define-global "vw" 'avy-goto-word-1)
+(setq key-chord-one-key-delay 0.05)
+(key-chord-define-global "\\a" 'avy-goto-word-1)
+(key-chord-define-global "\\o" 'lsp-format-buffer)
+(key-chord-define-global "\\u" 'undo-tree-visualize)
+(key-chord-define-global "pt" 'python-pytest-dispatch)
 
 ;;;; LSP
 
@@ -541,6 +567,15 @@ TODO: display current font size in prompt."
 (add-to-list 'projectile-globally-ignored-directories "*logs")
 (add-to-list 'projectile-globally-ignored-directories "*_output")
 ;;(add-to-list 'projectile-globally-ignored-directories ".terraform")
+
+;; Update projectile project detection to identify projects by the files in
+;; `projectile-project-root-files'. Originally, projectile identifies projects
+;; using a different set of files markers. Original value was:
+;;
+;;    (".projectile" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs")
+;;
+;;  Not sure if this is a good idea, trying it out. So far so good.
+(setq projectile-project-root-files-bottom-up projectile-project-root-files)
 
 ;;;; setenv-file
 
@@ -594,11 +629,16 @@ TODO: display current font size in prompt."
   (define-key smartparens-mode-map (kbd "M-a") 'sp-beginning-of-sexp)
   (define-key smartparens-mode-map (kbd "M-e") 'sp-end-of-sexp))
 
+;;;; which-key
+
+(setq which-key-show-early-on-C-h t)
+(setq which-key-idle-delay 0.5)
+
 ;;;; yasnippet
 
 (require 'yasnippet)
 (setq yas-indent-line 'fixed) ;; probably do this in a yaml-mode-hook
-(load (f-join user-emacs-directory "snippets/aws-snippets/aws-snippets.el"))
+;(load (f-join user-emacs-directory "snippets/aws-snippets/aws-snippets.el"))
 (yas-global-mode t)
 
 ;;; init.el ends here

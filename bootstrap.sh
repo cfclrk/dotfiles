@@ -47,10 +47,12 @@ ln -svf "$DIR/emacs_prelude/personal/babel/library-of-babel.org" $PRELUDE_DIR/pe
 
 # Emacs minimal
 MINIMAL_DIR=~/emacs/emacs_minimal
-ln -svfh "$DIR/emacs_minimal" $MINIMAL_DIR
+mkdir -p $MINIMAL_DIR
+ln -svfh "$DIR/emacs_minimal/init.el" $MINIMAL_DIR/init.el
 
-# Make Prelude the default
-ln -svfh $PRELUDE_DIR "$HOME/.config/emacs"
+# Set up symlinks, and make Prelude the default
+ln -svfh ~/.config/emacs ~/.emacs.d
+ln -svfh $PRELUDE_DIR ~/.config/emacs
 
 # Tmux
 if [[ ! -d ~/.tmux/plugins/tpm ]]; then

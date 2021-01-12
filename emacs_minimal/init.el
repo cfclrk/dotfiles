@@ -39,12 +39,6 @@
 (use-package yasnippet
   :ensure t)
 
-(require 'f)
-(require 'yasnippet)
-(setq yas-indent-line 'fixed)
-(load "/Users/chris.clark/.config/emacs/snippets/aws-snippets/aws-snippets.el")
-(yas-global-mode t)
-
 (set-language-environment "UTF-8")
 
 (setq help-window-select t)
