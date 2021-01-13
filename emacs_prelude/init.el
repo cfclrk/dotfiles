@@ -555,6 +555,14 @@ TODO: display current font size in prompt."
 
 ;;;; markdown
 
+;; On MacOS, this requires building Emacs with xwidgets enabled
+(use-package grip-mode
+  :config (setq grip-update-after-change nil
+                grip-github-user (getenv "GITHUB_USER")
+                grip-github-password (getenv "GITHUB_TOKEN"))
+  :bind (:map markdown-mode-command-map
+              ("g" . grip-mode)))
+
 (defun my-markdown-mode-hook ()
   "Customize `markdown-mode'."
   (whitespace-toggle-options '(lines-tail)))
