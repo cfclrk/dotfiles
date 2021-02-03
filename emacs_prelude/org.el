@@ -97,16 +97,18 @@
   "Customize `org-src-mode' in buffers created by `org-edit-special'."
   (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   (outline-minor-mode nil))
-
 (add-hook 'org-src-mode-hook 'my-org-src-mode-hook)
 
+
+(require 'ob-clojure)
+(require 'ob-shell)
 (defun my-org-mode-hook ()
   "Customize `org-mode'."
 
   (setq org-src-window-setup 'split-window-below
         org-adapt-indentation nil)
 
-  ;; Make bullets look pretty
+  (auto-fill-mode 1)
   (org-bullets-mode 1)
 
   ;; Don't highlight lines longer than fill-column
@@ -122,11 +124,21 @@
      (python . t)
      (shell . t)))
 
+  ;; Set :noweb header to yes by default
+  (setq org-babel-default-header-args
+        (cons '(:noweb . "yes")
+              (assq-delete-all :noweb org-babel-default-header-args)))
+
+  ;; Ensure incorrect shell blocks fail nicely
+  (add-to-list 'org-babel-default-header-args:sh
+               '(:prologue . "set -eu -o pipefail"))
+  (add-to-list 'org-babel-default-header-args:bash
+               '(:prologue . "set -eu -o pipefail"))
+
   ;; Load Library of Babel functions
   (org-babel-lob-ingest
    (f-join user-emacs-directory "personal/babel/library-of-babel.org"))
 
-  (require 'ob-clojure)
   (setq org-confirm-babel-evaluate nil
         org-babel-clojure-backend 'cider)
 
