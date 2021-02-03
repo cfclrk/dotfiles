@@ -4,5 +4,7 @@
 	user = chrisc-ironnet
 [url "git@github-work"]
 	insteadOf = git@github.com
+[url "ssh://git@github-work/"]
+	insteadOf = https://github.com/
 [url "git@gist-work"]
 	insteadOf = git@gist.github.com
