@@ -1,7 +1,6 @@
 # Created 2020-10-24 Sat 13:52
 #+TITLE: The Library of Babel
 #+AUTHOR: Org-mode People
-#+startup: hideblocks
 
 * Introduction
 
