@@ -573,7 +573,8 @@ TODO: display current font size in prompt."
 
 (defun my-markdown-mode-hook ()
   "Customize `markdown-mode'."
-  (whitespace-toggle-options '(lines-tail)))
+  (whitespace-toggle-options '(lines-tail))
+  (auto-fill-mode 1))
 (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 
 ;;;; projectile
