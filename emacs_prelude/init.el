@@ -283,14 +283,22 @@ TODO: display current font size in prompt."
 
 (defun my-go-mode-hook ()
   "Customize `go-mode'."
-  (setq tab-width 4)
+  (setq tab-width 4
+        go-test-args "-v")
 
   ;; Don't highlight lines longer than fill-column.Mnually toggle with:
   ;; "M-x whitespace-toggle-options L"
-  (whitespace-toggle-options '(lines-tail)))
+  (whitespace-toggle-options '(lines-tail))
 
+    ;; I don't like that prelude overrode C-h f to run godoc-at-point
+    (define-key go-mode-map (kbd "C-h f") 'counsel-describe-function)
+    (global-set-key (kbd "s-g") 'godoc-at-point)
+
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(add-hook 'go-mode-hook #'lsp-deferred)
 (add-hook 'go-mode-hook 'my-go-mode-hook)
-(add-hook 'go-mode-hook #'lsp)
 
 ;; (defun my-go-mode-hook ()
 ;;   "Customize `go-mode'."
