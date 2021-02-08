@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+emacsen=$(ls ~/emacs)
+
+if [ -z ${1+x} ]; then
+    printf "Arg 1 must be one of:\n$emacsen\n"
+    exit 1
+fi
+em=$1
+ln -sfh "$HOME/emacs/$em/" ~/.config/emacs
