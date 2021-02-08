@@ -2,57 +2,62 @@
 
 set -eu -o pipefail
 
-DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
+DOTFILES_DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
 
 # MacOS
 os=$(uname -s)
 if [[ "$os" == "Darwin" ]]; then
-   ./macos.sh
+    ./macos.sh
 fi
 
 # Dotfiles
-dotFiles=$(ls -A "$DIR/dotfiles")
+dotFiles=$(ls -A "$DOTFILES_DIR/dotfiles")
 for f in $dotFiles; do
-    ln -svfh "$DIR/dotfiles/$f" "$HOME/$f"
+    ln -svfh "$DOTFILES_DIR/dotfiles/$f" "$HOME/$f"
 done
 
 # ~/bin
 mkdir -p ~/bin
-scriptFiles=$(ls -A "$DIR/bin")
+scriptFiles=$(ls -A "$DOTFILES_DIR/bin")
 for f in $scriptFiles; do
-    ln -svf "$DIR/bin/$f" "$HOME/bin/$f"
+    ln -svf "$DOTFILES_DIR/bin/$f" "$HOME/bin/$f"
 done
 
 # XDG config: ~/.config
 mkdir -p ~/.config
-xdgConfigs=$(ls -A "$DIR/xdg_config")
+xdgConfigs=$(ls -A "$DOTFILES_DIR/xdg_config")
 for f in $xdgConfigs; do
-    ln -svfh "$DIR/xdg_config/$f" "$HOME/.config/$f"
+    ln -svfh "$DOTFILES_DIR/xdg_config/$f" "$HOME/.config/$f"
 done
 
 # Emacs Prelude
 mkdir -p ~/emacs
-PRELUDE_DIR=~/emacs/emacs_prelude
+PRELUDE_DIR=~/emacs/prelude
 if [[ ! -d $PRELUDE_DIR ]]; then
     printf "\nEmacs Prelude not found. Installing Prelude...\n"
     export PRELUDE_INSTALL_DIR="$PRELUDE_DIR"
     curl -L https://git.io/epre | sh
 fi
-ln -svf "$DIR/emacs_prelude/init.el" $PRELUDE_DIR/personal/init.el
-ln -svf "$DIR/emacs_prelude/org.el" $PRELUDE_DIR/personal/org.el
+ln -svf "$DOTFILES_DIR/emacs_prelude/init.el" $PRELUDE_DIR/personal/init.el
+ln -svf "$DOTFILES_DIR/emacs_prelude/org.el" $PRELUDE_DIR/personal/org.el
 mkdir -p $PRELUDE_DIR/personal/preload
-ln -svf "$DIR/emacs_prelude/preload/init.el" $PRELUDE_DIR/personal/preload/init.el
+ln -svf "$DOTFILES_DIR/emacs_prelude/preload/init.el" $PRELUDE_DIR/personal/preload/init.el
 mkdir -p $PRELUDE_DIR/personal/babel
-ln -svf "$DIR/emacs_prelude/personal/babel/library-of-babel.org" $PRELUDE_DIR/personal/babel/library-of-babel.org
+ln -svf "$DOTFILES_DIR/emacs_prelude/personal/babel/library-of-babel.org" $PRELUDE_DIR/personal/babel/library-of-babel.org
 
 # Emacs minimal
-MINIMAL_DIR=~/emacs/emacs_minimal
+MINIMAL_DIR=~/emacs/minimal
 mkdir -p $MINIMAL_DIR
-ln -svfh "$DIR/emacs_minimal/init.el" $MINIMAL_DIR/init.el
+ln -svfh "$DOTFILES_DIR/emacs_minimal/init.el" $MINIMAL_DIR/init.el
 
-# Set up symlinks, and make Prelude the default
+# Emacs cfclrk
+CFCLRK_DIR=~/emacs/cfclrk
+mkdir -p $CFCLRK_DIR
+ln -svfh "$DOTFILES_DIR/emacs_cfclrk/init.el" $CFCLRK_DIR/init.el
+
+# Set up symlinks, and make cfclrk the default
 ln -svfh ~/.config/emacs ~/.emacs.d
-ln -svfh $PRELUDE_DIR ~/.config/emacs
+ln -svfh $CFCLRK_DIR ~/.config/emacs
 
 # Tmux
 if [[ ! -d ~/.tmux/plugins/tpm ]]; then
@@ -63,8 +68,8 @@ fi
 
 # Pyenv
 mkdir -p ~/.pyenv
-ln -svf "$DIR/.pyenv/default_packages" ~/.pyenv/default-packages
+ln -svf "$DOTFILES_DIR/.pyenv/default_packages" ~/.pyenv/default-packages
 
 # SSH
 mkdir -p ~/.ssh
-ln -svf "$DIR/.ssh/config" ~/.ssh/config
+ln -svf "$DOTFILES_DIR/.ssh/config" ~/.ssh/config
