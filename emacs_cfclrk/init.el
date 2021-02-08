@@ -51,32 +51,37 @@
            gcs-done))
 (add-hook 'emacs-startup-hook 'cfclrk/startup-hook)
 
-;; Do not show splash screen
-(setq inhibit-splash-screen t)
-
-;;; MacOS
-
-;; ⌘ as Meta and ⎇ as Super on MacOS
-(when (eq system-type 'darwin)
-  (setq mac-command-modifier 'meta
-        mac-option-modifier 'super
-        mac-function-modifier 'hyper))
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
-;; Hide the tool bar, which has the save button, etc
-(tool-bar-mode -1)
+(tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
+(scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
+(setq make-backup-files nil      ;; Do not save ~ backup files
+      inhibit-splash-screen t)
 
-;; Do not save ~ backup files
-(setq make-backup-files nil)
+;;; MacOS
+
+(when (eq system-type 'darwin)
+  ;; ⌘ as Meta and ⎇ as Super
+  (setq mac-command-modifier 'meta
+        mac-option-modifier 'super
+        mac-function-modifier 'hyper)
+
+  ;; Enable emoji
+  (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)
+
+  ;; Set the PATH env var as we set it in the shell
+  (use-package exec-path-from-shell
+    :config
+    (exec-path-from-shell-initialize)))
 
 ;;; Display
 ;;  ----------------------------------------------------------------------------
 
 ;; Use Source Code Pro on MacOS
 ;; (when (eq system-type 'darwin)
-;;   (set-face-attribute 'default nil :family "Source Code Pro")
+;;   (set-face-attribute 'default nil :family "Source Code Pro"))
 
 ;; Use a larger font on big monitors
 (when window-system
@@ -99,34 +104,88 @@
   (setq doom-modeline-buffer-encoding nil)
   (setq doom-modeline-height 40))
 
+;;; Programming Languages
+;;  ----------------------------------------------------------------------------
+
+;;;; Elisp
+
+;; (defun cfc/emacs-lisp-mode-hook ()
+;;   (rainbow-delimeters-mode +1))
+;; (add-hook 'emacs-lisp-mode-hook 'cfc/emacs-lisp-mode-hook)
+
+;;;; Golang
+
+(use-package go-mode
+  :config
+  (setq go-test-args "-v"))
+
+;;;; Javascript (and JSON)
+
+(defun cfc/js-mode-hook ()
+  (setq js-indent-level 2))
+(add-hook 'js-mode-hook 'cfc/js-mode-hook)
+
 ;;; Packages
 ;;  ----------------------------------------------------------------------------
 
 ;;;; ace
 
 (use-package ace-window
-  :config
-  (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
-  (global-set-key (kbd "M-l") 'ace-window))
+  :bind ("M-l" . ace-window)
+  :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
+
+;;;; fish
+
+(use-package fish-mode)
 
 ;;;; helpful
 
 (use-package helpful)
 
-;;;; magit
+;;;; LSP
+
+(use-package lsp-mode
+  :hook
+  (go-mode . lsp-deferred)
+  (lsp-mode . lsp-enable-which-key-integration)
+  :commands (lsp lsp-deferred))
+
+;;;; markdown
+
+(use-package markdown-mode
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . gfm-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+;;;; git, magit, forge
 
 (use-package magit)
 
+;;;; org
+
+(load-file (expand-file-name "org.el" user-emacs-directory))
+
+;;;; rainbow-delimiters
+
+(use-package rainbow-delimiters)
+
 ;;;; selectrum
 
-(use-package selectrum)
-(selectrum-mode +1)
+(use-package selectrum
+  :config (selectrum-mode +1))
+
 
 ;;;; setenv-file
 
 (use-package setenv-file
   :straight (setenv-file :type git :host github :repo "cfclrk/setenv-file")
   :config (setq setenv-file-dir (expand-file-name "~/.env/")))
+
+;;;; which-key
+
+(use-package which-key
+  :config (which-key-mode +1))
 
 ;;; init.el ends here
 (custom-set-variables
