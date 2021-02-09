@@ -4,17 +4,24 @@
 
 ;;; Code:
 
+;;; Bootstrap Package Management
+;;  ----------------------------------------------------------------------------
+
 (require 'package)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
         ("melpa" . "https://melpa.org/packages/")))
 
-;; Reduce the frequency of garbage collection by making it happen on each 50MB
-;; of allocated data (the default is on every 0.76MB)
-(setq gc-cons-threshold 50000000)
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
 
-;; Do not save ~ backup files
-(setq make-backup-files nil)
+;;; Editor General
+;;  ----------------------------------------------------------------------------
+
+(set-language-environment "UTF-8")
+
+(setq help-window-select t
+      make-backup-files nil) ;; Do not save ~ backup files
 
 ;; Use a larger font on bigger screens
 (when window-system
@@ -27,21 +34,17 @@
         mac-option-modifier 'super
         mac-function-modifier 'hyper))
 
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+;;; Programming Languages
+;;  ----------------------------------------------------------------------------
+
+;;; Packages
+;;  ----------------------------------------------------------------------------
 
 (use-package yaml-mode
   :ensure t)
 
-(use-package f
-  :ensure t)
-
 (use-package yasnippet
   :ensure t)
-
-(set-language-environment "UTF-8")
-
-(setq help-window-select t)
 
 ;;; init.el ends here
 (custom-set-variables
