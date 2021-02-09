@@ -40,6 +40,8 @@
 ;; Good for dealing with verbose sub-processes like, ehem, an LSP server.
 (setq read-process-output-max (* 4 1024 1024)) ;; 4 MiB (default is 8 KiB)
 
+(setq gc-cons-threshold (* 2 1024 1024))  ;; 2 MiB (default is 800 KB)
+
 ;; Log a message about startup time
 (defun cfclrk/startup-hook ()
   "Show me some Emacs startup stats."
@@ -51,16 +53,70 @@
            gcs-done))
 (add-hook 'emacs-startup-hook 'cfclrk/startup-hook)
 
+;;; Theme, Font, Display
+;;  ----------------------------------------------------------------------------
+
+;; Use Source Code Pro on MacOS
+(when (eq system-type 'darwin)
+  (set-face-attribute 'default nil :family "Source Code Pro"))
+
+;; Use a larger font on big monitors
+(when window-system
+  (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
+      (set-face-attribute 'default nil :height 170)))
+
+;; Use the doom-one theme
+(use-package doom-themes
+  :config
+  (setq doom-modeline-project-detection 'project
+		doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
+
+(defun cfclrk/font-installed-p (font-name)
+  "Check if font with FONT-NAME is available."
+  (find-font (font-spec :name font-name)))
+
+(use-package all-the-icons
+  :config (unless (cfclrk/font-installed-p "all-the-icons")
+			(all-the-icons-install-fonts t)))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode +1)
+  :config
+  (setq doom-modeline-buffer-encoding nil)
+  (setq doom-modeline-height 40))
+
+;;; Functions
+;;  ----------------------------------------------------------------------------
+
+(defun cfclrk/set-font-size (font-size)
+  "Set font height to the given FONT-SIZE.
+TODO: display current font size in prompt. You can get it 
+with: (face-attribute 'default :height)."
+  (interactive "nFont Size: ")
+  (let ((frame-inhibit-implied-resize t))
+    (set-face-attribute 'default nil :height font-size)
+    (set-face-attribute 'mode-line nil :height font-size)))
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
 (tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
 (scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
-(setq make-backup-files nil      ;; Do not save ~ backup files
-      inhibit-splash-screen t)
+(show-paren-mode +1)  ;; Bold-face matching parentheses
 
-;;; MacOS
+(setq column-number-mode t    ;; show line:column in mode line
+	  make-backup-files nil
+      inhibit-splash-screen t
+      help-window-select t)
+
+;; Change all yes/no prompts to y/n
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;;;; MacOS
 
 (when (eq system-type 'darwin)
   ;; ⌘ as Meta and ⎇ as Super
@@ -76,55 +132,6 @@
     :config
     (exec-path-from-shell-initialize)))
 
-;;; Display
-;;  ----------------------------------------------------------------------------
-
-;; Use Source Code Pro on MacOS
-;; (when (eq system-type 'darwin)
-;;   (set-face-attribute 'default nil :family "Source Code Pro"))
-
-;; Use a larger font on big monitors
-(when window-system
-  (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 170)))
-
-;; Use the doom-one theme
-(use-package doom-themes
-  :config
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
-
-;; Use the doom modeline
-(use-package doom-modeline
-  :config
-  (doom-modeline-mode 1)
-  (setq doom-modeline-buffer-encoding nil)
-  (setq doom-modeline-height 40))
-
-;;; Programming Languages
-;;  ----------------------------------------------------------------------------
-
-;;;; Elisp
-
-;; (defun cfc/emacs-lisp-mode-hook ()
-;;   (rainbow-delimeters-mode +1))
-;; (add-hook 'emacs-lisp-mode-hook 'cfc/emacs-lisp-mode-hook)
-
-;;;; Golang
-
-(use-package go-mode
-  :config
-  (setq go-test-args "-v"))
-
-;;;; Javascript (and JSON)
-
-(defun cfc/js-mode-hook ()
-  (setq js-indent-level 2))
-(add-hook 'js-mode-hook 'cfc/js-mode-hook)
-
 ;;; Packages
 ;;  ----------------------------------------------------------------------------
 
@@ -134,21 +141,46 @@
   :bind ("M-l" . ace-window)
   :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
 
+;;;; bicycle
+
+(use-package bicycle
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global)))
+
+(add-hook 'prog-mode-hook 'outline-minor-mode)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
+;;;; completion (selectrum, prescient)
+
+(use-package selectrum
+  :config (selectrum-mode +1))
+
+;; (use-package selectrum-prescient
+;;   :config (selectrum-prescient-mode +1))
+
 ;;;; fish
 
 (use-package fish-mode)
 
 ;;;; helpful
 
-(use-package helpful)
+(use-package helpful
+  :bind (("C-h f" . helpful-callable)
+		 ("C-h v" . helpful-variable)
+		 ("C-h k" . helpful-key)
+		 ("C-c C-d" . helpful-at-point)
+		 ("C-h C" . helpful-command)))
 
 ;;;; LSP
 
 (use-package lsp-mode
-  :hook
-  (go-mode . lsp-deferred)
-  (lsp-mode . lsp-enable-which-key-integration)
+  :hook (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred))
+
+(use-package lsp-ui
+  :commands lsp-ui)
 
 ;;;; markdown
 
@@ -158,34 +190,92 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+;;;; marginalia
+
+
+
 ;;;; git, magit, forge
 
+(use-package gitconfig-mode)
 (use-package magit)
+(use-package forge)
 
 ;;;; org
 
 (load-file (expand-file-name "org.el" user-emacs-directory))
 
+;;;; projectile
+
+(use-package projectile
+  :config
+  (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
+  (add-to-list 'projectile-globally-ignored-directories "*.pytest_cache")
+  (add-to-list 'projectile-globally-ignored-directories "*logs")
+  (add-to-list 'projectile-globally-ignored-directories "*_output"))
+
 ;;;; rainbow-delimiters
 
 (use-package rainbow-delimiters)
-
-;;;; selectrum
-
-(use-package selectrum
-  :config (selectrum-mode +1))
-
 
 ;;;; setenv-file
 
 (use-package setenv-file
   :straight (setenv-file :type git :host github :repo "cfclrk/setenv-file")
-  :config (setq setenv-file-dir (expand-file-name "~/.env/")))
+  :config
+  (setq setenv-file-dir (expand-file-name "~/.env/")))
+
+;;;; smartparens
+
+(use-package smartparens
+  :config
+  (require 'smartparens-config)
+  
+  ;; wrapping
+  (define-prefix-command 'sp-wrap-key-map)
+  (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
+  (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
+  (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
+  (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
+  (define-key smartparens-mode-map (kbd "M-r") sp-wrap-key-map))
 
 ;;;; which-key
 
 (use-package which-key
-  :config (which-key-mode +1))
+  :config
+  (which-key-mode +1)
+  (setq which-key-idle-delay 0.5
+	which-key-idle-secondary-delay 0.1))
+
+;;; Programming Languages
+;;  ----------------------------------------------------------------------------
+
+;;;; Elisp
+
+(defun cfc/emacs-lisp-mode-hook ()
+  (smartparens-strict-mode +1)
+  (rainbow-delimiters-mode +1))
+(add-hook 'emacs-lisp-mode-hook 'cfc/emacs-lisp-mode-hook)
+
+;;;; Golang
+
+(use-package go-mode
+  :hook ((go-mode . lsp-deferred)
+		 (before-save . lsp-format-buffer)
+		 (before-save . lsp-organize-imports))
+  :config
+  (setq tab-width 4
+		go-test-args "-v")
+  
+  ;; Prefer goimports to gofmt if installed
+  (let ((goimports (executable-find "goimports")))
+    (when goimports
+      (setq gofmt-command goimports))))
+
+;;;; Javascript (and JSON)
+
+(defun cfc/js-mode-hook ()
+  (setq js-indent-level 2))
+(add-hook 'js-mode-hook 'cfc/js-mode-hook)
 
 ;;; init.el ends here
 (custom-set-variables
