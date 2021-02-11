@@ -54,6 +54,7 @@ ln -svfh "$DOTFILES_DIR/emacs_minimal/init.el" $MINIMAL_DIR/init.el
 CFCLRK_DIR=~/emacs/cfclrk
 mkdir -p $CFCLRK_DIR
 ln -svfh "$DOTFILES_DIR/emacs_cfclrk/init.el" $CFCLRK_DIR/init.el
+ln -svfh "$DOTFILES_DIR/emacs_cfclrk/cfclrk_org.el" $CFCLRK_DIR/cfclrk_org.el
 
 # Set up symlinks, and make cfclrk the default
 ln -svfh ~/.config/emacs ~/.emacs.d
