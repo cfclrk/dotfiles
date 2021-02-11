@@ -183,6 +183,13 @@ with: (face-attribute 'default :height)."
 (use-package crux
   :bind ([remap move-beginning-of-line] . crux-move-beginning-of-line))
 
+;;;; diff-hl
+
+(use-package diff-hl
+  :hook ((dired-mode . diff-hl-dired-mode)
+		 (magit-post-refresh . diff-hl-magit-post-refresh))
+  :config (global-diff-hl-mode))
+
 ;;;; dired
 
 (define-key global-map (kbd "C-c d") 'dired-jump-other-window)
