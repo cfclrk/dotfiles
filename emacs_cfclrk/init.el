@@ -117,6 +117,7 @@ with: (face-attribute 'default :height)."
 (tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
 (scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
 (show-paren-mode +1)  ;; Bold-face matching parentheses
+
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
@@ -126,6 +127,21 @@ with: (face-attribute 'default :height)."
 	  sentence-end-double-space nil
       help-window-select t)
 
+;; whitespace
+
+(require 'whitespace)
+(setq whitespace-style '(face tabs empty trailing lines-tail))
+(whitespace-mode +1)
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; Make a shell script executable automatically on save
+(add-hook 'after-save-hook
+          'executable-make-buffer-file-executable-if-script-p)
+
+;; A .zsh file is a shell script too
+(add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
+
+;; This is nice in go-mode. Should I only do this in go-mode?
 (define-key global-map (kbd "C-c M-.") 'xref-find-definitions-other-window)
 
 ;; Change all yes/no prompts to y/n
@@ -265,7 +281,7 @@ with: (face-attribute 'default :height)."
 
 ;;;; org
 
-(load-file (expand-file-name "org.el" user-emacs-directory))
+(load-file (expand-file-name "cfclrk_org.el" user-emacs-directory))
 
 ;;;; projectile
 
@@ -323,7 +339,7 @@ with: (face-attribute 'default :height)."
 (use-package smartparens
   :config
   (require 'smartparens-config)
-  
+
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
   (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"

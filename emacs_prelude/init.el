@@ -15,7 +15,7 @@
 
 ;; Number of bytes that can be read from a sub-process in one read operation.
 ;; Good for dealing with verbose sub-processes like, ehem, an LSP server.
-(setq read-process-output-max (* 3 1024 1024)) ;; 3 MiB (default is 8 KiB)
+(setq read-process-output-max (* 4 1024 1024)) ;; 4 MiB (default is 8 KiB)
 
 (defun my-startup-hook ()
   "Show me some Emacs startup stats."
@@ -127,14 +127,9 @@
 ;;; Fonts
 ;;  ----------------------------------------------------------------------------
 
-
-;; Source Code Pro looks nice in MacOS but not in Ubuntu
+;; Use Source Code Pro on MacOS
 (when (eq system-type 'darwin)
-  (set-face-attribute 'default nil
-                      :family "Source Code Pro"
-                      :height 120
-                      :weight 'normal
-                      :width 'normal))
+  (set-face-attribute 'default nil :family "Source Code Pro"))
 
 ;; Use a larger font on bigger screens
 (when window-system
@@ -541,8 +536,8 @@ TODO: display current font size in prompt."
 (setq key-chord-one-key-delay 0.05)
 (key-chord-define-global "\\a" 'avy-goto-word-1)
 (key-chord-define-global "\\o" 'lsp-format-buffer)
+(key-chord-define-global "\\e" 'org-toggle-inline-images)
 (key-chord-define-global "\\u" 'undo-tree-visualize)
-(key-chord-define-global "pt" 'python-pytest-dispatch)
 
 ;;;; LSP
 
@@ -592,7 +587,13 @@ TODO: display current font size in prompt."
 ;;    (".projectile" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs")
 ;;
 ;;  Not sure if this is a good idea, trying it out. So far so good.
-(setq projectile-project-root-files-bottom-up projectile-project-root-files)
+
+;; TODO: Projectile discovers projects by iterating through
+;; projectile-project-root-files-bottom-up and checking each parent dir for that
+;; file. It searches the entire dir lineage for the first item, then the next.
+;; Instead, it should iterate through the whole list at each dir level.
+(setq projectile-project-root-files-bottom-up
+      (cons "Makefile" projectile-project-root-files))
 
 ;;;; setenv-file
 
