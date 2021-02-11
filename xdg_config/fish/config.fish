@@ -1,6 +1,6 @@
 if not set -q TMUX
     set -gx EMACS "$HOME/Projects/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
-    set -gx EDITOR "begin; set -lx XDG_CONFIG_HOME ~/.config/emacs_minimal; $EMACS; end"
+    set -gx EDITOR $EMACS
 
     set PATH \
         $HOME/bin \
@@ -9,10 +9,7 @@ if not set -q TMUX
         $HOME/.cabal/bin \
         $HOME/IronNet/bin \
         /usr/local/sbin \
-        $PATH
-
-    # Programs installed with brew take precedence over pre-installed programs
-    set PATH \
+        # Programs installed with brew take precedence over pre-installed programs
         /usr/local/opt/make/libexec/gnubin \
         /usr/local/opt/texinfo/bin \
         /usr/local/opt/openjdk/bin \
@@ -50,7 +47,7 @@ if not set -q TMUX
             # pyinstaller
             set -gx PYTHON_CONFIGURE_OPTS "--enable-framework"
         case '*'
-            echo "Yo you need to set PYTHON_CONFIGURE_OPTS"
+            echo "Set PYTHON_CONFIGURE_OPTS"
     end
 end
 
