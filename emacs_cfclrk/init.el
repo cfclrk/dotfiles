@@ -303,6 +303,10 @@ with: (face-attribute 'default :height)."
 									:test-prefix "test"
 									:test-suffix"_test"))
 
+;;;; protobuf
+
+(use-package protobuf-mode)
+
 ;;;; rainbow-delimiters
 
 (use-package rainbow-delimiters)
@@ -327,6 +331,13 @@ with: (face-attribute 'default :height)."
   (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
   (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
   (define-key smartparens-mode-map (kbd "M-r") sp-wrap-key-map))
+
+;;;; super-save
+
+(use-package super-save
+  :config
+  (super-save-mode +1)
+  (add-to-list 'super-save-triggers 'ace-window))
 
 ;;;; toml-mode
 
