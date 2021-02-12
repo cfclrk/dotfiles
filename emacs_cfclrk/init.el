@@ -197,7 +197,8 @@ with: (face-attribute 'default :height)."
 ;;;; crux
 
 (use-package crux
-  :bind ([remap move-beginning-of-line] . crux-move-beginning-of-line))
+  :bind (([remap move-beginning-of-line] . crux-move-beginning-of-line)
+		 ("C-c D" . crux-delete-file-and-buffer)))
 
 ;;;; diff-hl
 
