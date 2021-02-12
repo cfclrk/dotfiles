@@ -283,6 +283,11 @@ with: (face-attribute 'default :height)."
 
 (load-file (expand-file-name "cfclrk_org.el" user-emacs-directory))
 
+;;;; page-break-lines
+
+(use-package page-break-lines
+  :hook (emacs-lisp-mode . page-break-lines-mode))
+
 ;;;; projectile
 
 (use-package projectile
@@ -374,6 +379,8 @@ with: (face-attribute 'default :height)."
 
 ;;; Programming Languages
 ;;  ----------------------------------------------------------------------------
+
+;;;; General (prog-mode)
 
 (defun cfclrk/prog-mode-hook ()
   "Customize `prog-mode'."
