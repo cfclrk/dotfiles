@@ -6,8 +6,12 @@
 
 ;;; Code:
 
+(require 'org)
+
 (defun cfc/org-mode-hook ()
   "Customize `org-mode'."
+
+  (setq org-startup-folded t)
   
   ;; Babel languages to load
   (org-babel-do-load-languages
