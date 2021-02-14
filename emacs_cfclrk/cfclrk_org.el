@@ -8,10 +8,25 @@
 
 (require 'org)
 
-(defun cfc/org-mode-hook ()
+;;; org-src-mode hook
+
+(defun cfclrk/org-src-mode-hook ()
+  "Customize `org-src-mode' in buffers created by `org-edit-special'."
+  (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (outline-minor-mode nil))
+
+(add-hook 'org-src-mode-hook 'cfclrk/org-src-mode-hook)
+
+;;; org-mode hook
+
+(defun cfclrk/org-mode-hook ()
   "Customize `org-mode'."
 
-  (setq org-startup-folded t)
+  (setq org-startup-folded t
+		org-confirm-babel-evaluate nil
+		org-src-window-setup 'split-window-below)
+
+  (turn-on-auto-fill)
   
   ;; Babel languages to load
   (org-babel-do-load-languages
@@ -19,12 +34,11 @@
    '((clojure . t)
      (dot . t)
      (emacs-lisp . t)
-     (plantuml . t)
-     (python . t)
+	 (python . t)
      (shell . t)))
   )
 
-(add-hook 'org-mode-hook 'cfc/org-mode-hook)
+(add-hook 'org-mode-hook 'cfclrk/org-mode-hook)
 
 (provide 'cfclrk-org)
 ;;; cfclrk_org.el ends here
