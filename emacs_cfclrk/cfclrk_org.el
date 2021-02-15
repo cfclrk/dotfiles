@@ -26,6 +26,10 @@
 		org-confirm-babel-evaluate nil
 		org-src-window-setup 'split-window-below)
 
+  ;; Note my smartparens config also pulls in 'smartparens-org
+  (smartparens-mode +1)
+
+  ;; Use auto-fill-mode
   (turn-on-auto-fill)
   
   ;; Babel languages to load
@@ -34,6 +38,7 @@
    '((clojure . t)
      (dot . t)
      (emacs-lisp . t)
+	 (gnuplot . t)
 	 (python . t)
      (shell . t)))
   )

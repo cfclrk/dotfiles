@@ -190,7 +190,10 @@ with: (face-attribute 'default :height)."
 
 ;;;; company
 
-(use-package company)
+(use-package company
+  :config
+  (global-company-mode))
+
 (use-package company-box
   :hook (company-mode . company-box-mode))
 
@@ -232,6 +235,10 @@ with: (face-attribute 'default :height)."
                               "api.github.com"
                               "github.com"
                               forge-github-repository)))
+
+;;;; gnuplot
+
+(use-package gnuplot)
 
 ;;;; Minibuffer completion (selectrum, prescient, marginalia)
 
@@ -287,7 +294,7 @@ with: (face-attribute 'default :height)."
 ;;;; page-break-lines
 
 (use-package page-break-lines
-  :hook (emacs-lisp-mode . page-break-lines-mode))
+  :config (global-page-break-lines-mode))
 
 ;;;; projectile
 
@@ -346,13 +353,33 @@ with: (face-attribute 'default :height)."
   :config
   (require 'smartparens-config)
 
+  ;; slurping and barfing
+  (define-key smartparens-mode-map (kbd "S-<right>") 'sp-forward-slurp-sexp)
+  (define-key smartparens-mode-map (kbd "S-<left>") 'sp-forward-barf-sexp)
+  (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-backward-barf-sexp)
+  (define-key smartparens-mode-map (kbd "C-S-<left>") 'sp-backward-slurp-sexp)
+
+  ;; splicing
+  (define-prefix-command 'sp-splice-key-map)
+  (define-key sp-splice-key-map (kbd "s") 'sp-splice-sexp)
+  (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
+  (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
+  (define-key sp-splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
+  (define-key smartparens-mode-map (kbd "C-s s") sp-splice-key-map)
+
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
   (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
   (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
   (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
   (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
-  (define-key smartparens-mode-map (kbd "M-r") sp-wrap-key-map))
+  (define-key smartparens-mode-map (kbd "C-s r") sp-wrap-key-map)
+
+  ;; selection
+  (define-prefix-command 'sp-select-key-map)
+  (define-key sp-select-key-map (kbd "n") 'sp-select-next-thing)
+  (define-key sp-select-key-map (kbd "p") 'sp-select-previous-thing-exchange)
+  (define-key smartparens-mode-map (kbd "C-s") sp-select-key-map))
 
 ;;;; super-save
 
@@ -449,7 +476,8 @@ with: (face-attribute 'default :height)."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(use-package)))
+ '(package-selected-packages '(use-package))
+ '(safe-local-variable-values '((checkdoc-minor-mode . t))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
