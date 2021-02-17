@@ -7,21 +7,40 @@
 ;;; Bootstrap Package Management
 ;;  ----------------------------------------------------------------------------
 
-(require 'package)
-(setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
-        ("melpa" . "https://melpa.org/packages/")))
+;; bootstrap straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file (expand-file-name
+		       "straight/repos/straight.el/bootstrap.el"
+		       user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+;; Install use-package
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
+(show-paren-mode +1)  ;; Bold-face matching parentheses
 (set-language-environment "UTF-8")
+(setq-default tab-width 4)
+(setq-default fill-column 80)
 
-(setq help-window-select t
+(setq column-number-mode t    ;; show line:column in mode line
+	  help-window-select t
       make-backup-files nil) ;; Do not save ~ backup files
+
+;; Keep customizations outside of init.el
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file t)
 
 ;; Use a larger font on bigger screens
 (when window-system
@@ -32,7 +51,10 @@
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta
         mac-option-modifier 'super
-        mac-function-modifier 'hyper))
+        mac-function-modifier 'hyper)
+
+  ;; Enable emoji
+  (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
 ;;; Programming Languages
 ;;  ----------------------------------------------------------------------------
@@ -40,22 +62,19 @@
 ;;; Packages
 ;;  ----------------------------------------------------------------------------
 
-(use-package yaml-mode
-  :ensure t)
+(use-package helpful
+  :bind (("C-h f" . helpful-callable)
+		 ("C-h v" . helpful-variable)
+		 ("C-h k" . helpful-key)
+		 ("C-c C-d" . helpful-at-point)
+		 ("C-h C" . helpful-command)))
 
-(use-package yasnippet
-  :ensure t)
+(use-package which-key
+  :config
+  (which-key-mode +1)
+  (setq which-key-idle-delay 0.5
+		which-key-idle-secondary-delay 0.1))
+
+(use-package yaml-mode)
 
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages '(use-package)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

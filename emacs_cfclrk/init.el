@@ -117,7 +117,7 @@ with: (face-attribute 'default :height)."
 (tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
 (scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
 (show-paren-mode +1)  ;; Bold-face matching parentheses
-
+(set-language-environment "UTF-8")
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
@@ -134,14 +134,8 @@ with: (face-attribute 'default :height)."
 
 (defun cfclrk/text-editing-hook ()
   "Stuff that should be enabled in pretty much every buffer."
-
-  ;; Use auto-fill-mode
   (turn-on-auto-fill)
-
-  ;; Note the smartparens config pulls in more configs for various langs
   (smartparens-mode +1)
-
-  ;; Use whitespace mode
   (whitespace-mode +1))
 
 ;; text mode
@@ -159,11 +153,6 @@ with: (face-attribute 'default :height)."
 
 ;; Change all yes/no prompts to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
-
-;; Always switch focus to the Occur buffer when running occur
-(add-hook 'occur-hook
-          '(lambda ()
-             (switch-to-buffer-other-window "*Occur*")))
 
 ;; Keep customizations outside of init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -220,8 +209,15 @@ with: (face-attribute 'default :height)."
   :bind (([remap move-beginning-of-line] . crux-move-beginning-of-line)
 		 ("C-c D" . crux-delete-file-and-buffer)))
 
+;;;; Searching (ctrlf)
+
 (use-package ctrlf
   :config (ctrlf-mode +1))
+
+;; Always switch focus to the Occur buffer when running occur
+(add-hook 'occur-hook
+          '(lambda ()
+             (switch-to-buffer-other-window "*Occur*")))
 
 ;;;; diff-hl
 
@@ -237,6 +233,10 @@ with: (face-attribute 'default :height)."
 (define-key global-map (kbd "C-c d") 'dired-jump-other-window)
 (setq dired-dwim-target t
       dired-listing-switches "-aoh")
+
+;;;; docker
+
+(use-package dockerfile-mode)
 
 ;;;; git, magit, forge
 
