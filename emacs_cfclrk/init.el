@@ -291,6 +291,14 @@ with: (face-attribute 'default :height)."
 		 ("C-c C-d" . helpful-at-point)
 		 ("C-h C" . helpful-command)))
 
+;;;; Images
+
+;; Allow inline EPS images in org files
+(setq imagemagick-enabled-types t)
+(imagemagick-register-types)
+(add-to-list 'image-file-name-extensions "eps")
+(setq org-image-actual-width '(500))
+
 ;;;; LSP
 
 (use-package lsp-mode
