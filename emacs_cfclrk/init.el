@@ -203,12 +203,17 @@ with: (face-attribute 'default :height)."
   :bind (([remap move-beginning-of-line] . crux-move-beginning-of-line)
 		 ("C-c D" . crux-delete-file-and-buffer)))
 
+(use-package ctrlf
+  :config (ctrlf-mode +1))
+
 ;;;; diff-hl
 
 (use-package diff-hl
+  :demand t
+  :config (global-diff-hl-mode)
   :hook ((dired-mode . diff-hl-dired-mode)
-		 (magit-post-refresh . diff-hl-magit-post-refresh))
-  :config (global-diff-hl-mode))
+		 (magit-pre-refresh . diff-hl-magit-pre-refresh)
+		 (magit-post-refresh . diff-hl-magit-post-refresh)))
 
 ;;;; dired
 
