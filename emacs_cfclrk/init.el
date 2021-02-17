@@ -128,11 +128,24 @@ with: (face-attribute 'default :height)."
       help-window-select t)
 
 ;; whitespace
-
 (require 'whitespace)
 (setq whitespace-style '(face tabs empty trailing lines-tail))
-(whitespace-mode +1)
 (add-hook 'before-save-hook 'whitespace-cleanup)
+
+(defun cfclrk/text-editing-hook ()
+  "Stuff that should be enabled in pretty much every buffer."
+
+  ;; Use auto-fill-mode
+  (turn-on-auto-fill)
+
+  ;; Note the smartparens config pulls in more configs for various langs
+  (smartparens-mode +1)
+
+  ;; Use whitespace mode
+  (whitespace-mode +1))
+
+;; text mode
+(add-hook 'text-mode-hook 'cfclrk/text-editing-hook)
 
 ;; Make a shell script executable automatically on save
 (add-hook 'after-save-hook
@@ -151,6 +164,10 @@ with: (face-attribute 'default :height)."
 (add-hook 'occur-hook
           '(lambda ()
              (switch-to-buffer-other-window "*Occur*")))
+
+;; Keep customizations outside of init.el
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file t)
 
 ;;;; MacOS
 
@@ -476,17 +493,3 @@ with: (face-attribute 'default :height)."
 (add-hook 'python-mode-hook #'lsp-deferred)
 
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages '(use-package))
- '(safe-local-variable-values '((checkdoc-minor-mode . t))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-(put 'dired-find-alternate-file 'disabled nil)
