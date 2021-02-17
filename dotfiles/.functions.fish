@@ -40,11 +40,6 @@ function fish_prompt --description 'Defines the prompt'
     "$__fish_prompt_normal"
 end
 
-function emacs
-    set -lx XDG_CONFIG_HOME ~/emacs/emacs_minimal
-    eval $EMACS
-end
-
 function s --description "Export environment variables from a file"
     test -z "$argv[1]"; and echo "Error: arg1 must be a file path"; and return 1
     set envFile $argv[1]
@@ -183,10 +178,11 @@ function clearBucket --description "Clear one S3 bucket"
 end
 
 function clearBuckets --description "Clear all S3 buckets"
-    set buckets (aws s3api list-buckets | jq -r .Buckets[].Name)
+    # TODO: accept prefix as param
 
     # To filter to those buckets that start with prefix
-    # aws s3api list-buckets | jq -r '.Buckets[] | select(.Name | startswith("prefix")).Name'
+    set buckets (aws s3api list-buckets \
+        | jq -r '.Buckets[] | select(.Name | startswith("cfc-tenant-1-static")).Name')
 
     echo $buckets | xargs -n 1 -P (count $buckets) -I {} fish -c 'clearBucket {}'
 end
