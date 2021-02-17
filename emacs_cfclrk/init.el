@@ -395,7 +395,7 @@ with: (face-attribute 'default :height)."
   (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
   (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
   (define-key sp-splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
-  (define-key smartparens-mode-map (kbd "C-s s") sp-splice-key-map)
+  (define-key smartparens-mode-map (kbd "M-s s") sp-splice-key-map)
 
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
@@ -403,13 +403,13 @@ with: (face-attribute 'default :height)."
   (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
   (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
   (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
-  (define-key smartparens-mode-map (kbd "C-s r") sp-wrap-key-map)
+  (define-key smartparens-mode-map (kbd "M-s r") sp-wrap-key-map)
 
   ;; selection
   (define-prefix-command 'sp-select-key-map)
   (define-key sp-select-key-map (kbd "n") 'sp-select-next-thing)
   (define-key sp-select-key-map (kbd "p") 'sp-select-previous-thing-exchange)
-  (define-key smartparens-mode-map (kbd "C-s") sp-select-key-map))
+  (define-key smartparens-mode-map (kbd "M-s") sp-select-key-map))
 
 ;;;; super-save
 
@@ -422,6 +422,11 @@ with: (face-attribute 'default :height)."
 
 (use-package toml-mode)
 (add-to-list 'auto-mode-alist '("Pipfile\\'" . toml-mode))
+
+;;;; unfill
+
+;; Unfill is the opposite of `fill-paragraph'
+(use-package unfill)
 
 ;;;; which-key
 
@@ -453,13 +458,16 @@ with: (face-attribute 'default :height)."
 ;;;; Golang
 
 (use-package go-mode
-  :hook ((go-mode . lsp-deferred)
-		 (before-save . lsp-format-buffer)
-		 (before-save . lsp-organize-imports))
+  :hook ((go-mode . lsp-deferred))
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
 		gofmt-command (executable-find "goimports")
-		go-test-args "-v"))
+		go-test-args "-v")
+  ;; (add-hook 'go-mode-hook (lambda ()
+  ;; 							(add-hook 'before-save-hook #'lsp-format-buffer)
+  ;; 							(add-hook 'before-save-hook
+  ;; 									  #'lsp-organize-imports)))
+  )
 
 (use-package gotest)
 

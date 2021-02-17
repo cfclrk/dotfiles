@@ -6,6 +6,8 @@
 
 ;;; Code:
 
+;; TODO: Try out https://github.com/Fuco1/org-radiobutton
+
 (require 'org)
 
 ;;; org-src-mode hook
@@ -29,9 +31,6 @@
   ;; Note my smartparens config also pulls in 'smartparens-org
   (smartparens-mode +1)
 
-  ;; Use auto-fill-mode
-  (turn-on-auto-fill)
-  
   ;; Babel languages to load
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -40,8 +39,7 @@
      (emacs-lisp . t)
 	 (gnuplot . t)
 	 (python . t)
-     (shell . t)))
-  )
+     (shell . t))))
 
 (add-hook 'org-mode-hook 'cfclrk/org-mode-hook)
 
