@@ -432,10 +432,7 @@ with: (face-attribute 'default :height)."
 
 ;;;; General (prog-mode)
 
-(defun cfclrk/prog-mode-hook ()
-  "Customize `prog-mode'."
-  (smartparens-mode +1))
-(add-hook 'prog-mode-hook 'cfclrk/prog-mode-hook)
+(add-hook 'prog-mode-hook 'cfclrk/text-editing-hook)
 
 ;;;; Elisp
 
