@@ -109,10 +109,8 @@ with: (face-attribute 'default :height)."
     (set-face-attribute 'default nil :height font-size)
     (set-face-attribute 'mode-line nil :height font-size)))
 
-;;; Editor
+;;; Editor General
 ;;  ----------------------------------------------------------------------------
-
-;;;; General
 
 (tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
 (scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
@@ -158,8 +156,7 @@ with: (face-attribute 'default :height)."
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file t)
 
-;;;; MacOS
-
+;; MacOS
 (when (eq system-type 'darwin)
   ;; ⌘ as Meta and ⎇ as Super
   (setq mac-command-modifier 'meta
@@ -174,7 +171,7 @@ with: (face-attribute 'default :height)."
     :config
     (exec-path-from-shell-initialize)))
 
-;;; Packages
+;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
 
 ;;;; ace
@@ -197,8 +194,10 @@ with: (face-attribute 'default :height)."
 ;;;; company
 
 (use-package company
-  :config
-  (global-company-mode))
+  :bind (:map company-active-map
+			  ("C-n" . company-select-next)
+			  ("C-p" . company-select-previous))
+  :config (global-company-mode))
 
 (use-package company-box
   :hook (company-mode . company-box-mode))
@@ -262,6 +261,14 @@ with: (face-attribute 'default :height)."
 
 (use-package gnuplot)
 
+;;;; key-chord
+
+(use-package key-chord
+  :config
+  (key-chord-define-global "\\o" 'org-toggle-inline-images)
+  (key-chord-define-global "\\e" 'lsp-format-buffer)
+  (key-chord-define-global "\\u" 'undo-tree-visualize))
+
 ;;;; Minibuffer completion (selectrum, prescient, marginalia)
 
 (use-package selectrum
@@ -307,7 +314,9 @@ with: (face-attribute 'default :height)."
 
 (use-package lsp-ui
   :commands lsp-ui
-  :config (setq lsp-ui-doc-position 'bottom))
+  :config
+  (setq lsp-ui-doc-position 'bottom
+		lsp-ui-sideline-show-hover t))
 
 ;;;; markdown
 
@@ -423,6 +432,10 @@ with: (face-attribute 'default :height)."
 (use-package toml-mode)
 (add-to-list 'auto-mode-alist '("Pipfile\\'" . toml-mode))
 
+;;;; undo-tree
+
+(use-package undo-tree)
+
 ;;;; unfill
 
 ;; Unfill is the opposite of `fill-paragraph'
@@ -435,6 +448,12 @@ with: (face-attribute 'default :height)."
   (which-key-mode +1)
   (setq which-key-idle-delay 0.5
 		which-key-idle-secondary-delay 0.1))
+
+;;;; winner-mode
+
+(setq winner-dont-bind-my-keys t)
+(winner-mode)
+(define-key winner-mode-map (kbd "C-c q") #'winner-undo)
 
 ;;;; yasnippet
 
@@ -457,17 +476,18 @@ with: (face-attribute 'default :height)."
 
 ;;;; Golang
 
+(defun lsp-go-install-save-hooks ()
+  "Hooks to add in `go-mode' buffers."
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
 (use-package go-mode
   :hook ((go-mode . lsp-deferred))
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
 		gofmt-command (executable-find "goimports")
 		go-test-args "-v")
-  ;; (add-hook 'go-mode-hook (lambda ()
-  ;; 							(add-hook 'before-save-hook #'lsp-format-buffer)
-  ;; 							(add-hook 'before-save-hook
-  ;; 									  #'lsp-organize-imports)))
-  )
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
 
 (use-package gotest)
 

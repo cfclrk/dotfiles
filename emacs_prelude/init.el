@@ -535,8 +535,8 @@ TODO: display current font size in prompt."
 (key-chord-mode +1)
 (setq key-chord-one-key-delay 0.05)
 (key-chord-define-global "\\a" 'avy-goto-word-1)
-(key-chord-define-global "\\o" 'lsp-format-buffer)
-(key-chord-define-global "\\e" 'org-toggle-inline-images)
+(key-chord-define-global "\\o" 'org-toggle-inline-images)
+(key-chord-define-global "\\e" 'lsp-format-buffer)
 (key-chord-define-global "\\u" 'undo-tree-visualize)
 
 ;;;; LSP
