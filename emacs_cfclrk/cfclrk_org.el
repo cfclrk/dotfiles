@@ -10,7 +10,12 @@
 
 (require 'org)
 
-;;; org-src-mode hook
+;;; pretty things
+
+(use-package org-superstar
+  :hook (org-mode . org-superstar-mode))
+
+;;; org-src mode
 
 (defun cfclrk/org-src-mode-hook ()
   "Customize `org-src-mode' in buffers created by `org-edit-special'."
@@ -19,14 +24,15 @@
 
 (add-hook 'org-src-mode-hook 'cfclrk/org-src-mode-hook)
 
-;;; org-mode hook
+;;; org mode
 
 (defun cfclrk/org-mode-hook ()
   "Customize `org-mode'."
 
   (setq org-startup-folded t
 		org-confirm-babel-evaluate nil
-		org-src-window-setup 'split-window-below)
+		org-src-window-setup 'split-window-below
+		org-special-ctrl-a/e t)
 
   ;; Note my smartparens config also pulls in 'smartparens-org
   (smartparens-mode +1)

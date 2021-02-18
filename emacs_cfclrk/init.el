@@ -196,7 +196,8 @@ with: (face-attribute 'default :height)."
 (use-package company
   :bind (:map company-active-map
 			  ("C-n" . company-select-next)
-			  ("C-p" . company-select-previous))
+			  ("C-p" . company-select-previous)
+			  ("<tab>" . company-complete-selection))
   :config (global-company-mode))
 
 (use-package company-box
@@ -267,7 +268,8 @@ with: (face-attribute 'default :height)."
   :config
   (key-chord-define-global "\\o" 'org-toggle-inline-images)
   (key-chord-define-global "\\e" 'lsp-format-buffer)
-  (key-chord-define-global "\\u" 'undo-tree-visualize))
+  (key-chord-define-global "\\u" 'undo-tree-visualize)
+  (key-chord-mode +1))
 
 ;;;; Minibuffer completion (selectrum, prescient, marginalia)
 
@@ -304,7 +306,9 @@ with: (face-attribute 'default :height)."
 (setq imagemagick-enabled-types t)
 (imagemagick-register-types)
 (add-to-list 'image-file-name-extensions "eps")
-(setq org-image-actual-width '(500))
+
+;; TODO: set this only when I need to render EPS
+;(setq org-image-actual-width '(500))
 
 ;;;; LSP
 
@@ -378,6 +382,12 @@ with: (face-attribute 'default :height)."
 ;;;; rainbow-delimiters
 
 (use-package rainbow-delimiters)
+
+;;;; recentf
+
+(setq recentf-max-saved-items 100
+	  recentf-max-menu-items 15)
+(recentf-mode +1)
 
 ;;;; setenv-file
 
