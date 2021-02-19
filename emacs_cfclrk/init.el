@@ -6,9 +6,10 @@
 
 ;;; TODO
 
-;; Make C-t a prefix for running tests.
+;; Make C-t a prefix for running tests. Nobody needs transpose anyway.
 ;; C-t t: run current test
 ;; C-t f: run tests in current file
+;; C-t c: run tests for the current class
 
 ;;; Bootstrap Package Management
 ;;  ----------------------------------------------------------------------------
@@ -127,12 +128,12 @@ with: (face-attribute 'default :height)."
 
 ;; whitespace
 (require 'whitespace)
-(setq whitespace-style '(face tabs empty trailing lines-tail))
+(setq whitespace-style '(face tabs empty trailing lines-tail)
+	  whitespace-line-column nil)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 (defun cfclrk/text-editing-hook ()
-  "Stuff that should be enabled in pretty much every buffer."
-  (turn-on-auto-fill)
+  "Minor modes that I want enabled in pretty much every textual buffer."
   (smartparens-mode +1)
   (whitespace-mode +1))
 
@@ -155,6 +156,9 @@ with: (face-attribute 'default :height)."
 ;; Keep customizations outside of init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file t)
+
+;; Remap C-h g from `describe-gnu-project' to `github-browse-file'
+(global-set-key (kbd "C-h g") 'github-browse-file)
 
 ;; MacOS
 (when (eq system-type 'darwin)
@@ -207,7 +211,8 @@ with: (face-attribute 'default :height)."
 
 (use-package crux
   :bind (([remap move-beginning-of-line] . crux-move-beginning-of-line)
-		 ("C-c D" . crux-delete-file-and-buffer)))
+		 ("C-c D" . crux-delete-file-and-buffer)
+		 ("C-c f" . crux-recentf-find-file)))
 
 ;;;; Searching (ctrlf)
 
@@ -233,6 +238,7 @@ with: (face-attribute 'default :height)."
 (define-key global-map (kbd "C-c d") 'dired-jump-other-window)
 (setq dired-dwim-target t
       dired-listing-switches "-aoh")
+(put 'dired-find-alternate-file 'disabled nil)
 
 ;;;; docker
 
@@ -257,6 +263,11 @@ with: (face-attribute 'default :height)."
                               "api.github.com"
                               "github.com"
                               forge-github-repository)))
+
+;;;; github-browse-file
+
+(use-package github-browse-file
+  :bind ("C-h g" . github-browse-file))
 
 ;;;; gnuplot
 
@@ -324,7 +335,12 @@ with: (face-attribute 'default :height)."
 
 ;;;; markdown
 
+(defun cfclrk/markdown-mode-hook ()
+  "Customize `markdown-mode'."
+  (turn-on-auto-fill))
+
 (use-package markdown-mode
+  :hook (markdown-mode . cfclrk/markdown-mode-hook)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
@@ -463,6 +479,8 @@ with: (face-attribute 'default :height)."
 
 (setq winner-dont-bind-my-keys t)
 (winner-mode)
+
+;; Use "C-c q" to close a Help buffer, Compilation buffer, etc I just opened.
 (define-key winner-mode-map (kbd "C-c q") #'winner-undo)
 
 ;;;; yasnippet
@@ -482,22 +500,23 @@ with: (face-attribute 'default :height)."
   "Customize `emacs-lisp-mode'."
   (smartparens-strict-mode +1)
   (rainbow-delimiters-mode +1))
-(add-hook 'emacs-lisp-mode-hook 'cfc/emacs-lisp-mode-hook)
+(add-hook 'emacs-lisp-mode-hook #'cfc/emacs-lisp-mode-hook)
 
 ;;;; Golang
 
-(defun lsp-go-install-save-hooks ()
+(defun cfclrk/go-mode-hook ()
   "Hooks to add in `go-mode' buffers."
+  (whitespace-toggle-options '(lines-tail))
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (use-package go-mode
-  :hook ((go-mode . lsp-deferred))
+  :hook ((go-mode . lsp-deferred)
+		 (go-mode . cfclrk/go-mode-hook))
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
 		gofmt-command (executable-find "goimports")
-		go-test-args "-v")
-  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
+		go-test-args "-v"))
 
 (use-package gotest)
 
@@ -506,13 +525,12 @@ with: (face-attribute 'default :height)."
 (defun cfclrk/js-mode-hook ()
   "Customize `js-mode'."
   (setq js-indent-level 2))
-(add-hook 'js-mode-hook 'cfclrk/js-mode-hook)
+(add-hook 'js-mode-hook #'cfclrk/js-mode-hook)
 
 ;;;; Python
 
 (defun cfclrk/python-mode-hook ()
   "Customize `python-mode'."
-
   (setq fill-column 88
         python-fill-docstring-style 'pep-257-nn
         python-shell-interpreter "ipython"
@@ -530,7 +548,11 @@ with: (face-attribute 'default :height)."
 
      ;; Disable these as they duplicate flake8 functionality
      ("pyls.plugins.mccabe.enabled" nil t)
-     ("pyls.plugins.pyflakes.enabled" nil t))))
+     ("pyls.plugins.pyflakes.enabled" nil t)))
+
+  ;; Restart whitespace-mode so that it properly uses `fill-column'
+  (whitespace-mode -1)
+  (whitespace-mode +1))
 
 (add-hook 'python-mode-hook #'cfclrk/python-mode-hook)
 (add-hook 'python-mode-hook #'lsp-deferred)
