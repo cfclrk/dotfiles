@@ -17,9 +17,13 @@ if not set -q TMUX
 
     # Golang
     set -gx GO111MODULE on
+	set -gx GOPRIVATE github.com/ironnetcybersecurity
     for goPath in (string split : (go env GOPATH))
         set PATH $goPath/bin $PATH
     end
+
+	# Use the new Docker run engine
+	set -gx DOCKER_BUILDKIT 1
 
     # Colors in less (makes man pages look nicer)
     set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
