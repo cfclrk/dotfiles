@@ -198,6 +198,7 @@ with: (face-attribute 'default :height)."
 ;;;; company
 
 (use-package company
+  :demand t
   :bind (:map company-active-map
 			  ("C-n" . company-select-next)
 			  ("C-p" . company-select-previous)
@@ -228,10 +229,10 @@ with: (face-attribute 'default :height)."
 
 (use-package diff-hl
   :demand t
-  :config (global-diff-hl-mode)
   :hook ((dired-mode . diff-hl-dired-mode)
 		 (magit-pre-refresh . diff-hl-magit-pre-refresh)
-		 (magit-post-refresh . diff-hl-magit-post-refresh)))
+		 (magit-post-refresh . diff-hl-magit-post-refresh))
+  :config (global-diff-hl-mode))
 
 ;;;; dired
 
@@ -277,9 +278,9 @@ with: (face-attribute 'default :height)."
 
 (use-package key-chord
   :config
-  (key-chord-define-global "\\o" 'org-toggle-inline-images)
   (key-chord-define-global "\\e" 'lsp-format-buffer)
   (key-chord-define-global "\\u" 'undo-tree-visualize)
+  (key-chord-define-global "\\i" 'org-toggle-inline-images)
   (key-chord-mode +1))
 
 ;;;; Minibuffer completion (selectrum, prescient, marginalia)
@@ -358,6 +359,7 @@ with: (face-attribute 'default :height)."
 ;;;; projectile
 
 (use-package projectile
+  :demand t
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (projectile-mode t)
@@ -378,8 +380,14 @@ with: (face-attribute 'default :height)."
   ;; projectile-project-root-files-bottom-up and checking each parent dir for that
   ;; file. It searches the entire dir lineage for the first item, then the next.
   ;; Instead, it should iterate through the whole list at each dir level.
+
+  ;; This was ok, but didn't include stuff like .git
+  ;; (setq projectile-project-root-files-bottom-up
+  ;; 		(cons "go.mod" (cons "Makefile" projectile-project-root-files)))
+
   (setq projectile-project-root-files-bottom-up
-		(cons "go.mod" (cons "Makefile" projectile-project-root-files)))
+		(-union projectile-project-root-files-bottom-up
+				projectile-project-root-files))
 
   ;; My kind of Python project, with a Makefile
   (projectile-register-project-type 'python-cfclrk '("setup.py")
@@ -483,6 +491,10 @@ with: (face-attribute 'default :height)."
 ;; Use "C-c q" to close a Help buffer, Compilation buffer, etc I just opened.
 (define-key winner-mode-map (kbd "C-c q") #'winner-undo)
 
+;;;; yaml
+
+(use-package yaml-mode)
+
 ;;;; yasnippet
 
 (use-package yasnippet)
@@ -494,13 +506,28 @@ with: (face-attribute 'default :height)."
 
 (add-hook 'prog-mode-hook 'cfclrk/text-editing-hook)
 
+;;;; CSS and SCSS
+
+(defun cfclrk/css-mode-hook ()
+  "Customize `css-mode' and derived modes like `scss-mode'."
+  (setq indent-tabs-mode nil
+		css-indent-offset 2))
+
+(add-hook 'css-mode-hook #'cfclrk/css-mode-hook)
+
 ;;;; Elisp
 
-(defun cfc/emacs-lisp-mode-hook ()
+(defun cfclrk/emacs-lisp-mode-hook ()
   "Customize `emacs-lisp-mode'."
   (smartparens-strict-mode +1)
-  (rainbow-delimiters-mode +1))
-(add-hook 'emacs-lisp-mode-hook #'cfc/emacs-lisp-mode-hook)
+  (rainbow-delimiters-mode +1)
+
+  ;; Restart whitespace mode so that it properly uses fill-column.
+  (setq fill-column 80)
+  (whitespace-mode -1)
+  (whitespace-mode +1))
+
+(add-hook 'emacs-lisp-mode-hook #'cfclrk/emacs-lisp-mode-hook)
 
 ;;;; Golang
 
