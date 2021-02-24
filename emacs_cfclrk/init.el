@@ -116,6 +116,7 @@ with: (face-attribute 'default :height)."
 (tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
 (scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
 (show-paren-mode +1)  ;; Bold-face matching parentheses
+(global-auto-revert-mode t)  ;; Revert buffers when their backing files change
 (set-language-environment "UTF-8")
 (setq-default tab-width 4)
 (setq-default fill-column 80)
@@ -409,6 +410,9 @@ with: (face-attribute 'default :height)."
 
 ;;;; recentf
 
+;; Saves recent file names in $user-emacs-directory/recentf. View recent files
+;; with C-c f (I configure that keybinding in the crux section).
+
 (setq recentf-max-saved-items 100
 	  recentf-max-menu-items 15)
 (recentf-mode +1)
@@ -438,7 +442,7 @@ with: (face-attribute 'default :height)."
   (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
   (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
   (define-key sp-splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
-  (define-key smartparens-mode-map (kbd "M-s s") sp-splice-key-map)
+  (define-key smartparens-mode-map (kbd "M-p s") sp-splice-key-map)
 
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
@@ -446,13 +450,13 @@ with: (face-attribute 'default :height)."
   (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
   (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
   (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
-  (define-key smartparens-mode-map (kbd "M-s r") sp-wrap-key-map)
+  (define-key smartparens-mode-map (kbd "M-p r") sp-wrap-key-map)
 
   ;; selection
   (define-prefix-command 'sp-select-key-map)
   (define-key sp-select-key-map (kbd "n") 'sp-select-next-thing)
   (define-key sp-select-key-map (kbd "p") 'sp-select-previous-thing-exchange)
-  (define-key smartparens-mode-map (kbd "M-s") sp-select-key-map))
+  (define-key smartparens-mode-map (kbd "M-p") sp-select-key-map))
 
 ;;;; super-save
 
@@ -514,6 +518,7 @@ with: (face-attribute 'default :height)."
 		css-indent-offset 2))
 
 (add-hook 'css-mode-hook #'cfclrk/css-mode-hook)
+(add-hook 'css-mode-hook #'lsp-deferred)
 
 ;;;; Elisp
 
