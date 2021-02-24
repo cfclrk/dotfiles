@@ -29,60 +29,59 @@
 
 ;;; Publishing
 
+(defun cfclrk/site-preamble (project-plist)
+  "Return a string for the HTML preamble.
+PROJECT-PLIST has the full contents of all files and properties
+in the project."
+  (let ((base-directory (plist-get project-plist :base-directory)))
+	(f-read (expand-file-name "../html_partials/navbar.html" base-directory))))
+
+(defun cfclrk/compile-scss (project-plist)
+  "Compile SCSS to CSS. PROJECT-PLIST has all project info."
+  (let* ((base-directory (plist-get project-plist :base-directory))
+		 (scss-file (expand-file-name "main.scss" base-directory))
+		 (out-file (expand-file-name "main.css" base-directory)))
+	(call-process "sass" nil nil nil scss-file out-file)))
+
 (require 'ox-publish)
 (setq org-publish-project-alist
-	  '(("articles"
+	  '(("org"
          :recursive t
-		 :base-directory "~/Projects/technotes/articles"
-		 :publishing-directory "~/Projects/technotes/_site/articles"
-		 :publishing-function org-html-publish-to-html
-		 :html-head-include-scripts nil
-		 :html-head-include-default-style nil
-		 :auto-sitemap t)
-
-		("notes"
-		 :recursive t
-		 :base-directory "~/Projects/technotes/notes"
-		 :publishing-directory "~/Projects/technotes/_site/notes"
-		 :publishing-function org-html-publish-to-html
-		 :html-head-include-scripts nil
-		 :html-head-include-default-style nil
-		 :auto-sitemap t)
-
-		("cf-include"
-         :recursive t
-		 :base-directory "~/Projects/technotes/cloudformation/org"
-		 :publishing-directory "~/Projects/technotes/cloudformation/_gen"
+		 :base-directory "~/Projects/technotes/org"
+		 :publishing-directory "~/Projects/technotes/_gen"
 		 :publishing-function org-org-publish-to-org)
+
+		("html"
+		 :recursive t
+		 :base-directory "~/Projects/technotes/_gen"
+		 :publishing-directory "~/Projects/technotes/_site"
+		 :publishing-function org-html-publish-to-html
+		 :exclude "setup\\.org"
+		 :html-head-include-scripts nil
+		 :html-head-include-default-style nil
+		 :auto-sitemap t
+		 :section-numbers nil
+		 :html-preamble cfclrk/site-preamble)
 
 		("cf-tangle"
          :recursive t
-		 :base-directory "~/Projects/technotes/cloudformation/_gen"
-		 :publishing-directory "~/Projects/technotes/cloudformation/_tangle"
-		 :publishing-function org-babel-tangle-publish)
-
-		("cf-html"
-         :recursive t
-		 :base-directory "~/Projects/technotes/cloudformation/_gen"
-		 :publishing-directory "~/Projects/technotes/_site/cloudformation"
-		 :publishing-function org-html-publish-to-html
-		 :html-head-include-scripts nil
-		 :html-head-include-default-style nil
-		 :auto-sitemap t)
+		 :base-directory "~/Projects/technotes/_gen/cloudformation"
+		 :publishing-directory "~/Projects/technotes/_site/tangle/cloudformation"
+		 :publishing-function org-babel-tangle-publish
+		 :exclude "parameters\\.org")
 
 		("static"
 		 :recursive t
 		 :base-directory "~/Projects/technotes/static"
 		 :publishing-directory "~/Projects/technotes/_site/static"
 		 :base-extension "png\\|jpg\\|gif\\|pdf\\|css"
-		 :publishing-function org-publish-attachment)
+		 :publishing-function org-publish-attachment
+		 :preparation-function cfclrk/compile-scss)
 
 		("site"
-		 :components ("articles"
-					  "notes"
-					  "cf-include"
+		 :components ("org"
+					  "html"
 					  "cf-tangle"
-					  "cf-html"
 					  "static"))))
 
 ;;; org-src mode
@@ -130,7 +129,8 @@
                '(:prologue . "set -eu -o pipefail"))
 
   ;; HTML exporting
-  (setq org-html-doctype "html5"
+  (setq org-html-checkbox-type 'html
+		org-html-doctype "html5"
 		org-html-html5-fancy t
 		org-html-postamble nil
 		org-html-validation-link nil))
