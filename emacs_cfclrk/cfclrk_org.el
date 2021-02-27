@@ -27,6 +27,10 @@
   :custom
   (org-image-actual-width nil))
 
+;;; weblorg
+
+(use-package weblorg)
+
 ;;; Publishing
 
 (defun cfclrk/site-preamble (project-plist)
@@ -43,13 +47,38 @@ in the project."
 		 (out-file (expand-file-name "main.css" base-directory)))
 	(call-process "sass" nil nil nil scss-file out-file)))
 
+(defun cfclrk/sitemap-function (title org-list)
+  "How to create and format the sitemap.
+TITLE is the sitmap title. ORG-LIST is as returned by
+`org-list-parse-list'."
+  (message (pp org-list))
+  (org-list-to-subtree org-list))
+
+(defun cfclrk/sitemap-format-entry (entry style project)
+  "Defines how a sitemap entry is formatted.
+TODO: For articles, add date and abstract."
+  "foo")
+
+(setq cfclrk/html-head
+	  (f-read (expand-file-name "~/Projects/technotes/html_partials/head.html")))
+
 (require 'ox-publish)
 (setq org-publish-project-alist
-	  '(("org"
+	  `(("org"
          :recursive t
 		 :base-directory "~/Projects/technotes/org"
 		 :publishing-directory "~/Projects/technotes/_gen"
-		 :publishing-function org-org-publish-to-org)
+		 :publishing-function org-org-publish-to-org
+		 :auto-sitemap t
+		 :sitemap-function cfclrk/sitemap-function
+		 :sitemay-sort-files anti-chronologically)
+
+		("cf-tangle"
+         :recursive t
+		 :base-directory "~/Projects/technotes/_gen/cloudformation"
+		 :publishing-directory "~/Projects/technotes/_site/tangle/cloudformation"
+		 :publishing-function org-babel-tangle-publish
+		 :exclude "parameters\\.org")
 
 		("html"
 		 :recursive t
@@ -59,16 +88,12 @@ in the project."
 		 :exclude "setup\\.org"
 		 :html-head-include-scripts nil
 		 :html-head-include-default-style nil
-		 :auto-sitemap t
+         :with-creator nil
+		 :with-author nil
+		 :html-head ,cfclrk/html-head,
 		 :section-numbers nil
-		 :html-preamble cfclrk/site-preamble)
-
-		("cf-tangle"
-         :recursive t
-		 :base-directory "~/Projects/technotes/_gen/cloudformation"
-		 :publishing-directory "~/Projects/technotes/_site/tangle/cloudformation"
-		 :publishing-function org-babel-tangle-publish
-		 :exclude "parameters\\.org")
+		 :html-preamble cfclrk/site-preamble
+		 :html-self-link-headlines t)
 
 		("static"
 		 :recursive t
@@ -80,8 +105,8 @@ in the project."
 
 		("site"
 		 :components ("org"
-					  "html"
 					  "cf-tangle"
+					  "html"
 					  "static"))))
 
 ;;; org-src mode

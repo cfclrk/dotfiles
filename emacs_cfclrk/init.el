@@ -115,7 +115,7 @@ with: (face-attribute 'default :height)."
 
 (tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
 (scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
-(show-paren-mode +1)  ;; Bold-face matching parentheses
+;; (show-paren-mode +1)  ;; Bold-face matching parentheses -- EDIT, use show-smartparens-mode
 (global-auto-revert-mode t)  ;; Revert buffers when their backing files change
 (set-language-environment "UTF-8")
 (setq-default tab-width 4)
@@ -429,6 +429,7 @@ with: (face-attribute 'default :height)."
 (use-package smartparens
   :config
   (require 'smartparens-config)
+  (show-smartparens-global-mode t)
 
   ;; slurping and barfing
   (define-key smartparens-mode-map (kbd "S-<right>") 'sp-forward-slurp-sexp)
@@ -436,13 +437,17 @@ with: (face-attribute 'default :height)."
   (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-backward-barf-sexp)
   (define-key smartparens-mode-map (kbd "C-S-<left>") 'sp-backward-slurp-sexp)
 
+  ;; Create prefix for smartparens commands
+  (define-prefix-command 'sp-prefix-key-map)
+  (define-key smartparens-mode-map (kbd "M-p") sp-prefix-key-map)
+
   ;; splicing
   (define-prefix-command 'sp-splice-key-map)
   (define-key sp-splice-key-map (kbd "s") 'sp-splice-sexp)
   (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
   (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
   (define-key sp-splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
-  (define-key smartparens-mode-map (kbd "M-p s") sp-splice-key-map)
+  (define-key sp-prefix-key-map (kbd "s") sp-splice-key-map)
 
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
@@ -450,13 +455,11 @@ with: (face-attribute 'default :height)."
   (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
   (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
   (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
-  (define-key smartparens-mode-map (kbd "M-p r") sp-wrap-key-map)
+  (define-key sp-prefix-key-map (kbd "r") sp-wrap-key-map)
 
   ;; selection
-  (define-prefix-command 'sp-select-key-map)
-  (define-key sp-select-key-map (kbd "n") 'sp-select-next-thing)
-  (define-key sp-select-key-map (kbd "p") 'sp-select-previous-thing-exchange)
-  (define-key smartparens-mode-map (kbd "M-p") sp-select-key-map))
+  (define-key sp-prefix-key-map (kbd "n") 'sp-select-next-thing)
+  (define-key sp-prefix-key-map (kbd "p") 'sp-select-previous-thing-exchange))
 
 ;;;; super-save
 
@@ -548,7 +551,8 @@ with: (face-attribute 'default :height)."
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
 		gofmt-command (executable-find "goimports")
-		go-test-args "-v"))
+		go-test-args "-v"
+		fill-column 100))
 
 (use-package gotest)
 
@@ -575,7 +579,7 @@ with: (face-attribute 'default :height)."
      ("pyls.plugins.pyls_mypy.live_mode" nil t)
      ("pyls.plugins.pyls_black.enabled" t t)
      ("pyls.plugins.pyls_isort.enabled" t t)
-     ("pyls.plugins.yapf.enabled" nil t)
+     ("pyls.plugins.yapf.enabled" nil t)  ;; I use black
      ("pyls.plugins.pydocstyple.enabled" t t)
 
      ;; Disable these as they duplicate flake8 functionality
