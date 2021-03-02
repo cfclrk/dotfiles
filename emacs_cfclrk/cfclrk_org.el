@@ -38,7 +38,7 @@
 PROJECT-PLIST has the full contents of all files and properties
 in the project."
   (let ((base-directory (plist-get project-plist :base-directory)))
-	(f-read (expand-file-name "../html_partials/navbar.html" base-directory))))
+	(f-read (expand-file-name "~/Projects/site/navbar.html"))))
 
 (defun cfclrk/compile-scss (project-plist)
   "Compile SCSS to CSS. PROJECT-PLIST has all project info."
@@ -51,62 +51,198 @@ in the project."
   "How to create and format the sitemap.
 TITLE is the sitmap title. ORG-LIST is as returned by
 `org-list-parse-list'."
-  (message (pp org-list))
+  ;;(message (pp org-list))
   (org-list-to-subtree org-list))
-
-(defun cfclrk/sitemap-format-entry (entry style project)
-  "Defines how a sitemap entry is formatted.
-TODO: For articles, add date and abstract."
-  "foo")
 
 (setq cfclrk/html-head
 	  (f-read (expand-file-name "~/Projects/technotes/html_partials/head.html")))
 
+(defun cfclrk/org-html-template (contents info)
+  "Return complete document string after HTML conversion.
+CONTENTS is the transcoded contents string.  INFO is a plist
+holding export options."
+  (concat
+   (when (and (not (org-html-html5-p info)) (org-html-xhtml-p info))
+     (let* ((xml-declaration (plist-get info :html-xml-declaration))
+	    (decl (or (and (stringp xml-declaration) xml-declaration)
+		      (cdr (assoc (plist-get info :html-extension)
+				  xml-declaration))
+		      (cdr (assoc "html" xml-declaration))
+		      "")))
+       (when (not (or (not decl) (string= "" decl)))
+	 (format "%s\n"
+		 (format decl
+			 (or (and org-html-coding-system
+				  (fboundp 'coding-system-get)
+				  (coding-system-get org-html-coding-system 'mime-charset))
+			     "iso-8859-1"))))))
+   (org-html-doctype info)
+   "\n"
+   (concat "<html"
+	   (cond ((org-html-xhtml-p info)
+		  (format
+		   " xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"%s\" xml:lang=\"%s\""
+		   (plist-get info :language) (plist-get info :language)))
+		 ((org-html-html5-p info)
+		  (format " lang=\"%s\"" (plist-get info :language))))
+	   ">\n")
+   "<head>\n"
+   (org-html--build-meta-info info)
+   (org-html--build-head info)
+   (org-html--build-mathjax-config info)
+   "</head>\n"
+   "<body>\n"
+   (let ((link-up (org-trim (plist-get info :html-link-up)))
+	 (link-home (org-trim (plist-get info :html-link-home))))
+     (unless (and (string= link-up "") (string= link-home ""))
+       (format (plist-get info :html-home/up-format)
+	       (or link-up link-home)
+	       (or link-home link-up))))
+   ;; Preamble.
+   (org-html--build-pre/postamble 'preamble info)
+   ;; Document contents.
+   (let ((div (assq 'content (plist-get info :html-divs))))
+     (format "<%s id=\"%s\">\n" (nth 1 div) (nth 2 div)))
+   ;; Document title.
+   (when (plist-get info :with-title)
+     (let ((title (and (plist-get info :with-title)
+		       (plist-get info :title)))
+	   (subtitle (plist-get info :subtitle))
+	   (html5-fancy (org-html--html5-fancy-p info)))
+       (when title
+	 (format
+	  (if html5-fancy
+	      "<header>\n<h1 class=\"title\">%s</h1>\n%s</header>"
+	    "<h1 class=\"title\">%s%s</h1>\n")
+	  (org-export-data title info)
+	  (if subtitle
+	      (format
+	       (if html5-fancy
+		   "<p class=\"subtitle\">%s</p>\n"
+		 (concat "\n" (org-html-close-tag "br" nil info) "\n"
+			 "<span class=\"subtitle\">%s</span>\n"))
+	       (org-export-data subtitle info))
+	    "")))))
+   contents
+   (format "</%s>\n" (nth 1 (assq 'content (plist-get info :html-divs))))
+   ;; Postamble.
+   (org-html--build-pre/postamble 'postamble info)
+   ;; Possibly use the Klipse library live code blocks.
+   (when (plist-get info :html-klipsify-src)
+     (concat "<script>" (plist-get info :html-klipse-selection-script)
+	     "</script><script src=\""
+	     org-html-klipse-js
+	     "\"></script><link rel=\"stylesheet\" type=\"text/css\" href=\""
+	     org-html-klipse-css "\"/>"))
+   ;; Closing document.
+   "</body>\n</html>"))
+
+(org-export-define-derived-backend 'cfclrk-html 'html
+  :translate-alist '((template . cfclrk/html-template)))
+
 (require 'ox-publish)
 (setq org-publish-project-alist
-	  `(("org"
+
+	  ;; Move this to cloudformation repo. Then in this file, I include that
+	  ;; file by pulling it straight from github (just how straight does it).
+	  ;; Each project can define its own backend, if it wants.
+	  `(("cf-org"
          :recursive t
-		 :base-directory "~/Projects/technotes/org"
-		 :publishing-directory "~/Projects/technotes/_gen"
-		 :publishing-function org-org-publish-to-org
+		 :base-directory "~/Projects/cloudformation/org"
+		 :publishing-directory "~/Projects/cloudformation/_org"
+         :publishing-function org-org-publish-to-org
 		 :auto-sitemap t
-		 :sitemap-function cfclrk/sitemap-function
-		 :sitemay-sort-files anti-chronologically)
+		 :sitemap-title "CloudFormation")
 
-		("cf-tangle"
+		("cf-html"
          :recursive t
-		 :base-directory "~/Projects/technotes/_gen/cloudformation"
-		 :publishing-directory "~/Projects/technotes/_site/tangle/cloudformation"
-		 :publishing-function org-babel-tangle-publish
-		 :exclude "parameters\\.org")
-
-		("html"
-		 :recursive t
-		 :base-directory "~/Projects/technotes/_gen"
-		 :publishing-directory "~/Projects/technotes/_site"
-		 :publishing-function org-html-publish-to-html
-		 :exclude "setup\\.org"
-		 :html-head-include-scripts nil
+		 :base-directory "~/Projects/cloudformation/_org"
+		 :publishing-directory "~/Projects/cfclrk.com/cloudformation"
+		 :publishing-function (org-babel-tangle-publish
+							   org-html-publish-to-html)
+		 :exclude "params\\.org"
+		 :auto-sitemap t
+         :html-head-include-scripts nil
 		 :html-head-include-default-style nil
          :with-creator nil
 		 :with-author nil
-		 :html-head ,cfclrk/html-head,
 		 :section-numbers nil
 		 :html-preamble cfclrk/site-preamble
-		 :html-self-link-headlines t)
+		 :html-self-link-headlines t
+		 :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/static/main.css\" />")
 
-		("static"
+		("cf-static"
 		 :recursive t
-		 :base-directory "~/Projects/technotes/static"
-		 :publishing-directory "~/Projects/technotes/_site/static"
+		 :base-directory "~/Projects/cloudformation/static"
+		 :publishing-directory "~/Projects/cfclrk.com/static"
+		 :base-extension "png\\|jpg\\|gif\\|pdf\\|css"
+		 :publishing-function org-publish-attachment)
+
+		("notes"
+         :recursive t
+		 :base-directory "~/notes"
+		 :publishing-directory "~/Projects/cfclrk.com/notes"
+		 :publishing-function org-html-publish-to-html
+		 :exclude "setup\\.org"
+		 :auto-sitemap t
+		 :sitemap-title "Notes"
+		 ;; :sitemap-function cfclrk/sitemap-function
+         :html-head-include-scripts nil
+		 :html-head-include-default-style nil
+         :with-creator nil
+		 :with-author nil
+		 :section-numbers nil
+		 :html-preamble cfclrk/site-preamble
+		 :html-self-link-headlines t
+		 :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/static/main.css\" />")
+
+		("articles"
+         :recursive t
+		 :base-directory "~/Projects/articles"
+		 :publishing-directory "~/Projects/cfclrk.com/articles"
+		 :publishing-function org-html-publish-to-html
+		 :exclude "setup\\.org"
+		 :auto-sitemap t
+		 ;; :sitemap-function cfclrk/sitemap-function
+		 :sitemap-sort-files anti-chronologically
+		 :sitemap-title "Articles"
+         :html-head-include-scripts nil
+		 :html-head-include-default-style nil
+         :with-creator nil
+		 :with-author nil
+		 :section-numbers nil
+		 :html-preamble cfclrk/site-preamble
+		 :html-self-link-headlines t
+		 :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/static/main.css\" />")
+
+		("homepage"
+		 :base-directory "~/Projects/site"
+		 :publishing-directory "~/Projects/cfclrk.com"
+		 :publishing-function org-html-publish-to-html
+		 :base-extension "org"
+         :html-head-include-scripts nil
+		 :html-head-include-default-style nil
+         :with-creator nil
+		 :with-author nil
+		 :section-numbers nil
+		 :html-preamble cfclrk/site-preamble
+		 :html-self-link-headlines t
+		 :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/static/main.css\" />")
+
+        ("static"
+		 :recursive t
+		 :base-directory "~/Projects/site/static"
+		 :publishing-directory "~/Projects/cfclrk.com/static"
 		 :base-extension "png\\|jpg\\|gif\\|pdf\\|css"
 		 :publishing-function org-publish-attachment
 		 :preparation-function cfclrk/compile-scss)
 
 		("site"
-		 :components ("org"
-					  "cf-tangle"
-					  "html"
+		 :components ("cf-org"
+					  "cf-html"
+					  "notes"
+					  "articles"
+					  "homepage"
 					  "static"))))
 
 ;;; org-src mode
