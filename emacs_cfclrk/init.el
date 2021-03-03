@@ -118,6 +118,7 @@ with: (face-attribute 'default :height)."
 ;; (show-paren-mode +1)  ;; Bold-face matching parentheses -- EDIT, use show-smartparens-mode
 (global-auto-revert-mode t)  ;; Revert buffers when their backing files change
 (set-language-environment "UTF-8")
+(setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
@@ -251,7 +252,9 @@ with: (face-attribute 'default :height)."
 (use-package gitconfig-mode)
 
 (use-package magit
-  :config (setq magit-diff-refine-hunk 'all))
+  :config
+  (setq magit-diff-refine-hunk 'all)
+  (add-to-list 'auto-mode-alist '("\\.gitconfig\\'" . gitconfig-mode)))
 
 (use-package forge
   :after magit
@@ -475,7 +478,12 @@ with: (face-attribute 'default :height)."
 
 ;;;; undo-tree
 
-(use-package undo-tree)
+(use-package undo-tree
+  :config
+  (setq undo-tree-history-directory-alist
+      `((".*" . ,temporary-file-directory)))
+  (setq undo-tree-auto-save-history t)
+  (global-undo-tree-mode))
 
 ;;;; unfill
 
