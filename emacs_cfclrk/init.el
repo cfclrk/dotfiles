@@ -110,6 +110,16 @@ with: (face-attribute 'default :height)."
     (set-face-attribute 'default nil :height font-size)
     (set-face-attribute 'mode-line nil :height font-size)))
 
+(defun backward-delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times. Unlike
+`backward-kill-word', do not add the word to the `kill-ring'.
+See: https://stackoverflow.com/questions/6133799"
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+
+(global-set-key (kbd "C-<backspace>") 'backward-delete-word)
+
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
