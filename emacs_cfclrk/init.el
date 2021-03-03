@@ -531,9 +531,9 @@ with: (face-attribute 'default :height)."
 (add-hook 'css-mode-hook #'cfclrk/css-mode-hook)
 (add-hook 'css-mode-hook #'lsp-deferred)
 
-;;;; Elisp
+;;;; Lisp
 
-(defun cfclrk/emacs-lisp-mode-hook ()
+(defun cfclrk/lisp-mode-hook ()
   "Customize `emacs-lisp-mode'."
   (smartparens-strict-mode +1)
   (rainbow-delimiters-mode +1)
@@ -543,7 +543,8 @@ with: (face-attribute 'default :height)."
   (whitespace-mode -1)
   (whitespace-mode +1))
 
-(add-hook 'emacs-lisp-mode-hook #'cfclrk/emacs-lisp-mode-hook)
+(dolist hook '(lisp-mode-hook emacs-lisp-mode-hook lisp-data-mode-hook)
+        (add-hook hook #'cfclrk/lisp-mode-hook))
 
 ;;;; Golang
 
