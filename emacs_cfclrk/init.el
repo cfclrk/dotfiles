@@ -249,9 +249,20 @@ See: https://stackoverflow.com/questions/6133799"
 ;;;; dired
 
 (define-key global-map (kbd "C-c d") 'dired-jump-other-window)
-(setq dired-dwim-target t
-      dired-listing-switches "-aoh")
+
+;; Format for listing files
+(setq dired-listing-switches "-aoh")
+
+;; If there is a Dired buffer displayed in some window, use its current
+;; directory, instead of this Dired buffer's current directory.
+(setq dired-dwim-target t)
+
+;; Reuse current buffer when pressing 'a'
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; Always delete and copy recursively
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
 
 ;;;; docker
 
@@ -553,8 +564,8 @@ See: https://stackoverflow.com/questions/6133799"
   (whitespace-mode -1)
   (whitespace-mode +1))
 
-(dolist hook '(lisp-mode-hook emacs-lisp-mode-hook lisp-data-mode-hook)
-        (add-hook hook #'cfclrk/lisp-mode-hook))
+(dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook lisp-data-mode-hook))
+  (add-hook hook #'cfclrk/lisp-mode-hook))
 
 ;;;; Golang
 
@@ -611,5 +622,9 @@ See: https://stackoverflow.com/questions/6133799"
 
 (add-hook 'python-mode-hook #'cfclrk/python-mode-hook)
 (add-hook 'python-mode-hook #'lsp-deferred)
+
+;;;; Powershell
+
+(use-package powershell)
 
 ;;; init.el ends here

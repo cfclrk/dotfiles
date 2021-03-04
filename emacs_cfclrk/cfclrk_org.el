@@ -175,7 +175,7 @@ holding export options."
 		 :recursive t
 		 :base-directory "~/Projects/cloudformation/static"
 		 :publishing-directory "~/Projects/cfclrk.com/static"
-		 :base-extension "png\\|jpg\\|gif\\|pdf\\|css"
+		 :base-extension "png\\|jpg\\|gif\\|pdf"
 		 :publishing-function org-publish-attachment)
 
 		("notes"
@@ -244,6 +244,9 @@ holding export options."
 					  "articles"
 					  "homepage"
 					  "static"))))
+
+;; To remove a project:
+;; (assoc-delete-all "notes" org-publish-project-alist)
 
 ;;; org-src mode
 
