@@ -29,6 +29,9 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; Make straight use SSH instead of HTTPS when cloning git repos
+(setq straight-vc-git-default-protocol 'ssh)
+
 ;; Install use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
