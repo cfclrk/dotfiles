@@ -39,28 +39,10 @@ in the project."
 	(f-read (expand-file-name "~/Projects/site/navbar.html"))))
 
 (setq org-publish-project-alist
-      `(("articles"
-         :recursive t
-		 :base-directory "~/Projects/articles"
-		 :publishing-directory "~/Projects/cfclrk.com/articles"
-		 :publishing-function org-html-publish-to-html
-		 :exclude "setup\\.org"
-		 :auto-sitemap t
-		 ;; :sitemap-function cfclrk/sitemap-function
-		 :sitemap-sort-files anti-chronologically
-		 :sitemap-title "Articles"
-         :html-head-include-scripts nil
-		 :html-head-include-default-style nil
-         :with-creator nil
-		 :with-author nil
-		 :section-numbers nil
-		 :html-preamble cfclrk/site-preamble
-		 :html-self-link-headlines t
-		 :html-head "<link rel=\"stylesheet\" type=\"text/css\" href=\"/static/main.css\" />")
-
-		("site"
-		 :components ("cf-org"
-					  "cf-html"
+      `(("site"
+		 :components ("cloudformation-org"
+					  "cloudformation-html"
+                      "cloudformation-static"
 					  "notes"
 					  "articles"
 					  "homepage"
@@ -68,18 +50,27 @@ in the project."
                       "site-homepage"))))
 
 ;; Add site static and site homepage
-(use-package site
-  :straight (:host github :repo "cfclrk/site"))
-;; (load (expand-file-name "~/Projects/site/site.el"))
-(require 'site)
+;; (use-package site
+;;   :straight (:host github :repo "cfclrk/site"))
+;; (require 'site)
+(load (expand-file-name "~/Projects/site/site.el"))
 
-(use-package notes
-  :straight (:host github :repo "cfclrk/notes"))
-;; (load (expand-file-name "~/notes/notes.el"))
 
-(use-package cloudformation
-  :straight (:host github :repo "cfclrk/cloudformation"))
-;; (load (expand-file-name "~/Projects/cloudformation/cloudformation.el"))
+;; (use-package notes
+;;   :straight (:host github :repo "cfclrk/notes"))
+;; (require 'notes)
+(load (expand-file-name "~/notes/notes.el"))
+
+;; (use-package cloudformation
+;;   :straight (:host github :repo "cfclrk/cloudformation"
+;;                    :files ("org" :defaults)))
+;; (require 'cloudformation)
+(load (expand-file-name "~/Projects/cloudformation/cloudformation.el"))
+
+
+(load (expand-file-name "~/Projects/articles/articles.el"))
+
+;; Do all in a list. For each one, add to :components in the site project.
 
 ;; Add (or update) the site-static project to org-public-project-alist
 (setq org-publish-project-alist
@@ -111,11 +102,10 @@ in the project."
       (cons cloudformation/org-project-cloudformation-static
             (assoc-delete-all "cloudformation-static" org-publish-project-alist)))
 
-;; (require 'cfclrk-site)
-;; (cons org-publish-project-alist cfclrk-site/static)
-
-;; To remove a project:
-;; (assoc-delete-all "notes" org-publish-project-alist)
+;; Add (or update) the articles project
+(setq org-publish-project-alist
+      (cons articles/org-project-articles
+            (assoc-delete-all "articles" org-publish-project-alist)))
 
 ;;; org-src mode
 

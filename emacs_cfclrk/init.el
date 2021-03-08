@@ -131,6 +131,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; (show-paren-mode +1)  ;; Bold-face matching parentheses -- EDIT, use show-smartparens-mode
 (global-auto-revert-mode t)  ;; Revert buffers when their backing files change
 (set-language-environment "UTF-8")
+
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default fill-column 80)
@@ -150,7 +151,8 @@ See: https://stackoverflow.com/questions/6133799"
 (defun cfclrk/text-editing-hook ()
   "Minor modes that I want enabled in pretty much every textual buffer."
   (smartparens-mode +1)
-  (whitespace-mode +1))
+  (whitespace-mode +1)
+  (delete-selection-mode +1))
 
 ;; text mode
 (add-hook 'text-mode-hook 'cfclrk/text-editing-hook)
@@ -189,6 +191,10 @@ See: https://stackoverflow.com/questions/6133799"
   (use-package exec-path-from-shell
     :config
     (exec-path-from-shell-initialize)))
+
+;;;; Registers
+
+(setq register-preview-delay 0)
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
