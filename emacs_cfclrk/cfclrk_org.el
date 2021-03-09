@@ -70,37 +70,29 @@ in the project."
 
 (load (expand-file-name "~/Projects/articles/articles.el"))
 
-;; Do all in a list. For each one, add to :components in the site project.
-
 ;; Add (or update) the site-static project to org-public-project-alist
 (setq org-publish-project-alist
       (cons site/org-project-static
             (assoc-delete-all "site-static" org-publish-project-alist)))
 
-;; Add (or update) the site-homepage project
-(setq org-publish-project-alist
-      (cons site/org-project-homepage
-            (assoc-delete-all "site-homepage" org-publish-project-alist)))
+;; Add (or update) the projects in site/org-project-alist
+(dolist (project site/org-project-alist)
+  (let ((project-name (car project)))
+    (setq org-publish-project-alist
+          (cons project
+                (assoc-delete-all project-name org-publish-project-alist)))))
 
 ;; Add (or update) the notes project
 (setq org-publish-project-alist
       (cons notes/org-project-notes
             (assoc-delete-all "notes" org-publish-project-alist)))
 
-;; Add (or update) the cloudformation-org project
-(setq org-publish-project-alist
-      (cons cloudformation/org-project-cloudformation-org
-            (assoc-delete-all "cloudformation-org" org-publish-project-alist)))
-
-;; Add (or update) the cloudformation-html project
-(setq org-publish-project-alist
-      (cons cloudformation/org-project-cloudformation-html
-            (assoc-delete-all "cloudformation-html" org-publish-project-alist)))
-
-;; Add (or update) the cloudformation-static project
-(setq org-publish-project-alist
-      (cons cloudformation/org-project-cloudformation-static
-            (assoc-delete-all "cloudformation-static" org-publish-project-alist)))
+;; Add (or update) the projects in cloudformation/org-projects-alist
+(dolist (project cloudformation/org-project-alist)
+  (let ((project-name (car project)))
+    (setq org-publish-project-alist
+          (cons project
+                (assoc-delete-all project-name org-publish-project-alist)))))
 
 ;; Add (or update) the articles project
 (setq org-publish-project-alist
