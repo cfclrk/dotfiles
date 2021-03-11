@@ -308,6 +308,15 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package gnuplot)
 
+;;;; grip
+
+(use-package grip-mode
+  :config (setq grip-update-after-change nil
+                grip-github-user (getenv "GITHUB_USER")
+                grip-github-password (getenv "GITHUB_TOKEN"))
+  :bind (:map markdown-mode-command-map
+              ("g" . grip-mode)))
+
 ;;;; key-chord
 
 (use-package key-chord
@@ -446,7 +455,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Saves recent file names in $user-emacs-directory/recentf. View recent files
 ;; with C-c f (I configure that keybinding in the crux section).
 
-(setq recentf-max-saved-items 100
+(setq recentf-max-saved-items 300
 	  recentf-max-menu-items 15)
 (recentf-mode +1)
 
