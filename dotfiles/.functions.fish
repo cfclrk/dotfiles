@@ -162,6 +162,8 @@ end
 
 function clearBucket --description "Clear one S3 bucket"
     set bucket $argv[1]
+    test -z "$argv[1]"; and echo "Error: arg1 must be a string"; and return 1
+
     echo "Checking bucket $bucket"
     set objects (aws s3api list-objects-v2 --bucket $bucket --delimiter /)
     if count $objects > /dev/null
@@ -169,7 +171,7 @@ function clearBucket --description "Clear one S3 bucket"
         echo "$bucket - has objects. Deleting..."
         set_color normal
         aws s3api delete-bucket-policy --bucket $bucket
-        aws s3 rm --recursive s3://$bucket
+        aws s3 rm --recursive --only-show-errors s3://$bucket
     else
         set_color green
         echo "$bucket - good to go."
@@ -178,11 +180,18 @@ function clearBucket --description "Clear one S3 bucket"
 end
 
 function clearBuckets --description "Clear all S3 buckets"
-    # TODO: accept prefix as param
+    test -z "$argv[1]"; and echo "Error: arg1 must be a string"; and return 1
+    set prefix $argv[1]
 
     # To filter to those buckets that start with prefix
     set buckets (aws s3api list-buckets \
-        | jq -r '.Buckets[] | select(.Name | startswith("cfc-tenant-1-static")).Name')
+        | jq -r --arg prefix $prefix \
+        '.Buckets[] | select(.Name | startswith($prefix)).Name')
+
+    echo "Matched buckets:"
+    for bucket in $buckets
+        echo " - $bucket"
+    end
 
     echo $buckets | xargs -n 1 -P (count $buckets) -I {} fish -c 'clearBucket {}'
 end
