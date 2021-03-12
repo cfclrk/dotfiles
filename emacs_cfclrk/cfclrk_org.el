@@ -27,6 +27,10 @@
   :custom
   (org-image-actual-width nil))
 
+;;; ox-gfm
+
+(use-package ox-gfm)
+
 ;;; Publishing
 
 (require 'ox-publish)
