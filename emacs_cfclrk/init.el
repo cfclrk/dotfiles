@@ -410,6 +410,7 @@ See: https://stackoverflow.com/questions/6133799"
   (add-to-list 'projectile-globally-ignored-directories "*.pytest_cache")
   (add-to-list 'projectile-globally-ignored-directories "*logs")
   (add-to-list 'projectile-globally-ignored-directories "*_output")
+  (add-to-list 'projectile-globally-ignored-directories "*cdk\.out")
 
   ;; Update projectile project detection to identify projects by the files in
   ;; `projectile-project-root-files'. Originally, projectile identifies projects
