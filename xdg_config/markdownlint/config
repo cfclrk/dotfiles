@@ -4,5 +4,6 @@
   "no-inline-html": {
     "allowed_elements": ["kbd"]
   },
-  "first-line-heading": false
+  "first-line-heading": false,
+  "no-duplicate-heading": false
 }
