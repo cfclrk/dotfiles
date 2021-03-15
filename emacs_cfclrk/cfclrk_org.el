@@ -31,6 +31,24 @@
 
 (use-package ox-gfm)
 
+;;; Functions
+
+(defun cfclrk/on-every-src-block (fn)
+  "Visit every source block and evaluate FN."
+  (save-excursion
+    (goto-char (point-min))
+    (let ((case-fold-search t))
+      (while (re-search-forward "^\s*#[+]BEGIN_SRC" nil t)
+        (let ((element (org-element-at-point)))
+          (when (eq (org-element-type element) 'src-block)
+            (funcall fn element)))))
+    (save-buffer)))
+
+(defun cfclrk/org-remove-results ()
+  "Remove all RESULTS blocks in an org file."
+  (interactive)
+  (cfclrk/on-every-src-block 'org-babel-remove-result))
+
 ;;; Publishing
 
 (require 'ox-publish)
@@ -73,11 +91,6 @@ in the project."
 
 
 (load (expand-file-name "~/Projects/articles/articles.el"))
-
-;; Add (or update) the site-static project to org-public-project-alist
-(setq org-publish-project-alist
-      (cons site/org-project-static
-            (assoc-delete-all "site-static" org-publish-project-alist)))
 
 ;; Add (or update) the projects in site/org-project-alist
 (dolist (project site/org-project-alist)
