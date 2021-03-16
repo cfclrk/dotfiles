@@ -279,12 +279,13 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;;;; git, magit, forge
 
-(use-package gitconfig-mode)
+(use-package gitconfig-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.gitconfig\\'" . gitconfig-mode)))
 
 (use-package magit
   :config
-  (setq magit-diff-refine-hunk 'all)
-  (add-to-list 'auto-mode-alist '("\\.gitconfig\\'" . gitconfig-mode)))
+  (setq magit-diff-refine-hunk 'all))
 
 (use-package forge
   :after magit
@@ -381,14 +382,19 @@ See: https://stackoverflow.com/questions/6133799"
 
 (defun cfclrk/markdown-mode-hook ()
   "Customize `markdown-mode'."
-  (turn-on-auto-fill))
+  (turn-on-auto-fill)
+  (display-fill-column-indicator-mode 1))
 
 (use-package markdown-mode
   :hook (markdown-mode . cfclrk/markdown-mode-hook)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :init (setq markdown-command "multimarkdown")
+  :config
+  (setq whitespace-style '(face tabs empty trailing))
+  (whitespace-mode -1)
+  (whitespace-mode +1))
 
 ;;;; org
 
@@ -515,6 +521,10 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package toml-mode)
 (add-to-list 'auto-mode-alist '("Pipfile\\'" . toml-mode))
+
+;;;; tramp
+
+(setq tramp-default-method "scp")
 
 ;;;; undo-tree
 
