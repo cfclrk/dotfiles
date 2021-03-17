@@ -600,7 +600,6 @@ See: https://stackoverflow.com/questions/6133799"
 
 (defun cfclrk/go-mode-hook ()
   "Hooks to add in `go-mode' buffers."
-  (whitespace-toggle-options '(lines-tail))
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
@@ -611,7 +610,10 @@ See: https://stackoverflow.com/questions/6133799"
   (setq godoc-at-point-function 'godoc-gogetdoc
 		gofmt-command (executable-find "goimports")
 		go-test-args "-v"
-		fill-column 100))
+		fill-column 100)
+  (setq whitespace-style '(face tabs empty trailing))
+  (whitespace-mode -1)
+  (whitespace-mode +1))
 
 (use-package gotest)
 
