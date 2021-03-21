@@ -10,24 +10,36 @@
 
 (require 'org)
 
-;;; htmlize
+;;; General
+
+(setq org-file-apps
+      '((auto-mode . emacs)
+        (directory . emacs)
+        ("\\.mm\\'" . default)
+        ("\\.x?html?\\'" . default)
+        ("\\.pdf\\'" . default)
+        ("\\.crt\\'" . emacs)))
+
+;;; Packages
+
+;;;; htmlize
 
 (use-package htmlize)
 
-;;; org-superstar
+;;;; org-superstar
 
 (use-package org-superstar
   :hook (org-mode . org-superstar-mode)
   :config
   (setq org-hide-leading-stars t))
 
-;;; org-tree-slide
+;;;; org-tree-slide
 
 (use-package org-tree-slide
   :custom
   (org-image-actual-width nil))
 
-;;; ox-gfm
+;;;; ox-gfm
 
 (use-package ox-gfm)
 
@@ -49,27 +61,20 @@
   (interactive)
   (cfclrk/on-every-src-block 'org-babel-remove-result))
 
+(defun host (user path &optional sudo)
+  "Return a TRAMP string for SSHing to a remote host.
+Requires the HOST environment variable to be set. USER is a user
+name on the remote host. PATH is the path on the remote host at
+which to execute the source block. If SUDO is non-nil, use sudo
+on the remote host."
+  (let ((ip (getenv "HOST")))
+    (if sudo
+        (s-lex-format "/ssh:${user}@${ip}|sudo:${ip}:${path}")
+      (s-lex-format "/ssh:${user}@${ip}:${path}"))))
+
 ;;; Publishing
 
 (require 'ox-publish)
-
-(defun cfclrk/site-preamble (project-plist)
-  "Return a string for the HTML preamble.
-PROJECT-PLIST has the full contents of all files and properties
-in the project."
-  (let ((base-directory (plist-get project-plist :base-directory)))
-	(f-read (expand-file-name "~/Projects/site/navbar.html"))))
-
-(setq org-publish-project-alist
-      `(("site"
-		 :components ("cloudformation-org"
-					  "cloudformation-html"
-                      "cloudformation-static"
-					  "notes"
-					  "articles"
-					  "homepage"
-                      "site-static"
-                      "site-homepage"))))
 
 ;; Add site static and site homepage
 ;; (use-package site
