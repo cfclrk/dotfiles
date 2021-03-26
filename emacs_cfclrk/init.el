@@ -104,6 +104,19 @@
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
 
+(defun cfclrk/show-buffer-file-name ()
+  "Display and copy the full path to the current file.
+Adapted from Emacs Redux (emacsredux.com)."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (message filename)
+    (kill-new filename)))
+
+;; C-c z to see full path of file in the current buffer
+(global-set-key (kbd "C-c z") 'cfclrk/show-buffer-file-name)
+
 (defun cfclrk/set-font-size (font-size)
   "Set font height to the given FONT-SIZE.
 TODO: display current font size in prompt. You can get it
@@ -243,8 +256,8 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;; Always switch focus to the Occur buffer when running occur
 (add-hook 'occur-hook
-          '(lambda ()
-             (switch-to-buffer-other-window "*Occur*")))
+          #'(lambda ()
+              (switch-to-buffer-other-window "*Occur*")))
 
 ;;;; diff-hl
 
