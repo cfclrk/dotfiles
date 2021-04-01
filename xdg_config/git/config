@@ -1,5 +1,9 @@
 [user]
 	name = Chris Clark
+[init]
+	defaultBranch = main
+[credential]
+	helper = osxkeychain
 [core]
 	editor = emacs
 	excludesfile = ~/.gitignore_global
@@ -15,12 +19,9 @@
 	fsckObjects = true
 [color]
 	ui = auto
-
+[includeIf "gitdir:~/Projects/"]
+	path = home.gitconfig
 [includeIf "gitdir:~/IronNet/"]
 	path = work.gitconfig
 [includeIf "gitdir:~/go/"]
 	path = work.gitconfig
-[includeIf "gitdir:/"]
-	path = home.gitconfig
-[init]
-	defaultBranch = main
