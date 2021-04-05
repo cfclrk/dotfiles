@@ -101,6 +101,20 @@
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
 
+(defun upsert-alist (quoted-alist entry)
+  "Insert ENTRY into QUOTED-ALIST if it is not already there.
+Update the entry if it is already there.
+
+Example:
+
+    (upsert-alist '(:noweb . \"yes\") 'org-babel-default-header-args)
+
+Without the backslashes. Elisp strings suck."
+  (let ((keyword (car entry))
+        (orig-alist (symbol-value quoted-alist)))
+    (set quoted-alist
+         (cons entry (assoc-delete-all keyword orig-alist)))))
+
 (defun cfclrk/show-buffer-file-name ()
   "Display and copy the full path to the current file.
 Adapted from Emacs Redux (emacsredux.com)."

@@ -153,17 +153,19 @@ on the remote host."
      (emacs-lisp . t)
 	 (gnuplot . t)
 	 (python . t)
-     (shell . t)))
+     (shell . t)
+     (js . t)))
 
-  ;; Set babel default headrs
-  (add-to-list 'org-babel-default-header-args '(:noweb . "yes"))
-  (add-to-list 'org-babel-default-header-args '(:eval . "never-export"))
+  ;; Babel default header arguments
+  (upsert-alist 'org-babel-default-header-args '(:noweb . "yes"))
+  (upsert-alist 'org-babel-default-header-args '(:exports . "both"))
+  (upsert-alist 'org-babel-default-header-args '(:eval . "never-export"))
 
   ;; Ensure incorrect shell blocks fail nicely
-  (add-to-list 'org-babel-default-header-args:sh
-               '(:prologue . "set -eu -o pipefail"))
-  (add-to-list 'org-babel-default-header-args:bash
-               '(:prologue . "set -eu -o pipefail"))
+  (upsert-alist 'org-babel-default-header-args:sh
+                '(:prologue . "set -eu -o pipefail"))
+  (upsert-alist 'org-babel-default-header-args:bash
+                '(:prologue . "set -eu -o pipefail"))
 
   ;; HTML exporting
   (setq org-html-checkbox-type 'html
