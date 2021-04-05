@@ -167,19 +167,15 @@ function clearBucket --description "Clear one S3 bucket"
     echo "Checking bucket $bucket"
     set objects (aws s3api list-objects-v2 --bucket $bucket --delimiter /)
     if count $objects > /dev/null
-        set_color red
-        echo "$bucket - has objects. Deleting..."
-        set_color normal
+        set_color red; echo "$bucket has objects. Deleting..."; set_color normal
         aws s3api delete-bucket-policy --bucket $bucket
         aws s3 rm --recursive --only-show-errors s3://$bucket
     else
-        set_color green
-        echo "$bucket - good to go."
-        set_color normal
+        set_color green; echo "$bucket is empty." set_color normal
     end
 end
 
-function clearBuckets --description "Clear all S3 buckets"
+function clearBuckets --description "Clear all S3 buckets matching a prefix"
     test -z "$argv[1]"; and echo "Error: arg1 must be a string"; and return 1
     set prefix $argv[1]
 

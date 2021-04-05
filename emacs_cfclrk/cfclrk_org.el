@@ -43,6 +43,10 @@
 
 (use-package ox-gfm)
 
+;;;; ox-slack
+
+(use-package ox-slack)
+
 ;;; Functions
 
 (defun cfclrk/on-every-src-block (fn)
@@ -93,7 +97,6 @@ on the remote host."
 ;;                    :files ("org" :defaults)))
 ;; (require 'cloudformation)
 (load (expand-file-name "~/Projects/cloudformation/cloudformation.el"))
-
 
 (load (expand-file-name "~/Projects/articles/articles.el"))
 

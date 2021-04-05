@@ -152,7 +152,7 @@ See: https://stackoverflow.com/questions/6133799"
 
 (tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
 (scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
-;; (show-paren-mode +1)  ;; Bold-face matching parentheses -- EDIT, use show-smartparens-mode
+(blink-cursor-mode -1)  ;; Just a nice, solid cursor
 (global-auto-revert-mode t)  ;; Revert buffers when their backing files change
 (set-language-environment "UTF-8")
 
@@ -228,6 +228,16 @@ See: https://stackoverflow.com/questions/6133799"
 (use-package ace-window
   :bind ("M-l" . ace-window)
   :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
+
+;;;; beacon
+
+;; Beacon is a package that temporarily highlights or flashes the line that the
+;; cursor is on when switching buffers.
+
+(use-package beacon
+  :config
+  (setq beacon-color "#a9a1e1")
+  (beacon-mode +1))
 
 ;;;; bicycle
 
@@ -383,12 +393,14 @@ See: https://stackoverflow.com/questions/6133799"
 ;;;; Images
 
 ;; Allow inline EPS images in org files
-(setq imagemagick-enabled-types t)
-(imagemagick-register-types)
-(add-to-list 'image-file-name-extensions "eps")
 
-;; TODO: set this only when I need to render EPS
-;(setq org-image-actual-width '(500))
+;; Commenting this out, because somehow this causes JSON files to open in Image
+;; mode. Also, requiring a fixed image size defined here is a non-starter.
+
+;; (setq imagemagick-enabled-types t)
+;; (imagemagick-register-types)
+;; (add-to-list 'image-file-name-extensions "eps")
+;; (setq org-image-actual-width '(500))
 
 ;;;; LSP
 
@@ -650,6 +662,8 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;;;; Python
 
+(use-package python-pytest)
+
 (defun cfclrk/python-mode-hook ()
   "Customize `python-mode'."
   (setq fill-column 88
@@ -664,7 +678,7 @@ See: https://stackoverflow.com/questions/6133799"
      ("pyls.plugins.pyls_mypy.live_mode" nil t)
      ("pyls.plugins.pyls_black.enabled" t t)
      ("pyls.plugins.pyls_isort.enabled" t t)
-     ("pyls.plugins.yapf.enabled" nil t)  ;; I use black
+     ("pyls.plugins.yapf.enabled" nil t)  ;; Because I use black
      ("pyls.plugins.pydocstyple.enabled" t t)
 
      ;; Disable these as they duplicate flake8 functionality
