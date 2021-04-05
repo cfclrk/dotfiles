@@ -49,6 +49,23 @@
 
 ;;; Functions
 
+(defun cfclrk/org-md ()
+  "Export an org file to GitHub Flavored Markdown and format."
+  (interactive)
+  (let* ((org-file-name (buffer-file-name))
+         (md-file-name (f-swap-ext org-file-name "md")))
+
+    ;; Export org to GitHub Flavored Markdown
+    (org-export-to-file 'gfm md-file-name)
+
+    ;; Format the markdown
+    (with-temp-buffer
+      (insert-file-contents md-file-name)
+      (markdown-mode)
+      (let ((fill-column 80))
+        (fill-region (point-min) (point-max)))
+      (write-file md-file-name))))
+
 (defun cfclrk/on-every-src-block (fn)
   "Visit every source block and evaluate FN."
   (save-excursion
