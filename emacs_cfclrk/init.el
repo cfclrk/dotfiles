@@ -62,50 +62,15 @@
            gcs-done))
 (add-hook 'emacs-startup-hook 'cfclrk/startup-hook)
 
-;;; Theme, Font, Display
-;;  ----------------------------------------------------------------------------
-
-;; Use Source Code Pro on MacOS
-(when (eq system-type 'darwin)
-  (set-face-attribute 'default nil :family "Source Code Pro"))
-
-;; Use a larger font on big monitors
-(when window-system
-  (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 170)))
-
-;; Use the doom-one theme
-(use-package doom-themes
-  :config
-  (setq doom-modeline-project-detection 'project
-		doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
-
-(defun cfclrk/font-installed-p (font-name)
-  "Check if font with FONT-NAME is available."
-  (find-font (font-spec :name font-name)))
-
-(use-package all-the-icons
-  :config (unless (cfclrk/font-installed-p "all-the-icons")
-			(all-the-icons-install-fonts t)))
-
-(use-package doom-modeline
-  :init (doom-modeline-mode +1)
-  :config
-  (setq doom-modeline-buffer-encoding nil)
-  (setq doom-modeline-height 40))
-
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
 
 (defun upsert-alist (quoted-alist entry)
-  "Insert ENTRY into QUOTED-ALIST if it is not already there.
-Update the entry if it is already there.
+  "Insert or update ENTRY in QUOTED-ALIST.
+This first deletes the existing item if it is there, then enserts
+the new ENTRY.
 
-Example:
+Example (backslashes not necessary, FFS Elisp!):
 
     (upsert-alist '(:noweb . \"yes\") 'org-babel-default-header-args)
 
@@ -146,6 +111,45 @@ See: https://stackoverflow.com/questions/6133799"
   (delete-region (point) (progn (backward-word arg) (point))))
 
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
+
+;;; Theme, Font, Display
+;;  ----------------------------------------------------------------------------
+
+;; Use Source Code Pro on MacOS
+(when (eq system-type 'darwin)
+  (set-face-attribute 'default nil :family "Source Code Pro"))
+
+;; Use a larger font on big monitors
+(when window-system
+  (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
+      (set-face-attribute 'default nil :height 170)))
+
+;; Use the doom-one theme
+(use-package doom-themes
+  :config
+  (setq doom-modeline-project-detection 'project
+		doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
+
+(defun cfclrk/font-installed-p (font-name)
+  "Check if font with FONT-NAME is available."
+  (find-font (font-spec :name font-name)))
+
+(use-package all-the-icons
+  :config (unless (cfclrk/font-installed-p "all-the-icons")
+			(all-the-icons-install-fonts t)))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode +1)
+  :config
+  (setq doom-modeline-buffer-encoding nil)
+  (setq doom-modeline-height 40))
+
+(setq display-buffer-alist
+      '(("\\*eshell\\*" display-buffer-use-some-window)))
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
@@ -236,8 +240,8 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package beacon
   :config
-  (setq beacon-color "#a9a1e1")
-  (beacon-mode +1))
+  (beacon-mode +1)
+  (setq beacon-color "#a9a1e1"))
 
 ;;;; bicycle
 
