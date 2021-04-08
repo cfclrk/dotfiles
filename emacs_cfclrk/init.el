@@ -665,7 +665,9 @@ See: https://stackoverflow.com/questions/6133799"
   (whitespace-mode -1)
   (whitespace-mode +1))
 
-(dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook lisp-data-mode-hook))
+(dolist (hook '(lisp-mode-hook
+                emacs-lisp-mode-hook
+                lisp-data-mode-hook))
   (add-hook hook #'cfclrk/lisp-mode-hook))
 
 ;;;; Python
