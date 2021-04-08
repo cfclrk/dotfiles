@@ -233,12 +233,10 @@ alias rk "rancher kubectl"
 
 # Example: install_kubectl 1.16.7
 function install_kubectl --description "Download a kubectl binary"
-    test -z "$argv[1]"; and echo "arg1 must be a version"; and return
+    test -z "$argv[1]"; and echo "arg1 must be a kubectl version"; and return
     set progVersion $argv[1]
-
     set progName kubectl
     set libPath ~/.local/lib/$progName/$progName-$progVersion
-    set binPath ~/.local/bin/$progName
     set url https://storage.googleapis.com/kubernetes-release/release/v$progVersion/bin/darwin/amd64/kubectl
     curl -s -o $libPath $url
     chmod +x $libPath
@@ -247,22 +245,37 @@ end
 
 # Example: install_helm 3.1.2
 function install_helm --description "Download a helm binary"
-    test -z "$argv[1]"; and echo "arg1 must be a version"; and return
+    test -z "$argv[1]"; and echo "arg1 must be a helm version"; and return
     set progVersion $argv[1]
-
     set progName helm
     set libPath ~/.local/lib/$progName/$progName-$progVersion
-    set binPath ~/.local/bin/$progName
     set url https://get.helm.sh/helm-v$progVersion-darwin-amd64.tar.gz
     curl -s $url | tar xvz - -C /tmp
     cp /tmp/darwin-amd64/helm $libPath
     use helm $progVersion
 end
 
-# Example: use helm 2.9.1
+# Examples:
+#  - use
+#  - use helm
+#  - use helm 3.5.3
 function use --description "Create symlink on $PATH to this installed program"
     set progName $argv[1]
+
+    if test -z $progName
+        echo "Local programs managed by use:"
+        ls -1 ~/.local/lib/
+        return 0
+    end
+
     set progVersion $argv[2]
+
+    if test -z $progVersion
+        echo "Locally installed versions:"
+        ls -1 ~/.local/lib/$progName
+        return 0
+    end
+
     set libPath ~/.local/lib/$progName/$progName-$progVersion
     set binPath ~/.local/bin/$progName
     rm -f $binPath
