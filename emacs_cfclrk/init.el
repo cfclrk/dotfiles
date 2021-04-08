@@ -621,6 +621,10 @@ See: https://stackoverflow.com/questions/6133799"
 (add-hook 'css-mode-hook #'cfclrk/css-mode-hook)
 (add-hook 'css-mode-hook #'lsp-deferred)
 
+;;;; Groovy
+
+(use-package groovy-mode)
+
 ;;;; Lisp
 
 (defun cfclrk/lisp-mode-hook ()
