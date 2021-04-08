@@ -621,25 +621,6 @@ See: https://stackoverflow.com/questions/6133799"
 (add-hook 'css-mode-hook #'cfclrk/css-mode-hook)
 (add-hook 'css-mode-hook #'lsp-deferred)
 
-;;;; Groovy
-
-(use-package groovy-mode)
-
-;;;; Lisp
-
-(defun cfclrk/lisp-mode-hook ()
-  "Customize `emacs-lisp-mode'."
-  (smartparens-strict-mode +1)
-  (rainbow-delimiters-mode +1)
-
-  ;; Restart whitespace mode so that it properly uses fill-column.
-  (setq fill-column 80)
-  (whitespace-mode -1)
-  (whitespace-mode +1))
-
-(dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook lisp-data-mode-hook))
-  (add-hook hook #'cfclrk/lisp-mode-hook))
-
 ;;;; Golang
 
 (defun cfclrk/go-mode-hook ()
@@ -661,12 +642,31 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package gotest)
 
+;;;; Groovy
+
+(use-package groovy-mode)
+
 ;;;; Javascript (and JSON)
 
 (defun cfclrk/js-mode-hook ()
   "Customize `js-mode'."
   (setq js-indent-level 2))
 (add-hook 'js-mode-hook #'cfclrk/js-mode-hook)
+
+;;;; Lisp
+
+(defun cfclrk/lisp-mode-hook ()
+  "Customize `emacs-lisp-mode'."
+  (smartparens-strict-mode +1)
+  (rainbow-delimiters-mode +1)
+
+  ;; Restart whitespace mode so that it properly uses fill-column.
+  (setq fill-column 80)
+  (whitespace-mode -1)
+  (whitespace-mode +1))
+
+(dolist (hook '(lisp-mode-hook emacs-lisp-mode-hook lisp-data-mode-hook))
+  (add-hook hook #'cfclrk/lisp-mode-hook))
 
 ;;;; Python
 
