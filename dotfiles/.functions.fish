@@ -240,7 +240,7 @@ function install_kubectl --description "Download a kubectl binary"
     set url https://storage.googleapis.com/kubernetes-release/release/v$progVersion/bin/darwin/amd64/kubectl
     curl -s -o $libPath $url
     chmod +x $libPath
-    use kubectl $progVersion
+    use $progName $progVersion
 end
 
 # Example: install_helm 3.1.2
@@ -252,7 +252,28 @@ function install_helm --description "Download a helm binary"
     set url https://get.helm.sh/helm-v$progVersion-darwin-amd64.tar.gz
     curl -s $url | tar xvz - -C /tmp
     cp /tmp/darwin-amd64/helm $libPath
-    use helm $progVersion
+    use $progName $progVersion
+end
+
+# Example:
+# - install_kops latest
+# - install_kops v1.17.0
+function install_kops
+    test -z "$argv[1]"; and echo "arg1 must be a kops version or 'latest'"; and return
+    set progVersion $argv[1]
+    set progName kops
+    if [ $progVersion = "latest" ]
+        set progVersion (curl -s \
+            https://api.github.com/repos/kubernetes/$progName/releases/latest \
+            | grep tag_name \
+            | cut -d '"' -f 4)
+    end
+    echo "progVersion $progVersion"
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set url https://github.com/kubernetes/$progName/releases/download/$progVersion/$progName-darwin-amd64
+    curl -sL -o $libPath $url
+    chmod +x $libPath
+    use $progName $progVersion
 end
 
 # Examples:
