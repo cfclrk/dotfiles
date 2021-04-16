@@ -304,14 +304,6 @@ function use --description "Create symlink on $PATH to this installed program"
     la $binPath
 end
 
-function latest_python
-    pyenv install --list \
-        | grep "^  3" \
-        | grep -v "src|dev" \
-        | tail -1 \
-        | tr -d '[:space:]'
-end
-
 # Azure
 # -----------------------------------------------------------------------------
 

@@ -25,10 +25,10 @@ tmux new-window -t Kube:2 -n qa
 tmux send-keys -t Kube:2 's ~/.env/iron_defense_clusters/qa.irondev.io' C-m
 
 tmux new-window -t Kube:3 -n crafty-lynx
-tmux send-keys -t Kube:3 's ~/.env/iron_defense_clusters/crafty-lynx' C-m
+tmux send-keys -t Kube:3 's ~/.env/iron_defense_clusters/crafty-lynx-kubectl.cfg' C-m
 
 tmux new-window -t Kube:4 -n testy-koala
-tmux send-keys -t Kube:4 's ~/.env/iron_defense_clusters/testy-koala' C-m
+tmux send-keys -t Kube:4 's ~/.env/iron_defense_clusters/testy-koala-kubectl.cfg' C-m
 
 # https://github.com/tmux-plugins/tmux-copycat/issues/116
 # tmux unbind -n n \; unbind -n N
