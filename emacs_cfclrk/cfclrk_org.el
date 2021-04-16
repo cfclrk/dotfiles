@@ -82,16 +82,14 @@
   (interactive)
   (cfclrk/on-every-src-block 'org-babel-remove-result))
 
-(defun host (user path &optional sudo)
+(defun host (user ip path &optional sudo)
   "Return a TRAMP string for SSHing to a remote host.
-Requires the HOST environment variable to be set. USER is a user
-name on the remote host. PATH is the path on the remote host at
-which to execute the source block. If SUDO is non-nil, use sudo
-on the remote host."
-  (let ((ip (getenv "HOST")))
-    (if sudo
-        (s-lex-format "/ssh:${user}@${ip}|sudo:${ip}:${path}")
-      (s-lex-format "/ssh:${user}@${ip}:${path}"))))
+USER is a user name on the remote host IP. PATH is the path on
+the remote host at which to execute the source block. If SUDO is
+non-nil, use sudo on the remote host."
+  (if sudo
+      (s-lex-format "/ssh:${user}@${ip}|sudo:${ip}:${path}")
+    (s-lex-format "/ssh:${user}@${ip}:${path}")))
 
 ;;; Publishing
 
@@ -172,9 +170,10 @@ on the remote host."
      (dot . t)
      (emacs-lisp . t)
 	 (gnuplot . t)
+     (js . t)
 	 (python . t)
      (shell . t)
-     (js . t)))
+     (sql . t)))
 
   ;; Babel default header arguments
   (upsert-alist 'org-babel-default-header-args '(:noweb . "yes"))
