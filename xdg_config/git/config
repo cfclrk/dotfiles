@@ -21,6 +21,10 @@
 	ui = auto
 [includeIf "gitdir:~/Projects/"]
 	path = home.gitconfig
+[includeIf "gitdir:~/notes/"]
+	path = home.gitconfig
+[includeIf "gitdir:~/oldnotes/"]
+	path = home.gitconfig
 [includeIf "gitdir:~/IronNet/"]
 	path = work.gitconfig
 [includeIf "gitdir:~/go/"]
