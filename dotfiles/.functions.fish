@@ -255,6 +255,20 @@ function install_helm --description "Download a helm binary"
     use $progName $progVersion
 end
 
+# Example: install_terraform 0.13.6
+function install_terraform
+    test -z "$argv[1]"; and echo "arg1 must be a terraform version"; and return
+    set progVersion $argv[1]
+    set progName terraform
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    echo "progVersion $progVersion"
+    set url https://releases.hashicorp.com/terraform/$progVersion/terraform_$progVersion\_darwin_amd64.zip
+    curl -s $url | tar xvz - -C /tmp
+    cp /tmp/terraform $libPath
+    chmod +x $libPath
+    use $progName $progVersion
+end
+
 # Example:
 # - install_kops latest
 # - install_kops v1.17.0
@@ -268,7 +282,6 @@ function install_kops
             | grep tag_name \
             | cut -d '"' -f 4)
     end
-    echo "progVersion $progVersion"
     set libPath ~/.local/lib/$progName/$progName-$progVersion
     set url https://github.com/kubernetes/$progName/releases/download/$progVersion/$progName-darwin-amd64
     curl -sL -o $libPath $url
