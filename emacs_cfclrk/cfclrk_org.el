@@ -33,12 +33,6 @@
   :config
   (setq org-hide-leading-stars t))
 
-;;;; org-tree-slide
-
-(use-package org-tree-slide
-  :custom
-  (org-image-actual-width nil))
-
 ;;;; ox-gfm
 
 (use-package ox-gfm)
