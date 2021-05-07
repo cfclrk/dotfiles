@@ -10,6 +10,8 @@ tmux new-session -d -s Home
 
 tmux new-session -d -s Work
 
+tmux send-keys -t Work:1 's ~/.env/work_ca' C-m
+
 # tmux new-window -c ~/IronNet/irondefense-orchestration/ikcm -n ikcm \; \
 #      send-keys 'pwd' C-m \;
 
@@ -21,19 +23,19 @@ tmux new-session -d -s Kube -n aws-dev
 tmux rename-window -t Kube:1 "aws-dev"
 tmux send-keys -t Kube:1 's ~/.env/iron_defense_clusters/aws-dev.irondev.io' C-m
 
-tmux new-window -t Kube:2 -n qa
+tmux new-window -t Kube:2 -c ~/IronNet -n qa
 tmux send-keys -t Kube:2 's ~/.env/iron_defense_clusters/qa.irondev.io' C-m
 
-tmux new-window -t Kube:3 -n crafty-lynx
+tmux new-window -t Kube:3 -c ~/IronNet -n crafty-lynx
 tmux send-keys -t Kube:3 's ~/.env/iron_defense_clusters/crafty-lynx' C-m
 
-tmux new-window -t Kube:4 -n testy-koala
+tmux new-window -t Kube:4 -c ~/IronNet -n testy-koala
 tmux send-keys -t Kube:4 's ~/.env/iron_defense_clusters/testy-koala' C-m
 
-tmux new-window -t Kube:5 -n sassy-bear
+tmux new-window -t Kube:5 -c ~/IronNet -n sassy-bear
 tmux send-keys -t Kube:5 's ~/.env/iron_defense_clusters/sassy-bear' C-m
 
-tmux new-window -t Kube:6 -n harbor
+tmux new-window -t Kube:6 -c ~/IronNet -n harbor
 tmux send-keys -t Kube:6 's ~/.env/iron_defense_clusters/harbor-prod' C-m
 
 # https://github.com/tmux-plugins/tmux-copycat/issues/116
