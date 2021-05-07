@@ -365,7 +365,7 @@ See: https://stackoverflow.com/questions/6133799"
   (key-chord-define-global "\\i" 'org-toggle-inline-images)
   (key-chord-mode +1))
 
-;;;; Minibuffer completion (selectrum, prescient, marginalia)
+;;;; Minibuffer completion (selectrum, prescient, marginalia, consult)
 
 (use-package selectrum
   :config (selectrum-mode +1))
@@ -375,6 +375,8 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package marginalia
   :init (marginalia-mode))
+
+(use-package consult)
 
 ;;;; fish
 
@@ -398,8 +400,9 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;; Allow inline EPS images in org files
 
-;; Commenting this out, because somehow this causes JSON files to open in Image
-;; mode. Also, requiring a fixed image size defined here is a non-starter.
+;; Commenting this out, because
+;; - somehow this causes JSON files to open in Image mode
+;; - requiring a fixed image size defined here is a non-starter
 
 ;; (setq imagemagick-enabled-types t)
 ;; (imagemagick-register-types)
@@ -505,6 +508,10 @@ See: https://stackoverflow.com/questions/6133799"
 (setq recentf-max-saved-items 300
 	  recentf-max-menu-items 15)
 (recentf-mode +1)
+
+;;;; reveal-in-osx-finder
+
+(use-package reveal-in-osx-finder)
 
 ;;;; setenv-file
 
@@ -705,5 +712,11 @@ See: https://stackoverflow.com/questions/6133799"
 ;;;; Powershell
 
 (use-package powershell)
+
+;;;; Terraform
+
+(use-package terraform-mode
+  :hook (terraform-mode . lsp-deferred)
+  :init (setq lsp-terraform-server '("terraform-ls" "serve")))
 
 ;;; init.el ends here
