@@ -9,17 +9,30 @@ if not set -q TMUX
         $HOME/.cabal/bin \
         $HOME/IronNet/bin \
         /usr/local/sbin \
-        # Programs installed with brew take precedence over pre-installed programs
+        # Programs installed with brew take precedence over pre-installed
+        # programs
         /usr/local/opt/make/libexec/gnubin \
         /usr/local/opt/texinfo/bin \
         /usr/local/opt/openjdk/bin \
+        /usr/local/opt/curl/bin \
         $PATH
 
     # Golang
     set -gx GO111MODULE on
-	set -gx GOPRIVATE github.com/ironnetcybersecurity
     for goPath in (string split : (go env GOPATH))
         set PATH $goPath/bin $PATH
+    end
+
+    # pyenv
+    if command -v pyenv > /dev/null
+        pyenv init --path | source
+        pyenv init - | source
+        pyenv virtualenv-init - | source
+    end
+
+    # rbenv
+    if command -v rbenv > /dev/null
+        source (rbenv init - | psub)
     end
 
 	# Use the new Docker run engine
@@ -29,20 +42,9 @@ if not set -q TMUX
     set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
     set -x LESS_TERMCAP_ue (set_color normal)      # reset underline
 
-    # pyenv
-    if command -v pyenv > /dev/null
-        source (pyenv init - | psub)
-        source (pyenv virtualenv-init - | psub)
-    end
-
     # pipenv
     if command -v pipenv > /dev/null
         set -gx PIPENV_IGNORE_VIRTUALENVS 1
-    end
-
-    # rbenv
-    if command -v rbenv > /dev/null
-        source (rbenv init - | psub)
     end
 
     set os (uname)
