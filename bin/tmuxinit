@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# Sesison Home
-# ------------
+# Session: Home
+# -------------
 
 tmux new-session -d -s Home
 
-# Session Work
-# ------------
+# Session: Work
+# -------------
 
 tmux new-session -d -s Work
 
@@ -15,8 +15,8 @@ tmux send-keys -t Work:1 's ~/.env/work_ca' C-m
 # tmux new-window -c ~/IronNet/irondefense-orchestration/ikcm -n ikcm \; \
 #      send-keys 'pwd' C-m \;
 
-# Session Kube
-# ------------
+# Session: Kube
+# -------------
 
 tmux new-session -d -s Kube -n aws-dev
 
@@ -35,8 +35,11 @@ tmux send-keys -t Kube:4 's ~/.env/iron_defense_clusters/testy-koala' C-m
 tmux new-window -t Kube:5 -c ~/IronNet -n sassy-bear
 tmux send-keys -t Kube:5 's ~/.env/iron_defense_clusters/sassy-bear' C-m
 
-tmux new-window -t Kube:6 -c ~/IronNet -n harbor
-tmux send-keys -t Kube:6 's ~/.env/iron_defense_clusters/harbor-prod' C-m
+tmux new-window -t Kube:6 -c ~/IronNet -n cheerful-pig
+tmux send-keys -t Kube:6 's ~/.env/iron_defense_clusters/cheerful-pig' C-m
+
+tmux new-window -t Kube:7 -c ~/IronNet -n harbor
+tmux send-keys -t Kube:7 's ~/.env/iron_defense_clusters/harbor-prod' C-m
 
 # https://github.com/tmux-plugins/tmux-copycat/issues/116
 # tmux unbind -n n \; unbind -n N
