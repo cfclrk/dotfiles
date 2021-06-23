@@ -2,6 +2,8 @@
 	email = cfclrk@gmail.com
 [github]
 	user = cfclrk
+[url "git@github-home:"]
+	insteadOf = https://github.com/
 [url "git@github-home"]
 	insteadOf = git@github.com
 [url "git@gist-home"]

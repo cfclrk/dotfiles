@@ -80,6 +80,15 @@ Without the backslashes. Elisp strings suck."
     (set quoted-alist
          (cons entry (assoc-delete-all keyword orig-alist)))))
 
+(defun pprint (form &optional printcharfun)
+  "Return a pretty-printed version of FORM.
+
+Optional PRINTCHARFUN is as defined by `princ'."
+  (princ (with-temp-buffer
+           (cl-prettyprint form)
+           (buffer-string))
+         printcharfun))
+
 (defun cfclrk/show-buffer-file-name ()
   "Display and copy the full path to the current file.
 Adapted from Emacs Redux (emacsredux.com)."
@@ -143,10 +152,10 @@ See: https://stackoverflow.com/questions/6133799"
 			(all-the-icons-install-fonts t)))
 
 (use-package doom-modeline
-  :init (doom-modeline-mode +1)
-  :config
-  (setq doom-modeline-buffer-encoding nil)
-  (setq doom-modeline-height 40))
+ :init (doom-modeline-mode +1)
+ :config
+ (setq doom-modeline-buffer-encoding nil)
+ (setq doom-modeline-height 40))
 
 (setq display-buffer-alist
       '(("\\*eshell\\*" display-buffer-use-some-window)))
@@ -387,6 +396,26 @@ See: https://stackoverflow.com/questions/6133799"
 (use-package flycheck
   :config (global-flycheck-mode +1))
 
+;; Run more flycheck checkers in LSP mode. Unfortunately, LSP-mode disables all
+;; flycheck checkers other than what's built in to the LSP server. From:
+;; https://github.com/flycheck/flycheck/issues/1762
+
+(defvar-local my/flycheck-local-cache nil)
+
+(defun my/flycheck-checker-get (fn checker property)
+  "Advice around the flycheck-checker-get function."
+  (or (alist-get property (alist-get checker my/flycheck-local-cache))
+      (funcall fn checker property)))
+
+(advice-add 'flycheck-checker-get :around 'my/flycheck-checker-get)
+
+(add-hook 'lsp-managed-mode-hook
+          (lambda ()
+            (when (derived-mode-p 'sh-mode)
+              (setq my/flycheck-local-cache '((lsp . ((next-checkers . (sh-posix-bash)))))))
+            (when (derived-mode-p 'go-mode)
+              (setq my/flycheck-local-cache '((lsp . ((next-checkers . (go-golint)))))))))
+
 ;;;; helpful
 
 (use-package helpful
@@ -618,6 +647,12 @@ See: https://stackoverflow.com/questions/6133799"
 
 (add-hook 'prog-mode-hook 'cfclrk/text-editing-hook)
 
+;;;; Clojure
+
+(use-package clojure-mode)
+
+(use-package cider)
+
 ;;;; CSS and SCSS
 
 (defun cfclrk/css-mode-hook ()
@@ -686,32 +721,32 @@ See: https://stackoverflow.com/questions/6133799"
   (setq fill-column 88
         python-fill-docstring-style 'pep-257-nn
         python-shell-interpreter "ipython"
-        python-shell-interpreter-args "--simple-prompt -i"
-		lsp-pyls-plugins-flake8-enabled t)
-
-  ;; LSP using the pyls (Palantir) language server. The Microsoft one sucks.
-  (lsp-register-custom-settings
-   '(("pyls.plugins.pyls_mypy.enabled" t t)
-     ("pyls.plugins.pyls_mypy.live_mode" nil t)
-     ("pyls.plugins.pyls_black.enabled" t t)
-     ("pyls.plugins.pyls_isort.enabled" t t)
-     ("pyls.plugins.yapf.enabled" nil t)  ;; Because I use black
-     ("pyls.plugins.pydocstyple.enabled" t t)
-
-     ;; Disable these as they duplicate flake8 functionality
-     ("pyls.plugins.mccabe.enabled" nil t)
-     ("pyls.plugins.pyflakes.enabled" nil t)))
+        python-shell-interpreter-args "--simple-prompt -i")
 
   ;; Restart whitespace-mode so that it properly uses `fill-column'
   (whitespace-mode -1)
   (whitespace-mode +1))
-
 (add-hook 'python-mode-hook #'cfclrk/python-mode-hook)
-(add-hook 'python-mode-hook #'lsp-deferred)
+
+;; LSP using the pyright language server
+;; (use-package python-mode
+;;   :hook ((python-mode . lsp-deferred)
+;;          (python-mode . )))
+
+(use-package lsp-pyright
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp-deferred))))
 
 ;;;; Powershell
 
 (use-package powershell)
+
+;;;; Rust
+
+;; I am using the rust-analyzer LSP server.
+
+(use-package rustic)
 
 ;;;; Terraform
 

@@ -8,7 +8,12 @@
 
 ;; TODO: Try out https://github.com/Fuco1/org-radiobutton
 
+;; Use straight to get org-mode. Straight runs some extra stuff that makes sure
+;; we don't end up using the org-mode bundled with Emacs.
+(use-package org)
+
 (require 'org)
+(require 'ob)  ;; Do I still need this? Once got error loading org-babel-comint-use-async.
 
 ;;; General
 
@@ -19,6 +24,8 @@
         ("\\.x?html?\\'" . default)
         ("\\.pdf\\'" . default)
         ("\\.crt\\'" . emacs)))
+
+(setq org-adapt-indentation t)
 
 ;;; Packages
 
@@ -154,7 +161,7 @@ non-nil, use sudo on the remote host."
 		org-special-ctrl-a/e t
 		org-babel-clojure-backend 'cider)
 
-  ;; Note my smartparens config also pulls in 'smartparens-org
+  ;; Note: This smartparens config also pulls in 'smartparens-org
   (smartparens-mode +1)
 
   ;; Babel languages to load
@@ -165,6 +172,7 @@ non-nil, use sudo on the remote host."
      (emacs-lisp . t)
 	 (gnuplot . t)
      (js . t)
+     (latex . t)
 	 (python . t)
      (shell . t)
      (sql . t)))

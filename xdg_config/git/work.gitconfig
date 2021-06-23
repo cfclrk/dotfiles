@@ -2,12 +2,12 @@
 	email = chris.clark@ironnetcybersecurity.com
 [github]
 	user = chrisc-ironnet
+[url "git@github-work:"]
+	insteadOf = https://github.com/
 [url "git@github-work"]
 	insteadOf = git@github.com
-[url "ssh://git@github-work/"]
-	insteadOf = https://github.com/
-# Ridiculous terraform issue. Fuuuck you terraform, just shell out to git!
-[url "https://github.com"]
-	insteadOf = "ssh://git@github.com"
+# # Ridiculous terraform issue. Fuuuck you terraform, just shell out to git!
+# [url "ssh://git@github-work/"]
+# 	insteadOf = https://github.com/
 [url "git@gist-work"]
 	insteadOf = git@gist.github.com

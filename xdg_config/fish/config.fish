@@ -1,4 +1,5 @@
 if not set -q TMUX
+
     set -gx EMACS "$HOME/Projects/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
     set -gx EDITOR $EMACS
 
@@ -15,6 +16,7 @@ if not set -q TMUX
         /usr/local/opt/texinfo/bin \
         /usr/local/opt/openjdk/bin \
         /usr/local/opt/curl/bin \
+        /usr/local/opt/openssl@1.1/bin \
         $PATH
 
     # Golang
