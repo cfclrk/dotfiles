@@ -38,12 +38,11 @@
  :aliases
 
  ;; Run like: clojure -X:new-lib :name cfclrk/mylib
- {:new-app {:extra-deps {seancorfield/clj-new
-                         {:mvn/version "RELEASE"}}
+ {:new-app {:extra-deps {com.github.seancorfield/clj-new {:mvn/version "RELEASE"}}
             :exec-fn clj-new/create
             :exec-args {:template "app"}}
-  :new-lib {:extra-deps {seancorfield/clj-new
-                         {:mvn/version "RELEASE"}}
+
+  :new-lib {:extra-deps {com.github.seancorfield/clj-new {:mvn/version "RELEASE"}}
             :exec-fn clj-new/create
             :exec-args {:template "lib"}}}
 
