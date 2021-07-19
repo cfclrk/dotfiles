@@ -293,6 +293,10 @@ See: https://stackoverflow.com/questions/6133799"
           #'(lambda ()
               (switch-to-buffer-other-window "*Occur*")))
 
+;;;; dap
+
+(use-package dap-mode)
+
 ;;;; diff-hl
 
 (use-package diff-hl
@@ -372,6 +376,7 @@ See: https://stackoverflow.com/questions/6133799"
   (key-chord-define-global "\\e" 'lsp-format-buffer)
   (key-chord-define-global "\\u" 'undo-tree-visualize)
   (key-chord-define-global "\\i" 'org-toggle-inline-images)
+  (key-chord-define-global "\\p" 'python-pytest-dispatch)
   (key-chord-mode +1))
 
 ;;;; Minibuffer completion (selectrum, prescient, marginalia, consult)
@@ -708,6 +713,7 @@ See: https://stackoverflow.com/questions/6133799"
   (whitespace-mode +1))
 
 (dolist (hook '(lisp-mode-hook
+                clojure-mode-hook
                 emacs-lisp-mode-hook
                 lisp-data-mode-hook))
   (add-hook hook #'cfclrk/lisp-mode-hook))
@@ -715,6 +721,8 @@ See: https://stackoverflow.com/questions/6133799"
 ;;;; Python
 
 (use-package python-pytest)
+
+(use-package pyenv-mode)
 
 (defun cfclrk/python-mode-hook ()
   "Customize `python-mode'."

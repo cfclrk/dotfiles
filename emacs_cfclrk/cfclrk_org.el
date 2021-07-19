@@ -33,6 +33,10 @@
 
 (use-package htmlize)
 
+;;;; ob-async
+
+(use-package ob-async)
+
 ;;;; org-superstar
 
 (use-package org-superstar
