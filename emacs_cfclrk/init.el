@@ -328,6 +328,10 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package dockerfile-mode)
 
+;;;; eshell
+
+(setq eshell-aliases-file (expand-file-name "~/emacs/eshell/alias"))
+
 ;;;; git, magit, forge
 
 (use-package gitconfig-mode
@@ -687,7 +691,10 @@ See: https://stackoverflow.com/questions/6133799"
   (whitespace-mode -1)
   (whitespace-mode +1))
 
-(use-package gotest)
+(use-package gotest
+  :bind (:map go-mode-map
+              ("<f5>" . go-test-current-test)
+              ("<f6>" . go-test-current-file)))
 
 ;;;; Groovy
 
