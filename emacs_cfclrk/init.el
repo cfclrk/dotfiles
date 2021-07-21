@@ -571,25 +571,27 @@ See: https://stackoverflow.com/questions/6133799"
   (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-backward-barf-sexp)
   (define-key smartparens-mode-map (kbd "C-S-<left>") 'sp-backward-slurp-sexp)
 
-  ;; Create prefix for smartparens commands
+  ;; Create a key prefix
   (define-prefix-command 'sp-prefix-key-map)
   (define-key smartparens-mode-map (kbd "M-p") sp-prefix-key-map)
 
   ;; splicing
   (define-prefix-command 'sp-splice-key-map)
+  (define-key sp-prefix-key-map (kbd "s") sp-splice-key-map)
+
   (define-key sp-splice-key-map (kbd "s") 'sp-splice-sexp)
   (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
   (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
   (define-key sp-splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
-  (define-key sp-prefix-key-map (kbd "s") sp-splice-key-map)
 
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
+  (define-key sp-prefix-key-map (kbd "r") sp-wrap-key-map)
+
   (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
   (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
   (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
   (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
-  (define-key sp-prefix-key-map (kbd "r") sp-wrap-key-map)
 
   ;; selection
   (define-key sp-prefix-key-map (kbd "n") 'sp-select-next-thing)
@@ -685,13 +687,26 @@ See: https://stackoverflow.com/questions/6133799"
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
 		gofmt-command (executable-find "goimports")
-		go-test-args "-v"
 		fill-column 100)
   (setq whitespace-style '(face tabs empty trailing))
+
+  ;; Restart whitespace mode to correctly use fill-column
   (whitespace-mode -1)
   (whitespace-mode +1))
 
 (use-package gotest
+  :config
+  (setq go-test-args "-v")
+
+  ;; Create a key prefix
+  (define-prefix-command 'go-test-prefix-key-map)
+  (define-key go-mode-map (kbd "C-t") go-test-prefix-key-map)
+
+  ;; Keys to run tests
+  (define-key go-test-prefix-key-map (kbd "t") 'go-test-current-test)
+  (define-key go-test-prefix-key-map (kbd "f") 'go-test-current-file)
+  (define-key go-test-prefix-key-map (kbd "p") 'go-test-current-project)
+
   :bind (:map go-mode-map
               ("<f5>" . go-test-current-test)
               ("<f6>" . go-test-current-file)))

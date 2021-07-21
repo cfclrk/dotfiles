@@ -153,6 +153,10 @@ non-nil, use sudo on the remote host."
 
 (add-hook 'org-src-mode-hook 'cfclrk/org-src-mode-hook)
 
+;;; ob-http
+
+(use-package ob-http)
+
 ;;; org mode
 
 (defun cfclrk/org-mode-hook ()
@@ -175,6 +179,7 @@ non-nil, use sudo on the remote host."
      (dot . t)
      (emacs-lisp . t)
 	 (gnuplot . t)
+     (http . t)
      (js . t)
      (latex . t)
 	 (python . t)
@@ -186,7 +191,8 @@ non-nil, use sudo on the remote host."
   (upsert-alist 'org-babel-default-header-args '(:exports . "both"))
   (upsert-alist 'org-babel-default-header-args '(:eval . "never-export"))
 
-  ;; Ensure incorrect shell blocks fail nicely
+  ;; Ensure incorrect shell blocks fail nicely TODO: This causes "set -eu -o
+  ;; pipefail" to be inserted before every block in tangled files!
   (upsert-alist 'org-babel-default-header-args:sh
                 '(:prologue . "set -eu -o pipefail"))
   (upsert-alist 'org-babel-default-header-args:bash
