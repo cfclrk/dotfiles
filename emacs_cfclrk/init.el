@@ -649,7 +649,11 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;;;; yasnippet
 
-(use-package yasnippet)
+;; LSP uses yasnippet to expand snippets. So enabling yas-global-mode is
+;; necessary even if you don't load any snippets.
+
+(use-package yasnippet
+  :config (yas-global-mode 1))
 
 ;;; Programming Languages
 ;;  ----------------------------------------------------------------------------
