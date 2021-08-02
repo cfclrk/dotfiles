@@ -691,29 +691,41 @@ See: https://stackoverflow.com/questions/6133799"
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
 		gofmt-command (executable-find "goimports")
-		fill-column 100)
-  (setq whitespace-style '(face tabs empty trailing))
+		fill-column 100
+        whitespace-style '(face tabs empty trailing))
 
   ;; Restart whitespace mode to correctly use fill-column
   (whitespace-mode -1)
   (whitespace-mode +1))
 
+;; An Emacs mode for running "go test" in a compilation buffer.
+;; https://github.com/nlamirault/gotest.el
 (use-package gotest
-  :config
-  (setq go-test-args "-v")
-
-  ;; Create a key prefix
-  (define-prefix-command 'go-test-prefix-key-map)
-  (define-key go-mode-map (kbd "C-t") go-test-prefix-key-map)
-
-  ;; Keys to run tests
-  (define-key go-test-prefix-key-map (kbd "t") 'go-test-current-test)
-  (define-key go-test-prefix-key-map (kbd "f") 'go-test-current-file)
-  (define-key go-test-prefix-key-map (kbd "p") 'go-test-current-project)
-
-  :bind (:map go-mode-map
+  :after go-mode
+  :bind-keymap ("C-t" . go-test-mode-map)
+  :bind (:map go-test-mode-map
               ("<f5>" . go-test-current-test)
-              ("<f6>" . go-test-current-file)))
+              ("<f6>" . go-test-current-file)
+              ("p" . go-test-current-project)
+              ("f" . go-test-current-file)
+              ("c" . go-test-current-coverage)
+              ("t" . go-test-current-test))
+  :config
+  (setq go-test-args "-v"))
+
+;; Provides the ability to add struct tags using gomodifytags. Requires
+;; gomodifytags, which can be install with:
+;;
+;;     go get github.com/fatih/gomodifytags
+(use-package go-tag
+  :after go-mode)
+
+;; Provides ability to fill in all key values in a struct. Requires fillstruct,
+;; which can be installed with:
+;;
+;;    go get -u github.com/davidrjenni/reftools/cmd/fillstruct
+(use-package go-fill-struct
+  :after go-mode)
 
 ;;;; Groovy
 
