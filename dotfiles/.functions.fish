@@ -58,11 +58,9 @@ end
 
 function rand --description 'Some ways to create a decent random string'
     ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'
-    # openssl rand -base64 32
-end
 
-function ssh_decrypt --description 'Decrypt password-protected ssh key'
-    openssl rsa -in $argv[1] -out $argv[2]
+    # A random binary byte array encoded in base64
+    # openssl rand -base64 32
 end
 
 function myip --description "What is my ip address?"
@@ -93,20 +91,6 @@ function uninstall_gems
     for gem in (gem list --no-versions)
         gem uninstall $gem -aIx
     end
-end
-
-# Clojure
-# -----------------------------------------------------------------------------
-
-function cljrepl
-    clj -Sdeps '{:deps {cider/cider-nrepl {:mvn/version "RELEASE"}}}' \
-        -m nrepl.cmdline \
-        --middleware "[cider.nrepl/cider-middleware]"
-end
-
-function cljnew
-    set projectName $argv[1]
-    clj -A:new lib cfclrk/$projectName
 end
 
 # Golang
@@ -230,6 +214,9 @@ end
 alias k "kubectl"
 alias kn "kubectl config set-context (kubectl config current-context) --namespace"
 alias rk "rancher kubectl"
+
+# Use
+# -----------------------------------------------------------------------------
 
 # Example: install_kubectl 1.16.7
 function install_kubectl --description "Download a kubectl binary"
