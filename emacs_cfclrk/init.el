@@ -319,7 +319,9 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;;;; eshell
 
-(setq eshell-aliases-file (expand-file-name "~/emacs/eshell/alias"))
+(setq eshell-aliases-file (expand-file-name "~/emacs/eshell/alias")
+      ;; Do TAB completion
+      eshell-cmpl-cycle-completions nil)
 
 ;;;; git, magit, forge
 
@@ -328,9 +330,12 @@ See: https://stackoverflow.com/questions/6133799"
   (add-to-list 'auto-mode-alist '("\\.gitconfig\\'" . gitconfig-mode)))
 
 (use-package magit
+  :bind (:map magit-diff-mode-map
+              ("M-<return>" . magit-diff-visit-file-other-window))
   :config
   (setq magit-diff-refine-hunk 'all))
 
+;; Credentials are stored in ~/.authinfo
 (use-package forge
   :after magit
   :hook (after-save . magit-after-save-refresh-status)
@@ -655,7 +660,8 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package clojure-mode)
 
-(use-package cider)
+(use-package cider
+  :after clojure-mode)
 
 ;;;; CSS and SCSS
 
@@ -747,10 +753,6 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;;;; Python
 
-(use-package python-pytest)
-
-(use-package pyenv-mode)
-
 (defun cfclrk/python-mode-hook ()
   "Customize `python-mode'."
   (setq fill-column 88
@@ -774,10 +776,6 @@ See: https://stackoverflow.com/questions/6133799"
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                          (lsp-deferred))))
-
-;;;; Powershell
-
-(use-package powershell)
 
 ;;;; Rust
 
