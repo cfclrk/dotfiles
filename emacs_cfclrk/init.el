@@ -10,8 +10,8 @@
 ;; bootstrap straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file (expand-file-name
-		               "straight/repos/straight.el/bootstrap.el"
-		               user-emacs-directory))
+                       "straight/repos/straight.el/bootstrap.el"
+                       user-emacs-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -158,15 +158,15 @@ See: https://stackoverflow.com/questions/6133799"
 (setq-default fill-column 80)
 
 (setq column-number-mode t    ;; show line:column in mode line
-	  make-backup-files nil
+      make-backup-files nil
       inhibit-splash-screen t
-	  sentence-end-double-space nil
+      sentence-end-double-space nil
       help-window-select t)
 
 ;; whitespace
 (require 'whitespace)
 (setq whitespace-style '(face tabs empty trailing lines-tail)
-	  whitespace-line-column nil)
+      whitespace-line-column nil)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 (defun cfclrk/text-editing-hook ()
@@ -252,17 +252,17 @@ See: https://stackoverflow.com/questions/6133799"
 (use-package company
   :demand t
   :bind (:map company-active-map
-			  ("C-n" . company-select-next)
-			  ("C-p" . company-select-previous)
-			  ("<tab>" . company-complete-selection))
+              ("C-n" . company-select-next)
+              ("C-p" . company-select-previous)
+              ("<tab>" . company-complete-selection))
   :config (global-company-mode))
 
 ;;;; crux
 
 (use-package crux
   :bind (([remap move-beginning-of-line] . crux-move-beginning-of-line)
-		 ("C-c D" . crux-delete-file-and-buffer)
-		 ("C-c f" . crux-recentf-find-file)))
+         ("C-c D" . crux-delete-file-and-buffer)
+         ("C-c f" . crux-recentf-find-file)))
 
 ;;;; Searching (ctrlf)
 
@@ -291,8 +291,8 @@ See: https://stackoverflow.com/questions/6133799"
 (use-package diff-hl
   :demand t
   :hook ((dired-mode . diff-hl-dired-mode)
-		 (magit-pre-refresh . diff-hl-magit-pre-refresh)
-		 (magit-post-refresh . diff-hl-magit-post-refresh))
+         (magit-pre-refresh . diff-hl-magit-pre-refresh)
+         (magit-post-refresh . diff-hl-magit-post-refresh))
   :config (global-diff-hl-mode))
 
 ;;;; dired
@@ -423,10 +423,10 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package helpful
   :bind (("C-h f" . helpful-callable)
-		 ("C-h v" . helpful-variable)
-		 ("C-h k" . helpful-key)
-		 ("C-c C-d" . helpful-at-point)
-		 ("C-h C" . helpful-command)))
+         ("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-c C-d" . helpful-at-point)
+         ("C-h C" . helpful-command)))
 
 ;;;; Images
 
@@ -451,7 +451,7 @@ See: https://stackoverflow.com/questions/6133799"
   :commands lsp-ui
   :config
   (setq lsp-ui-doc-position 'bottom
-		lsp-ui-sideline-show-hover t))
+        lsp-ui-sideline-show-hover t))
 
 ;;;; markdown
 
@@ -492,6 +492,9 @@ See: https://stackoverflow.com/questions/6133799"
   (add-to-list 'projectile-globally-ignored-directories "*logs")
   (add-to-list 'projectile-globally-ignored-directories "*_output")
   (add-to-list 'projectile-globally-ignored-directories "*cdk\.out")
+
+  ;; TODO: is this necessary? Shouldn't projectile exclude items in the .gitignore?
+  (add-to-list 'projectile-globally-ignored-directories "*.terraform")
 
   ;; Update projectile project detection to identify projects by the files in
   ;; `projectile-project-root-files'. Originally, projectile identifies projects
@@ -668,10 +671,10 @@ See: https://stackoverflow.com/questions/6133799"
 (defun cfclrk/css-mode-hook ()
   "Customize `css-mode' and derived modes like `scss-mode'."
   (setq indent-tabs-mode nil
-		css-indent-offset 2))
+        css-indent-offset 2))
 
 (add-hook 'css-mode-hook #'cfclrk/css-mode-hook)
-(add-hook 'css-mode-hook #'lsp-deferred)
+;; (add-hook 'css-mode-hook #'lsp-deferred)
 
 ;;;; Golang
 
@@ -682,11 +685,11 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package go-mode
   :hook ((go-mode . lsp-deferred)
-		 (go-mode . cfclrk/go-mode-hook))
+         (go-mode . cfclrk/go-mode-hook))
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
-		gofmt-command (executable-find "goimports")
-		fill-column 100
+        gofmt-command (executable-find "goimports")
+        fill-column 100
         whitespace-style '(face tabs empty trailing))
 
   ;; Restart whitespace mode to correctly use fill-column
@@ -699,12 +702,13 @@ See: https://stackoverflow.com/questions/6133799"
   :after go-mode
   :bind-keymap ("C-t" . go-test-mode-map)
   :bind (:map go-test-mode-map
-              ("<f5>" . go-test-current-test)
-              ("<f6>" . go-test-current-file)
-              ("p" . go-test-current-project)
-              ("f" . go-test-current-file)
-              ("c" . go-test-current-coverage)
-              ("t" . go-test-current-test))
+         ("p" . go-test-current-project)
+         ("f" . go-test-current-file)
+         ("c" . go-test-current-coverage)
+         ("t" . go-test-current-test)
+         :map go-mode-map
+         ("<f5>" . go-test-current-test)
+         ("<f6>" . go-test-current-file))
   :config
   (setq go-test-args "-v"))
 
@@ -719,6 +723,9 @@ See: https://stackoverflow.com/questions/6133799"
 ;; which can be installed with:
 ;;
 ;;    go get -u github.com/davidrjenni/reftools/cmd/fillstruct
+;;
+;; Struct has to have opening and closing {} braces, and cursor at beginning of
+;; struct name I believe.
 (use-package go-fill-struct
   :after go-mode)
 
@@ -736,7 +743,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;;;; Lisp
 
 (defun cfclrk/lisp-mode-hook ()
-  "Customize `emacs-lisp-mode'."
+  "General configuration for any Lisp."
   (smartparens-strict-mode +1)
   (rainbow-delimiters-mode +1)
 
