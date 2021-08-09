@@ -36,13 +36,6 @@
 ;;; Startup
 ;;  ----------------------------------------------------------------------------
 
-;; I make ~/.emacs.d a symlink to ~/.config/emacs, which itself is a symlink to
-;; the actually emacs configuration directory. Follow the symlinks so that I
-;; don't pollute ~/.emacs.d/, and so that I can update my ~/.config/emacs
-;; symlink without affecting an already-running Emacs. See:
-;; https://emacs.stackexchange.com/a/5470/6769
-(setq user-emacs-directory (file-truename "~/.emacs.d/"))
-
 ;; Number of bytes that can be read from a sub-process in one read operation.
 ;; Good for dealing with verbose subprocesses, like *ehem* an LSP server.
 (setq read-process-output-max (* 4 1024 1024)) ;; 4 MiB (default is 8 KiB)

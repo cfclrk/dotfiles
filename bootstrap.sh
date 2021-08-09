@@ -56,9 +56,21 @@ mkdir -p $CFCLRK_DIR
 ln -svfh "$DOTFILES_DIR/emacs_cfclrk/init.el" $CFCLRK_DIR/init.el
 ln -svfh "$DOTFILES_DIR/emacs_cfclrk/cfclrk_org.el" $CFCLRK_DIR/cfclrk_org.el
 
-# Set up symlinks, and make cfclrk the default
-ln -svfh ~/.config/emacs ~/.emacs.d
-ln -svfh $CFCLRK_DIR ~/.config/emacs
+# Set up chemacs2
+if [[ -d ~/.emacs.d ]]; then
+    pushd ~/.emacs.d
+    remote=$(git remote get-url origin)
+    if [[ ! $remote == "git@github-home:plexus/chemacs2.git" ]]; then
+        echo "$HOME/.emacs.d exists but it is not chemacs2"
+        exit 1
+    fi
+    echo "Updating chemacs2"
+    git pull
+    popd
+else
+    echo "Cloning chemacs2 into $HOME/.emacs.d/"
+    git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
+fi
 
 # Tmux
 if [[ ! -d ~/.tmux/plugins/tpm ]]; then
