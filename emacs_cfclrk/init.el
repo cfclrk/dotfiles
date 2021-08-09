@@ -4,21 +4,14 @@
 
 ;;; Code:
 
-;;; TODO
-
-;; Make C-t a prefix for running tests. Nobody needs transpose anyway.
-;; C-t t: run current test
-;; C-t f: run tests in current file
-;; C-t c: run tests for the current class
-
-;;; Bootstrap Package Management
+;;; Startup
 ;;  ----------------------------------------------------------------------------
 
 ;; bootstrap straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file (expand-file-name
-		       "straight/repos/straight.el/bootstrap.el"
-		       user-emacs-directory))
+		               "straight/repos/straight.el/bootstrap.el"
+		               user-emacs-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -29,12 +22,9 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; Install use-package
+;; Use use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
-
-;;; Startup
-;;  ----------------------------------------------------------------------------
 
 ;; Number of bytes that can be read from a sub-process in one read operation.
 ;; Good for dealing with verbose subprocesses, like *ehem* an LSP server.
@@ -53,6 +43,7 @@
                    (float-time
                     (time-subtract after-init-time before-init-time)))
            gcs-done))
+
 (add-hook 'emacs-startup-hook 'cfclrk/startup-hook)
 
 ;;; Functions
@@ -265,9 +256,6 @@ See: https://stackoverflow.com/questions/6133799"
 			  ("C-p" . company-select-previous)
 			  ("<tab>" . company-complete-selection))
   :config (global-company-mode))
-
-(use-package company-box
-  :hook (company-mode . company-box-mode))
 
 ;;;; crux
 
