@@ -276,7 +276,15 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;;;; dap
 
-(use-package dap-mode)
+(use-package dap-mode
+  :after lsp-mode
+  :hook ((lsp-mode . dap-mode)
+         (dap-mode . dap-ui-mode)
+         (dap-mode . dap-tooltip-mode)
+         (python-mode . (lambda()
+                          (require 'dap-python)
+                          (setq dap-python-debugger 'debugpy)))
+         (go-mode . (lambda() (require 'dap-go)))))
 
 ;;;; diff-hl
 
@@ -753,14 +761,16 @@ See: https://stackoverflow.com/questions/6133799"
   ;; Restart whitespace-mode so that it properly uses `fill-column'
   (whitespace-mode -1)
   (whitespace-mode +1))
+
 (add-hook 'python-mode-hook #'cfclrk/python-mode-hook)
 
-;; LSP using the pyright language server
-;; (use-package python-mode
-;;   :hook ((python-mode . lsp-deferred)
-;;          (python-mode . )))
+(use-package python-pytest)
 
+(use-package pyenv-mode)
+
+;; LSP using the pyright language server
 (use-package lsp-pyright
+  :init (setq lsp-pyright-multi-root nil)
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                          (lsp-deferred))))
