@@ -358,6 +358,12 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package gnuplot)
 
+;;;; graphviz
+
+(use-package graphviz-dot-mode
+  :config
+  (setq graphviz-dot-indent-width 4))
+
 ;;;; grip
 
 (use-package grip-mode
