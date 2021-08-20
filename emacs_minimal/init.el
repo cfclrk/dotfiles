@@ -22,20 +22,22 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; Install use-package
+;; Use use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
-(show-paren-mode +1)  ;; Bold-face matching parentheses
+(blink-cursor-mode -1)
 (set-language-environment "UTF-8")
+
+(setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
 (setq column-number-mode t    ;; show line:column in mode line
-	  help-window-select t
+      help-window-select t
       make-backup-files nil) ;; Do not save ~ backup files
 
 ;; Keep customizations outside of init.el
@@ -59,21 +61,94 @@
 ;;; Programming Languages
 ;;  ----------------------------------------------------------------------------
 
-;;; Packages
+;;;; Lisp
+
+(defun cfclrk/lisp-mode-hook ()
+  "General configuration for any Lisp."
+  (smartparens-strict-mode +1)
+  (rainbow-delimiters-mode +1))
+
+(dolist (hook '(lisp-mode-hook
+                clojure-mode-hook
+                emacs-lisp-mode-hook
+                lisp-data-mode-hook))
+  (add-hook hook #'cfclrk/lisp-mode-hook))
+
+;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
 
-(use-package helpful
-  :bind (("C-h f" . helpful-callable)
-		 ("C-h v" . helpful-variable)
-		 ("C-h k" . helpful-key)
-		 ("C-c C-d" . helpful-at-point)
-		 ("C-h C" . helpful-command)))
+;;;; ace
 
-(use-package which-key
+(use-package ace-window
+  :bind ("M-l" . ace-window)
+  :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
+
+;;;; bicycle
+
+(use-package bicycle
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global)))
+
+(add-hook 'prog-mode-hook 'outline-minor-mode)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
+;;;; rainbow-delimiters
+
+(use-package rainbow-delimiters)
+
+;;;; smartparens
+
+(use-package smartparens
+  :bind (:map smartparens-mode-map
+              ;; slurping and barfing
+              ("S-<right>" . sp-forward-slurp-sexp)
+              ("S-<left>" . sp-forward-barf-sexp)
+              ("M-S-<right>" . sp-backward-barf-sexp)
+              ("M-S-<left>" . sp-backward-slurp-sexp))
   :config
-  (which-key-mode +1)
-  (setq which-key-idle-delay 0.5
-		which-key-idle-secondary-delay 0.1))
+  (require 'smartparens-config)
+  (show-smartparens-global-mode t)
+
+  ;; Create a key prefix M-p
+  (define-prefix-command 'sp-prefix-key-map)
+  (define-key smartparens-mode-map (kbd "M-p") sp-prefix-key-map)
+
+  ;; splicing prefix is M-p s
+  (define-prefix-command 'sp-splice-key-map)
+  (define-key sp-prefix-key-map (kbd "s") sp-splice-key-map)
+
+  ;; splicing commands
+  (define-key sp-splice-key-map (kbd "s") 'sp-splice-sexp)
+  (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
+  (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
+  (define-key sp-splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
+
+  ;; wrapping prefix is M-p r
+  (define-prefix-command 'sp-wrap-key-map)
+  (define-key sp-prefix-key-map (kbd "r") sp-wrap-key-map)
+
+  ;; wrapping commands
+  (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
+  (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
+  (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
+  (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
+
+  ;; selection
+  (define-key sp-prefix-key-map (kbd "n") 'sp-select-next-thing)
+  (define-key sp-prefix-key-map (kbd "p") 'sp-select-previous-thing-exchange))
+
+;;;; undo-tree
+
+(use-package undo-tree
+  :config
+  (setq undo-tree-history-directory-alist
+      `((".*" . ,temporary-file-directory)))
+  (setq undo-tree-auto-save-history t)
+  (global-undo-tree-mode))
+
+;;;; yaml
 
 (use-package yaml-mode)
 
