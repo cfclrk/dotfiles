@@ -366,12 +366,20 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;;;; grip
 
+;; Use grip-mode to view markdown (GFM) files rendered as HTML using GitHub's
+;; rendering API.
+;;
+;; HEY CHRIS: Using work account requires setting CA cert.
+
 (use-package grip-mode
-  :config (setq grip-update-after-change nil
-                grip-github-user (getenv "GITHUB_USER")
-                grip-github-password (getenv "GITHUB_TOKEN"))
   :bind (:map markdown-mode-command-map
-              ("g" . grip-mode)))
+              ("g" . grip-mode))
+  :config
+  (require 'auth-source)
+  (let ((credential (auth-source-user-and-password
+                     "api.github.com" "chrisc-ironnet^forge")))
+    (setq grip-github-user (car credential)
+          grip-github-password (cadr credential))))
 
 ;;;; key-chord
 
