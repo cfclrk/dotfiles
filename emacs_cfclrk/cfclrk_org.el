@@ -100,24 +100,9 @@ non-nil, use sudo on the remote host."
 
 (require 'ox-publish)
 
-;; Add site static and site homepage
-;; (use-package site
-;;   :straight (:host github :repo "cfclrk/site"))
-;; (require 'site)
 (load (expand-file-name "~/Projects/site/site.el"))
-
-
-;; (use-package notes
-;;   :straight (:host github :repo "cfclrk/notes"))
-;; (require 'notes)
 (load (expand-file-name "~/notes/notes.el"))
-
-;; (use-package cloudformation
-;;   :straight (:host github :repo "cfclrk/cloudformation"
-;;                    :files ("org" :defaults)))
-;; (require 'cloudformation)
 (load (expand-file-name "~/Projects/cloudformation/cloudformation.el"))
-
 (load (expand-file-name "~/Projects/articles/articles.el"))
 
 ;; Add (or update) the projects in site/org-project-alist
@@ -127,10 +112,12 @@ non-nil, use sudo on the remote host."
           (cons project
                 (assoc-delete-all project-name org-publish-project-alist)))))
 
-;; Add (or update) the notes project
-(setq org-publish-project-alist
-      (cons notes/org-project-notes
-            (assoc-delete-all "notes" org-publish-project-alist)))
+;; Add (or update) the projects in notes/org-project-alist
+(dolist (project notes/org-project-alist)
+  (let ((project-name (car project)))
+    (setq org-publish-project-alist
+          (cons project
+                (assoc-delete-all project-name org-publish-project-alist)))))
 
 ;; Add (or update) the projects in cloudformation/org-projects-alist
 (dolist (project cloudformation/org-project-alist)
