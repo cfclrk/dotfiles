@@ -119,6 +119,7 @@ See: https://stackoverflow.com/questions/6133799"
   (interactive "p")
   (delete-region (point) (progn (backward-word arg) (point))))
 
+;; What was this before?
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
 
 ;;; Theme, Font, Display
@@ -236,7 +237,9 @@ See: https://stackoverflow.com/questions/6133799"
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
 
-;;;; ace
+;;;; ace-window
+
+;; Switch focus between visible windows.
 
 (use-package ace-window
   :bind ("M-l" . ace-window)
@@ -347,7 +350,8 @@ See: https://stackoverflow.com/questions/6133799"
 
 (use-package magit
   :bind (:map magit-diff-mode-map
-              ("M-<return>" . magit-diff-visit-file-other-window))
+              ("<C-return>" . magit-diff-visit-file-other-window)
+              ("<M-return>" . magit-diff-visit-worktree-file-other-window))
   :config
   (setq magit-diff-refine-hunk 'all))
 
@@ -821,6 +825,9 @@ Return the first (bottommost) matched directory or nil if not found."
                          (require 'lsp-pyright)
                          (lsp-deferred))))
 
+(use-package python-black
+  :after python)
+
 ;;;; Rust
 
 ;; I am using the rust-analyzer LSP server.
@@ -832,5 +839,10 @@ Return the first (bottommost) matched directory or nil if not found."
 (use-package terraform-mode
   :hook (terraform-mode . lsp-deferred)
   :init (setq lsp-terraform-server '("terraform-ls" "serve")))
+
+;;;; WebAssembly
+
+(use-package wat-mode
+  :straight (wat-mode :type git :host github :repo "devonsparks/wat-mode"))
 
 ;;; init.el ends here
