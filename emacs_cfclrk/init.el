@@ -305,6 +305,13 @@ See: https://stackoverflow.com/questions/6133799"
                           (setq dap-python-debugger 'debugpy)))
          (go-mode . (lambda() (require 'dap-go)))))
 
+(defun cfc/lsp-remove-all-workspaces ()
+  "Clear all LSP workspaces. Sometimes this fixes things."
+  (interactive)
+  (mapc
+   'lsp-workspace-folders-remove
+   (lsp-session-folders (lsp-session))))
+
 ;;;; diff-hl
 
 (use-package diff-hl
