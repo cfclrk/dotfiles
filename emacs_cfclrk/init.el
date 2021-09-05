@@ -49,6 +49,22 @@
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
 
+;; At the top because I use dash in my own functions.
+
+(use-package dash
+  :config
+  ;; Fontify dash-defined anaphoric vars ("it", "acc", etc)
+  (global-dash-fontify-mode)
+
+  ;; Enable C-h S (info-lookup-symbol) on dash symbols
+  (with-eval-after-load 'info-look
+    (dash-register-info-lookup)))
+
+(defun any-file-in-dir? (file-list dir)
+  "True if any of the files in FILE-LIST is in the directory DIR.
+Otherwise false."
+  (--any (f-exists? (f-expand it dir)) file-list))
+
 (defun upsert-alist (quoted-alist entry)
   "Insert or update ENTRY in QUOTED-ALIST.
 This first deletes the existing item if it is there, then enserts
@@ -516,30 +532,37 @@ See: https://stackoverflow.com/questions/6133799"
   ;;
   ;;    (".projectile" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs")
   ;;
-  ;;  Not sure if this is a good idea, trying it out. So far so good.
-
-  ;; TODO: Projectile discovers projects by iterating through
-  ;; projectile-project-root-files-bottom-up and checking each parent dir for that
-  ;; file. It searches the entire dir lineage for the first item, then the next.
-  ;; Instead, it should iterate through the whole list at each dir level.
-
-  ;; This was ok, but didn't include stuff like .git
-  ;; (setq projectile-project-root-files-bottom-up
-  ;; 		(cons "go.mod" (cons "Makefile" projectile-project-root-files)))
+  ;; Projectile discovers projects by iterating through
+  ;; projectile-project-root-files-bottom-up and checking each parent dir for
+  ;; that file. It searches the entire dir lineage for the first item, then the
+  ;; next. I don't think this is correct; it should iterate through the whole
+  ;; list at each dir level.
 
   (setq projectile-project-root-files-bottom-up
 		(-union projectile-project-root-files-bottom-up
 				projectile-project-root-files))
 
+  (defun projectile-root-bottom-up (dir &optional list)
+  "Redefine this projectile function to discover most specific project.
+
+Identify a project root in DIR by bottom-up search for files in LIST.
+If LIST is nil, use `projectile-project-root-files-bottom-up' instead.
+Return the first (bottommost) matched directory or nil if not found."
+  (let ((marker-files (or list projectile-project-root-files-bottom-up)))
+    (f--traverse-upwards
+     (any-file-in-dir? marker-files it)
+     dir)))
+
   ;; My kind of Python project, with a Makefile
-  (projectile-register-project-type 'python-cfclrk '("setup.py")
-									:project-file "setup.py"
-									:src-dir "src"
-									:test-dir "tests"
-									:compile "make dev"
-									:test "make test"
-									:test-prefix "test"
-									:test-suffix"_test"))
+  (projectile-register-project-type
+   'python-cfclrk '("setup.py" "Makefile")
+   :project-file "setup.py"
+   :src-dir "src"
+   :compile "make dev"
+   :test "make test"
+   :test-dir "tests"
+   :test-prefix "test"
+   :test-suffix"_test"))
 
 ;;;; protobuf
 
