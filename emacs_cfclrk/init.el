@@ -276,6 +276,20 @@ See: https://stackoverflow.com/questions/6133799"
               ("<tab>" . company-complete-selection))
   :config (global-company-mode))
 
+;;;; compilation
+
+;; Render ANSI color codes in all compilation buffers.
+
+(require 'ansi-color)
+
+(defun colorize-compilation-buffer ()
+  "Apply `ansi-color-apply-on-region' on the whole compilation buffer.
+From: https://stackoverflow.com/a/3072831/340613"
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
 ;;;; crux
 
 (use-package crux
