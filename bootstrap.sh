@@ -4,10 +4,10 @@ set -eu -o pipefail
 
 DOTFILES_DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
 
-# MacOS
+# On MacOS, install Homebrew and all brew packages in the Brewfile
 os=$(uname -s)
 if [[ "$os" == "Darwin" ]]; then
-    ./macos.sh
+    ./homebrew.sh
 fi
 
 # Dotfiles
