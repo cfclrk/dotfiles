@@ -27,6 +27,8 @@
 	path = home.gitconfig
 [includeIf "gitdir:~/emacs/"]
 	path = home.gitconfig
+[includeIf "gitdir:~/.emacs.d/"]
+	path = home.gitconfig
 [includeIf "gitdir:~/IronNet/"]
 	path = work.gitconfig
 [includeIf "gitdir:~/go/"]
