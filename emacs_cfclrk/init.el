@@ -454,14 +454,15 @@ From: https://stackoverflow.com/a/3072831/340613"
 (use-package flycheck
   :config (global-flycheck-mode +1))
 
-;; Run more flycheck checkers in LSP mode. Unfortunately, LSP-mode disables all
-;; flycheck checkers other than what's built in to the LSP server. From:
+;; Run more flycheck checkers in LSP mode. LSP-mode disables all flycheck
+;; checkers (instead that is delegated to the LSP server). From:
 ;; https://github.com/flycheck/flycheck/issues/1762
 
 (defvar-local my/flycheck-local-cache nil)
 
 (defun my/flycheck-checker-get (fn checker property)
-  "Advice around the flycheck-checker-get function."
+  "Advice around the flycheck-checker-get function.
+FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (or (alist-get property (alist-get checker my/flycheck-local-cache))
       (funcall fn checker property)))
 
@@ -584,6 +585,7 @@ Return the first (bottommost) matched directory or nil if not found."
    :project-file "setup.py"
    :src-dir "src"
    :compile "make dev"
+   :install "make dev"
    :test "make test"
    :test-dir "tests"
    :test-prefix "test"
@@ -788,6 +790,8 @@ Return the first (bottommost) matched directory or nil if not found."
 ;;
 ;; Struct has to have opening and closing {} braces, and cursor at beginning of
 ;; struct name I believe.
+;;
+;; TODO: I think LSP might provide this now.
 (use-package go-fill-struct
   :after go-mode)
 
