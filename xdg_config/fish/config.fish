@@ -12,11 +12,12 @@ if not set -q TMUX
         /usr/local/sbin \
         # Programs installed with brew take precedence over pre-installed
         # programs
-        /usr/local/opt/make/libexec/gnubin \
-        /usr/local/opt/texinfo/bin \
-        /usr/local/opt/openjdk/bin \
         /usr/local/opt/curl/bin \
+        /usr/local/opt/findutils/libexec/gnubin \
+        /usr/local/opt/make/libexec/gnubin \
+        /usr/local/opt/openjdk/bin \
         /usr/local/opt/openssl@1.1/bin \
+        /usr/local/opt/texinfo/bin \
         $PATH
 
     # Golang
