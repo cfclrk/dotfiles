@@ -3,7 +3,7 @@ function fish_prompt --description 'Defines the prompt'
     set stat $status
 
     if not set -q __fish_prompt_normal
-        set -g __fish_prompt_normal (set_color normal)
+        set -g __fish_prompt_normal (set_color yellow)
     end
 
     if not set -q __fish_color_blue
