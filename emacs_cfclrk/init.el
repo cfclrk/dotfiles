@@ -752,7 +752,7 @@ Return the first (bottommost) matched directory or nil if not found."
          (go-mode . cfclrk/go-mode-hook))
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
-        gofmt-command (executable-find "goimports")
+        gofmt-command (executable-find "gci")
         fill-column 100
         whitespace-style '(face tabs empty trailing))
 
@@ -766,13 +766,9 @@ Return the first (bottommost) matched directory or nil if not found."
   :after go-mode
   :bind-keymap ("C-t" . go-test-mode-map)
   :bind (:map go-test-mode-map
-         ("p" . go-test-current-project)
-         ("f" . go-test-current-file)
-         ("c" . go-test-current-coverage)
-         ("t" . go-test-current-test)
-         :map go-mode-map
-         ("<f5>" . go-test-current-test)
-         ("<f6>" . go-test-current-file))
+              ("f" . go-test-current-file)
+              ("c" . go-test-current-coverage)
+              ("t" . go-test-current-test))
   :config
   (setq go-test-args "-v"))
 
@@ -839,7 +835,12 @@ Return the first (bottommost) matched directory or nil if not found."
 
 (add-hook 'python-mode-hook #'cfclrk/python-mode-hook)
 
-(use-package python-pytest)
+(use-package python-pytest
+  :bind (:map python-mode-map
+              ;; To use "-s", save it to `transient-values-file'
+              ("C-t t" . python-pytest-function)
+              ("C-t f" . python-pytest-file)
+              ("C-t l" . python-pytest-last-failed)))
 
 (use-package pyenv-mode)
 
@@ -852,6 +853,8 @@ Return the first (bottommost) matched directory or nil if not found."
 
 (use-package python-black
   :after python)
+
+(use-package python-isort)
 
 ;;;; Rust
 
