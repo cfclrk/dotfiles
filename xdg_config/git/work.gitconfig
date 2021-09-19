@@ -2,17 +2,14 @@
 	email = chris.clark@ironnetcybersecurity.com
 [github]
 	user = chrisc-ironnet
-
-[url "git@github-work"]
+[url "git@github-work:IronNetCybersecurity"]
 	insteadOf = git@github.com:IronNetCybersecurity
+# [url "git@github-work:"]
+# 	insteadOf = https://github.com/
 
 # Gists must be individually enumerated
 [url "git@gist-work:0d3153fd22c622ef6223ae022933e99f"]
 	insteadOf = git@gist.github.com:0d3153fd22c622ef6223ae022933e99f
-
-# Always use SSH
-[url "git@github-work:"]
-	insteadOf = https://github.com/
 
 # # Ridiculous terraform issue. Fuuuck you terraform, just shell out to git!
 # [url "ssh://git@github-work/"]

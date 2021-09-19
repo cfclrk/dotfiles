@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-DOTFILES_DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 function linkEmacsMinimal {
     d=~/emacs/minimal
@@ -101,8 +101,17 @@ fi
 
 # Pyenv
 mkdir -p ~/.pyenv
-ln -svf "$DOTFILES_DIR/.pyenv/default_packages" ~/.pyenv/default-packages
+ln -svf \
+   "$DOTFILES_DIR/.pyenv/default_packages" \
+   ~/.pyenv/default-packages
 
 # SSH
 mkdir -p ~/.ssh
-ln -svf "$DOTFILES_DIR/.ssh/config" ~/.ssh/config
+ln -svfh \
+   "$DOTFILES_DIR/.ssh/config" \
+   ~/.ssh/config
+
+# Git
+ln -svfh \
+   /usr/local/etc/gitconfig \
+   ~/.config/git/home.gitconfig

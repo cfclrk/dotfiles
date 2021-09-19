@@ -178,7 +178,8 @@ See: https://stackoverflow.com/questions/6133799"
       make-backup-files nil
       inhibit-splash-screen t
       sentence-end-double-space nil
-      help-window-select t)
+      help-window-select t
+      delete-by-moving-to-trash t)
 
 ;; whitespace
 (require 'whitespace)
@@ -622,6 +623,9 @@ Return the first (bottommost) matched directory or nil if not found."
 ;;;; smartparens
 
 (use-package smartparens
+  :bind (:map lisp-mode-map
+              ("M-f" . sp-next-sexp)
+              ("M-b" . sp-backward-sexp))
   :config
   (require 'smartparens-config)
   (show-smartparens-global-mode t)
@@ -635,6 +639,10 @@ Return the first (bottommost) matched directory or nil if not found."
   ;; Create a key prefix
   (define-prefix-command 'sp-prefix-key-map)
   (define-key smartparens-mode-map (kbd "M-p") sp-prefix-key-map)
+
+  ;; movement
+  ;; Maybe M-f and M-b
+  ;; Definitely remap C-M-f and C-M-b to use smartparens
 
   ;; splicing
   (define-prefix-command 'sp-splice-key-map)

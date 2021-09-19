@@ -101,9 +101,9 @@ non-nil, use sudo on the remote host."
 (require 'ox-publish)
 
 (load (expand-file-name "~/Projects/site/site.el"))
-(load (expand-file-name "~/notes/notes.el"))
+(load (expand-file-name "~/Projects/cfclrk.com/notes/notes.el"))
 (load (expand-file-name "~/Projects/cloudformation/cloudformation.el"))
-(load (expand-file-name "~/Projects/articles/articles.el"))
+(load (expand-file-name "~/Projects/cfclrk.com/articles/articles.el"))
 
 ;; Add (or update) the projects in site/org-project-alist
 (dolist (project site/org-project-alist)
@@ -154,7 +154,8 @@ non-nil, use sudo on the remote host."
 		org-confirm-babel-evaluate nil
 		org-src-window-setup 'split-window-below
 		org-special-ctrl-a/e t
-		org-babel-clojure-backend 'cider)
+		org-babel-clojure-backend 'cider
+        org-babel-min-lines-for-block-output 40)
 
   ;; Note: This smartparens config also pulls in 'smartparens-org
   (smartparens-mode +1)
@@ -180,10 +181,10 @@ non-nil, use sudo on the remote host."
 
   ;; Ensure incorrect shell blocks fail nicely TODO: This causes "set -eu -o
   ;; pipefail" to be inserted before every block in tangled files!
-  (upsert-alist 'org-babel-default-header-args:sh
-                '(:prologue . "set -eu -o pipefail"))
-  (upsert-alist 'org-babel-default-header-args:bash
-                '(:prologue . "set -eu -o pipefail"))
+  ;; (upsert-alist 'org-babel-default-header-args:sh
+  ;;               '(:prologue . "set -e -o pipefail"))
+  ;; (upsert-alist 'org-babel-default-header-args:bash
+  ;;               '(:prologue . "set -e -o pipefail"))
 
   ;; HTML exporting
   (setq org-html-checkbox-type 'html

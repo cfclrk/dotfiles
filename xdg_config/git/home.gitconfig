@@ -1,13 +1,16 @@
+# System-wide git config. This file should be stored at the location that "git
+# config --system" uses. You can find what file that is with "git config
+# --system --edit".
+
+[credential]
+	helper = osxkeychain
 [user]
 	email = cfclrk@gmail.com
 [github]
 	user = cfclrk
-
 [url "git@github-home"]
 	insteadOf = git@github.com
 [url "git@gist-home"]
 	insteadOf = git@gist.github.com
-
-# Always use SSH
-[url "git@github-home:"]
-	insteadOf = https://github.com/
+# [url "git@github-home:"]
+# 	insteadOf = https://github.com/
