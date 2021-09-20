@@ -1,27 +1,24 @@
-[user]
-	name = Chris Clark
-[init]
-	defaultBranch = main
 [credential]
 	helper = osxkeychain
 [core]
 	editor = emacs
 	excludesfile = ~/.gitignore_global
+[github]
+	user = cfclrk
+[init]
+	defaultBranch = main
 [pull]
 	ff = only
-[push]
-	default = simple
-[merge]
-	tool = emerge
-[diff]
-	compactionHeuristic = true
 [transfer]
 	fsckObjects = true
-[color]
-	ui = auto
-[includeIf "gitdir:~/"]
-	path = home.gitconfig
-[includeIf "gitdir:~/IronNet/"]
+[user]
+	name = Chris Clark
+	email = cfclrk@gmail.com
+[url "git@github-home"]
+	insteadOf = git@github.com
+[url "git@gist-home"]
+	insteadOf = git@gist.github.com
+[includeIf "gitdir:~/work/"]
 	path = work.gitconfig
 [includeIf "gitdir:~/go/"]
 	path = work.gitconfig

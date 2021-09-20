@@ -110,8 +110,3 @@ mkdir -p ~/.ssh
 ln -svfh \
    "$DOTFILES_DIR/.ssh/config" \
    ~/.ssh/config
-
-# Git
-ln -svfh \
-   /usr/local/etc/gitconfig \
-   ~/.config/git/home.gitconfig
