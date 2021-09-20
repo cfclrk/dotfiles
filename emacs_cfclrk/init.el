@@ -844,8 +844,9 @@ Return the first (bottommost) matched directory or nil if not found."
 (add-hook 'python-mode-hook #'cfclrk/python-mode-hook)
 
 (use-package python-pytest
+  ;; To run as "pytest -s", save "-s" opt to `transient-values-file'
+  :after python
   :bind (:map python-mode-map
-              ;; To use "-s", save it to `transient-values-file'
               ("C-t t" . python-pytest-function)
               ("C-t f" . python-pytest-file)
               ("C-t l" . python-pytest-last-failed)))

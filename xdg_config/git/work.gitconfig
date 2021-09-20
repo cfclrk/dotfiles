@@ -4,13 +4,20 @@
 	user = chrisc-ironnet
 [url "git@github-work:IronNetCybersecurity"]
 	insteadOf = git@github.com:IronNetCybersecurity
+[url "git@github-work:chrisc-ironnet"]
+	insteadOf = git@github.com:chrisc-ironnet
+
+# Force git over HTTPS
 # [url "git@github-work:"]
 # 	insteadOf = https://github.com/
 
-# Gists must be individually enumerated
+# Gists
+#######
+
+# Each gist must be individually enumerated
 [url "git@gist-work:0d3153fd22c622ef6223ae022933e99f"]
 	insteadOf = git@gist.github.com:0d3153fd22c622ef6223ae022933e99f
 
-# # Ridiculous terraform issue. Fuuuck you terraform, just shell out to git!
+# # Terraform issue I had once. See if I still need this.
 # [url "ssh://git@github-work/"]
 # 	insteadOf = https://github.com/
