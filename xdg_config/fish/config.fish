@@ -62,4 +62,4 @@ end
 
 alias md5sum "md5 -r"
 source ~/.functions.fish
-source ~/IronNet/bin/fish.fish
+source ~/Work/bin/fish.fish

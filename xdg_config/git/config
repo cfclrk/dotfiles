@@ -2,6 +2,7 @@
 	helper = osxkeychain
 [core]
 	editor = emacs
+	# TODO: What is the default? Update to .config/git/gitignore
 	excludesfile = ~/.gitignore_global
 [github]
 	user = cfclrk
@@ -18,7 +19,7 @@
 	insteadOf = git@github.com
 [url "git@gist-home"]
 	insteadOf = git@gist.github.com
-[includeIf "gitdir:~/work/"]
+[includeIf "gitdir:~/Work/"]
 	path = work.gitconfig
 [includeIf "gitdir:~/go/"]
 	path = work.gitconfig

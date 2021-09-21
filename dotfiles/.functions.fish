@@ -218,25 +218,37 @@ alias rk "rancher kubectl"
 # Use
 # -----------------------------------------------------------------------------
 
-# Example: install_kubectl 1.16.7
+# Example: install_kubectl v1.17.17
 function install_kubectl --description "Download a kubectl binary"
     test -z "$argv[1]"; and echo "arg1 must be a kubectl version"; and return
     set progVersion $argv[1]
     set progName kubectl
     set libPath ~/.local/lib/$progName/$progName-$progVersion
-    set url https://storage.googleapis.com/kubernetes-release/release/v$progVersion/bin/darwin/amd64/kubectl
+    set url https://storage.googleapis.com/kubernetes-release/release/$progVersion/bin/darwin/amd64/kubectl
+
+    echo "Installing $progName $progVersion"
+    echo "From: $url"
+    echo "To:   $libPath"
+    mkdir -p (dirname $libPath)
+
     curl -s -o $libPath $url
     chmod +x $libPath
     use $progName $progVersion
 end
 
-# Example: install_helm 3.1.2
+# Example: install_helm v3.5.2
 function install_helm --description "Download a helm binary"
     test -z "$argv[1]"; and echo "arg1 must be a helm version"; and return
     set progVersion $argv[1]
     set progName helm
     set libPath ~/.local/lib/$progName/$progName-$progVersion
-    set url https://get.helm.sh/helm-v$progVersion-darwin-amd64.tar.gz
+    set url https://get.helm.sh/helm-$progVersion-darwin-amd64.tar.gz
+
+    echo "Installing $progName $progVersion"
+    echo "From: $url"
+    echo "To:   $libPath"
+    mkdir -p (dirname $libPath)
+
     curl -s $url | tar xvz - -C /tmp
     cp /tmp/darwin-amd64/helm $libPath
     use $progName $progVersion
@@ -271,6 +283,12 @@ function install_kops
     end
     set libPath ~/.local/lib/$progName/$progName-$progVersion
     set url https://github.com/kubernetes/$progName/releases/download/$progVersion/$progName-darwin-amd64
+
+    echo "Installing $progName $progVersion"
+    echo "From: $url"
+    echo "To:   $libPath"
+    mkdir -p (dirname $libPath)
+
     curl -sL -o $libPath $url
     chmod +x $libPath
     use $progName $progVersion

@@ -70,11 +70,24 @@ for f in $xdgConfigs; do
     ln -svfh "$DOTFILES_DIR/xdg_config/$f" "$HOME/.config/$f"
 done
 
-# Emacs
-mkdir -p ~/emacs
-linkEmacsCfclrk
-linkEmacsPrelude
-linkEmacsMinimal
+# SSH
+mkdir -p ~/.ssh
+ln -svfh \
+   "$DOTFILES_DIR/.ssh/config" \
+   ~/.ssh/config
+
+# Tmux
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then
+    echo "Tmux package manager is not installed. Installing!"
+    mkdir -p ~/.tmux/plugins
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
+# Pyenv
+mkdir -p ~/.pyenv
+ln -svf \
+   "$DOTFILES_DIR/.pyenv/default_packages" \
+   ~/.pyenv/default-packages
 
 # Set up chemacs2
 if [[ -d ~/.emacs.d ]]; then
@@ -92,21 +105,9 @@ else
     git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
 fi
 
-# Tmux
-if [[ ! -d ~/.tmux/plugins/tpm ]]; then
-    echo "Tmux package manager is not installed. Installing!"
-    mkdir -p ~/.tmux/plugins
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-fi
+# Emacs
+mkdir -p ~/emacs
+linkEmacsCfclrk
+linkEmacsPrelude
+linkEmacsMinimal
 
-# Pyenv
-mkdir -p ~/.pyenv
-ln -svf \
-   "$DOTFILES_DIR/.pyenv/default_packages" \
-   ~/.pyenv/default-packages
-
-# SSH
-mkdir -p ~/.ssh
-ln -svfh \
-   "$DOTFILES_DIR/.ssh/config" \
-   ~/.ssh/config
