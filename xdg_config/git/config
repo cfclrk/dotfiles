@@ -1,25 +1,17 @@
-[credential]
-	helper = osxkeychain
-[core]
-	editor = emacs
-	# TODO: What is the default? Update to .config/git/gitignore
-	excludesfile = ~/.gitignore_global
-[github]
-	user = cfclrk
-[init]
-	defaultBranch = main
-[pull]
-	ff = only
-[transfer]
-	fsckObjects = true
 [user]
-	name = Chris Clark
-	email = cfclrk@gmail.com
+    name = Chris Clark
+    email = cfclrk@gmail.com
+[github]
+    user = cfclrk
+[core]
+    editor = emacs
+[init]
+    defaultBranch = main
 [url "git@github-home"]
-	insteadOf = git@github.com
+    insteadOf = git@github.com
 [url "git@gist-home"]
-	insteadOf = git@gist.github.com
+    insteadOf = git@gist.github.com
 [includeIf "gitdir:~/Work/"]
-	path = work.gitconfig
+    path = work.gitconfig
 [includeIf "gitdir:~/go/"]
-	path = work.gitconfig
+    path = work.gitconfig

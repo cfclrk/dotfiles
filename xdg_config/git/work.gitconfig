@@ -1,23 +1,12 @@
 [user]
-	email = chris.clark@ironnetcybersecurity.com
+    email = chris.clark@ironnet.com
 [github]
-	user = chrisc-ironnet
+    user = chrisc-ironnet
 [url "git@github-work:IronNetCybersecurity"]
-	insteadOf = git@github.com:IronNetCybersecurity
+    insteadOf = git@github.com:IronNetCybersecurity
 [url "git@github-work:chrisc-ironnet"]
-	insteadOf = git@github.com:chrisc-ironnet
+    insteadOf = git@github.com:chrisc-ironnet
 
-# Force git over HTTPS
-# [url "git@github-work:"]
-# 	insteadOf = https://github.com/
-
-# Gists
-#######
-
-# Each gist must be individually enumerated
-[url "git@gist-work:0d3153fd22c622ef6223ae022933e99f"]
-	insteadOf = git@gist.github.com:0d3153fd22c622ef6223ae022933e99f
-
-# # Terraform issue I had once. See if I still need this.
-# [url "ssh://git@github-work/"]
-# 	insteadOf = https://github.com/
+# Each of your gists must be individually enumerated.
+[url "git@gist-work:a9e0dc9676cab129bc7b37a352257524.git"]
+    insteadOf = git@gist.github.com:a9e0dc9676cab129bc7b37a352257524
