@@ -3,8 +3,6 @@
     email = cfclrk@gmail.com
 [github]
     user = cfclrk
-[core]
-    editor = emacs
 [init]
     defaultBranch = main
 [url "git@github-home"]
