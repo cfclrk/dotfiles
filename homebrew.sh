@@ -5,6 +5,7 @@ if ! command -v brew >/dev/null; then
     echo "Homebrew is not installed. Installing..."
     bash -c "$(curl -fsSL \
       https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    brew generate-man-completions
 else
     echo "Homebrew is already installed!"
 fi

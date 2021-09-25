@@ -137,7 +137,7 @@
 
   ;; Load Library of Babel functions
   (org-babel-lob-ingest
-   (f-join user-emacs-directory "personal/babel/library-of-babel.org"))
+   (f-join user-emacs-directory "personal/library-of-babel.org"))
 
   (setq org-confirm-babel-evaluate nil
         org-babel-clojure-backend 'cider)

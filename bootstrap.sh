@@ -92,8 +92,8 @@ ln -svf \
 # Set up chemacs2
 if [[ -d ~/.emacs.d ]]; then
     pushd ~/.emacs.d
-    remote=$(git remote get-url origin)
-    if [[ ! $remote == "git@github-home:plexus/chemacs2.git" ]]; then
+    remote=$(basename $(git remote get-url origin))
+    if [[ ! $remote == "chemacs2.git" ]]; then
         echo "$HOME/.emacs.d exists but it is not chemacs2"
         exit 1
     fi
@@ -110,4 +110,3 @@ mkdir -p ~/emacs
 linkEmacsCfclrk
 linkEmacsPrelude
 linkEmacsMinimal
-

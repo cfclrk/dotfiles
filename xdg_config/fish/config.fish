@@ -1,7 +1,8 @@
 if not set -q TMUX
 
-    set -gx EMACS "$HOME/Projects/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
-    set -gx EDITOR $EMACS
+    set -gx EMACS "$HOME/Projects/cloned/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
+    set -gx EDITOR "$EMACS --with-profile minimal"
+    # Fish doesn't allow variables in commands, so to use EDITOR, run "eval $EDITOR"
 
     set PATH \
         $HOME/bin \
