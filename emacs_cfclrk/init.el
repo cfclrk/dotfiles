@@ -731,6 +731,10 @@ Return the first (bottommost) matched directory or nil if not found."
 
 (add-hook 'prog-mode-hook 'cfclrk/text-editing-hook)
 
+;;;; Bash
+
+(add-hook 'sh-mode-hook #'lsp-deferred)
+
 ;;;; Clojure
 
 (use-package clojure-mode)
@@ -881,5 +885,27 @@ Return the first (bottommost) matched directory or nil if not found."
 
 (use-package wat-mode
   :straight (wat-mode :type git :host github :repo "devonsparks/wat-mode"))
+
+;;;; YAML
+
+(add-hook 'yaml-mode-hook #'lsp-deferred)
+(setq lsp-yaml-custom-tags
+      ["!Base64"
+       "!Cidr"
+       "!FindInMap sequence"
+       "!GetAtt"
+       "!GetAZs"
+       "!ImportValue"
+       "!Join sequence"
+       "!Select"
+       "!Split sequence"
+       "!Sub"
+       "!Ref"
+       ;; Condition Functions
+       "!And"
+       "!Equals"
+	   "!If"
+       "!Not"
+       "!Or"])
 
 ;;; init.el ends here
