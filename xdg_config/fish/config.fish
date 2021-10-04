@@ -9,7 +9,7 @@ if not set -q TMUX
         $HOME/.local/bin \
         $HOME/.cargo/bin \
         $HOME/.cabal/bin \
-        $HOME/IronNet/bin \
+        $HOME/Work/bin \
         /usr/local/sbin \
         # Programs installed with brew take precedence over pre-installed
         # programs

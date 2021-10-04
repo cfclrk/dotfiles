@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-go get -u github.com/zmb3/gogetdoc    # Used in emacs godoc-at-point-function
-go get -u github.com/rogpeppe/godef   # Find symbol information in Go source
-go get -u github.com/mdempsky/gocode  # Editor auto completion
-go get -u golang.org/x/tools/...      # godoc, gopls, goimports, gorename, etc
-go get -u honnef.co/go/tools/...      # staticcheck, structlayout, rdeps, keyify
-go get -u golang.org/x/lint/golint    # golint
+go install github.com/zmb3/gogetdoc@latest    # Used in emacs godoc-at-point-function
+go install golang.org/x/tools/gopls@latest
+
+# go install github.com/rogpeppe/godef@latest   # Find symbol information in Go source
+# go install github.com/mdempsky/gocode@latest  # Editor auto completion
+# go install golang.org/x/tools/...@latest      # godoc, gopls, goimports, gorename, etc
+# go get -u honnef.co/go/tools/...      # staticcheck, structlayout, rdeps, keyify
+# go get -u golang.org/x/lint/golint    # golint
