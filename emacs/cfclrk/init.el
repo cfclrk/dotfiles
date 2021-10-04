@@ -60,10 +60,12 @@
   (with-eval-after-load 'info-look
     (dash-register-info-lookup)))
 
-(defun any-file-in-dir? (file-list dir)
-  "True if any of the files in FILE-LIST is in the directory DIR.
-Otherwise false."
-  (--any (f-exists? (f-expand it dir)) file-list))
+(defun cfc/lsp-remove-all-workspaces ()
+  "Clear all LSP workspaces. Sometimes this fixes things."
+  (interactive)
+  (mapc
+   'lsp-workspace-folders-remove
+   (lsp-session-folders (lsp-session))))
 
 (defun upsert-alist (quoted-alist entry)
   "Insert or update ENTRY in QUOTED-ALIST.
@@ -320,13 +322,6 @@ From: https://stackoverflow.com/a/3072831/340613"
                           (setq dap-python-debugger 'debugpy)))
          (go-mode . (lambda() (require 'dap-go)))))
 
-(defun cfc/lsp-remove-all-workspaces ()
-  "Clear all LSP workspaces. Sometimes this fixes things."
-  (interactive)
-  (mapc
-   'lsp-workspace-folders-remove
-   (lsp-session-folders (lsp-session))))
-
 ;;;; diff-hl
 
 (use-package diff-hl
@@ -389,7 +384,8 @@ From: https://stackoverflow.com/a/3072831/340613"
   (add-to-list 'forge-alist '("github-work"
                               "api.github.com"
                               "github.com"
-                              forge-github-repository)))
+                              forge-github-repository))
+  (setq forge-owned-accounts '(("cfclrk" . nil))))
 
 ;;;; github-browse-file
 
@@ -544,41 +540,19 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (projectile-mode t)
-  (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
-  (add-to-list 'projectile-globally-ignored-directories "*.pytest_cache")
+
+  ;; Never cache project roost
+  (setq projectile-enable-caching nil)
+
+  ;; TODO: Are these necessary? Shouldn't projectile exclude items in the .gitignore?
   (add-to-list 'projectile-globally-ignored-directories "*logs")
   (add-to-list 'projectile-globally-ignored-directories "*_output")
+  (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
+  (add-to-list 'projectile-globally-ignored-directories "*.pytest_cache")
   (add-to-list 'projectile-globally-ignored-directories "*cdk\.out")
-
-  ;; TODO: is this necessary? Shouldn't projectile exclude items in the .gitignore?
   (add-to-list 'projectile-globally-ignored-directories "*.terraform")
 
-  ;; Update projectile project detection to identify projects by the files in
-  ;; `projectile-project-root-files'. Originally, projectile identifies projects
-  ;; using a different set of files markers. Original value was:
-  ;;
-  ;;    (".projectile" ".git" ".hg" ".fslckout" "_FOSSIL_" ".bzr" "_darcs")
-  ;;
-  ;; Projectile discovers projects by iterating through
-  ;; projectile-project-root-files-bottom-up and checking each parent dir for
-  ;; that file. It searches the entire dir lineage for the first item, then the
-  ;; next. I don't think this is correct; it should iterate through the whole
-  ;; list at each dir level.
-
-  (setq projectile-project-root-files-bottom-up
-		(-union projectile-project-root-files-bottom-up
-				projectile-project-root-files))
-
-  (defun projectile-root-bottom-up (dir &optional list)
-  "Redefine this projectile function to discover most specific project.
-
-Identify a project root in DIR by bottom-up search for files in LIST.
-If LIST is nil, use `projectile-project-root-files-bottom-up' instead.
-Return the first (bottommost) matched directory or nil if not found."
-  (let ((marker-files (or list projectile-project-root-files-bottom-up)))
-    (f--traverse-upwards
-     (any-file-in-dir? marker-files it)
-     dir)))
+  ;; (load (expand-file-name "~/emacs/projectile-discovery.el"))
 
   ;; My kind of Python project, with a Makefile
   (projectile-register-project-type
@@ -897,7 +871,7 @@ Return the first (bottommost) matched directory or nil if not found."
        "!GetAZs"
        "!ImportValue"
        "!Join sequence"
-       "!Select"
+       "!Select sequence"
        "!Split sequence"
        "!Sub"
        "!Ref"

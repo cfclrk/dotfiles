@@ -7,10 +7,10 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 function linkEmacsMinimal {
     d=~/emacs/minimal
     mkdir -p $d
-    files=$(find "$DOTFILES_DIR/emacs_minimal" -type f -printf "%P\n")
+    files=$(find "$DOTFILES_DIR/emacs/minimal" -type f -printf "%P\n")
     for f in $files; do
         ln -svfh \
-           "$DOTFILES_DIR/emacs_minimal/$f" \
+           "$DOTFILES_DIR/emacs/minimal/$f" \
            "$d/$f"
     done
 }
@@ -18,28 +18,20 @@ function linkEmacsMinimal {
 function linkEmacsCfclrk {
     d=~/emacs/cfclrk
     mkdir -p $d
-    files=$(find "$DOTFILES_DIR/emacs_cfclrk" -type f -printf "%P\n")
+    files=$(find "$DOTFILES_DIR/emacs/cfclrk" -type f -printf "%P\n")
     for f in $files; do
         ln -svfh \
-           "$DOTFILES_DIR/emacs_cfclrk/$f" \
+           "$DOTFILES_DIR/emacs/cfclrk/$f" \
            "$d/$f"
     done
 }
 
 function linkEmacsPrelude {
     d=~/emacs/prelude
-
-    # Install Prelude if necessary
-    if [[ ! -d $d ]]; then
-        printf "\nEmacs Prelude not found. Installing Prelude...\n"
-        export PRELUDE_INSTALL_DIR="$d"
-        curl -L https://git.io/epre | sh
-    fi
-
-    files=$(find "$DOTFILES_DIR/emacs_prelude" -type f -printf "%P\n")
+    files=$(find "$DOTFILES_DIR/emacs/prelude" -type f -printf "%P\n")
     for f in $files; do
         ln -svfh \
-           "$DOTFILES_DIR/emacs_prelude/$f" \
+           "$DOTFILES_DIR/emacs/prelude/$f" \
            "$d/personal/$f"
     done
 }
@@ -110,3 +102,10 @@ mkdir -p ~/emacs
 linkEmacsCfclrk
 linkEmacsPrelude
 linkEmacsMinimal
+
+# Install Prelude if necessary
+if [[ ! -d $d ]]; then
+    printf "\nEmacs Prelude not found. Installing Prelude...\n"
+    export PRELUDE_INSTALL_DIR="$d"
+    curl -L https://git.io/epre | sh
+fi
