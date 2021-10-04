@@ -54,6 +54,39 @@
 
 ;;; Functions
 
+(defun org-outline-tempdir (&optional empty)
+  "Create a temporary directory for the current outline section.
+
+If EMPTY is non-nil, empty the directory first.
+
+The directory is created under
+`variable:temporary-file-directory'. Specifically:
+
+<temporary-file-directory>/org-outline/<file>/<HEADING 1>/<HEADING 2>/...
+
+Returns the directory name."
+  (interactive)
+  (let ((outline-path (org-get-outline-path 'with-self))
+        (doc-path (list temporary-file-directory
+                        "org-outline"
+                        (f-base (buffer-file-name)))))
+
+    (let ((tempdir (file-name-as-directory
+                    (apply #'f-join (append doc-path outline-path)))))
+
+      ;; Clear the directory if the "empty" param is given
+      (if empty
+          (delete-directory tempdir 'recursive))
+
+      ;; Return the temp dir name.
+      tempdir)))
+
+
+(defun org-outline-tempdir-dired ()
+  "Open Dired in a temporary directory for this outline section."
+  (dired (make-directory (org-outline-tempdir) 'parents)))
+
+
 (defun cfclrk/org-md ()
   "Export an org file to GitHub Flavored Markdown and format."
   (interactive)
