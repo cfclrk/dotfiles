@@ -218,25 +218,31 @@ alias rk "rancher kubectl"
 # Use
 # -----------------------------------------------------------------------------
 
-# Example: install_kubectl v1.17.17
+# Example:
+# - install_kubectl v1.17.17
+# - install_kubectl latest
 function install_kubectl --description "Download a kubectl binary"
     test -z "$argv[1]"; and echo "arg1 must be a kubectl version"; and return
     set progVersion $argv[1]
     set progName kubectl
+    if [ $progVersion = "latest" ]
+        set progVersion (curl -L -s https://dl.k8s.io/release/stable.txt)
+    end
     set libPath ~/.local/lib/$progName/$progName-$progVersion
-    set url https://storage.googleapis.com/kubernetes-release/release/$progVersion/bin/darwin/amd64/kubectl
+    set url https://dl.k8s.io/release/$progVersion/bin/darwin/amd64/kubectl
 
     echo "Installing $progName $progVersion"
     echo "From: $url"
     echo "To:   $libPath"
     mkdir -p (dirname $libPath)
 
-    curl -s -o $libPath $url
+    curl -L -s -o $libPath $url
     chmod +x $libPath
     use $progName $progVersion
 end
 
-# Example: install_helm v3.5.2
+# Examples:
+# - install_helm v3.5.2
 function install_helm --description "Download a helm binary"
     test -z "$argv[1]"; and echo "arg1 must be a helm version"; and return
     set progVersion $argv[1]
@@ -254,7 +260,8 @@ function install_helm --description "Download a helm binary"
     use $progName $progVersion
 end
 
-# Example: install_terraform 0.13.6
+# Examples:
+# - install_terraform 0.13.6
 function install_terraform
     test -z "$argv[1]"; and echo "arg1 must be a terraform version"; and return
     set progVersion $argv[1]
@@ -268,7 +275,7 @@ function install_terraform
     use $progName $progVersion
 end
 
-# Example:
+# Examples:
 # - install_kops latest
 # - install_kops v1.17.0
 function install_kops
@@ -310,16 +317,14 @@ function use --description "Create symlink on $PATH to this installed program"
     set progVersion $argv[2]
 
     if test -z $progVersion
-        echo "Locally installed versions:"
+        echo "Installed versions of $progName:"
         ls -1 ~/.local/lib/$progName
         return 0
     end
 
     set libPath ~/.local/lib/$progName/$progName-$progVersion
     set binPath ~/.local/bin/$progName
-    rm -f $binPath
-    ln -s $libPath $binPath
-    la $binPath
+    ln -svfh $libPath $binPath
 end
 
 # Azure
