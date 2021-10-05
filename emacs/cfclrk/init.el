@@ -552,7 +552,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (add-to-list 'projectile-globally-ignored-directories "*cdk\.out")
   (add-to-list 'projectile-globally-ignored-directories "*.terraform")
 
-  ;; (load (expand-file-name "~/emacs/projectile-discovery.el"))
+  (load (expand-file-name "~/emacs/projectile-discovery.el"))
 
   ;; My kind of Python project, with a Makefile
   (projectile-register-project-type

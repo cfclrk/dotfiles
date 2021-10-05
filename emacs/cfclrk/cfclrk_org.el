@@ -224,7 +224,9 @@ non-nil, use sudo on the remote host."
 		org-html-doctype "html5"
 		org-html-html5-fancy t
 		org-html-postamble nil
-		org-html-validation-link nil))
+		org-html-validation-link nil
+        ;; Prevent timestamps from being inserted in generated HTML
+        org-export-time-stamp-file nil))
 
 (add-hook 'org-mode-hook 'cfclrk/org-mode-hook)
 
