@@ -131,38 +131,13 @@ non-nil, use sudo on the remote host."
 
 ;;; Publishing
 
-(require 'ox-publish)
+;; Site project
+(load (expand-file-name "~/Projects/cfclrk.com/site.el"))
+(load (expand-file-name "notes/notes.el" site/project-directory))
+(load (expand-file-name "articles/articles.el" site/project-directory))
 
-(load (expand-file-name "~/Projects/site/site.el"))
-(load (expand-file-name "~/Projects/cfclrk.com/notes/notes.el"))
+;; CloudFormation project
 (load (expand-file-name "~/Projects/cloudformation/cloudformation.el"))
-(load (expand-file-name "~/Projects/cfclrk.com/articles/articles.el"))
-
-;; Add (or update) the projects in site/org-project-alist
-(dolist (project site/org-project-alist)
-  (let ((project-name (car project)))
-    (setq org-publish-project-alist
-          (cons project
-                (assoc-delete-all project-name org-publish-project-alist)))))
-
-;; Add (or update) the projects in notes/org-project-alist
-(dolist (project notes/org-project-alist)
-  (let ((project-name (car project)))
-    (setq org-publish-project-alist
-          (cons project
-                (assoc-delete-all project-name org-publish-project-alist)))))
-
-;; Add (or update) the projects in cloudformation/org-projects-alist
-(dolist (project cloudformation/org-project-alist)
-  (let ((project-name (car project)))
-    (setq org-publish-project-alist
-          (cons project
-                (assoc-delete-all project-name org-publish-project-alist)))))
-
-;; Add (or update) the articles project
-(setq org-publish-project-alist
-      (cons articles/org-project-articles
-            (assoc-delete-all "articles" org-publish-project-alist)))
 
 ;;; org-src mode
 
