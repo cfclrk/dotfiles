@@ -355,8 +355,7 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 ;;;; eshell
 
-(setq eshell-aliases-file (expand-file-name "~/emacs/eshell/alias")
-      ;; Do TAB completion
+(setq ;; Do TAB completion
       eshell-cmpl-cycle-completions nil)
 
 ;;;; git, magit, forge
@@ -863,6 +862,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;;;; YAML
 
 (add-hook 'yaml-mode-hook #'lsp-deferred)
+
 (setq lsp-yaml-custom-tags
       ["!Base64"
        "!Cidr"
