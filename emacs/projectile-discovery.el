@@ -10,7 +10,7 @@
 (require 'f)
 
 (setq my-project-root-files
-      (-concat '("go.mod")
+      (-concat '("go.mod" "requirements.txt")
                projectile-project-root-files-bottom-up
                projectile-project-root-files))
 

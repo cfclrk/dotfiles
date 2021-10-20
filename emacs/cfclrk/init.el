@@ -778,7 +778,9 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Groovy
 
-(use-package groovy-mode)
+(use-package groovy-mode
+  :config
+  (setq groovy-indent-offset 2))
 
 ;;;; Javascript (and JSON)
 
