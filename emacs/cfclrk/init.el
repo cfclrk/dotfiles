@@ -406,7 +406,9 @@ From: https://stackoverflow.com/a/3072831/340613"
 ;; Use grip-mode to view markdown (GFM) files rendered as HTML using GitHub's
 ;; rendering API.
 ;;
-;; HEY CHRIS: Using work account requires setting CA cert.
+;; --------------------------------------------
+;; USING WORK ACCOUNT REQUIRES SETTING CA CERT!
+;; --------------------------------------------
 
 (use-package grip-mode
   :bind (:map markdown-mode-command-map
@@ -522,6 +524,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (setq whitespace-style '(face tabs empty trailing))
   (whitespace-mode -1)
   (whitespace-mode +1))
+
+;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
+;; you edit source blocks in another buffer (similar to org-edit-special)
+(use-package edit-indirect)
 
 ;;;; org
 
