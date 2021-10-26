@@ -3,8 +3,8 @@
 [github]
     user = chrisc-ironnet
 
-# These "insteadOf = ..." parts must be more specific than
-# the insteadOf rules for the github-home account.
+# These "insteadOf" values must be more specific than
+# the ones for the github-home account.
 [url "git@github-work:IronNetCybersecurity"]
     insteadOf = git@github.com:IronNetCybersecurity
 [url "git@github-work:chrisc-ironnet"]

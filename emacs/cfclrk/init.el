@@ -353,6 +353,11 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 (use-package dockerfile-mode)
 
+;; Edit files in a docker container like:
+;;
+;;   C-x C-f /docker:root@mycontainer:/app/server.py
+(use-package docker-tramp)
+
 ;;;; eshell
 
 (setq ;; Do TAB completion
@@ -360,9 +365,16 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 ;;;; git, magit, forge
 
-(use-package gitconfig-mode
+;; git-modes (https://github.com/magit/git-modes) is developed under the
+;; umbrella of magit, and provides "gitattributes-mode", "gitconfig-mode", and
+;; "gitigrone-mode".
+
+(use-package git-modes
   :config
-  (add-to-list 'auto-mode-alist '("\\.gitconfig\\'" . gitconfig-mode)))
+  ;; gitconfig-mode
+  (add-to-list 'auto-mode-alist '("\\.gitconfig\\'" . gitconfig-mode))
+  ;; gitignore-mode
+  (add-to-list 'auto-mode-alist '("/.dockerignore\\'" . gitignore-mode)))
 
 (use-package magit
   :bind (:map magit-diff-mode-map
