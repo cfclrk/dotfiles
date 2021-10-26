@@ -1,0 +1,63 @@
+* Set Up New MacOS
+
+** Remap caps-lock to control
+
+   System Pref -> Keyboard -> Modifier Keys
+
+** Install Firefox
+
+   Sign in to LastPass
+   Sign in to Firefox
+
+** Install Iterm2
+
+   - Download from website
+   - Extract and put into Applications
+
+   Preferences:
+
+   Theme: minimal
+   Color scheme: smooooth
+
+** Install brew
+
+   Brew installation also installs Xcode command line tools
+
+   Brew install git (TODO: get rid of this)
+
+   Git clone dotfiles with https (TODO: use curl, but still need to brew install
+   curl)
+
+   Run dotfiles
+
+   Change shell to fish
+
+   Add fish to /etc/shells
+   chsh -s $(which fish)
+
+   Update Iterm2 Preferences
+
+   - Set font to fira code
+
+* TODO
+
+  Read/link to https://sourabhbajaj.com/mac-setup/
+
+  Install iterm2 with brew: =https://sourabhbajaj.com/mac-setup/iTerm/=
+
+  Need findutils installed before find commands in bootstrap.sh work.
+
+  - Add libxml2 to brew
+  - For compiling macOS with json, need to brew install Jansson
+  - transient/values.el link does not work if transient dir is not there
+
+  Can't start emacs without site.el project
+
+  Getting error:
+  /Users/chris.clark/.emacs.d exists but it is not chemacs2
+
+** Create ssh keys
+
+   github-home and github-work
+
+   Requires brew openssl to already be installed I think?
