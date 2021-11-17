@@ -56,6 +56,9 @@
   Getting error:
   /Users/chris.clark/.emacs.d exists but it is not chemacs2
 
+  Execute basictex =.pkg= file if =pdflatex= command is not on =$PATH=. Then
+  needs a new terminal sesison (installer adds path to =/etc/paths.d=).
+
 ** Create ssh keys
 
    github-home and github-work
