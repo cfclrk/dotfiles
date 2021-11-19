@@ -225,7 +225,6 @@ function install_istioctl --description "Download a kubectl binary"
     set progVersion $argv[1]
     set progName istioctl
     set libPath ~/.local/lib/$progName/$progName-$progVersion
-    # set url https://dl.k8s.io/release/$progVersion/bin/darwin/amd64/kubectl
     set url https://github.com/istio/istio/releases/download/$progVersion/istioctl-$progVersion-osx.tar.gz
 
     echo "Installing $progName $progVersion"
@@ -233,8 +232,8 @@ function install_istioctl --description "Download a kubectl binary"
     echo "To:   $libPath"
     mkdir -p (dirname $libPath)
 
-    curl -L -s -o $libPath $url
-    chmod +x $libPath
+    curl -L -s $url | tar xvz - -C /tmp
+    cp /tmp/istioctl $libPath
 end
 
 # Example:
