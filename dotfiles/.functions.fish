@@ -219,6 +219,25 @@ alias rk "rancher kubectl"
 # -----------------------------------------------------------------------------
 
 # Example:
+# - install_istioctl 1.6.2
+function install_istioctl --description "Download a kubectl binary"
+    test -z "$argv[1]"; and echo "arg1 must be a istioctl version"; and return
+    set progVersion $argv[1]
+    set progName istioctl
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    # set url https://dl.k8s.io/release/$progVersion/bin/darwin/amd64/kubectl
+    set url https://github.com/istio/istio/releases/download/$progVersion/istioctl-$progVersion-osx.tar.gz
+
+    echo "Installing $progName $progVersion"
+    echo "From: $url"
+    echo "To:   $libPath"
+    mkdir -p (dirname $libPath)
+
+    curl -L -s -o $libPath $url
+    chmod +x $libPath
+end
+
+# Example:
 # - install_kubectl v1.17.17
 # - install_kubectl latest
 function install_kubectl --description "Download a kubectl binary"
@@ -238,7 +257,6 @@ function install_kubectl --description "Download a kubectl binary"
 
     curl -L -s -o $libPath $url
     chmod +x $libPath
-    use $progName $progVersion
 end
 
 # Examples:
@@ -257,7 +275,6 @@ function install_helm --description "Download a helm binary"
 
     curl -s $url | tar xvz - -C /tmp
     cp /tmp/darwin-amd64/helm $libPath
-    use $progName $progVersion
 end
 
 # Examples:
@@ -272,7 +289,6 @@ function install_terraform
     curl -s $url | tar xvz - -C /tmp
     cp /tmp/terraform $libPath
     chmod +x $libPath
-    use $progName $progVersion
 end
 
 # Examples:
@@ -298,7 +314,6 @@ function install_kops
 
     curl -sL -o $libPath $url
     chmod +x $libPath
-    use $progName $progVersion
 end
 
 # Examples:
@@ -324,6 +339,12 @@ function use --description "Create symlink on $PATH to this installed program"
 
     set libPath ~/.local/lib/$progName/$progName-$progVersion
     set binPath ~/.local/bin/$progName
+
+    # If this version has not been downloaded yet, then download it.
+    if ! test -e $libPath
+        eval "install_$progName $progVersion"
+    end
+
     ln -svfh $libPath $binPath
 end
 
