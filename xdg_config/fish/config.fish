@@ -14,9 +14,9 @@ if not set -q TMUX
         # Programs installed with brew take precedence over pre-installed
         # programs
         /usr/local/opt/curl/bin \
+        /usr/local/opt/coreutils/libexec/gnubin \
         /usr/local/opt/findutils/libexec/gnubin \
         /usr/local/opt/make/libexec/gnubin \
-        /usr/local/opt/openjdk/bin \
         /usr/local/opt/openssl@1.1/bin \
         /usr/local/opt/texinfo/bin \
         $PATH
