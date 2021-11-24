@@ -1,8 +1,15 @@
-;;; projectile-discovery.el -- My project discovery config  -*- lexical-binding: t; -*-
+;;; projectile-discovery.el -- My project discovery config -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
-;; This file is tangled from projectile_root.org
+;; Update projectile's project discovery behavior in monorepos to consider
+;; subprojects as project roots, rather than considering the monorepo root as
+;; the project root.
+
+;; See: https://www.cfclrk.com/articles/projectile_root.html
+
+;; This file is tangled from
+;; https://github.com/cfclrk/cfclrk.github.io/blob/main/articles/org/projectile_root.org
 
 ;;; Code:
 
