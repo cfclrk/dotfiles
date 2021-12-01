@@ -175,6 +175,7 @@ non-nil, use sudo on the remote host."
      (dot . t)
      (emacs-lisp . t)
 	 (gnuplot . t)
+     (groovy . t)
      (http . t)
      (js . t)
      (latex . t)
