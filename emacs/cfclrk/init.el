@@ -805,11 +805,27 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (setq groovy-indent-offset 2))
 
+;;;; Java
+
+;; lsp-java uses the Eclipse JDT Language Server:
+;; https://github.com/eclipse/eclipse.jdt.ls
+
+(use-package lsp-java
+  :hook (java-mode . lsp-deferred)
+  :config
+  (setq lsp-java-format-settings-url
+        "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
+  (setq lsp-java-format-settings-profile "GoogleStyle")
+  (setq c-basic-offset 2))
+
+(add-hook 'java-mode-hook #'lsp-deferred)
+
 ;;;; Javascript (and JSON)
 
 (defun cfclrk/js-mode-hook ()
   "Customize `js-mode'."
   (setq js-indent-level 2))
+
 (add-hook 'js-mode-hook #'cfclrk/js-mode-hook)
 
 ;;;; Lisp
