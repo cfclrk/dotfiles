@@ -1,6 +1,9 @@
 [user]
     name = Chris Clark
     email = cfclrk@gmail.com
+    signingkey = 279B742AFFA518D5
+[commit]
+    gpgsign = true
 [github]
     user = cfclrk
 [init]
