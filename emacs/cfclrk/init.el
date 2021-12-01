@@ -730,6 +730,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (add-hook 'sh-mode-hook #'lsp-deferred)
 
+;;;; C and C++
+
+;; (add-hook c-mode-hook #lsp-deferred)
+;; (add-hook c++-mode-hook #lsp-deferred)
+
 ;;;; Clojure
 
 (use-package clojure-mode)
