@@ -907,6 +907,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (add-hook 'yaml-mode-hook #'lsp-deferred)
 
+;; Associate schemas with certain files
+(setq lsp-yaml-schemas
+      '((/Users/chris\.clark/\.config/eksctl/schema\.json . ["/eksctl/cluster.yaml"])))
+
 (setq lsp-yaml-custom-tags
       ["!Base64"
        "!Cidr"
