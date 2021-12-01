@@ -511,7 +511,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (use-package lsp-mode
   :hook (lsp-mode . lsp-enable-which-key-integration)
-  :commands (lsp lsp-deferred))
+  :commands (lsp lsp-deferred)
+  :config
+  (setq
+   lsp-groovy-server-file
+   "/Users/chris.clark/Projects/cloned/groovy-language-server/build/libs/groovy-language-server-all.jar"))
 
 (use-package lsp-ui
   :commands lsp-ui
@@ -797,6 +801,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;;;; Groovy
 
 (use-package groovy-mode
+  :hook (groovy-mode . lsp-deferred)
   :config
   (setq groovy-indent-offset 2))
 
