@@ -885,9 +885,12 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Rust
 
-;; I am using the rust-analyzer LSP server.
-
-(use-package rustic)
+;; rustic starts a rust-analyzer LSP server.
+(use-package rustic
+  :bind (:map rustic-mode-map
+              ("C-t t" . rustic-cargo-current-test))
+  :config
+  (setq rustic-test-arguments "-- --show-output"))
 
 ;;;; Terraform
 
