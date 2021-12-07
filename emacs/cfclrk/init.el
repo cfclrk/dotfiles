@@ -176,9 +176,9 @@ See: https://stackoverflow.com/questions/6133799"
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
-(setq column-number-mode t    ;; show line:column in mode line
+(setq column-number-mode t           ;; Show line:column in mode line
       make-backup-files nil
-      inhibit-splash-screen t
+      inhibit-splash-screen t        ;; Do not show the welcome screen
       sentence-end-double-space nil
       help-window-select t
       delete-by-moving-to-trash t)
@@ -895,7 +895,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :bind (:map rustic-mode-map
               ("C-t t" . rustic-cargo-current-test))
   :config
-  (setq rustic-test-arguments "-- --show-output"))
+  (setq ;; rustic-format-on-save t
+        rustic-test-arguments "-- --show-output"))
 
 ;;;; Terraform
 
