@@ -9,7 +9,7 @@ function linkEmacsMinimal {
     mkdir -p $d
     files=$(find "$DOTFILES_DIR/emacs/minimal" -type f -printf "%P\n")
     for f in $files; do
-        ln -svfh \
+        ln -svfn \
            "$DOTFILES_DIR/emacs/minimal/$f" \
            "$d/$f"
     done
@@ -20,7 +20,7 @@ function linkEmacsCfclrk {
     mkdir -p $d
     files=$(find "$DOTFILES_DIR/emacs/cfclrk" -type f -printf "%P\n")
     for f in $files; do
-        ln -svfh \
+        ln -svfn \
            "$DOTFILES_DIR/emacs/cfclrk/$f" \
            "$d/$f"
     done
@@ -30,7 +30,7 @@ function linkEmacsPrelude {
     d=~/emacs/prelude
     files=$(find "$DOTFILES_DIR/emacs/prelude" -type f -printf "%P\n")
     for f in $files; do
-        ln -svfh \
+        ln -svfn \
            "$DOTFILES_DIR/emacs/prelude/$f" \
            "$d/personal/$f"
     done
@@ -45,26 +45,26 @@ fi
 # Dotfiles
 dotFiles=$(ls -A "$DOTFILES_DIR/dotfiles")
 for f in $dotFiles; do
-    ln -svfh "$DOTFILES_DIR/dotfiles/$f" "$HOME/$f"
+    ln -svfn "$DOTFILES_DIR/dotfiles/$f" "$HOME/$f"
 done
 
 # ~/bin
 mkdir -p ~/bin
 scriptFiles=$(ls -A "$DOTFILES_DIR/bin")
 for f in $scriptFiles; do
-    ln -svf "$DOTFILES_DIR/bin/$f" "$HOME/bin/$f"
+    ln -svfn "$DOTFILES_DIR/bin/$f" "$HOME/bin/$f"
 done
 
 # XDG config: ~/.config
 mkdir -p ~/.config
 xdgConfigs=$(ls -A "$DOTFILES_DIR/xdg_config")
 for f in $xdgConfigs; do
-    ln -svfh "$DOTFILES_DIR/xdg_config/$f" "$HOME/.config/$f"
+    ln -svfn "$DOTFILES_DIR/xdg_config/$f" "$HOME/.config/$f"
 done
 
 # SSH
 mkdir -p ~/.ssh
-ln -svfh \
+ln -svfn \
    "$DOTFILES_DIR/.ssh/config" \
    ~/.ssh/config
 
