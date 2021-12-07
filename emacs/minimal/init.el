@@ -36,9 +36,10 @@
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
-(setq column-number-mode t    ;; show line:column in mode line
+(setq column-number-mode t    ;; Show line:column in mode line
       help-window-select t
-      make-backup-files nil) ;; Do not save ~ backup files
+      inhibit-splash-screen t ;; Do not show the welcome page
+      make-backup-files nil)  ;; Do not save ~ backup files
 
 ;; Keep customizations outside of init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
