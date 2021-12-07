@@ -15,6 +15,7 @@ if not set -q TMUX
         # programs
         /usr/local/opt/curl/bin \
         /usr/local/opt/coreutils/libexec/gnubin \
+        /usr/local/opt/libtool/libexec/gnubin \
         /usr/local/opt/findutils/libexec/gnubin \
         /usr/local/opt/make/libexec/gnubin \
         /usr/local/opt/openssl@1.1/bin \
