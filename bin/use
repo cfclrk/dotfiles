@@ -1,0 +1,140 @@
+#!/usr/bin/env fish
+
+# Example:
+# - install_istioctl 1.6.2
+function install_istioctl --description "Download a kubectl binary"
+    test -z "$argv[1]"; and echo "arg1 must be a istioctl version"; and return
+    set progVersion $argv[1]
+    set progName istioctl
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set url https://github.com/istio/istio/releases/download/$progVersion/istioctl-$progVersion-osx.tar.gz
+
+    echo "Installing $progName $progVersion"
+    echo "From: $url"
+    echo "To:   $libPath"
+    mkdir -p (dirname $libPath)
+
+    curl -L -s $url | tar xvz - -C /tmp
+    cp /tmp/istioctl $libPath
+end
+
+# Example:
+# - install_kubectl v1.17.17
+# - install_kubectl latest
+function install_kubectl --description "Download a kubectl binary"
+    test -z "$argv[1]"; and echo "arg1 must be a kubectl version"; and return
+    set progVersion $argv[1]
+    set progName kubectl
+    if [ $progVersion = "latest" ]
+        set progVersion (curl -L -s https://dl.k8s.io/release/stable.txt)
+    end
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set url https://dl.k8s.io/release/$progVersion/bin/darwin/amd64/kubectl
+
+    echo "Installing $progName $progVersion"
+    echo "From: $url"
+    echo "To:   $libPath"
+    mkdir -p (dirname $libPath)
+
+    curl -L -s -o $libPath $url
+    chmod +x $libPath
+end
+
+# Examples:
+# - install_helm v3.5.2
+function install_helm --description "Download a helm binary"
+    test -z "$argv[1]"; and echo "arg1 must be a helm version"; and return
+    set progVersion $argv[1]
+    set progName helm
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set url https://get.helm.sh/helm-$progVersion-darwin-amd64.tar.gz
+
+    echo "Installing $progName $progVersion"
+    echo "From: $url"
+    echo "To:   $libPath"
+    mkdir -p (dirname $libPath)
+
+    curl -s $url | tar xvz - -C /tmp
+    cp /tmp/darwin-amd64/helm $libPath
+end
+
+# Examples:
+# - install_terraform 0.13.6
+function install_terraform
+    test -z "$argv[1]"; and echo "arg1 must be a terraform version"; and return
+    set progVersion $argv[1]
+    set progName terraform
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    echo "progVersion $progVersion"
+    set url https://releases.hashicorp.com/terraform/$progVersion/terraform_$progVersion\_darwin_amd64.zip
+    curl -s $url | tar xvz - -C /tmp
+    cp /tmp/terraform $libPath
+    chmod +x $libPath
+end
+
+# Examples:
+# - install_kops latest
+# - install_kops v1.17.0
+function install_kops
+    test -z "$argv[1]"; and echo "arg1 must be a kops version or 'latest'"; and return
+    set progVersion $argv[1]
+    set progName kops
+    if [ $progVersion = "latest" ]
+        set progVersion (curl -s \
+            https://api.github.com/repos/kubernetes/$progName/releases/latest \
+            | grep tag_name \
+            | cut -d '"' -f 4)
+    end
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set url https://github.com/kubernetes/$progName/releases/download/$progVersion/$progName-darwin-amd64
+
+    echo "Installing $progName $progVersion"
+    echo "From: $url"
+    echo "To:   $libPath"
+    mkdir -p (dirname $libPath)
+
+    curl -sL -o $libPath $url
+    chmod +x $libPath
+end
+
+# Examples:
+#  - use
+#  - use helm
+#  - use helm 3.5.3
+function use --description "Create symlink on $PATH to this installed program"
+    # Optional argument: the program name (e.g. "kubectl")
+    set progName $argv[1]
+    # Optional argument: the program version (e.g. "1.17.1")
+    set progVersion $argv[2]
+
+    # If the first argument $progName was not provided, list all programs
+    # managed by use and return success.
+    if test -z $progName
+        echo "Local programs managed by use:"
+        ls -1 ~/.local/lib/
+        return 0
+    end
+
+    # If the second argument $progVersion was not provided, list all locally
+    # installed versions of $progName and return success.
+    if test -z $progVersion
+        echo "Installed versions of $progName:"
+        ls -1 ~/.local/lib/$progName
+        return 0
+    end
+
+    # Both arguments were provided.
+
+    set libPath ~/.local/lib/$progName/$progName-$progVersion
+    set binPath ~/.local/bin/$progName
+
+    # If this version has not been installed yet, install it.
+    if ! test -e $libPath
+        eval "install_$progName $progVersion"
+    end
+
+    # Create a symlink from the $binPath to this binary.
+    ln -svfh $libPath $binPath
+end
+
+use $argv
