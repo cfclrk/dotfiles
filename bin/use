@@ -42,7 +42,7 @@ function install_kubectl --description "Download a kubectl binary"
     echo "To:   $archiveFile"
     mkdir -p (dirname $archiveFile)
 
-    curl -L -s -o $archiveFile $url
+    curl -sL -o $archiveFile $url
     chmod +x $archiveFile
 end
 
@@ -73,7 +73,7 @@ function install_terraform
     set progName terraform
 
     set archiveFile $ARCHIVE_DIR/$progName/$progName-$progVersion
-    set url https://releases.hashicorp.com/terraform/$progVersion/terraform_$progVersion\_darwin_amd64.zip
+    set url https://releases.hashicorp.com/terraform/$progVersion/terraform_"$progVersion"_darwin_amd64.zip
 
     echo "Installing $progName $progVersion"
     echo "From: $url"
@@ -92,12 +92,14 @@ function install_kops
     test -z "$argv[1]"; and echo "arg1 must be a kops version or 'latest'"; and return
     set progVersion $argv[1]
     set progName kops
+
     if [ $progVersion = "latest" ]
         set progVersion (curl -s \
             https://api.github.com/repos/kubernetes/$progName/releases/latest \
             | grep tag_name \
             | cut -d '"' -f 4)
     end
+
     set archiveFile $ARCHIVE_DIR/$progName/$progName-$progVersion
     set url https://github.com/kubernetes/$progName/releases/download/$progVersion/$progName-darwin-amd64
 
