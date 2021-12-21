@@ -3,14 +3,5 @@
     signingkey = EDC41C0910322DD6
 [github]
     user = chrisc-ironnet
-
-# These "insteadOf" values must be more specific than
-# the ones for the github-home account.
-[url "git@github-work:IronNetCybersecurity"]
-    insteadOf = git@github.com:IronNetCybersecurity
-[url "git@github-work:chrisc-ironnet"]
-    insteadOf = git@github.com:chrisc-ironnet
-
-# Each of your gists must be individually enumerated.
-[url "git@gist-work:a9e0dc9676cab129bc7b37a352257524.git"]
-    insteadOf = git@gist.github.com:a9e0dc9676cab129bc7b37a352257524
+[core]
+    sshCommand = "ssh -i ~/.ssh/github-work"
