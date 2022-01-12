@@ -35,17 +35,6 @@
   ;;   :test {:extra-paths ["test"]}
  ;; }
 
- :aliases
-
- ;; Run like: clojure -X:new-lib :name cfclrk/mylib
- {:new-app {:extra-deps {com.github.seancorfield/clj-new {:mvn/version "RELEASE"}}
-            :exec-fn clj-new/create
-            :exec-args {:template "app"}}
-
-  :new-lib {:extra-deps {com.github.seancorfield/clj-new {:mvn/version "RELEASE"}}
-            :exec-fn clj-new/create
-            :exec-args {:template "lib"}}}
-
   ;; Provider attributes
 
   ;; :mvn/repos {

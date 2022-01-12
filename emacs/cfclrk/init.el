@@ -722,9 +722,19 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;;; Programming Languages
 ;;  ----------------------------------------------------------------------------
 
-;;;; General (prog-mode)
+;;;; General
 
 (add-hook 'prog-mode-hook 'cfclrk/text-editing-hook)
+
+(defun my-lisp-mode-hook ()
+  "General configuration for any LISP."
+  (smartparens-strict-mode +1)
+  (rainbow-delimiters-mode +1)
+
+  ;; Restart whitespace mode so that it properly uses fill-column.
+  (setq fill-column 80)
+  (whitespace-mode -1)
+  (whitespace-mode +1))
 
 ;;;; Bash
 
@@ -737,10 +747,14 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Clojure
 
-(use-package clojure-mode)
+(use-package clojure-mode
+  :hook ((clojure-mode . lsp-deferred)
+         (clojure-mode . my-lisp-mode-hook)))
 
 (use-package cider
-  :after clojure-mode)
+  :after clojure-mode
+  :config
+  (setq cider-save-file-on-load t))
 
 ;;;; CSS and SCSS
 
@@ -751,6 +765,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (add-hook 'css-mode-hook #'cfclrk/css-mode-hook)
 ;; (add-hook 'css-mode-hook #'lsp-deferred)
+
+;;;; Emacs Lisp
+
+(add-hook 'emacs-lisp-mode-hook #'my-lisp-mode-hook)
 
 ;;;; Golang
 
@@ -835,21 +853,9 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Lisp
 
-(defun cfclrk/lisp-mode-hook ()
-  "General configuration for any Lisp."
-  (smartparens-strict-mode +1)
-  (rainbow-delimiters-mode +1)
-
-  ;; Restart whitespace mode so that it properly uses fill-column.
-  (setq fill-column 80)
-  (whitespace-mode -1)
-  (whitespace-mode +1))
-
 (dolist (hook '(lisp-mode-hook
-                clojure-mode-hook
-                emacs-lisp-mode-hook
                 lisp-data-mode-hook))
-  (add-hook hook #'cfclrk/lisp-mode-hook))
+  (add-hook hook #'my-lisp-mode-hook))
 
 ;;;; Python
 
