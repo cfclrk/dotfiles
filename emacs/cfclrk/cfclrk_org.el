@@ -131,12 +131,10 @@ non-nil, use sudo on the remote host."
 
 ;;; Publishing
 
-;; Site project
+;; Load my projects
 (load (expand-file-name "~/Projects/cfclrk.com/site.el"))
 (load (expand-file-name "notes/notes.el" site/project-directory))
 (load (expand-file-name "articles/articles.el" site/project-directory))
-
-;; CloudFormation project
 (load (expand-file-name "~/Projects/cloudformation/cloudformation.el"))
 
 ;;; org-src mode
