@@ -29,14 +29,14 @@
      pyenv virtualenv 3.7.0 foo   # Create a virtual env with Python 3.7.0
      pyenv local foo              # Use 'foo' virtual env in current dir
      pyenv global foo             # Use 'foo' env unless otherwise specified
-     pyenv versions               # List installed virtualenvs and Pythons
+     pyenv versions               # List installed Pythons and virtual envs
      pyenv version                # Show current Python/virtualenv and why
    #+end_src
 
-** rbenv
+** Ruby
 
    #+begin_src sh
-     rbenv install -l        # List all downloadable Ruby versions
-     rbenv install 2.6.1     # Download and install Ruby 2.6.1
-     rbenv global 2.6.1      # Use Ruby 2.6.1 unless otherwise specified
+     frum install -l       # List all downloadable Ruby versions
+     frum install 3.1.0    # Download and install Ruby 3.1.0
+     frum global 2.6.1     # Use Ruby 2.6.1 unless otherwise specified
    #+end_src
