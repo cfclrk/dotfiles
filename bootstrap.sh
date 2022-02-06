@@ -4,38 +4,6 @@ set -eu -o pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-function linkEmacsMinimal {
-    d=~/emacs/minimal
-    mkdir -p $d
-    files=$(find "$DOTFILES_DIR/emacs/minimal" -type f -printf "%P\n")
-    for f in $files; do
-        ln -svfn \
-           "$DOTFILES_DIR/emacs/minimal/$f" \
-           "$d/$f"
-    done
-}
-
-function linkEmacsCfclrk {
-    d=~/emacs/cfclrk
-    mkdir -p $d
-    files=$(find "$DOTFILES_DIR/emacs/cfclrk" -type f -printf "%P\n")
-    for f in $files; do
-        ln -svfn \
-           "$DOTFILES_DIR/emacs/cfclrk/$f" \
-           "$d/$f"
-    done
-}
-
-function linkEmacsPrelude {
-    d=~/emacs/prelude
-    files=$(find "$DOTFILES_DIR/emacs/prelude" -type f -printf "%P\n")
-    for f in $files; do
-        ln -svfn \
-           "$DOTFILES_DIR/emacs/prelude/$f" \
-           "$d/personal/$f"
-    done
-}
-
 # On MacOS, install Homebrew and all brew packages in the Brewfile
 os=$(uname -s)
 if [[ "$os" == "Darwin" ]]; then
@@ -81,7 +49,42 @@ ln -svf \
    "$DOTFILES_DIR/.pyenv/default_packages" \
    ~/.pyenv/default-packages
 
-# Set up chemacs2
+# Emacs
+# -----------------------------------------------------------------------------
+
+function linkEmacsMinimal {
+    d=~/emacs/minimal
+    mkdir -p $d
+    files=$(find "$DOTFILES_DIR/emacs/minimal" -type f -printf "%P\n")
+    for f in $files; do
+        ln -svfn \
+           "$DOTFILES_DIR/emacs/minimal/$f" \
+           "$d/$f"
+    done
+}
+
+function linkEmacsCfclrk {
+    d=~/emacs/cfclrk
+    mkdir -p $d
+    files=$(find "$DOTFILES_DIR/emacs/cfclrk" -type f -printf "%P\n")
+    for f in $files; do
+        ln -svfn \
+           "$DOTFILES_DIR/emacs/cfclrk/$f" \
+           "$d/$f"
+    done
+}
+
+function linkEmacsPrelude {
+    d=~/emacs/prelude
+    files=$(find "$DOTFILES_DIR/emacs/prelude" -type f -printf "%P\n")
+    for f in $files; do
+        ln -svfn \
+           "$DOTFILES_DIR/emacs/prelude/$f" \
+           "$d/personal/$f"
+    done
+}
+
+# Set up chemacs2, installing it if necessary.
 if [[ -d ~/.emacs.d ]]; then
     pushd ~/.emacs.d
     remote=$(basename $(git remote get-url origin))
@@ -97,7 +100,7 @@ else
     git clone https://github.com/plexus/chemacs2.git ~/.emacs.d
 fi
 
-# Emacs
+# Create Emacs config directories
 mkdir -p ~/emacs
 linkEmacsCfclrk
 linkEmacsPrelude

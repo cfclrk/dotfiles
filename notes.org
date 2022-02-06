@@ -4,9 +4,13 @@
 
    System Pref -> Keyboard -> Modifier Keys
 
-** Install Firefox
+** 1Password
 
-   Sign in to LastPass
+   Install native app if allowed
+
+** Firefox
+
+   Install FireFox using Safari
    Sign in to Firefox
 
 ** Install Iterm2
@@ -38,6 +42,8 @@
    Update Iterm2 Preferences
 
    - Set font to fira code
+
+** Alfred
 
 * TODO
 
