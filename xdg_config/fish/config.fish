@@ -9,6 +9,7 @@ if not set -q TMUX
         $HOME/.local/bin \
         $HOME/.cargo/bin \
         $HOME/.cabal/bin \
+        $HOME/.ghcup/bin \
         $HOME/Work/bin \
         /usr/local/sbin \
         # Programs installed with brew take precedence over pre-installed
@@ -51,6 +52,9 @@ if not set -q TMUX
     if command -v pipenv > /dev/null
         set -gx PIPENV_IGNORE_VIRTUALENVS 1
     end
+
+    # ghcup
+    set GHCUP_INSTALL_BASE_PREFIX $HOME
 
     set os (uname)
     switch $os

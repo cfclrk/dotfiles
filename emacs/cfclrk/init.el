@@ -129,12 +129,18 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;; Use Source Code Pro on MacOS
 (when (eq system-type 'darwin)
-  (set-face-attribute 'default nil :family "Source Code Pro"))
+  ;; (set-face-attribute 'default nil :family "Source Code Pro")
+
+  ;; Requires installing the Hasklig font. See:
+  ;; https://github.com/i-tu/Hasklig
+  (set-face-attribute 'default nil
+                      :family "Hasklig"
+                      :weight 'normal))
 
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 170)))
+      (set-face-attribute 'default nil :height 200)))
 
 ;; Use the doom-one theme
 (use-package doom-themes
@@ -827,6 +833,25 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :hook (groovy-mode . lsp-deferred)
   :config
   (setq groovy-indent-offset 2))
+
+;;;; Haskell
+
+(use-package haskell-mode
+  :hook ((haskell-mode . lsp-deferred)
+         (haskell-literate-mode . lsp-deferred)))
+
+(use-package lsp-haskell
+  :after lsp-mode)
+
+(use-package hasklig-mode
+  :hook (haskell-mode))
+
+;; projectile -- discover projects with a ".cabal" file
+(add-to-list
+ 'my-project-root-files
+ (lambda (dir)
+   "Non-nil if a file with a .cabal extension is in dir"
+   (member "cabal" (-map 'f-ext (f-entries dir)))))
 
 ;;;; Java
 

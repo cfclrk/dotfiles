@@ -47,6 +47,9 @@
 
 * TODO
 
+  Install Hasklig.
+    - Grab the font zip and unzip the ttf files to ~/Library/Fonts/
+
   Read/link to https://sourabhbajaj.com/mac-setup/
 
   Install iterm2 with brew: =https://sourabhbajaj.com/mac-setup/iTerm/=
