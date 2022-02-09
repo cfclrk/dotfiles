@@ -59,10 +59,10 @@
 
 If EMPTY is non-nil, empty the directory first.
 
-The directory is created under
-`variable:temporary-file-directory'. Specifically:
+The directory is created relative to
+`variable:temporary-file-directory', at:
 
-<temporary-file-directory>/org-outline/<file>/<HEADING 1>/<HEADING 2>/...
+    org-outline/<file-name>/<heading 1>/<heading 2>/...
 
 Returns the directory name."
   (interactive)

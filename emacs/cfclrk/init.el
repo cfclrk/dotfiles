@@ -212,7 +212,9 @@ See: https://stackoverflow.com/questions/6133799"
 (add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
 
 ;; This is nice in go-mode. Should I only do this in go-mode?
-(define-key global-map (kbd "C-c M-.") 'xref-find-definitions-other-window)
+(define-key global-map
+            (kbd "C-c M-.")
+            'xref-find-definitions-other-window)
 
 ;; Change all yes/no prompts to y/n
 (fset 'yes-or-no-p 'y-or-n-p)

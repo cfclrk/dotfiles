@@ -23,30 +23,24 @@ if not set -q TMUX
         /usr/local/opt/texinfo/bin \
         $PATH
 
-    # Golang
-    set -gx GO111MODULE on
-    for goPath in (string split : (go env GOPATH))
-        set PATH $goPath/bin $PATH
+    # Colors in less (makes man pages look nicer)
+    set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
+    set -x LESS_TERMCAP_ue (set_color normal)      # reset underline
+
+    # Use the new Docker run engine
+	set -gx DOCKER_BUILDKIT 1
+
+    # frum - this prepends to $PATH
+    if command -v frum > /dev/null
+        frum init | source
     end
 
-    # pyenv
+    # pyenv - this prepends to $PATH
     if command -v pyenv > /dev/null
         pyenv init --path | source
         pyenv init - | source
         pyenv virtualenv-init - | source
     end
-
-    # rbenv
-    if command -v rbenv > /dev/null
-        source (rbenv init - | psub)
-    end
-
-	# Use the new Docker run engine
-	set -gx DOCKER_BUILDKIT 1
-
-    # Colors in less (makes man pages look nicer)
-    set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
-    set -x LESS_TERMCAP_ue (set_color normal)      # reset underline
 
     # pipenv
     if command -v pipenv > /dev/null
