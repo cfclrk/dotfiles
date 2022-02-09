@@ -846,7 +846,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :after lsp-mode)
 
 (use-package hasklig-mode
-  :hook (haskell-mode))
+  :hook ((haskell-mode)
+         (inferior-haskell-mode)))
 
 ;; projectile -- discover projects with a ".cabal" file
 (add-to-list
