@@ -486,12 +486,15 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (advice-add 'flycheck-checker-get :around 'my/flycheck-checker-get)
 
-(add-hook 'lsp-managed-mode-hook
-          (lambda ()
-            (when (derived-mode-p 'sh-mode)
-              (setq my/flycheck-local-cache '((lsp . ((next-checkers . (sh-posix-bash)))))))
-            (when (derived-mode-p 'go-mode)
-              (setq my/flycheck-local-cache '((lsp . ((next-checkers . (go-golint)))))))))
+(add-hook
+ 'lsp-managed-mode-hook
+ (lambda ()
+   (when (derived-mode-p 'sh-mode)
+     (setq my/flycheck-local-cache
+           '((lsp . ((next-checkers . (sh-posix-bash)))))))
+   (when (derived-mode-p 'go-mode)
+     (setq my/flycheck-local-cache
+           '((lsp . ((next-checkers . (go-golint)))))))))
 
 ;;;; helpful
 
@@ -523,7 +526,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (setq
    lsp-groovy-server-file
-   "/Users/chris.clark/Projects/cloned/groovy-language-server/build/libs/groovy-language-server-all.jar"))
+   (expand-file-name
+    "~/Projects/cloned/groovy-language-server/build/libs/groovy-language-server-all.jar")))
 
 (use-package lsp-ui
   :commands lsp-ui
