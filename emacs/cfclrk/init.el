@@ -498,12 +498,14 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; helpful
 
-(use-package helpful
-  :bind (("C-h f" . helpful-callable)
-         ("C-h v" . helpful-variable)
-         ("C-h k" . helpful-key)
-         ("C-c C-d" . helpful-at-point)
-         ("C-h C" . helpful-command)))
+;; TODO: enable again once https://github.com/Wilfred/elisp-refs/issues/35 is
+;; resolved.
+;; (use-package helpful
+;;   :bind (("C-h f" . helpful-callable)
+;;          ("C-h v" . helpful-variable)
+;;          ("C-h k" . helpful-key)
+;;          ("C-c C-d" . helpful-at-point)
+;;          ("C-h C" . helpful-command)))
 
 ;;;; Images
 
@@ -524,10 +526,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :hook (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred)
   :config
-  (setq
-   lsp-groovy-server-file
-   (expand-file-name
-    "~/Projects/cloned/groovy-language-server/build/libs/groovy-language-server-all.jar")))
+  ;; Location of the groovy-language-server jar file.
+  (setq lsp-groovy-server-file
+        (expand-file-name
+         "~/Projects/cloned/groovy-language-server/build/libs/groovy-language-server-all.jar")))
 
 (use-package lsp-ui
   :commands lsp-ui
@@ -585,19 +587,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (add-to-list 'projectile-globally-ignored-directories "*cdk\.out")
   (add-to-list 'projectile-globally-ignored-directories "*.terraform")
 
-  (load (expand-file-name "~/emacs/projectile-discovery.el"))
-
-  ;; My kind of Python project, with a Makefile
-  (projectile-register-project-type
-   'python-cfclrk '("setup.py" "Makefile")
-   :project-file "setup.py"
-   :src-dir "src"
-   :compile "make dev"
-   :install "make dev"
-   :test "make test"
-   :test-dir "tests"
-   :test-prefix "test"
-   :test-suffix"_test"))
+  (load (expand-file-name "~/emacs/projectile-discovery.el")))
 
 ;;;; protobuf
 
@@ -748,7 +738,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (whitespace-mode -1)
   (whitespace-mode +1))
 
-;;;; Bash
+;;;; shell/bash/zsh
 
 (add-hook 'sh-mode-hook #'lsp-deferred)
 
@@ -761,7 +751,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (use-package clojure-mode
   :hook ((clojure-mode . lsp-deferred)
-         (clojure-mode . my-lisp-mode-hook)))
+         (clojure-mode . my-lisp-mode-hook))
+  :bind (:map clojure-mode-map
+              ("C-t n" . cider-test-run-ns-tests)
+              ("C-t p" . cider-test-run-project-tests)
+              ("C-t t" . cider-test-run-test)))
 
 (use-package cider
   :after clojure-mode
@@ -849,6 +843,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 (use-package lsp-haskell
   :after lsp-mode)
 
+;; Use font ligatures
 (use-package hasklig-mode
   :hook ((haskell-mode)
          (inferior-haskell-mode)))
@@ -882,6 +877,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (setq js-indent-level 2))
 
 (add-hook 'js-mode-hook #'cfclrk/js-mode-hook)
+(add-hook 'js-mode-hook #'lsp-deferred)
 
 ;;;; Lisp
 
@@ -921,10 +917,26 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
                          (require 'lsp-pyright)
                          (lsp-deferred))))
 
+;; Code formatter
 (use-package python-black
   :after python)
 
-(use-package python-isort)
+;; Sort imports
+(use-package python-isort
+  :after python)
+
+;; Add a new kind of Projectile project for python projects that are structured
+;; like py-demo.
+  (projectile-register-project-type
+   'python-cfclrk '("setup.py" "Makefile")
+   :project-file "setup.py"
+   :src-dir "src"
+   :compile "make dev"
+   :install "make dev"
+   :test "make test"
+   :test-dir "tests"
+   :test-prefix "test"
+   :test-suffix"_test")
 
 ;;;; Rust
 
@@ -933,8 +945,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :bind (:map rustic-mode-map
               ("C-t t" . rustic-cargo-current-test))
   :config
-  (setq ;; rustic-format-on-save t
-        rustic-test-arguments "-- --show-output"))
+  (setq
+   ;; rustic-format-on-save was causing some problems with LSP.
+   ;; rustic-format-on-save t
+   rustic-test-arguments "-- --show-output"))
 
 ;;;; Terraform
 
@@ -967,10 +981,9 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
        "!Split sequence"
        "!Sub"
        "!Ref"
-       ;; Condition Functions
        "!And"
        "!Equals"
-	   "!If"
+       "!If"
        "!Not"
        "!Or"])
 

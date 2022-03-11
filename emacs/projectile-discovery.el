@@ -48,7 +48,7 @@ DIR is a path to a directory."
        (funcall name dir)))
    files))
 
-(defun projectile-root-bottom-up-unprioritized (dir &optional list)
+(defun my/projectile-root-bottom-up (dir &optional list)
   "Identify a project root.
 Perform a bottom-up search for files in LIST starting from DIR.
 Always return the lowest directory that has any file in LIST. If
@@ -58,13 +58,17 @@ first (bottommost) matched directory or nil."
     (f--traverse-upwards
      (any-file-exists? marker-files it) dir)))
 
+;; Add my new function into Projectile's hierarchy of project
+;; discovery functions.
 (setq projectile-project-root-functions
       '(projectile-root-local
         projectile-root-bottom-up
-        projectile-root-bottom-up-unprioritized  ;;  Our new function
+        my/projectile-root-bottom-up  ;;  New function
         projectile-root-top-down
         projectile-root-top-down-recurring))
 
+;; Only allow a .projectile file to force project
+;; roots to higher levels.
 (setq projectile-project-root-files-bottom-up
       '(".projectile"))
 
