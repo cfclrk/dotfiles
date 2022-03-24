@@ -1,7 +1,7 @@
 [user]
     name = Chris Clark
     email = cfclrk@gmail.com
-    signingkey = 279B742AFFA518D5
+    signingkey = 80027A20FC0B6207
 [core]
     sshCommand = "ssh -i ~/.ssh/github-home"
 [commit]

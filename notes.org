@@ -1,66 +1,78 @@
-* Set Up New MacOS
+* System Preferences
 
-** Remap caps-lock to control
+** Trackpad
 
-   System Pref -> Keyboard -> Modifier Keys
+   Tap to click
+
+** Keyboard
+
+   Modiffier Keys -> Remap Caps Lock to Control
+
+** Internet Accounts
+
+   iCloud Drive -> Options -> Check Desktop and Documents
+
+* Applications
+
+**  Finder
+
+   - Preferences -> General -> New Finder windows show: home dir
+   - Preferences -> Sidebar -> check Pictures and home dir
 
 ** 1Password
 
-   Install native app if allowed
+   Install native app from App Store.
 
 ** Firefox
 
-   Install FireFox using Safari
-   Sign in to Firefox
+   Install. Sign in to sync. Sign in (again) to the containers extension.
 
-** Install Iterm2
+** Iterm2
 
-   - Download from website
-   - Extract and put into Applications
+   Download from website. Preferences:
 
-   Preferences:
+   - Theme: minimal
+   - Color scheme: smooooth
 
-   Theme: minimal
-   Color scheme: smooooth
+** Keybase
 
-** Install brew
+   Create a new key?
 
-   Brew installation also installs Xcode command line tools
+* Set Up New MacOS
 
-   Brew install git (TODO: get rid of this)
+** Install [[https://brew.sh/][homebrew]]
 
-   Git clone dotfiles with https (TODO: use curl, but still need to brew install
-   curl)
+   Installing brew also installs the Xcode command line tools.
 
-   Run dotfiles
+** Run dotfiles
 
-   Change shell to fish
+   #+begin_src sh
+     bash -c "$()"
+   #+end_src
 
-   Add fish to /etc/shells
-   chsh -s $(which fish)
+** Change shell
 
-   Update Iterm2 Preferences
+   #+begin_src sh
+     f=$(which fish)
+     echo "$f" >> /etc/shells
+     chsh -s "$f"
+   #+end_src
 
-   - Set font to fira code
+** Keybase
 
 ** Alfred
 
 * TODO
 
-  Install Hasklig.
-    - Grab the font zip and unzip the ttf files to ~/Library/Fonts/
+  Update ssh .config link ownership to 600
 
   Read/link to https://sourabhbajaj.com/mac-setup/
-
-  Install iterm2 with brew: =https://sourabhbajaj.com/mac-setup/iTerm/=
 
   Need findutils installed before find commands in bootstrap.sh work.
 
   - Add libxml2 to brew
   - For compiling macOS with json, need to brew install Jansson
   - transient/values.el link does not work if transient dir is not there
-
-  Can't start emacs without site.el project
 
   Getting error:
   /Users/chris.clark/.emacs.d exists but it is not chemacs2
