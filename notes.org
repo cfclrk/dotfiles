@@ -46,9 +46,7 @@
 
 ** Run dotfiles
 
-   #+begin_src sh
-     bash -c "$()"
-   #+end_src
+   Run the bash command in the README.
 
 ** Change shell
 
@@ -60,9 +58,13 @@
 
 ** Keybase
 
+   Install keybase native app.
+
 ** Alfred
 
 * TODO
+
+  Install 1Password with "brew mas 1Password"
 
   Update ssh .config link ownership to 600
 

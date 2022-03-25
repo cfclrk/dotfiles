@@ -7,7 +7,7 @@ brew "fish"
 brew "findutils"
 brew "gnupg"
 brew "gnutls"
-brew "go"
+brew "go", link: true
 brew "imagemagick"
 brew "jq"
 brew "librsvg"

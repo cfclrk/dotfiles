@@ -11,7 +11,7 @@ if [[ "$OS" == "Darwin" ]]; then
         echo "Homebrew is not installed"
         exit 1
     fi
-    brew bundle --file Brewfile
+    brew bundle --no-lock --file Brewfile
 fi
 
 # Install the Hasklig font if necessary.
