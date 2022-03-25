@@ -13,12 +13,12 @@ brew "jq"
 brew "librsvg"
 brew "make"
 brew "node"
-# brew "rust-analyzer"
-# brew "shellcheck"
-# brew "svn"  # needed to download fonts
-# brew "texinfo"
-# brew "tmux"
-# brew "tree"
+brew "rust-analyzer"
+brew "shellcheck"
+brew "svn"  # needed to download fonts
+brew "texinfo"
+brew "tmux"
+brew "tree"
 
 # Downloads a .pkg to /usr/local/Caskroom/basictex, need to manually run it
 # cask "basictex"

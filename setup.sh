@@ -22,7 +22,7 @@ if [[ ! -f ~/Library/Fonts/Hasklig-Regular.ttf ]]; then
          $repo/releases/download/v1.2/Hasklig-1.2.zip \
          -o /tmp/hasklig.zip
     tar xvf /tmp/hasklig.zip
-    mkdir -p ~/Library/Fonts/
+    mkdir -p ~/Library/Fonts/ -C /tmp
     cp /tmp/TTF/*.ttf ~/Library/Fonts/
 fi
 
@@ -118,7 +118,7 @@ ln -svfn \
    "$HOME/emacs/projectile-discovery.el"
 
 # Clone my website
-git clone
-ln -svfn \
-   "$DOTFILES_DIR/emacs/projectile-discovery.el" \
-   "$HOME/emacs/projectile-discovery.el"
+# git clone
+# ln -svfn \
+#    "$DOTFILES_DIR/emacs/projectile-discovery.el" \
+#    "$HOME/emacs/projectile-discovery.el"
