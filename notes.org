@@ -68,10 +68,6 @@
 
   Read/link to https://sourabhbajaj.com/mac-setup/
 
-  Need findutils installed before find commands in bootstrap.sh work.
-
-  - Add libxml2 to brew
-  - For compiling macOS with json, need to brew install Jansson
   - transient/values.el link does not work if transient dir is not there
 
   Getting error:

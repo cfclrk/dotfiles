@@ -1,0 +1,12 @@
+name: Test
+on:
+  push:
+    branches: ["*"]
+
+jobs:
+  test:
+    runs-on: macOS-latest
+    steps:
+
+      - name: Run bootstrap script
+        run: bash -c "$(curl -sSL https://raw.githubusercontent.com/cfclrk/dotfiles/master/bootstrap.sh)"
