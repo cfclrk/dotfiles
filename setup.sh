@@ -16,7 +16,7 @@ fi
 
 # Install the Hasklig font if necessary.
 if [[ ! -f ~/Library/Fonts/Hasklig-Regular.ttf ]]; then
-    "Installing Hasklig font"
+    echo "Installing Hasklig font"
     repo="https://github.com/i-tu/Hasklig"
     curl -L \
          $repo/releases/download/v1.2/Hasklig-1.2.zip \
