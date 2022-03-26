@@ -21,8 +21,8 @@ if [[ ! -f ~/Library/Fonts/Hasklig-Regular.ttf ]]; then
     curl -L \
          $repo/releases/download/v1.2/Hasklig-1.2.zip \
          -o /tmp/hasklig.zip
-    tar xvf /tmp/hasklig.zip
-    mkdir -p ~/Library/Fonts/ -C /tmp
+    tar xvf /tmp/hasklig.zip -C /tmp
+    mkdir -p ~/Library/Fonts/
     cp /tmp/TTF/*.ttf ~/Library/Fonts/
 fi
 
