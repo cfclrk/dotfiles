@@ -2,10 +2,14 @@
 
 set -eu -o pipefail
 
+# The absolute path to this directory
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+# This operating system name ("Darwin")
 OS=$(uname -s)
 
-# On MacOS, install homebrew packages. Assumes homebrew is already installed.
+# On MacOS, install the homebrew packages in Brewfile. Assumes homebrew is
+# already installed.
 if [[ "$OS" == "Darwin" ]]; then
     if ! command -v brew >/dev/null; then
         echo "Homebrew is not installed"
@@ -14,36 +18,44 @@ if [[ "$OS" == "Darwin" ]]; then
     brew bundle --no-lock --file Brewfile
 fi
 
-# Install the Hasklig font if necessary.
-if [[ ! -f ~/Library/Fonts/Hasklig-Regular.ttf ]]; then
-    echo "Installing Hasklig font"
+# Install the Hasklig font.
+fontDir=~/Library/Fonts/
+if [[ ! -f $fontDir/Hasklig-Regular.ttf ]]; then
+    # The font is not installed
     repo="https://github.com/i-tu/Hasklig"
+    echo "Installing the Hasklig font from: $repo"
     curl -L \
          $repo/releases/download/v1.2/Hasklig-1.2.zip \
          -o /tmp/hasklig.zip
     tar xvf /tmp/hasklig.zip -C /tmp
-    mkdir -p ~/Library/Fonts/
-    cp /tmp/TTF/*.ttf ~/Library/Fonts/
+    mkdir -p $fontDir
+    cp /tmp/TTF/*.ttf $fontDir
 fi
 
 # Dotfiles
 dotFiles=$(ls -A "$DOTFILES_DIR/dotfiles")
 for f in $dotFiles; do
-    ln -svfn "$DOTFILES_DIR/dotfiles/$f" "$HOME/$f"
+    ln -svfn \
+       "$DOTFILES_DIR/dotfiles/$f" \
+       "$HOME/$f"
 done
 
 # ~/bin
 mkdir -p ~/bin
 scriptFiles=$(ls -A "$DOTFILES_DIR/bin")
 for f in $scriptFiles; do
-    ln -svfn "$DOTFILES_DIR/bin/$f" "$HOME/bin/$f"
+    ln -svfn \
+       "$DOTFILES_DIR/bin/$f" \
+       "$HOME/bin/$f"
 done
 
-# XDG config: ~/.config
+# XDG ~/.config directory
 mkdir -p ~/.config
-xdgConfigs=$(ls -A "$DOTFILES_DIR/xdg_config")
+xdgConfigs=$(ls -A "$DOTFILES_DIR/.config")
 for f in $xdgConfigs; do
-    ln -svfn "$DOTFILES_DIR/xdg_config/$f" "$HOME/.config/$f"
+    ln -svfn \
+       "$DOTFILES_DIR/.config/$f" \
+       "$HOME/.config/$f"
 done
 
 # SSH
@@ -122,9 +134,3 @@ linkEmacsMinimal
 ln -svfn \
    "$DOTFILES_DIR/emacs/projectile-discovery.el" \
    "$HOME/emacs/projectile-discovery.el"
-
-# Clone my website
-# git clone
-# ln -svfn \
-#    "$DOTFILES_DIR/emacs/projectile-discovery.el" \
-#    "$HOME/emacs/projectile-discovery.el"
