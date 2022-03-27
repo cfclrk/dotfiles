@@ -132,10 +132,18 @@ non-nil, use sudo on the remote host."
 ;;; Publishing
 
 ;; Load my projects
-(load (expand-file-name "~/Projects/cfclrk.com/site.el"))
-(load (expand-file-name "notes/notes.el" site/project-directory))
-(load (expand-file-name "articles/articles.el" site/project-directory))
-(load (expand-file-name "~/Projects/cloudformation/cloudformation.el"))
+(let ((site.el (expand-file-name "~/Projects/cfclrk.com/site.el")))
+   (when (f-exists? site.el)
+    (progn
+      (load site.el)
+      (let ((notes.el (expand-file-name "notes/notes.el" site/project-directory))
+            (articles.el (expand-file-name "articles/articles.el" site/project-directory)))
+        (load notes.el)
+        (load articles.el)))))
+
+(let  ((cloudformation.el (expand-file-name "~/Projects/cloudformation/cloudformation.el")))
+  (when (f-exists? cloudformation.el)
+    (load cloudformation.el)))
 
 ;;; org-src mode
 
