@@ -74,6 +74,9 @@ function linkEmacsMinimal {
     mkdir -p $d
     files=$(find "$DOTFILES_DIR/emacs/minimal" -type f -printf "%P\n")
     for f in $files; do
+        # Create the directory for this file if the directory doesn't exist yet
+        mkdir -p $d/$(dirname $f)
+        # Create symlink to this file in my dotfiles project
         ln -svfn \
            "$DOTFILES_DIR/emacs/minimal/$f" \
            "$d/$f"
@@ -85,6 +88,9 @@ function linkEmacsCfclrk {
     mkdir -p $d
     files=$(find "$DOTFILES_DIR/emacs/cfclrk" -type f -printf "%P\n")
     for f in $files; do
+        # Create the directory for this file if the directory doesn't exist yet
+        mkdir -p $d/$(dirname $f)
+        # Create symlink to this file in my dotfiles project
         ln -svfn \
            "$DOTFILES_DIR/emacs/cfclrk/$f" \
            "$d/$f"
