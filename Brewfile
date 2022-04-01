@@ -7,7 +7,6 @@ brew "fish"
 brew "findutils"
 brew "gnupg"
 brew "gnutls"
-# brew "go"
 brew "imagemagick"
 brew "jq"
 brew "librsvg"
@@ -20,10 +19,9 @@ brew "texinfo"
 brew "tmux"
 brew "tree"
 
-# Downloads a .pkg to /usr/local/Caskroom/basictex, need to manually run it
-# cask "basictex"
+# Downloads a .pkg file in to $(brew --prefix)/Caskroom/basictex/, need to
+# manually run it
+cask "basictex"
 
-# tap "homebrew/cask-fonts"
-# cask "font-fira-code"
-# cask "font-source-code-pro"
-# cask "font-source-sans-pro"
+tap "homebrew/cask-fonts"
+cask "font-fira-code"

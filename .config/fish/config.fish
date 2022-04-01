@@ -1,8 +1,9 @@
 if not set -q TMUX
 
+    # NOTE: Fish doesn't allow variables in commands, so to use EDITOR, run
+    # "eval $EDITOR"
     set -gx EMACS "$HOME/Projects/cloned/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
     set -gx EDITOR "$EMACS --with-profile minimal"
-    # Fish doesn't allow variables in commands, so to use EDITOR, run "eval $EDITOR"
 
     set PATH \
         $HOME/bin \
@@ -22,6 +23,9 @@ if not set -q TMUX
         /usr/local/opt/openssl@1.1/bin \
         /usr/local/opt/texinfo/bin \
         $PATH
+
+    # All of a sudden, I need this on my new MacBook. M1 thing only?
+    eval (/opt/homebrew/bin/brew shellenv)
 
     # Colors in less (makes man pages look nicer)
     set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline

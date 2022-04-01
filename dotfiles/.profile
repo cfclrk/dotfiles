@@ -2,8 +2,6 @@ HISTCONTROL=ignoreboth  # Ignore duplicate lines in the history
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-export GOPATH=$HOME/IronNet/go
-
 PATH=$HOME/bin:$PATH
 PATH=$HOME/.cargo/bin:$PATH
 PATH=$(go env GOPATH)/bin:$PATH

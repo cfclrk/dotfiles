@@ -10,30 +10,19 @@ tmux new-session -d -s Home
 
 tmux new-session -d -s Work
 
-tmux send-keys -t Work:1 's ~/.env/work_ca' C-m
-
-# tmux new-window -c ~/IronNet/irondefense-orchestration/ikcm -n ikcm \; \
-#      send-keys 'pwd' C-m \;
-
-# Session: Kube
+# Session: Dply
 # -------------
 
-tmux new-session -d -s Kube -n aws-dev
+tmux new-session -d -s Dply -n dev
 
-tmux rename-window -t Kube:1 "aws-dev"
-tmux send-keys -t Kube:1 's ~/.env/iron_defense_clusters/aws-dev.irondev.io' C-m
+tmux rename-window -t Dply:1 "dev"
+tmux send-keys -t Dply:1 's ~/.env/splash/dev' C-m
 
-tmux new-window -t Kube:2 -c ~/IronNet -n qa
-tmux send-keys -t Kube:2 's ~/.env/iron_defense_clusters/qa.irondev.io' C-m
+tmux new-window -t Dply:2 -c ~/Work -n stage
+tmux send-keys -t Dply:2 's ~/.env/splash/stage' C-m
 
-tmux new-window -t Kube:3 -c ~/IronNet -n harbor-dev
-tmux send-keys -t Kube:3 's ~/.env/iron_defense_clusters/harbor-dev' C-m
-
-tmux new-window -t Kube:4 -c ~/IronNet -n harbor-prod
-tmux send-keys -t Kube:4 's ~/.env/iron_defense_clusters/harbor-prod' C-m
-
-tmux new-window -t Kube:5 -c ~/IronNet -n jenkins-prod
-tmux send-keys -t Kube:5 's ~/.env/iron_defense_clusters/jenkins-prod' C-m
+tmux new-window -t Dply:3 -c ~/Work -n prod
+tmux send-keys -t Dply:3 's ~/.env/splash/prod' C-m
 
 # https://github.com/tmux-plugins/tmux-copycat/issues/116
 # tmux unbind -n n \; unbind -n N

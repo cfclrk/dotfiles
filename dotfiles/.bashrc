@@ -67,9 +67,3 @@ fi
 
 # aws CLI yumminess
 complete -C aws_completer aws
-
-s ~/.env/work
-
-[[ -s ~/.ironkube/bashrc ]] && source ~/.ironkube/bashrc
-
-[[ -s ~/.ironkube/shrc && ! -s ~/.ironkube/bashrc ]] && source ~/.ironkube/shrc

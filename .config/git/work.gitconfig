@@ -1,7 +1,6 @@
 [user]
-    email = chris.clark@ironnet.com
-    signingkey = EDC41C0910322DD6
-[github]
-    user = chrisc-ironnet
+    email = cclark@splashfinancial.com
 [core]
     sshCommand = "ssh -i ~/.ssh/github-work"
+[github]
+    user = cclark-splash

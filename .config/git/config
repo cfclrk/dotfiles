@@ -1,16 +1,14 @@
 [user]
     name = Chris Clark
     email = cfclrk@gmail.com
-    signingkey = 80027A20FC0B6207
+    signingkey = C6ECD046467701AB
 [core]
     sshCommand = "ssh -i ~/.ssh/github-home"
 [commit]
     gpgsign = true
-[github]
-    user = cfclrk
 [init]
     defaultBranch = main
 [includeIf "gitdir:~/Work/"]
     path = work.gitconfig
-[includeIf "gitdir:~/go/"]
-    path = work.gitconfig
+[github]
+    user = cfclrk

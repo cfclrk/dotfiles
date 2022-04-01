@@ -140,7 +140,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 200)))
+      (set-face-attribute 'default nil :height 170)))
 
 ;; Use the doom-one theme
 (use-package doom-themes
@@ -692,6 +692,13 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;; Unfill is the opposite of `fill-paragraph'
 (use-package unfill)
+
+;;;; visual-fill-column
+
+(use-package visual-fill-column)
+
+;; To automatically use visual-fill-column whenever you enter visual-line-mode:
+;; (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
 
 ;;;; which-key
 
