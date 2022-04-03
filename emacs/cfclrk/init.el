@@ -256,6 +256,11 @@ See: https://stackoverflow.com/questions/6133799"
   :bind ("M-l" . ace-window)
   :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
 
+;;;; bazel
+
+(use-package bazel
+  :straight (bazel :type git :host github :repo "bazelbuild/emacs-bazel-mode"))
+
 ;;;; beacon
 
 ;; Beacon is a package that temporarily highlights or flashes the line that the
@@ -396,15 +401,16 @@ From: https://stackoverflow.com/a/3072831/340613"
   :after magit
   :hook (after-save . magit-after-save-refresh-status)
   :config
-  (add-to-list 'forge-alist '("github-home"
-                              "api.github.com"
-                              "github.com"
-                              forge-github-repository))
-  (add-to-list 'forge-alist '("github-work"
-                              "api.github.com"
-                              "github.com"
-                              forge-github-repository))
-  (setq forge-owned-accounts '(("cfclrk" . nil))))
+  ;; (add-to-list 'forge-alist '("github-home"
+  ;;                             "api.github.com"
+  ;;                             "github.com"
+  ;;                             forge-github-repository))
+  ;; (add-to-list 'forge-alist '("github-work"
+  ;;                             "api.github.com"
+  ;;                             "github.com"
+  ;;                             forge-github-repository))
+  (setq forge-owned-accounts '(("cfclrk" . nil)
+                               ("cclark-splash" . nil))))
 
 ;;;; github-browse-file
 
@@ -425,10 +431,6 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 ;; Use grip-mode to view markdown (GFM) files rendered as HTML using GitHub's
 ;; rendering API.
-;;
-;; --------------------------------------------
-;; USING WORK ACCOUNT REQUIRES SETTING CA CERT!
-;; --------------------------------------------
 
 (use-package grip-mode
   :bind (:map markdown-mode-command-map
@@ -436,7 +438,7 @@ From: https://stackoverflow.com/a/3072831/340613"
   :config
   (require 'auth-source)
   (let ((credential (auth-source-user-and-password
-                     "api.github.com" "chrisc-ironnet^forge")))
+                     "api.github.com" "cclark-splash^forge")))
     (setq grip-github-user (car credential)
           grip-github-password (cadr credential))))
 
