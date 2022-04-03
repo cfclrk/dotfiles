@@ -8,7 +8,7 @@
     gpgsign = true
 [init]
     defaultBranch = main
+[github]
+	user = cfclrk
 [includeIf "gitdir:~/Work/"]
     path = work.gitconfig
-[github]
-    user = cfclrk

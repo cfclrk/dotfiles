@@ -27,9 +27,8 @@ if not set -q TMUX
     # All of a sudden, I need this on my new MacBook. M1 thing only?
     eval (/opt/homebrew/bin/brew shellenv)
 
-    # Colors in less (makes man pages look nicer)
-    set -x LESS_TERMCAP_us (set_color -o magenta)  # begin underline
-    set -x LESS_TERMCAP_ue (set_color normal)      # reset underline
+    # Setting XDG_CONFIG_HOME makes more programs use it
+    set -gx XDG_CONFIG_HOME ~/.config
 
     # Use the new Docker run engine
 	set -gx DOCKER_BUILDKIT 1
