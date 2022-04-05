@@ -16,21 +16,13 @@
 (require 'projectile)
 (require 'f)
 
-(setq
+(defvar
  my-project-root-files
  (-concat
+  '("requirements.txt")        ;; Python
+  '("go.mod")                  ;; Go
   projectile-project-root-files-bottom-up
   projectile-project-root-files))
-
-;; Python
-(add-to-list
- 'my-project-root-files
- "requirements.txt")
-
-;; Go
-(add-to-list
- 'my-project-root-files
- "go.mod")
 
 (defun any-file-exists? (files dir)
   "True if any of FILES exist in DIR.

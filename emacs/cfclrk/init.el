@@ -472,7 +472,9 @@ From: https://stackoverflow.com/a/3072831/340613"
 ;;;; flycheck
 
 (use-package flycheck
-  :config (global-flycheck-mode +1))
+  :config
+  (global-flycheck-mode +1)
+  (setq-default flycheck-disabled-checkers '(markdown-markdownlint-cli)))
 
 ;; Run more flycheck checkers in LSP mode. LSP-mode disables all flycheck
 ;; checkers (instead that is delegated to the LSP server). From:
@@ -543,11 +545,18 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (defun cfclrk/markdown-mode-hook ()
   "Customize `markdown-mode'."
+  ;; When you're typing, automatically insert a newline when you hit
+  ;; fill-column.
   (turn-on-auto-fill)
+  ;; Show a vertical line where fill-column is
   (display-fill-column-indicator-mode 1))
 
 (use-package markdown-mode
-  :hook (markdown-mode . cfclrk/markdown-mode-hook)
+  :hook (;; visual-line-mode and visual-fill-column-mode allow for reading files
+         ;; where VSCoders write paragraphs on single, long lines (as barbarians
+         ;; are wont to do)
+         (markdown-mode . visual-line-mode)
+         (markdown-mode . visual-fill-column-mode))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
