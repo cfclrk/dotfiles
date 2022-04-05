@@ -19,8 +19,7 @@
 (defvar
  my-project-root-files
  (-concat
-  '("requirements.txt")        ;; Python
-  '("go.mod")                  ;; Go
+  '("go.mod")
   projectile-project-root-files-bottom-up
   projectile-project-root-files))
 
