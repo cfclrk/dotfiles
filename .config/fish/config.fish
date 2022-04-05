@@ -5,6 +5,8 @@ if not set -q TMUX
     set -gx EMACS "$HOME/Projects/cloned/emacs/nextstep/Emacs.app/Contents/MacOS/Emacs"
     set -gx EDITOR "$EMACS --with-profile minimal"
 
+    eval (/opt/homebrew/bin/brew shellenv)
+
     set PATH \
         $HOME/bin \
         $HOME/.local/bin \
@@ -12,20 +14,17 @@ if not set -q TMUX
         $HOME/.cabal/bin \
         $HOME/.ghcup/bin \
         $HOME/Work/bin \
-        /usr/local/sbin \
+        $HOMEBREW_PREFIX/sbin \
         # Programs installed with brew take precedence over pre-installed
         # programs
-        /usr/local/opt/curl/bin \
-        /usr/local/opt/coreutils/libexec/gnubin \
-        /usr/local/opt/libtool/libexec/gnubin \
-        /usr/local/opt/findutils/libexec/gnubin \
-        /usr/local/opt/make/libexec/gnubin \
-        /usr/local/opt/openssl@1.1/bin \
-        /usr/local/opt/texinfo/bin \
+        $HOMEBREW_PREFIX/opt/curl/bin \
+        $HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin \
+        $HOMEBREW_PREFIX/opt/libtool/libexec/gnubin \
+        $HOMEBREW_PREFIX/opt/findutils/libexec/gnubin \
+        $HOMEBREW_PREFIX/opt/make/libexec/gnubin \
+        $HOMEBREW_PREFIX/opt/openssl@1.1/bin \
+        $HOMEBREW_PREFIX/opt/texinfo/bin \
         $PATH
-
-    # All of a sudden, I need this on my new MacBook. M1 thing only?
-    eval (/opt/homebrew/bin/brew shellenv)
 
     # Setting XDG_CONFIG_HOME makes more programs use it
     set -gx XDG_CONFIG_HOME ~/.config
