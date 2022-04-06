@@ -563,6 +563,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :init (setq markdown-command "multimarkdown")
   :config
   (setq whitespace-style '(face tabs empty trailing))
+  ;; Restart whitespace mode so that is properly uses `whitespace-style'.
   (whitespace-mode -1)
   (whitespace-mode +1))
 
@@ -750,9 +751,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   "General configuration for any LISP."
   (smartparens-strict-mode +1)
   (rainbow-delimiters-mode +1)
-
-  ;; Restart whitespace mode so that it properly uses fill-column.
   (setq fill-column 80)
+  ;; Restart whitespace mode so that it properly uses `fill-column'.
   (whitespace-mode -1)
   (whitespace-mode +1))
 
