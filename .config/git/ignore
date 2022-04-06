@@ -1,2 +1,4 @@
 .DS_Store
 .projectile
+.clj-kondo
+.lsp
