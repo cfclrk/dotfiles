@@ -24,7 +24,13 @@
 
 ;; Use use-package
 (straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
+
+;; Straight configuration
+(setq
+ ;; Make every use-package declaration use straight
+ straight-use-package-by-default t
+ ;; Make straight use ssh instead of https
+ straight-vc-git-default-protocol 'ssh)
 
 ;; Number of bytes that can be read from a sub-process in one read operation.
 ;; Good for dealing with verbose subprocesses, like *ehem* an LSP server.
@@ -766,6 +772,16 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;; (add-hook c++-mode-hook #lsp-deferred)
 
 ;;;; Clojure
+
+;; (load-file "/Users/cclark/Work/stonehenge/development/emacs/monorepl.el")
+
+(use-package monorepl
+  :after cider
+  :straight (monorepl
+             :type git
+             :host github
+             :repo "SplashFinancial/stonehenge"
+             :files ("development/emacs/*.el")))
 
 (use-package clojure-mode
   :hook ((clojure-mode . lsp-deferred)

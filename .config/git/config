@@ -11,4 +11,6 @@
 [github]
 	user = cfclrk
 [includeIf "gitdir:~/Work/"]
+	path = work.gitconfig
+[includeIf "gitdir:~/emacs/"]
     path = work.gitconfig
