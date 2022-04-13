@@ -9,8 +9,10 @@
 ;; TODO: Try out https://github.com/Fuco1/org-radiobutton
 
 ;; Use straight to get org-mode. Straight runs some extra stuff that makes sure
-;; we don't end up using the org-mode bundled with Emacs.
+;; we don't end up using the org-mode bundled with Emacs. These come from the
+;; straight mirror here: https://github.com/emacs-straight
 (use-package org)
+(use-package org-contrib)
 
 (require 'org)
 (require 'ob)  ;; Do I still need this? Once got error loading org-babel-comint-use-async.
@@ -24,8 +26,6 @@
         ("\\.x?html?\\'" . default)
         ("\\.pdf\\'" . default)
         ("\\.crt\\'" . emacs)))
-
-(setq org-adapt-indentation t)
 
 ;;; Packages
 
@@ -137,13 +137,13 @@ non-nil, use sudo on the remote host."
     (progn
       (load site.el)
       (let ((notes.el (expand-file-name "notes/notes.el" site/project-directory))
-            (articles.el (expand-file-name "articles/articles.el" site/project-directory)))
+            (articles.el (expand-file-name "articles/articles.el" site/project-directory))
+            (cloudformation.el (expand-file-name "~/Projects/cloudformation/cloudformation.el")))
         (load notes.el)
-        (load articles.el)))))
-
-(let  ((cloudformation.el (expand-file-name "~/Projects/cloudformation/cloudformation.el")))
-  (when (f-exists? cloudformation.el)
-    (load cloudformation.el)))
+        (load articles.el)
+        (when (f-exists? cloudformation.el)
+          (load cloudformation.el)))
+        )))
 
 ;;; org-src mode
 
@@ -166,6 +166,7 @@ non-nil, use sudo on the remote host."
 
   (setq org-startup-folded t
 		org-confirm-babel-evaluate nil
+        org-adapt-indentation t
 		org-src-window-setup 'split-window-below
 		org-special-ctrl-a/e t
 		org-babel-clojure-backend 'cider

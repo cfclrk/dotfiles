@@ -15,12 +15,11 @@ if not set -q TMUX
         $HOME/.ghcup/bin \
         $HOME/Work/bin \
         $HOMEBREW_PREFIX/sbin \
-        # Programs installed with brew take precedence over pre-installed
-        # programs
         $HOMEBREW_PREFIX/opt/curl/bin \
         $HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin \
         $HOMEBREW_PREFIX/opt/libtool/libexec/gnubin \
         $HOMEBREW_PREFIX/opt/findutils/libexec/gnubin \
+        $HOMEBREW_PREFIX/opt/libpq/bin \
         $HOMEBREW_PREFIX/opt/make/libexec/gnubin \
         $HOMEBREW_PREFIX/opt/openssl@1.1/bin \
         $HOMEBREW_PREFIX/opt/texinfo/bin \

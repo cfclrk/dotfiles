@@ -146,7 +146,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 170)))
+      (set-face-attribute 'default nil :height 150)))
 
 ;; Use the doom-one theme
 (use-package doom-themes
@@ -439,6 +439,7 @@ From: https://stackoverflow.com/a/3072831/340613"
 ;; rendering API.
 
 (use-package grip-mode
+  :after markdown-mode
   :bind (:map markdown-mode-command-map
               ("g" . grip-mode))
   :config
@@ -576,6 +577,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
 ;; you edit source blocks in another buffer (similar to org-edit-special)
 (use-package edit-indirect)
+
+;;;; mermaid
+
+(use-package mermaid-mode)
 
 ;;;; org
 
@@ -773,14 +778,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Clojure
 
-;; (load-file "/Users/cclark/Work/stonehenge/development/emacs/monorepl.el")
-
 (use-package monorepl
   :after cider
   :straight (monorepl
-             :type git
-             :host github
-             :repo "SplashFinancial/stonehenge"
+             :local-repo "~/Work/stonehenge"
              :files ("development/emacs/*.el")))
 
 (use-package clojure-mode
