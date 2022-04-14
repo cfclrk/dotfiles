@@ -14,6 +14,8 @@
 (use-package org)
 (use-package org-contrib)
 
+(load-file "/Users/cclark/emacs/cfclrk/straight/repos/org/lisp/org-compat.el")
+
 (require 'org)
 (require 'ob)  ;; Do I still need this? Once got error loading org-babel-comint-use-async.
 

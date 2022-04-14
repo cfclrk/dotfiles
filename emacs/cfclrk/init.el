@@ -146,7 +146,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 150)))
+      (set-face-attribute 'default nil :height 160)))
 
 ;; Use the doom-one theme
 (use-package doom-themes
@@ -402,6 +402,8 @@ From: https://stackoverflow.com/a/3072831/340613"
   :config
   (setq magit-diff-refine-hunk 'all))
 
+(use-package magit-todos)
+
 ;; Credentials are stored in ~/.authinfo
 (use-package forge
   :after magit
@@ -570,6 +572,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :init (setq markdown-command "multimarkdown")
   :config
   (setq whitespace-style '(face tabs empty trailing))
+  (setq markdown-fontify-code-blocks-natively t)
+
   ;; Restart whitespace mode so that is properly uses `whitespace-style'.
   (whitespace-mode -1)
   (whitespace-mode +1))
@@ -667,7 +671,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   ;; splicing
   (define-prefix-command 'sp-splice-key-map)
   (define-key sp-prefix-key-map (kbd "s") sp-splice-key-map)
-
   (define-key sp-splice-key-map (kbd "s") 'sp-splice-sexp)
   (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
   (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
@@ -676,7 +679,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   ;; wrapping
   (define-prefix-command 'sp-wrap-key-map)
   (define-key sp-prefix-key-map (kbd "r") sp-wrap-key-map)
-
   (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
   (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
   (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
@@ -778,22 +780,15 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Clojure
 
-(defun cfclrk/clojure-mode-hook ()
+(defun my-clojure-mode-hook ()
   "Hooks to add in `clojure-mode' buffers."
-  (add-hook 'before-save-hook #'cljstyle))
-
-(use-package monorepl
-  :after cider
-  :straight (monorepl
-             :local-repo "~/Work/stonehenge"
-             :files ("development/emacs/*.el")))
+  (add-hook 'before-save-hook #'cljstyle nil t))
 
 (use-package clojure-mode
-  :init (add-to-list 'auto-mode-alist
-               '("\\.cljstyle\\'" . clojure-mode))
+  :mode "\\.cljstyle\\'"  ;; Use clojure-mode for ".cljstyle" files
   :hook ((clojure-mode . lsp-deferred)
          (clojure-mode . my-lisp-mode-hook)
-         (clojure-mode . cfclrk/clojure-mode-hook))
+         (clojure-mode . my-clojure-mode-hook))
   :bind (:map clojure-mode-map
               ("C-t n" . cider-test-run-ns-tests)
               ("C-t p" . cider-test-run-project-tests)
@@ -801,14 +796,35 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (use-package cider
   :after clojure-mode
+  ;; TODO: How do I get smartparens working in the cider repl? The following
+  ;; overrides M-p. Get smartparens working without clobbering cider
+  ;; keybindings.
+  ;;
+  ;; :hook (cider-repl . (lambda () (smartparens-strict-mode +1)))
   :config
   (setq cider-save-file-on-load t))
 
-(use-package cljstyle-mode
-  :straight (cljstyle-mode
-             :type git
-             :host github
-             :repo "jstokes/cljstyle-mode"))
+(use-package cljstyle
+  :after clojure-mode
+  :straight (cljstyle
+             :local-repo "~/Projects/codenotes/elisp/cljstyle.el"
+             :files ("cljstyle.el")))
+
+(use-package stonehenge
+  :after cider
+  :straight (stonehenge
+             :local-repo "~/Work/stonehenge"
+             :files ("development/emacs/stonehenge.el"))
+  :config
+  (setq stonehenge-path (expand-file-name "~/Work/stonehenge")))
+
+;; (use-package monorepl
+;;   :after cider
+;;   :straight (monorepl
+;;              :local-repo "~/Work/stonehenge"
+;;              :files ("development/emacs/monorepl.el"))
+;;   :config
+;;   (setq stonehenge-path "/Users/cclark/Work/stonehenge"))
 
 ;;;; CSS and SCSS
 
@@ -932,6 +948,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 (dolist (hook '(lisp-mode-hook
                 lisp-data-mode-hook))
   (add-hook hook #'my-lisp-mode-hook))
+
+;;;; PHP
+
+(use-package php-mode)
 
 ;;;; Python
 
