@@ -778,6 +778,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Clojure
 
+(defun cfclrk/clojure-mode-hook ()
+  "Hooks to add in `clojure-mode' buffers."
+  (add-hook 'before-save-hook #'cljstyle))
+
 (use-package monorepl
   :after cider
   :straight (monorepl
@@ -785,8 +789,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
              :files ("development/emacs/*.el")))
 
 (use-package clojure-mode
+  :init (add-to-list 'auto-mode-alist
+               '("\\.cljstyle\\'" . clojure-mode))
   :hook ((clojure-mode . lsp-deferred)
-         (clojure-mode . my-lisp-mode-hook))
+         (clojure-mode . my-lisp-mode-hook)
+         (clojure-mode . cfclrk/clojure-mode-hook))
   :bind (:map clojure-mode-map
               ("C-t n" . cider-test-run-ns-tests)
               ("C-t p" . cider-test-run-project-tests)
@@ -796,6 +803,12 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :after clojure-mode
   :config
   (setq cider-save-file-on-load t))
+
+(use-package cljstyle-mode
+  :straight (cljstyle-mode
+             :type git
+             :host github
+             :repo "jstokes/cljstyle-mode"))
 
 ;;;; CSS and SCSS
 
