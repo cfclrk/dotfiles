@@ -482,8 +482,7 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 (use-package flycheck
   :config
-  (global-flycheck-mode +1)
-  (setq-default flycheck-disabled-checkers '(markdown-markdownlint-cli)))
+  (global-flycheck-mode +1))
 
 ;; Run more flycheck checkers in LSP mode. LSP-mode disables all flycheck
 ;; checkers (instead that is delegated to the LSP server). From:
