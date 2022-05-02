@@ -21,7 +21,7 @@
 
 ** 1Password
 
-   Install native app from App Store.
+   Do NOT install the native app. Just install the Chrome and FireFox extensions.
 
 ** Firefox
 
@@ -36,7 +36,7 @@
 
 ** Keybase
 
-   Create a new key?
+   Create a new key.
 
 * Set Up New MacOS
 

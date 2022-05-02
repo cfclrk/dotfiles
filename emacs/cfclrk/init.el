@@ -52,11 +52,16 @@
 
 (add-hook 'emacs-startup-hook 'cfclrk/startup-hook)
 
-;;; Functions
+;;; Early init - Org Mode and dash
 ;;  ----------------------------------------------------------------------------
 
-;; At the top because I use dash in my own functions.
+;; Prevent loading the built-in org-mode. Instead, use straight to get org-mode.
+;; We must run this before anything else loads the built-in org-mode. These come
+;; from the straight mirror here: https://github.com/emacs-straight
+(use-package org)
+(use-package org-contrib)
 
+;; At the top because I use dash in my own functions.
 (use-package dash
   :config
   ;; Fontify dash-defined anaphoric vars ("it", "acc", etc)
@@ -65,6 +70,10 @@
   ;; Enable C-h S (info-lookup-symbol) on dash symbols
   (with-eval-after-load 'info-look
     (dash-register-info-lookup)))
+
+
+;;; Functions
+;;  ----------------------------------------------------------------------------
 
 (defun cfc/lsp-remove-all-workspaces ()
   "Clear all LSP workspaces. Sometimes this fixes things."
@@ -451,6 +460,10 @@ From: https://stackoverflow.com/a/3072831/340613"
     (setq grip-github-user (car credential)
           grip-github-password (cadr credential))))
 
+;;;; ispell
+
+(setq ispell-program-name "aspell")
+
 ;;;; key-chord
 
 (use-package key-chord
@@ -806,8 +819,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 (use-package cljstyle
   :after clojure-mode
   :straight (cljstyle
-             :local-repo "~/Projects/codenotes/elisp/cljstyle.el"
-             :files ("cljstyle.el")))
+             :type git
+             :host github
+             :repo "cfclrk/cljstyle.el")
+  :config
+  (setq cljstyle-format-on-save-mode t))
 
 (use-package stonehenge
   :after cider

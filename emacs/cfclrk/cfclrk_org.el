@@ -8,14 +8,6 @@
 
 ;; TODO: Try out https://github.com/Fuco1/org-radiobutton
 
-;; Use straight to get org-mode. Straight runs some extra stuff that makes sure
-;; we don't end up using the org-mode bundled with Emacs. These come from the
-;; straight mirror here: https://github.com/emacs-straight
-(use-package org)
-(use-package org-contrib)
-
-(load-file "/Users/cclark/emacs/cfclrk/straight/repos/org/lisp/org-compat.el")
-
 (require 'org)
 (require 'ob)  ;; Do I still need this? Once got error loading org-babel-comint-use-async.
 
