@@ -25,9 +25,9 @@
 ;; Use use-package
 (straight-use-package 'use-package)
 
-;; Straight configuration
 (setq
- ;; Make every use-package declaration use straight
+ ;; Make every use-package declaration use straight. This also accomplishes what
+ ;; `use-package-always-ensure' does.
  straight-use-package-by-default t
  ;; Make straight use ssh instead of https
  straight-vc-git-default-protocol 'ssh)
@@ -178,31 +178,38 @@ See: https://stackoverflow.com/questions/6133799"
 (use-package doom-modeline
  :init (doom-modeline-mode +1)
  :config
- (setq doom-modeline-buffer-encoding nil)
- (setq doom-modeline-height 40))
+ (setq doom-modeline-buffer-encoding nil
+       doom-modeline-height 40
+       doom-modeline-hud t
+       doom-modeline-project-detection 'projectile
+       doom-modeline-buffer-file-name-style 'buffer-name))
 
 (setq display-buffer-alist
-      '(("\\*eshell\\*" display-buffer-use-some-window)))
+      '(("\\*eshell\\*" display-buffer-use-some-window)
+        ("\\*Help\\*" display-buffer-same-window)))
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
-(tool-bar-mode -1)    ;; No tool bar, which has the save button, etc
-(scroll-bar-mode -1)  ;; No scroll bars to the right of buffers
-(blink-cursor-mode -1)  ;; Just a nice, solid cursor
-(global-auto-revert-mode t)  ;; Revert buffers when their backing files change
+(tool-bar-mode -1)           ; No tool bar, which has the save button, etc
+(scroll-bar-mode -1)         ; No scroll bars to the right of buffers
+(blink-cursor-mode -1)       ; Just a nice, solid cursor
+(global-auto-revert-mode t)  ; Revert buffers when their backing files change
 (set-language-environment "UTF-8")
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
-(setq column-number-mode t           ;; Show line:column in mode line
+(setq column-number-mode t           ; Show line:column in mode line
       make-backup-files nil
-      inhibit-splash-screen t        ;; Do not show the welcome screen
+      inhibit-splash-screen t        ; Do not show the welcome screen
       sentence-end-double-space nil
       help-window-select t
       delete-by-moving-to-trash t)
+
+;; Change all yes/no prompts to y/n
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; whitespace
 (require 'whitespace)
@@ -210,29 +217,26 @@ See: https://stackoverflow.com/questions/6133799"
       whitespace-line-column nil)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
+;; text mode
 (defun cfclrk/text-editing-hook ()
   "Minor modes that I want enabled in pretty much every textual buffer."
   (smartparens-mode +1)
   (whitespace-mode +1)
   (delete-selection-mode +1))
 
-;; text mode
 (add-hook 'text-mode-hook 'cfclrk/text-editing-hook)
 
-;; Make a shell script executable automatically on save
+;; Make shell scripts executable when saved
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
 
 ;; A .zsh file is a shell script too
 (add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
 
-;; This is nice in go-mode. Should I only do this in go-mode?
+;; Make nicer keybinding for `xref-find-definitions-other-window'
 (define-key global-map
             (kbd "C-c M-.")
             'xref-find-definitions-other-window)
-
-;; Change all yes/no prompts to y/n
-(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Keep customizations outside of init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -560,7 +564,9 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :commands lsp-ui
   :config
   (setq lsp-ui-doc-position 'bottom
-        lsp-ui-sideline-show-hover t))
+        lsp-ui-sideline-show-diagnostics nil
+        lsp-ui-sideline-show-symbol nil
+        lsp-ui-doc-max-height 20))
 
 ;;;; markdown
 
