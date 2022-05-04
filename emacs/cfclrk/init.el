@@ -798,19 +798,22 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Clojure
 
-(defun my-clojure-mode-hook ()
-  "Hooks to add in `clojure-mode' buffers."
-  (add-hook 'before-save-hook #'cljstyle nil t))
-
 (use-package clojure-mode
-  :mode "\\.cljstyle\\'"  ;; Use clojure-mode for ".cljstyle" files
+  :mode "\\.cljstyle\\'"  ; Use clojure-mode for ".cljstyle" files
   :hook ((clojure-mode . lsp-deferred)
          (clojure-mode . my-lisp-mode-hook)
-         (clojure-mode . my-clojure-mode-hook))
+         (clojure-mode . cljstyle-format-on-save-mode))
   :bind (:map clojure-mode-map
               ("C-t n" . cider-test-run-ns-tests)
               ("C-t p" . cider-test-run-project-tests)
               ("C-t t" . cider-test-run-test)))
+
+(use-package cljstyle
+  :after clojure-mode
+  :straight (cljstyle
+             :type git
+             :host github
+             :repo "cfclrk/cljstyle.el"))
 
 (use-package cider
   :after clojure-mode
@@ -821,15 +824,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   ;; :hook (cider-repl . (lambda () (smartparens-strict-mode +1)))
   :config
   (setq cider-save-file-on-load t))
-
-(use-package cljstyle
-  :after clojure-mode
-  :straight (cljstyle
-             :type git
-             :host github
-             :repo "cfclrk/cljstyle.el")
-  :config
-  (setq cljstyle-format-on-save-mode t))
 
 (use-package stonehenge
   :after cider
