@@ -9,6 +9,16 @@
       '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
         ("melpa" . "https://melpa.org/packages/")))
 
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
 (blink-cursor-mode -1)
 (set-language-environment "UTF-8")
 
@@ -34,15 +44,18 @@
   ;; Enable emoji
   (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
-(use-package cljstyle
-  :after clojure-mode
-  :straight (cljstyle
-             :type git
-             :host github
-             :repo "cfclrk/cljstyle.el"))
+(unless (package-installed-p 'cljstyle)
+  (package-install-file
+   "~/emacs/cfclrk/straight/repos/cljstyle.el/cljstyle.el"))
 
-(use-package clojure-mode
-  :hook ((clojure-mode . cljstyle-format-on-save-mode)))
+(require 'cljstyle)
+
+(unless (package-installed-p 'clojure-mode)
+  (package-install 'clojure-mode))
+
+(add-hook
+ 'clojure-mode-hook
+ #'cljstyle-format-on-save-mode)
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
