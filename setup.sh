@@ -78,34 +78,36 @@ ln -svf \
    "$DOTFILES_DIR/.pyenv/default_packages" \
    ~/.pyenv/default-packages
 
-# Emacs
-# -----------------------------------------------------------------------------
+# Link the contents of a directory in the dotfiles repo in ~/emacs.
+#
+# Parameters:
+#
+# - `dirName`: Name of a directory in the emacs/ directory of this project
+#
+# Example:
+#
+#     linkEmacs "min-package"
+function linkEmacs {
+    [[ -n "$1" ]] || {
+        echo "Error: param 1 is required"
+        return 1
+    }
+    dirName=$1
+    dotfilesEmacsDir="$DOTFILES_DIR/emacs/$dirName"
+    realEmacsDir=~/emacs/$dirName
 
-function linkEmacsMinimal {
-    d=~/emacs/minimal
-    mkdir -p $d
-    files=$(find "$DOTFILES_DIR/emacs/minimal" -type f -printf "%P\n")
+    # Create ~/emacs/<dirName>
+    mkdir -p $realEmacsDir
+
+    # Create symlinks in $realEmacsDir to every file in $dotfilesEmacsDir
+    files=$(find $dotfilesEmacsDir -type f -printf "%P\n")
     for f in $files; do
-        # Create the directory for this file if the directory doesn't exist yet
-        mkdir -p $d/$(dirname $f)
+        # Create the subdirectory for this file if it doesn't exist
+        mkdir -p $realEmacsDir/$(dirname $f)
         # Create symlink to this file in my dotfiles project
         ln -svfn \
-           "$DOTFILES_DIR/emacs/minimal/$f" \
-           "$d/$f"
-    done
-}
-
-function linkEmacsCfclrk {
-    d=~/emacs/cfclrk
-    mkdir -p $d
-    files=$(find "$DOTFILES_DIR/emacs/cfclrk" -type f -printf "%P\n")
-    for f in $files; do
-        # Create the directory for this file if the directory doesn't exist yet
-        mkdir -p $d/$(dirname $f)
-        # Create symlink to this file in my dotfiles project
-        ln -svfn \
-           "$DOTFILES_DIR/emacs/cfclrk/$f" \
-           "$d/$f"
+           "$dotfilesEmacsDir/$f" \
+           "$realEmacsDir/$f"
     done
 }
 
@@ -127,8 +129,9 @@ fi
 
 # Create Emacs config directories
 mkdir -p ~/emacs
-linkEmacsCfclrk
-linkEmacsMinimal
+linkEmacs "cfclrk"
+linkEmacs "min-straight"
+linkEmacs "min-package"
 
 # Top-level emacs files, shared among emacsen.
 ln -svfn \
