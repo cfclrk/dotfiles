@@ -4,30 +4,10 @@
 
 ;;; Code:
 
-;;; Startup
-;;  ----------------------------------------------------------------------------
-
-;; bootstrap straight.el
-(defvar bootstrap-version)
-(let ((bootstrap-file (expand-file-name
-                       "straight/repos/straight.el/bootstrap.el"
-                       user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-;; Use use-package
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
-
-;;; Editor General
-;;  ----------------------------------------------------------------------------
+(require 'package)
+(setq package-archives
+      '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
+        ("melpa" . "https://melpa.org/packages/")))
 
 (blink-cursor-mode -1)
 (set-language-environment "UTF-8")
@@ -45,11 +25,6 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file t)
 
-;; Use a larger font on bigger screens
-(when window-system
-  (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 170)))
-
 ;; ⌘ as Meta and ⎇ as Super on MacOS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta
@@ -59,21 +34,15 @@
   ;; Enable emoji
   (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
-;;; Programming Languages
-;;  ----------------------------------------------------------------------------
+(use-package cljstyle
+  :after clojure-mode
+  :straight (cljstyle
+             :type git
+             :host github
+             :repo "cfclrk/cljstyle.el"))
 
-;;;; Lisp
-
-(defun cfclrk/lisp-mode-hook ()
-  "General configuration for any Lisp."
-  (smartparens-strict-mode +1)
-  (rainbow-delimiters-mode +1))
-
-(dolist (hook '(lisp-mode-hook
-                clojure-mode-hook
-                emacs-lisp-mode-hook
-                lisp-data-mode-hook))
-  (add-hook hook #'cfclrk/lisp-mode-hook))
+(use-package clojure-mode
+  :hook ((clojure-mode . cljstyle-format-on-save-mode)))
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------

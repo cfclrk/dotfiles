@@ -1,4 +1,5 @@
 (("default" . ((user-emacs-directory . "~/emacs/cfclrk")))
  ("cfclrk" . ((user-emacs-directory . "~/emacs/cfclrk")))
- ("minimal" . ((user-emacs-directory . "~/emacs/minimal")))
+ ("min-straight" . ((user-emacs-directory . "~/emacs/min-straight")))
+ ("min-package" . ((user-emacs-directory . "~/emacs/min-package")))
  ("prelude" . ((user-emacs-directory . "~/emacs/prelude"))))
