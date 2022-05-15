@@ -612,19 +612,42 @@ To be used with `markdown-live-preview-window-function'."
         markdown-content-type "")
   (setq markdown-live-preview-window-function
         #'markdown-live-preview-window-xwidget-webkit)
-  ;; A sensible and simple default preamble for markdown exports that takes
-  ;; after the github asthetic (plus highlightjs syntax coloring).
+
+  ;; A file I made using generate-github-markdown-css
+  (setq my-markdown-css (expand-file-name
+                         "github_dark_dimmed.css"
+                         user-emacs-directory))
+
   (setq
    markdown-content-type "application/xhtml+xml"
+
+   ;; Note, this requires a "markdown-body" css class. Default
+   ;; github-markdown-css theme is dark.
    markdown-css-paths
-   '("https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css"
-     "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/github.min.css")
+   `(;; A file I made using generate-github-markdown-css
+     ,my-markdown-css
+
+     ;; For highlighting code blocks with highlightjs
+     "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/github-dark-dimmed.min.css")
+
+   ;; Note: there is some CSS available on a CDN. But, it includes styles for
+   ;; the "dark" and "light" themes, and uses whichever your system theme is.
+   ;; Probably not possible to include other themes in or with that file. Also,
+   ;; it's nice to be able to use this without hitting the internet.
+   ;;
+   ;; - "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css"
+
    markdown-xhtml-header-content
-   (concat "<meta name='viewport' content='width=device-width, initial-scale=1'>"
-           "<style> body { box-sizing: border-box; max-width: 810px; width: 100%; padding: 1em 0em 1em 1.5em; } </style>"
-           "<script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>"
-           "<script src='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js'></script>"
-           "<script>document.addEventListener('DOMContentLoaded', () => { document.body.classList.add('markdown-body'); document.querySelectorAll('pre[lang] > code').forEach((code) => { code.classList.add(code.parentElement.lang); }); document.querySelectorAll('pre > code').forEach((code) => { hljs.highlightBlock(code); }); });</script>"))
+   (f-read-text
+    (file-truename
+     (expand-file-name
+      "markdown/header.html"
+      user-emacs-directory)))
+
+   ;; Makes github-markdown-css work
+   ;; markdown-xhtml-body-preamble "<div class=\"markdown-body\">"
+   ;; markdown-xhtml-body-epilogue "</div>"
+   )
   :config
   (setq whitespace-style '(face tabs empty trailing))
 
