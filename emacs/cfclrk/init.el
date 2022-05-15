@@ -621,8 +621,18 @@ To be used with `markdown-live-preview-window-function'."
   (setq
    markdown-content-type "application/xhtml+xml"
 
-   ;; Note, this requires a "markdown-body" css class. Default
-   ;; github-markdown-css theme is dark.
+   ;; Note, these styles are only applied to the div with a "markdown-body"
+   ;; class attribute. markdown-mode does not automatically add a
+   ;; `class="markdown-body"' anywhere, so we need to do that ourselves
+   ;; somewhere (I do it in the header.html file below).
+   ;;
+   ;; Also, the URL below is some GitHub CSS, available on a CDN. But, it only
+   ;; includes styles for the "dark" and "light" GitHub themes. The xwdidget
+   ;; browser wil use one of those - whichever your system theme is. Using the
+   ;; dark-dimmed theme requires some other solution. Also, I like having local
+   ;; CSS so it doesn't have to be fetched over the internet.
+   ;;
+   ;; - "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css"
    markdown-css-paths
    `(;; A file I made using generate-github-markdown-css
      ,my-markdown-css
@@ -630,24 +640,12 @@ To be used with `markdown-live-preview-window-function'."
      ;; For highlighting code blocks with highlightjs
      "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/github-dark-dimmed.min.css")
 
-   ;; Note: there is some CSS available on a CDN. But, it includes styles for
-   ;; the "dark" and "light" themes, and uses whichever your system theme is.
-   ;; Probably not possible to include other themes in or with that file. Also,
-   ;; it's nice to be able to use this without hitting the internet.
-   ;;
-   ;; - "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css"
-
    markdown-xhtml-header-content
    (f-read-text
     (file-truename
      (expand-file-name
       "markdown/header.html"
-      user-emacs-directory)))
-
-   ;; Makes github-markdown-css work
-   ;; markdown-xhtml-body-preamble "<div class=\"markdown-body\">"
-   ;; markdown-xhtml-body-epilogue "</div>"
-   )
+      user-emacs-directory))))
   :config
   (setq whitespace-style '(face tabs empty trailing))
 
