@@ -575,41 +575,56 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; markdown
 
-(defun cfclrk/markdown-mode-hook ()
+(defun markdown-live-preview-window-xwidget-webkit (file)
+  "Preview FILE with xwidget-webkit.
+To be used with `markdown-live-preview-window-function'."
+  (let ((uri (format "file://%s" file)))
+      (xwidget-webkit-browse-url uri)
+      xwidget-webkit-last-session-buffer))
+
+(defun my-markdown-mode-hook ()
   "Customize `markdown-mode'."
-  ;; When you're typing, automatically insert a newline when you hit
-  ;; fill-column.
-  (turn-on-auto-fill)
+  ;; automatically insert a newline at fill-column
+  ;; (turn-on-auto-fill)
+
   ;; Show a vertical line where fill-column is
-  (display-fill-column-indicator-mode 1))
+  ;; (display-fill-column-indicator-mode 1)
+  )
 
 (use-package markdown-mode
   :hook ((markdown-mode . visual-line-mode)
-         (markdown-mode . visual-fill-column-mode))
+         (markdown-mode . visual-fill-column-mode)
+         (markdown-mode . my-markdown-mode-hook))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init
+  ;; TODO: Update/monkeypatch markdown-add-xhtml-header-and-footer. Use mustache
+  ;; templates.
   (setq markdown-command "multimarkdown"
         markdown-fontify-code-blocks-natively t
         markdown-enable-math t
         markdown-enable-wiki-links t
         markdown-italic-underscore t
         markdown-make-gfm-checkboxes-buttons t
-
-        ;; From doom: A sensible and simple default preamble for markdown
-        ;; exports that takes after the github asthetic (plus highlightjs syntax
-        ;; coloring).
         markdown-content-type "application/xhtml+xml"
-        markdown-css-paths
-        '("https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css"
-          "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/github.min.css")
-                markdown-xhtml-header-content
-        (concat "<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>"
-                "<style> body { box-sizing: border-box; max-width: 740px; width: 100%; margin: 40px auto; padding: 0 10px; } </style>"
-                "<script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtmnl.js'></script>"
-                "<script src='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js'></script>"
-                "<script>document.addEventListener('DOMContentLoaded', () => { document.body.classList.add('markdown-body'); document.querySelectorAll('pre[lang] > code').forEach((code) => { code.classList.add(code.parentElement.lang); }); document.querySelectorAll('pre > code').forEach((code) => { hljs.highlightBlock(code); }); });</script>"))
+        markdown-split-window-direction 'right
+        markdown-content-type "")
+  (setq markdown-live-preview-window-function
+        #'markdown-live-preview-window-xwidget-webkit)
+  ;; A sensible and simple default preamble for markdown exports that takes
+  ;; after the github asthetic (plus highlightjs syntax coloring).
+  (setq
+   markdown-content-type "application/xhtml+xml"
+   markdown-css-paths
+   '("https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css"
+     "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/github.min.css")
+   markdown-xhtml-header-content
+   (concat "<meta name='viewport' content='width=device-width, initial-scale=1'>"
+           "<style> body { box-sizing: border-box; max-width: 810px; width: 100%; padding: 1em 0em 1em 1.5em; } </style>"
+           "<script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>"
+           "<script src='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js'></script>"
+           "<script>document.addEventListener('DOMContentLoaded', () => { document.body.classList.add('markdown-body'); document.querySelectorAll('pre[lang] > code').forEach((code) => { code.classList.add(code.parentElement.lang); }); document.querySelectorAll('pre > code').forEach((code) => { hljs.highlightBlock(code); }); });</script>"))
   :config
   (setq whitespace-style '(face tabs empty trailing))
 
