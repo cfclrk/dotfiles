@@ -182,7 +182,9 @@ See: https://stackoverflow.com/questions/6133799"
        doom-modeline-height 40
        doom-modeline-hud t
        doom-modeline-project-detection 'projectile
-       doom-modeline-buffer-file-name-style 'buffer-name))
+       doom-modeline-buffer-file-name-style 'buffer-name
+       doom-modeline-vcs-max-length 15
+       doom-modeline-env-version nil))
 
 (setq display-buffer-alist
       '(("\\*eshell\\*" display-buffer-use-some-window)
@@ -210,6 +212,9 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;; Change all yes/no prompts to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
+
+;; Show line numbers in any text mode.
+(add-hook 'text-mode-hook #'display-line-numbers-mode)
 
 ;; whitespace
 (require 'whitespace)
