@@ -23,5 +23,6 @@ brew "tree"
 # manually run it
 cask "basictex"
 
+# Fira code is nice to have, though I use hasklig right now
 tap "homebrew/cask-fonts"
 cask "font-fira-code"

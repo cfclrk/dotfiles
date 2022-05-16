@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-brew install git
+brew install git --force
 brew install findutils
 
 # Make the ~/Projects dir if it's not already there.
