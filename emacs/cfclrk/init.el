@@ -725,19 +725,23 @@ To be used with `markdown-live-preview-window-function'."
   :bind (:map lisp-mode-map
               ("M-f" . sp-next-sexp)
               ("M-b" . sp-backward-sexp))
-  :config
+  :init
   (require 'smartparens-config)
+  :config
+  ;; Activates show-smartparens-mode. Turn on visualization of matching pairs.
   (show-smartparens-global-mode t)
 
-  ;; slurping and barfing
+  ;; Create a key prefix. I like having a prefix so that which-key can show me
+  ;; all the usual actions I perform.
+  (global-unset-key (kbd "s-s"))  ; Was an alias for save-buffer, C-x C-s
+  (define-prefix-command 'sp-prefix-key-map)
+  (define-key smartparens-mode-map (kbd "s-s") sp-prefix-key-map)
+
+  ;; Slurping and barfing with Shift
   (define-key smartparens-mode-map (kbd "S-<right>") 'sp-forward-slurp-sexp)
   (define-key smartparens-mode-map (kbd "S-<left>") 'sp-forward-barf-sexp)
   (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-backward-barf-sexp)
   (define-key smartparens-mode-map (kbd "C-S-<left>") 'sp-backward-slurp-sexp)
-
-  ;; Create a key prefix
-  (define-prefix-command 'sp-prefix-key-map)
-  (define-key smartparens-mode-map (kbd "M-p") sp-prefix-key-map)
 
   ;; movement
   ;; Maybe M-f and M-b
@@ -874,11 +878,7 @@ To be used with `markdown-live-preview-window-function'."
 
 (use-package cider
   :after clojure-mode
-  ;; TODO: How do I get smartparens working in the cider repl? The following
-  ;; overrides M-p. Get smartparens working without clobbering cider
-  ;; keybindings.
-  ;;
-  ;; :hook (cider-repl . (lambda () (smartparens-strict-mode +1)))
+  :hook (cider-repl-mode . my-lisp-mode-hook)
   :config
   (setq cider-save-file-on-load t))
 
