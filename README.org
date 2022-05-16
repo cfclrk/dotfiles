@@ -1,7 +1,16 @@
 * Usage
 
+  First time setup (clones this repo):
+
   #+begin_src sh
-    bash -c "$(curl -sSL https://raw.githubusercontent.com/cfclrk/dotfiles/master/bootstrap.sh)"
+    f="https://raw.githubusercontent.com/cfclrk/dotfiles/master/bootstrap.sh"
+    bash -c "$(curl -sSL $f)"
+  #+end_src
+
+  Successive setups:
+
+  #+begin_src sh
+    ./setup.sh
   #+end_src
 
 * Notes
