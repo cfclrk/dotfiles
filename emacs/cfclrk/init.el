@@ -265,6 +265,15 @@ See: https://stackoverflow.com/questions/6133799"
     :config
     (exec-path-from-shell-initialize)))
 
+;;;; URLs
+
+(require 'xwidget)
+
+(add-to-list
+ 'browse-url-handlers
+ '("https://docs.oracle.com/en/.*.html" . xwidget-webkit-browse-url))
+
+
 ;;;; Registers
 
 (setq register-preview-delay 0)
