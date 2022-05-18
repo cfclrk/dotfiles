@@ -569,17 +569,15 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :hook (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred)
   :config
-  ;; Location of the groovy-language-server jar file.
-  (setq lsp-groovy-server-file
-        (expand-file-name
-         "~/Projects/cloned/groovy-language-server/build/libs/groovy-language-server-all.jar")))
+  (add-to-list lsp-file-watch-ignored-directories
+               "[/\\\\]\\.stonehenge\\'"))
 
 (use-package lsp-ui
   :commands lsp-ui
   :config
-  (setq lsp-ui-doc-position 'bottom
-        lsp-ui-sideline-show-diagnostics nil
+  (setq lsp-ui-sideline-show-diagnostics nil
         lsp-ui-sideline-show-symbol nil
+        lsp-ui-peek-show-directory nil
         lsp-ui-doc-max-height 20))
 
 ;;;; markdown
