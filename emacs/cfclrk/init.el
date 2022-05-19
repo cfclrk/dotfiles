@@ -680,22 +680,13 @@ To be used with `markdown-live-preview-window-function'."
 ;;;; projectile
 
 (use-package projectile
+  :demand t
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
-  (projectile-mode t)
-
+  (load (expand-file-name "~/emacs/projectile-discovery.el"))
+  (projectile-mode +1)
   ;; Never cache project root
-  (setq projectile-enable-caching nil)
-
-  ;; TODO: Are these necessary? Shouldn't projectile exclude items in the .gitignore?
-  (add-to-list 'projectile-globally-ignored-directories "*logs")
-  (add-to-list 'projectile-globally-ignored-directories "*_output")
-  (add-to-list 'projectile-globally-ignored-directories "*.mypy_cache")
-  (add-to-list 'projectile-globally-ignored-directories "*.pytest_cache")
-  (add-to-list 'projectile-globally-ignored-directories "*cdk\.out")
-  (add-to-list 'projectile-globally-ignored-directories "*.terraform")
-
-  (load (expand-file-name "~/emacs/projectile-discovery.el")))
+  (setq projectile-enable-caching nil))
 
 ;;;; protobuf
 
