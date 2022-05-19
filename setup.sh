@@ -129,11 +129,15 @@ fi
 
 # Create Emacs config directories
 mkdir -p ~/emacs
-linkEmacs "cfclrk"
-linkEmacs "min-straight"
-linkEmacs "min-package"
+emacsDirs=$(find ./emacs -maxdepth 1 -type d -printf "%P\n")
+for d in $emacsDirs; do
+    linkEmacs "$d"
+done
 
 # Top-level emacs files, shared among emacsen.
-ln -svfn \
-   "$DOTFILES_DIR/emacs/projectile-discovery.el" \
-   "$HOME/emacs/projectile-discovery.el"
+emacsFiles=$(find ./emacs -maxdepth 1 -type f -printf "%P\n")
+for f in $emacsFiles; do
+    ln -svfn \
+       "$DOTFILES_DIR/emacs/$f" \
+       "$HOME/emacs/$f"
+done

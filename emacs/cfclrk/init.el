@@ -680,12 +680,11 @@ To be used with `markdown-live-preview-window-function'."
 ;;;; projectile
 
 (use-package projectile
-  :demand t
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (projectile-mode t)
 
-  ;; Never cache project roost
+  ;; Never cache project root
   (setq projectile-enable-caching nil)
 
   ;; TODO: Are these necessary? Shouldn't projectile exclude items in the .gitignore?
