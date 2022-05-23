@@ -876,7 +876,9 @@ To be used with `markdown-live-preview-window-function'."
   :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1))))
   :config
-  (setq cider-save-file-on-load t))
+  (setq cider-save-file-on-load t)
+  (setq cider-repl-prompt-function (lambda (namespace)
+                                     (format "%s\n> " namespace))))
 
 (use-package stonehenge
   :after cider
