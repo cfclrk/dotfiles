@@ -875,7 +875,8 @@ To be used with `markdown-live-preview-window-function'."
 
 (use-package cider
   :after clojure-mode
-  :hook (cider-repl-mode . my-lisp-mode-hook)
+  :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
+         (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1))))
   :config
   (setq cider-save-file-on-load t))
 
