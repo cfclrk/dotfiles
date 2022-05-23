@@ -213,8 +213,9 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Change all yes/no prompts to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Show line numbers in any text mode.
+;; Show line numbers in any text or prog mode.
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 ;; whitespace
 (require 'whitespace)
