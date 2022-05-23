@@ -587,19 +587,9 @@ To be used with `markdown-live-preview-window-function'."
       (xwidget-webkit-browse-url uri)
       xwidget-webkit-last-session-buffer))
 
-(defun my-markdown-mode-hook ()
-  "Customize `markdown-mode'."
-  ;; automatically insert a newline at fill-column
-  ;; (turn-on-auto-fill)
-
-  ;; Show a vertical line where fill-column is
-  ;; (display-fill-column-indicator-mode 1)
-  )
-
 (use-package markdown-mode
   :hook ((markdown-mode . visual-line-mode)
-         (markdown-mode . visual-fill-column-mode)
-         (markdown-mode . my-markdown-mode-hook))
+         (markdown-mode . visual-fill-column-mode))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
