@@ -541,14 +541,12 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; helpful
 
-;; TODO: enable again once https://github.com/Wilfred/elisp-refs/issues/35 is
-;; resolved.
-;; (use-package helpful
-;;   :bind (("C-h f" . helpful-callable)
-;;          ("C-h v" . helpful-variable)
-;;          ("C-h k" . helpful-key)
-;;          ("C-c C-d" . helpful-at-point)
-;;          ("C-h C" . helpful-command)))
+(use-package helpful
+  :bind (("C-h f" . helpful-callable)
+         ("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-c C-d" . helpful-at-point)
+         ("C-h C" . helpful-command)))
 
 ;;;; Images
 
