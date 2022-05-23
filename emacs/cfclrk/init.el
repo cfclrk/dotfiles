@@ -465,8 +465,11 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 ;;;; grip
 
-;; Use grip-mode to view markdown (GFM) files rendered as HTML using GitHub's
-;; rendering API.
+;; `grip-mode' renders markdown files using GitHub's rendering API. That's
+;; pretty cool, but it requires an internet connection and can't easily be
+;; customized. I actually use `markdown-live-preview-mode', which I've set up to
+;; render markdown files locally in an xwidget. `grip-mode' can still sometimes
+;; be useful though, so I keep it.
 
 (use-package grip-mode
   :after markdown-mode
