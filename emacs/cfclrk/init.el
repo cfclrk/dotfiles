@@ -561,8 +561,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :hook (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred)
   :config
-  (add-to-list lsp-file-watch-ignored-directories
-               "[/\\\\]\\.stonehenge\\'"))
+  (setq lsp-enable-file-watchers nil))
 
 (use-package lsp-ui
   :commands lsp-ui
@@ -862,23 +861,23 @@ To be used with `markdown-live-preview-window-function'."
   :config
   (setq cider-save-file-on-load t)
   (setq cider-repl-prompt-function (lambda (namespace)
-                                     (format "%s\n> " namespace))))
+                                     (format "\n%s\n> " namespace))))
 
-(use-package stonehenge
-  :after cider
-  :straight (stonehenge
-             :local-repo "~/Work/stonehenge"
-             :files ("development/emacs/stonehenge.el"))
-  :config
-  (setq stonehenge-path (expand-file-name "~/Work/stonehenge")))
-
-;; (use-package monorepl
+;; (use-package stonehenge
 ;;   :after cider
-;;   :straight (monorepl
+;;   :straight (stonehenge
 ;;              :local-repo "~/Work/stonehenge"
-;;              :files ("development/emacs/monorepl.el"))
+;;              :files ("development/emacs/stonehenge.el"))
 ;;   :config
-;;   (setq stonehenge-path "/Users/cclark/Work/stonehenge"))
+;;   (setq stonehenge-path (expand-file-name "~/Work/stonehenge")))
+
+(use-package monorepl
+  :after cider
+  :straight (monorepl
+             :local-repo "~/Work/stonehenge"
+             :files ("development/emacs/monorepl.el"))
+  :config
+  (setq monorepl-STONEHENGE-PATH "/Users/cclark/Work/stonehenge"))
 
 ;;;; CSS and SCSS
 
