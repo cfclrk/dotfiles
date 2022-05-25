@@ -430,8 +430,6 @@ From: https://stackoverflow.com/a/3072831/340613"
   :config
   (setq magit-diff-refine-hunk 'all))
 
-(use-package magit-todos)
-
 ;; Credentials are stored in ~/.authinfo
 (use-package forge
   :after magit
