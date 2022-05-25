@@ -1088,10 +1088,7 @@ To be used with `markdown-live-preview-window-function'."
 
 (add-hook 'yaml-mode-hook #'lsp-deferred)
 
-;; Associate schemas with certain files
-(setq lsp-yaml-schemas
-      '((/Users/chris\.clark/\.config/eksctl/schema\.json . ["/eksctl/cluster.yaml"])))
-
+;; Better YAML LSP support for CloudFormation
 (setq lsp-yaml-custom-tags
       ["!Base64"
        "!Cidr"
