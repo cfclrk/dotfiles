@@ -581,8 +581,7 @@ To be used with `markdown-live-preview-window-function'."
       xwidget-webkit-last-session-buffer))
 
 (use-package markdown-mode
-  :hook ((markdown-mode . visual-line-mode)
-         (markdown-mode . visual-fill-column-mode))
+  :hook ((markdown-mode . visual-line-mode))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
