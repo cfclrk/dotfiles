@@ -435,14 +435,6 @@ From: https://stackoverflow.com/a/3072831/340613"
   :after magit
   :hook (after-save . magit-after-save-refresh-status)
   :config
-  ;; (add-to-list 'forge-alist '("github-home"
-  ;;                             "api.github.com"
-  ;;                             "github.com"
-  ;;                             forge-github-repository))
-  ;; (add-to-list 'forge-alist '("github-work"
-  ;;                             "api.github.com"
-  ;;                             "github.com"
-  ;;                             forge-github-repository))
   (setq forge-owned-accounts '(("cfclrk" . nil)
                                ("cclark-splash" . nil))))
 
@@ -983,16 +975,17 @@ To be used with `markdown-live-preview-window-function'."
 
 ;;;; Java
 
-;; lsp-java uses the Eclipse JDT Language Server:
+;; lsp-java uses the Eclipse JDT Language Server. See:
 ;; https://github.com/eclipse/eclipse.jdt.ls
 
 (use-package lsp-java
   :hook (java-mode . lsp-deferred)
   :config
   (setq lsp-java-format-settings-url
-        "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
-  (setq lsp-java-format-settings-profile "GoogleStyle")
-  (setq c-basic-offset 2))
+        (concat "https://raw.githubusercontent.com/"
+                "google/styleguide/gh-pages/eclipse-java-google-style.xml"))
+  (setq lsp-java-format-settings-profile "GoogleStyle"
+        c-basic-offset 2))
 
 (add-hook 'java-mode-hook #'lsp-deferred)
 
