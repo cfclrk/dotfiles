@@ -1,5 +1,6 @@
 (("default" . ((user-emacs-directory . "~/emacs/cfclrk")))
  ("cfclrk" . ((user-emacs-directory . "~/emacs/cfclrk")))
+ ("cfclrk-emacs-plus" . ((user-emacs-directory . "~/emacs/cfclrk-emacs-plus")))
  ("min-straight" . ((user-emacs-directory . "~/emacs/min-straight")))
  ("min-package" . ((user-emacs-directory . "~/emacs/min-package")))
  ("min-clojure" . ((user-emacs-directory . "~/emacs/min-clojure")))
