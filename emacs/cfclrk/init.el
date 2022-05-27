@@ -148,7 +148,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 160)))
+      (set-face-attribute 'default nil :height 150)))
 
 ;; Use the doom-one theme
 (use-package doom-themes
@@ -284,17 +284,10 @@ See: https://stackoverflow.com/questions/6133799"
 ;;;; bazel
 
 (use-package bazel
-  :straight (bazel :type git :host github :repo "bazelbuild/emacs-bazel-mode"))
-
-;;;; beacon
-
-;; Beacon is a package that temporarily highlights or flashes the line that the
-;; cursor is on when switching buffers.
-
-(use-package beacon
-  :config
-  (beacon-mode +1)
-  (setq beacon-color "#a9a1e1"))
+  :straight (bazel
+             :type git
+             :host github
+             :repo "bazelbuild/emacs-bazel-mode"))
 
 ;;;; bicycle
 
