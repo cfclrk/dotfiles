@@ -93,7 +93,9 @@
   :after cider
   :straight (monorepl
              :local-repo "~/Work/stonehenge"
-             :files ("development/emacs/monorepl.el")))
+             :files ("development/emacs/monorepl.el"))
+  :config
+  (setq monorepl-STONEHENG-PATH (expand-file-name "~/Work/stonehenge")))
 
 ;;;; yasnippet
 

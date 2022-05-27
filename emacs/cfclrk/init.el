@@ -839,12 +839,13 @@ To be used with `markdown-live-preview-window-function'."
 
 (use-package cider
   :after clojure-mode
+  ;; TODO: :bind cider-pprint-eval-last-sexp-to-comment to C-j
   :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1))))
   :config
   (setq cider-save-file-on-load t)
   (setq cider-repl-prompt-function (lambda (namespace)
-                                     (format "\n%s\n> " namespace))))
+                                     (format "%s\n> " namespace))))
 
 ;; (use-package stonehenge
 ;;   :after cider
@@ -860,7 +861,8 @@ To be used with `markdown-live-preview-window-function'."
              :local-repo "~/Work/stonehenge"
              :files ("development/emacs/monorepl.el"))
   :config
-  (setq monorepl-STONEHENGE-PATH "/Users/cclark/Work/stonehenge"))
+  (setq monorepl-STONEHENGE-PATH
+        (expand-file-name "~/Work/stonehenge")))
 
 ;;;; CSS and SCSS
 
