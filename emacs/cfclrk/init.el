@@ -32,13 +32,6 @@
  ;; Make straight use ssh instead of https
  straight-vc-git-default-protocol 'ssh)
 
-;; Number of bytes that can be read from a sub-process in one read operation.
-;; Good for dealing with verbose subprocesses, like *ehem* an LSP server.
-(setq read-process-output-max (* 4 1024 1024)) ;; 4 MiB (default is 8 KiB)
-
-;; Amount of memory allowed before garbage collection. If you set this
-;; too high, GC takes a long time.
-(setq gc-cons-threshold (* 3 1024 1024))  ;; 3 MiB (default is 800 KB)
 
 ;; Log a message about startup time
 (defun cfclrk/startup-hook ()
@@ -193,8 +186,6 @@ See: https://stackoverflow.com/questions/6133799"
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
-(tool-bar-mode -1)           ; No tool bar, which has the save button, etc
-(scroll-bar-mode -1)         ; No scroll bars to the right of buffers
 (blink-cursor-mode -1)       ; Just a nice, solid cursor
 (global-auto-revert-mode t)  ; Revert buffers when their backing files change
 (set-language-environment "UTF-8")
@@ -1104,5 +1095,15 @@ To be used with `markdown-live-preview-window-function'."
        "!If"
        "!Not"
        "!Or"])
+
+;;; Garbage collect
+
+(garbage-collect)
+
+;; Restore original GC values
+(add-hook 'emacs-startup-hook
+		  (lambda ()
+			(setq gc-cons-threshold gc-cons-threshold-original)
+			(setq gc-cons-percentage gc-cons-percentage-original)))
 
 ;;; init.el ends here
