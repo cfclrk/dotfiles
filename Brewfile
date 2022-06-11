@@ -14,7 +14,6 @@ brew "make"
 brew "node"
 brew "rust-analyzer"
 brew "shellcheck"
-brew "svn"  # needed to download fonts
 brew "texinfo"
 brew "tmux"
 brew "tree"
@@ -22,7 +21,10 @@ brew "tree"
 # Downloads a .pkg file in to $(brew --prefix)/Caskroom/basictex/, need to
 # manually run it
 cask "basictex"
+cask "cljstyle"
+cask "zprint"
 
 # Fira code is nice to have, though I use hasklig right now
+brew "svn"
 tap "homebrew/cask-fonts"
 cask "font-fira-code"
