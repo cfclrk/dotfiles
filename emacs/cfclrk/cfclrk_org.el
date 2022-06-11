@@ -152,6 +152,16 @@ non-nil, use sudo on the remote host."
 
 (use-package ob-http)
 
+;;; ob-mermaid
+
+(use-package ob-mermaid
+  :straight (ob-mermaid
+             :type git
+             :host github
+             :repo "arnm/ob-mermaid"
+             :fork (:host github
+                    :repo "tonyaldon/ob-mermaid")))
+
 ;;; org mode
 
 (defun cfclrk/org-mode-hook ()
@@ -180,6 +190,7 @@ non-nil, use sudo on the remote host."
      (http . t)
      (js . t)
      (latex . t)
+     (mermaid . t)
 	 (python . t)
      (shell . t)
      (sql . t)))
