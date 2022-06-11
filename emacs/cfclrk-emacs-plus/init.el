@@ -9,9 +9,8 @@
 
 ;; bootstrap straight.el
 (defvar bootstrap-version)
-(let ((bootstrap-file (expand-file-name
-                       "straight/repos/straight.el/bootstrap.el"
-                       user-emacs-directory))
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -31,14 +30,6 @@
  straight-use-package-by-default t
  ;; Make straight use ssh instead of https
  straight-vc-git-default-protocol 'ssh)
-
-;; Number of bytes that can be read from a sub-process in one read operation.
-;; Good for dealing with verbose subprocesses, like *ehem* an LSP server.
-(setq read-process-output-max (* 4 1024 1024)) ;; 4 MiB (default is 8 KiB)
-
-;; Amount of memory allowed before garbage collection. If you set this
-;; too high, GC takes a long time.
-(setq gc-cons-threshold (* 3 1024 1024))  ;; 3 MiB (default is 800 KB)
 
 ;; Log a message about startup time
 (defun cfclrk/startup-hook ()
@@ -70,7 +61,6 @@
   ;; Enable C-h S (info-lookup-symbol) on dash symbols
   (with-eval-after-load 'info-look
     (dash-register-info-lookup)))
-
 
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
@@ -121,8 +111,11 @@ Adapted from Emacs Redux (emacsredux.com)."
 
 (defun cfclrk/set-font-size (font-size)
   "Set font height to the given FONT-SIZE.
-TODO: display current font size in prompt. You can get it
-with: (face-attribute 'default :height)."
+This updates font size without changing the Emacs frame (i.e.
+window) size.
+- TODO: display current font size in prompt. You can
+get it with: (face-attribute 'default :height).
+- TODO: Bind to M-F1/M-F2"
   (interactive "nFont Size: ")
   (let ((frame-inhibit-implied-resize t))
     (set-face-attribute 'default nil :height font-size)
@@ -176,27 +169,23 @@ See: https://stackoverflow.com/questions/6133799"
 			(all-the-icons-install-fonts t)))
 
 (use-package doom-modeline
- :init (doom-modeline-mode +1)
- :config
- (setq doom-modeline-buffer-encoding nil
-       doom-modeline-height 40
-       doom-modeline-hud t
-       doom-modeline-project-detection 'projectile
-       doom-modeline-buffer-file-name-style 'buffer-name
-       doom-modeline-vcs-max-length 15
-       doom-modeline-env-version nil))
+  :init (doom-modeline-mode +1)
+  :config
+  (setq doom-modeline-buffer-encoding nil
+        doom-modeline-height 40
+        doom-modeline-hud t
+        doom-modeline-project-detection 'projectile
+        doom-modeline-buffer-file-name-style 'buffer-name
+        doom-modeline-vcs-max-length 15
+        doom-modeline-env-version nil))
 
 (setq display-buffer-alist
       '(("\\*eshell\\*" display-buffer-use-some-window)
-        ("\\*Help\\*" display-buffer-same-window)
-        ;; this isn't working
-        ("\\*xwidget-webkit.*" display-buffer-use-some-window)))
+        ("\\*Help\\*" display-buffer-same-window)))
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
-(tool-bar-mode -1)           ; No tool bar, which has the save button, etc
-(scroll-bar-mode -1)         ; No scroll bars to the right of buffers
 (blink-cursor-mode -1)       ; Just a nice, solid cursor
 (global-auto-revert-mode t)  ; Revert buffers when their backing files change
 (set-language-environment "UTF-8")
@@ -295,17 +284,9 @@ See: https://stackoverflow.com/questions/6133799"
 ;;;; bazel
 
 (use-package bazel
-  :straight (bazel :type git :host github :repo "bazelbuild/emacs-bazel-mode"))
-
-;;;; beacon
-
-;; Beacon is a package that temporarily highlights or flashes the line that the
-;; cursor is on when switching buffers.
-
-(use-package beacon
-  :config
-  (beacon-mode +1)
-  (setq beacon-color "#a9a1e1"))
+  :straight (bazel
+             :host github
+             :repo "bazelbuild/emacs-bazel-mode"))
 
 ;;;; bicycle
 
@@ -410,7 +391,7 @@ From: https://stackoverflow.com/a/3072831/340613"
 ;;;; eshell
 
 (setq ;; Do TAB completion
-      eshell-cmpl-cycle-completions nil)
+ eshell-cmpl-cycle-completions nil)
 
 ;;;; git, magit, forge
 
@@ -465,6 +446,7 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 (use-package grip-mode
   :after markdown-mode
+  ;; TODO: bind C-c C-z to markdown-live-preview-switch-to-output
   :bind (:map markdown-mode-command-map
               ("g" . grip-mode))
   :config
@@ -512,7 +494,7 @@ From: https://stackoverflow.com/a/3072831/340613"
   (global-flycheck-mode +1))
 
 ;; Run more flycheck checkers in LSP mode. LSP-mode disables all flycheck
-;; checkers (instead that is delegated to the LSP server). From:
+;; checkers (because such checks are instead delegated to the LSP server). From:
 ;; https://github.com/flycheck/flycheck/issues/1762
 
 (defvar-local my/flycheck-local-cache nil)
@@ -557,6 +539,25 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;; (add-to-list 'image-file-name-extensions "eps")
 ;; (setq org-image-actual-width '(500))
 
+;;;; Ligatures
+
+;; Taken from the hasklig README.md here: https://github.com/i-tu/Hasklig
+;; (setq hasklig-ligatures
+;;       '("<*" "<*>" "<+>" "<$>" "***" "<|" "|>" "<|>" "!!"
+;;         "||" "===" "==>" "<<<" ">>>" "<>" "+++" "<-" "->"
+;;         "=>" ">>" "<<" ">>=" "=<<" ".." "..." "::" "-<"
+;;         ">-" "-<<" ">>-" "++" "/=" "=="))
+
+(use-package ligature
+  :straight (ligature
+             :host github
+             :repo "mickeynp/ligature.el")
+  :config
+  (ligature-set-ligatures
+   'clojure-mode
+   '("->" "-->" "<>" "=>"))
+  (global-ligature-mode t))
+
 ;;;; LSP
 
 (use-package lsp-mode
@@ -579,18 +580,21 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   "Preview FILE with xwidget-webkit.
 To be used with `markdown-live-preview-window-function'."
   (let ((uri (format "file://%s" file)))
-      (xwidget-webkit-browse-url uri)
-      xwidget-webkit-last-session-buffer))
+    (xwidget-webkit-browse-url uri)
+    xwidget-webkit-last-session-buffer))
 
 (use-package markdown-mode
   :hook ((markdown-mode . visual-line-mode))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
+  :bind (:map markdown-mode-map
+              ("C-c C-z" . markdown-live-preview-switch-to-output))
   :init
   ;; TODO: Update/monkeypatch markdown-add-xhtml-header-and-footer. Use mustache
   ;; templates.
   (setq markdown-command "multimarkdown"
+        markdown-spaces-after-code-fence 0
         markdown-fontify-code-blocks-natively t
         markdown-enable-math t
         markdown-enable-wiki-links t
@@ -648,9 +652,13 @@ To be used with `markdown-live-preview-window-function'."
 
 ;;;; mermaid
 
-(use-package mermaid-mode)
+(use-package mermaid-mode
+  :config
+  (setq mermaid-output-format ".svg"))
 
 ;;;; org
+
+;; Org stuff is in a separate file, because it's so much.
 
 (load-file (expand-file-name "cfclrk_org.el" user-emacs-directory))
 
@@ -667,8 +675,7 @@ To be used with `markdown-live-preview-window-function'."
   :config
   (load (expand-file-name "~/emacs/projectile-discovery.el"))
   (projectile-mode +1)
-  ;; Never cache project root
-  (setq projectile-enable-caching nil))
+  (setq projectile-use-git-grep t))
 
 ;;;; protobuf
 
@@ -694,7 +701,9 @@ To be used with `markdown-live-preview-window-function'."
 ;;;; setenv-file
 
 (use-package setenv-file
-  :straight (setenv-file :type git :host github :repo "cfclrk/setenv-file")
+  :straight (setenv-file
+             :host github
+             :repo "cfclrk/setenv-file")
   :config
   (setq setenv-file-dir (expand-file-name "~/.env/")))
 
@@ -712,9 +721,9 @@ To be used with `markdown-live-preview-window-function'."
 
   ;; Create a key prefix. I like having a prefix so that which-key can show me
   ;; all the usual actions I perform.
-  (global-unset-key (kbd "s-s"))  ; Was an alias for save-buffer, C-x C-s
+  (global-unset-key (kbd "s-p"))  ; Was ns-print-buffer. Who uses paper?
   (define-prefix-command 'sp-prefix-key-map)
-  (define-key smartparens-mode-map (kbd "s-s") sp-prefix-key-map)
+  (define-key smartparens-mode-map (kbd "s-p") sp-prefix-key-map)
 
   ;; Slurping and barfing with Shift
   (define-key smartparens-mode-map (kbd "S-<right>") 'sp-forward-slurp-sexp)
@@ -767,7 +776,7 @@ To be used with `markdown-live-preview-window-function'."
 (use-package undo-tree
   :config
   (setq undo-tree-history-directory-alist
-      `((".*" . ,temporary-file-directory)))
+        `((".*" . ,temporary-file-directory)))
   (setq undo-tree-auto-save-history t)
   (global-undo-tree-mode))
 
@@ -840,45 +849,56 @@ To be used with `markdown-live-preview-window-function'."
 
 (use-package clojure-mode
   :mode "\\.cljstyle\\'"  ; Use clojure-mode for ".cljstyle" files
-  :hook ((clojure-mode . lsp-deferred)
-         (clojure-mode . my-lisp-mode-hook)
-         (clojure-mode . cljstyle-format-on-save-mode))
+  ;; TODO: :bind cider-pprint-eval-last-sexp-to-comment to C-j
   :bind (:map clojure-mode-map
               ("C-t n" . cider-test-run-ns-tests)
               ("C-t p" . cider-test-run-project-tests)
-              ("C-t t" . cider-test-run-test)))
+              ("C-t t" . cider-test-run-test))
+  :hook ((clojure-mode . lsp-deferred)
+         (clojure-mode . my-lisp-mode-hook)
+         (clojure-mode . cljstyle-format-on-save-mode))
+  :config
+  (setq clojure-indent-style 'always-indent))
 
 (use-package cljstyle
   :after clojure-mode
   :straight (cljstyle
-             :type git
              :host github
              :repo "cfclrk/cljstyle.el"))
 
+(use-package clj-refactor)
+
+;; From: https://ag91.github.io/blog/2022/06/09/
+;; make-adding-a-clojure-require-more-interactive-with-cider-and-cljr/
+(defun my/make-cljr-add-use-snippet-interactive ()
+  (setq-local
+   cljr--add-use-snippet
+   "[${1:$$(yas-choose-value
+             (ignore-errors
+               (cider-sync-request:ns-list)))} :refer ${2:[$3]}]"))
+
+;; - TODO: The cider-test-* key bindings should be declared here
+;;
+;; - TODO: Figure out how to make `xref-find-definitions' work when a file is
+;;         not loaded in cider
 (use-package cider
   :after clojure-mode
   :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
-         (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1))))
+         (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1)))
+         (cider-mode . my/make-cljr-add-use-snippet-interactive))
   :config
   (setq cider-save-file-on-load t)
   (setq cider-repl-prompt-function (lambda (namespace)
-                                     (format "\n%s\n> " namespace))))
-
-;; (use-package stonehenge
-;;   :after cider
-;;   :straight (stonehenge
-;;              :local-repo "~/Work/stonehenge"
-;;              :files ("development/emacs/stonehenge.el"))
-;;   :config
-;;   (setq stonehenge-path (expand-file-name "~/Work/stonehenge")))
+                                     (format "%s\n> " namespace))))
 
 (use-package monorepl
-  :after cider
+  ;;:after cider
   :straight (monorepl
              :local-repo "~/Work/stonehenge"
              :files ("development/emacs/monorepl.el"))
   :config
-  (setq monorepl-STONEHENGE-PATH "/Users/cclark/Work/stonehenge"))
+  (setq monorepl-STONEHENGE-PATH
+        (expand-file-name "~/Work/stonehenge")))
 
 ;;;; CSS and SCSS
 
@@ -989,7 +1009,7 @@ To be used with `markdown-live-preview-window-function'."
 
 (add-hook 'java-mode-hook #'lsp-deferred)
 
-;;;; Javascript (and JSON)
+;;;; Javascript and JSON
 
 (defun cfclrk/js-mode-hook ()
   "Customize `js-mode'."
@@ -998,7 +1018,12 @@ To be used with `markdown-live-preview-window-function'."
 (add-hook 'js-mode-hook #'cfclrk/js-mode-hook)
 (add-hook 'js-mode-hook #'lsp-deferred)
 
+(use-package js2-mode)
+
 ;;;; Lisp
+
+;; TODO: figure out how to make fill-paragraph respect markdown formatting. E.g.
+;; reformatting a bulleted list puts everyting on the same line right now.
 
 (dolist (hook '(lisp-mode-hook
                 lisp-data-mode-hook))
@@ -1050,16 +1075,16 @@ To be used with `markdown-live-preview-window-function'."
 
 ;; Add a new kind of Projectile project for python projects that are structured
 ;; like py-demo.
-  (projectile-register-project-type
-   'python-cfclrk '("setup.py" "Makefile")
-   :project-file "setup.py"
-   :src-dir "src"
-   :compile "make dev"
-   :install "make dev"
-   :test "make test"
-   :test-dir "tests"
-   :test-prefix "test"
-   :test-suffix"_test")
+(projectile-register-project-type
+ 'python-cfclrk '("setup.py" "Makefile")
+ :project-file "setup.py"
+ :src-dir "src"
+ :compile "make dev"
+ :install "make dev"
+ :test "make test"
+ :test-dir "tests"
+ :test-prefix "test"
+ :test-suffix"_test")
 
 ;;;; Rust
 
@@ -1082,7 +1107,9 @@ To be used with `markdown-live-preview-window-function'."
 ;;;; WebAssembly
 
 (use-package wat-mode
-  :straight (wat-mode :type git :host github :repo "devonsparks/wat-mode"))
+  :straight (wat-mode
+             :host github
+             :repo "devonsparks/wat-mode"))
 
 ;;;; YAML
 
@@ -1106,5 +1133,15 @@ To be used with `markdown-live-preview-window-function'."
        "!If"
        "!Not"
        "!Or"])
+
+;;; Garbage collect
+
+(garbage-collect)
+
+;; Restore original GC values
+(add-hook 'emacs-startup-hook
+		  (lambda ()
+			(setq gc-cons-threshold gc-cons-threshold-original)
+			(setq gc-cons-percentage gc-cons-percentage-original)))
 
 ;;; init.el ends here
