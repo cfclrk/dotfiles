@@ -555,7 +555,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (ligature-set-ligatures
    'clojure-mode
-   '("->" "-->" "<>" "=>"))
+   '("->" "->>" "<>" "=>"))
   (global-ligature-mode t))
 
 ;;;; LSP
@@ -721,9 +721,9 @@ To be used with `markdown-live-preview-window-function'."
 
   ;; Create a key prefix. I like having a prefix so that which-key can show me
   ;; all the usual actions I perform.
-  (global-unset-key (kbd "s-p"))  ; Was ns-print-buffer. Who uses paper?
+  (global-unset-key (kbd "M-c"))  ; Was capitalize-word.
   (define-prefix-command 'sp-prefix-key-map)
-  (define-key smartparens-mode-map (kbd "s-p") sp-prefix-key-map)
+  (define-key smartparens-mode-map (kbd "M-c") sp-prefix-key-map)
 
   ;; Slurping and barfing with Shift
   (define-key smartparens-mode-map (kbd "S-<right>") 'sp-forward-slurp-sexp)
@@ -865,6 +865,8 @@ To be used with `markdown-live-preview-window-function'."
   :straight (cljstyle
              :host github
              :repo "cfclrk/cljstyle.el"))
+
+(use-package zprint-format)
 
 (use-package clj-refactor)
 
