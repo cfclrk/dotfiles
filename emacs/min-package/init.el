@@ -84,43 +84,14 @@
 ;;;; smartparens
 
 (use-package smartparens
-  :bind (:map smartparens-mode-map
-              ;; slurping and barfing
-              ("S-<right>" . sp-forward-slurp-sexp)
-              ("S-<left>" . sp-forward-barf-sexp)
-              ("M-S-<right>" . sp-backward-barf-sexp)
-              ("M-S-<left>" . sp-backward-slurp-sexp))
-  :config
+  :bind (:map lisp-mode-map
+              ("M-f" . sp-next-sexp)
+              ("M-b" . sp-backward-sexp))
+  :init
   (require 'smartparens-config)
-  (show-smartparens-global-mode t)
-
-  ;; Create a key prefix M-p
-  (define-prefix-command 'sp-prefix-key-map)
-  (define-key smartparens-mode-map (kbd "M-p") sp-prefix-key-map)
-
-  ;; splicing prefix is M-p s
-  (define-prefix-command 'sp-splice-key-map)
-  (define-key sp-prefix-key-map (kbd "s") sp-splice-key-map)
-
-  ;; splicing commands
-  (define-key sp-splice-key-map (kbd "s") 'sp-splice-sexp)
-  (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
-  (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
-  (define-key sp-splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
-
-  ;; wrapping prefix is M-p r
-  (define-prefix-command 'sp-wrap-key-map)
-  (define-key sp-prefix-key-map (kbd "r") sp-wrap-key-map)
-
-  ;; wrapping commands
-  (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
-  (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
-  (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
-  (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
-
-  ;; selection
-  (define-key sp-prefix-key-map (kbd "n") 'sp-select-next-thing)
-  (define-key sp-prefix-key-map (kbd "p") 'sp-select-previous-thing-exchange))
+  :config
+  (load (expand-file-name "~/emacs/smartparens.el"))
+  (my-smartparens-config))
 
 ;;;; undo-tree
 

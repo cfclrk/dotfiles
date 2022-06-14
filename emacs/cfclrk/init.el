@@ -731,7 +731,8 @@ To be used with `markdown-live-preview-window-function'."
   :init
   (require 'smartparens-config)
   :config
-  (load (expand-file-name "~/emacs/smartparens.el")))
+  (load (expand-file-name "~/emacs/smartparens.el"))
+  (my-smartparens-config))
 
 ;;;; super-save
 
