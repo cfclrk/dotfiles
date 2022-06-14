@@ -75,17 +75,6 @@
                 lisp-data-mode-hook))
   (add-hook hook #'cfclrk/lisp-mode-hook))
 
-;;;; Clojure
-
-(use-package cljstyle
-  :after clojure-mode
-  :straight (cljstyle
-             :type git
-             :host github
-             :repo "cfclrk/cljstyle.el"))
-
-(use-package clojure-mode
-  :hook ((clojure-mode . cljstyle-format-on-save-mode)))
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
@@ -160,6 +149,10 @@
       `((".*" . ,temporary-file-directory)))
   (setq undo-tree-auto-save-history t)
   (global-undo-tree-mode))
+
+(use-package vertico
+  :init
+  (vertico-mode))
 
 ;;;; yaml
 

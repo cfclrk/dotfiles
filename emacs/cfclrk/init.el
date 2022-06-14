@@ -470,16 +470,21 @@ From: https://stackoverflow.com/a/3072831/340613"
   (key-chord-define-global "\\p" 'python-pytest-dispatch)
   (key-chord-mode +1))
 
-;;;; Minibuffer completion (selectrum, prescient, marginalia, consult)
+;;;; Minibuffer completion (vertico, orderless, marginalia, consult)
 
-(use-package selectrum
-  :config (selectrum-mode +1))
-
-(use-package selectrum-prescient
-  :config (selectrum-prescient-mode +1))
+(use-package vertico
+  :init
+  (vertico-mode))
 
 (use-package marginalia
+  :after vertico
   :init (marginalia-mode))
+
+(use-package orderless
+  :after vertico
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package consult)
 
@@ -660,7 +665,8 @@ To be used with `markdown-live-preview-window-function'."
 
 ;; Org stuff is in a separate file, because it's so much.
 
-(load-file (expand-file-name "cfclrk_org.el" user-emacs-directory))
+(load
+ (expand-file-name "cfclrk_org.el" user-emacs-directory))
 
 ;;;; page-break-lines
 
@@ -698,6 +704,15 @@ To be used with `markdown-live-preview-window-function'."
 
 (use-package reveal-in-osx-finder)
 
+;;;; savehist
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode)
+  :config
+  (setq history-length 25))
+
 ;;;; setenv-file
 
 (use-package setenv-file
@@ -716,44 +731,7 @@ To be used with `markdown-live-preview-window-function'."
   :init
   (require 'smartparens-config)
   :config
-  ;; Activates show-smartparens-mode. Turn on visualization of matching pairs.
-  (show-smartparens-global-mode t)
-
-  ;; Create a key prefix. I like having a prefix so that which-key can show me
-  ;; all the usual actions I perform.
-  (global-unset-key (kbd "M-c"))  ; Was capitalize-word.
-  (define-prefix-command 'sp-prefix-key-map)
-  (define-key smartparens-mode-map (kbd "M-c") sp-prefix-key-map)
-
-  ;; Slurping and barfing with Shift
-  (define-key smartparens-mode-map (kbd "S-<right>") 'sp-forward-slurp-sexp)
-  (define-key smartparens-mode-map (kbd "S-<left>") 'sp-forward-barf-sexp)
-  (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-backward-barf-sexp)
-  (define-key smartparens-mode-map (kbd "C-S-<left>") 'sp-backward-slurp-sexp)
-
-  ;; movement
-  ;; Maybe M-f and M-b
-  ;; Definitely remap C-M-f and C-M-b to use smartparens
-
-  ;; splicing
-  (define-prefix-command 'sp-splice-key-map)
-  (define-key sp-prefix-key-map (kbd "s") sp-splice-key-map)
-  (define-key sp-splice-key-map (kbd "s") 'sp-splice-sexp)
-  (define-key sp-splice-key-map (kbd "f") 'sp-splice-sexp-killing-forward)
-  (define-key sp-splice-key-map (kbd "b") 'sp-splice-sexp-killing-backward)
-  (define-key sp-splice-key-map (kbd "a") 'sp-splice-sexp-killing-around)
-
-  ;; wrapping
-  (define-prefix-command 'sp-wrap-key-map)
-  (define-key sp-prefix-key-map (kbd "r") sp-wrap-key-map)
-  (define-key sp-wrap-key-map (kbd "a") 'sp-wrap-round) ; mneumonic: "around"
-  (define-key sp-wrap-key-map (kbd "u") 'sp-unwrap-sexp)
-  (define-key sp-wrap-key-map (kbd "c") 'sp-wrap-curly)
-  (define-key sp-wrap-key-map (kbd "r") 'sp-rewrap-sexp)
-
-  ;; selection
-  (define-key sp-prefix-key-map (kbd "n") 'sp-select-next-thing)
-  (define-key sp-prefix-key-map (kbd "p") 'sp-select-previous-thing-exchange))
+  (load (expand-file-name "~/emacs/smartparens.el")))
 
 ;;;; super-save
 
@@ -878,6 +856,11 @@ To be used with `markdown-live-preview-window-function'."
    "[${1:$$(yas-choose-value
              (ignore-errors
                (cider-sync-request:ns-list)))} :refer ${2:[$3]}]"))
+
+(defun my-cljr-add-require-snippet-interactive ()
+  (setq-local
+   cljr--add-require-snippet
+   "${1:[${2:${3:} :as ${4:${3:$(cljr--ns-name yas-text)}}}]}"))
 
 ;; - TODO: The cider-test-* key bindings should be declared here
 ;;
