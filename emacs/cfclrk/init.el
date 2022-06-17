@@ -438,11 +438,16 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 ;;;; grip
 
-;; `grip-mode' renders markdown files using GitHub's rendering API. That's
-;; pretty cool, but it requires an internet connection and can't easily be
-;; customized. I actually use `markdown-live-preview-mode', which I've set up to
-;; render markdown files locally in an xwidget. `grip-mode' can still sometimes
-;; be useful though, so I keep it.
+;; `grip-mode' renders markdown files using GitHub's rendering API. That can be
+;; very useful, but it
+;;
+;; 1. Requires an internet connection
+;; 2. Can't be easily customized
+;; 3. Doesn't render mermaid diagrams
+;;
+;; `grip-mode' can be a great way to double-check how something will look in
+;; GitHub, but more commonly your day-to-day rendering should be done using
+;; `markdown-live-preview-mode'.
 
 (use-package grip-mode
   :after markdown-mode
@@ -589,7 +594,8 @@ To be used with `markdown-live-preview-window-function'."
     xwidget-webkit-last-session-buffer))
 
 (use-package markdown-mode
-  :hook ((markdown-mode . visual-line-mode))
+  :hook ((markdown-mode . visual-line-mode)
+         (markdown-mode . markdown-toc-mode))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
@@ -617,8 +623,6 @@ To be used with `markdown-live-preview-window-function'."
                          user-emacs-directory))
 
   (setq
-   markdown-content-type "application/xhtml+xml"
-
    ;; Note, these styles are only applied to the div with a "markdown-body"
    ;; class attribute. markdown-mode does not automatically add a
    ;; `class="markdown-body"' anywhere, so we need to do that ourselves
@@ -650,6 +654,16 @@ To be used with `markdown-live-preview-window-function'."
   ;; Restart whitespace mode so that is properly uses `whitespace-style'.
   (whitespace-mode -1)
   (whitespace-mode +1))
+
+(use-package markdown-toc
+  :config
+  (setq
+   markdown-toc-header-toc-start "<!--ts-->"
+   markdown-toc-header-toc-end "<!--te-->"
+   markdown-toc-indentation-space 2
+   markdown-toc-header-toc-title nil
+   ;; Do not include h1
+   markdown-toc-user-toc-structure-manipulation-fn 'cdr))
 
 ;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
 ;; you edit source blocks in another buffer (similar to org-edit-special)
