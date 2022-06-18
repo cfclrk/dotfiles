@@ -156,7 +156,6 @@ non-nil, use sudo on the remote host."
 
 (use-package ob-mermaid
   :straight (ob-mermaid
-             :type git
              :host github
              :repo "arnm/ob-mermaid"
              :fork (:host github

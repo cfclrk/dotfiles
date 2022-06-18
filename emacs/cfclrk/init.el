@@ -656,6 +656,11 @@ To be used with `markdown-live-preview-window-function'."
   (whitespace-mode +1))
 
 (use-package markdown-toc
+  :straight (markdown-toc
+             :host github
+             :repo "ardumont/markdown-toc"
+             :fork (:host github
+                    :repo "cfclrk/markdown-toc"))
   :config
   (setq
    markdown-toc-header-toc-start "<!--ts-->"
