@@ -605,6 +605,7 @@ To be used with `markdown-live-preview-window-function'."
   ;; TODO: Update/monkeypatch markdown-add-xhtml-header-and-footer. Use mustache
   ;; templates.
   (setq markdown-command "multimarkdown"
+        markdown-list-indent-width 2
         markdown-spaces-after-code-fence 0
         markdown-fontify-code-blocks-natively t
         markdown-enable-math t
@@ -663,12 +664,11 @@ To be used with `markdown-live-preview-window-function'."
                     :repo "cfclrk/markdown-toc"))
   :config
   (setq
-   markdown-toc-header-toc-start "<!--ts-->"
-   markdown-toc-header-toc-end "<!--te-->"
-   markdown-toc-indentation-space 2
-   markdown-toc-header-toc-title nil
-   ;; Do not include h1
-   markdown-toc-user-toc-structure-manipulation-fn 'cdr))
+   ;; markdown-toc-start "<!--ts-->"
+   ;; markdown-toc-end "<!--te-->"
+   ;; markdown-toc-title nil
+   ;; Do not include first h1
+   markdown-toc-transform-fn 'cdr))
 
 ;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
 ;; you edit source blocks in another buffer (similar to org-edit-special)
@@ -905,6 +905,26 @@ To be used with `markdown-live-preview-window-function'."
   (setq monorepl-STONEHENGE-PATH
         (expand-file-name "~/Work/stonehenge")))
 
+(with-eval-after-load 'clojure-mode
+  ;;; ns manipulation to comply with stonehenge
+  (defun clojure-expected-ns (&optional path)
+    "Return the namespace matching PATH.
+PATH is expected to be an absolute file path.
+If PATH is nil, use the path to the file backing the current buffer."
+    (let* ((path (or path (file-truename (buffer-file-name))))
+           (relative (clojure-project-relative-path path))
+           (sans-file-type (substring relative 0 (- (length (file-name-extension path t)))))
+           (splitted-parts (split-string sans-file-type "/"))
+           (usable-parts (if (string= "splash" (car splitted-parts))
+                             splitted-parts
+                           (cdr splitted-parts)))
+           (sans-file-sep (mapconcat 'identity usable-parts  "."))
+           (sans-underscores (replace-regexp-in-string "_" "-" sans-file-sep)))
+      ;; Drop prefix from ns for projects with structure src/{clj,cljs,cljc}
+      (cl-reduce (lambda (a x) (replace-regexp-in-string x "" a))
+                 clojure-directory-prefixes
+                 :initial-value sans-underscores))))
+
 ;;;; CSS and SCSS
 
 (defun cfclrk/css-mode-hook ()
@@ -1102,6 +1122,15 @@ To be used with `markdown-live-preview-window-function'."
    ;; rustic-format-on-save was causing some problems with LSP.
    ;; rustic-format-on-save t
    rustic-test-arguments "-- --show-output"))
+
+;;;; SQL
+
+;; (setq sql-postgres-login-params nil)
+
+(use-package sqlformat
+  :config
+  (setq sqlformat-command 'pgformatter
+        sqlformat-args '("-s2" "-g")))
 
 ;;;; Terraform
 
