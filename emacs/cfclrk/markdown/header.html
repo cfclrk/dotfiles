@@ -25,12 +25,21 @@
     'DOMContentLoaded',
     () => {
       document.body.classList.add('markdown-body');
-      hljs.highlightAll();
-      // document.querySelectorAll('pre[lang] > code').forEach((code) => {
-      //   code.classList.add(code.parentElement.lang);
-      // });
-      // document.querySelectorAll('pre > code').forEach((code) => {
-      //   hljs.highlightBlock(code);
-      // });
+
+      // Use highlight.js to add syntax highlighting to all non-mermaid code blocks.
+      document.querySelectorAll('pre > code').forEach((code) => {
+        if (code.className != 'mermaid') {
+          hljs.highlightBlock(code);
+        }
+      });
     });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+<script>
+mermaid.initialize({
+  theme: 'dark',  // default, forest, dark, neutral
+  startOnLoad: true
+});
 </script>

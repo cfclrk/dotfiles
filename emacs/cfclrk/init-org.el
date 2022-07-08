@@ -1,4 +1,4 @@
-;;; cfclrk_org.el -- Org mode customization  -*- lexical-binding: t; -*-
+;;; init-org.el -- Org mode config  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -217,5 +217,5 @@ non-nil, use sudo on the remote host."
 
 (add-hook 'org-mode-hook 'cfclrk/org-mode-hook)
 
-(provide 'cfclrk-org)
-;;; cfclrk_org.el ends here
+(provide 'init-org)
+;;; init-org.el ends here
