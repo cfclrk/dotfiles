@@ -2,7 +2,7 @@
   "default": true,
   "single-title": false,
   "no-inline-html": {
-    "allowed_elements": ["kbd"]
+    "allowed_elements": ["kbd", "img"]
   },
   "first-line-heading": false,
   "no-duplicate-heading": false,
