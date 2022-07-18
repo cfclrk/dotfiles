@@ -148,7 +148,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 150)))
+      (set-face-attribute 'default nil :height 170)))
 
 ;; Use the doom-one theme
 (use-package doom-themes
@@ -476,6 +476,7 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 (use-package flycheck
   :config
+  (setq flycheck-emacs-lisp-load-path 'inherit)
   (global-flycheck-mode +1))
 
 ;; Run more flycheck checkers in LSP mode. LSP-mode disables all flycheck
@@ -563,7 +564,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;;;; markdown
 
 (load
- (expand-file-name "markdown/init-markdown.el" user-emacs-directory))
+ (expand-file-name "init-markdown.el" user-emacs-directory))
 
 ;;;; mermaid
 
@@ -694,6 +695,15 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;; Use "C-c q" to close a Help buffer, Compilation buffer, etc I just opened.
 (define-key winner-mode-map (kbd "C-c q") #'winner-undo)
+
+;;;; web-mode
+
+(use-package web-mode
+  :config
+  (setq web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-markup-indent-offset 2
+        web-mode-sql-indent-offset 2))
 
 ;;;; yaml
 

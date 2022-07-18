@@ -29,14 +29,19 @@
     (setq grip-github-user (car credential)
           grip-github-password (cadr credential))))
 
-;;;; markdown
+;;;; markdown-defaults
 
-(defun markdown-live-preview-window-xwidget-webkit (file)
-  "Preview FILE with xwidget-webkit.
-To be used with `markdown-live-preview-window-function'."
-  (let ((uri (format "file://%s" file)))
-    (xwidget-webkit-browse-url uri)
-    xwidget-webkit-last-session-buffer))
+(use-package markdown-defaults
+  :straight (markdown-defaults
+             :type git
+             :host github
+             :repo "cfclrk/markdown-defaults"
+             :files (:defaults "resources"))
+  :config
+  (setq markdown-defaults-theme "dark-dimmed"
+        markdown-defaults-mermaid-theme "dark"))
+
+;;;; markdown
 
 (use-package markdown-mode
   :hook ((markdown-mode . visual-line-mode)
@@ -47,53 +52,13 @@ To be used with `markdown-live-preview-window-function'."
   :bind (:map markdown-mode-map
               ("C-c C-z" . markdown-live-preview-switch-to-output))
   :init
-  ;; TODO: Update/monkeypatch markdown-add-xhtml-header-and-footer. Use mustache
-  ;; templates.
-  (setq markdown-command "multimarkdown"
-        markdown-list-indent-width 2
-        markdown-spaces-after-code-fence 0
-        markdown-fontify-code-blocks-natively t
-        markdown-enable-math t
-        markdown-enable-wiki-links t
-        markdown-italic-underscore t
-        markdown-make-gfm-checkboxes-buttons t
-        markdown-content-type "application/xhtml+xml"
-        markdown-split-window-direction 'right
-        markdown-content-type "")
-  (setq markdown-live-preview-window-function
-        #'markdown-live-preview-window-xwidget-webkit)
+  (setq markdown-split-window-direction 'right)
 
   ;; A file I made using generate-github-markdown-css
   (setq my-markdown-css (expand-file-name
                          "github_dark_dimmed.css"
                          user-emacs-directory))
 
-  (setq
-   ;; Note, these styles are only applied to the div with a "markdown-body"
-   ;; class attribute. markdown-mode does not automatically add a
-   ;; `class="markdown-body"' anywhere, so we need to do that ourselves
-   ;; somewhere (I do it in the header.html file below).
-   ;;
-   ;; Also, the URL below is some GitHub CSS, available on a CDN. But, it only
-   ;; includes styles for the "dark" and "light" GitHub themes. The xwdidget
-   ;; browser wil use one of those - whichever your system theme is. Using the
-   ;; dark-dimmed theme requires some other solution. Also, I like having local
-   ;; CSS so it doesn't have to be fetched over the internet.
-   ;;
-   ;; - "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css"
-   markdown-css-paths
-   `(;; A file I made using generate-github-markdown-css
-     ,my-markdown-css
-
-     ;; For highlighting code blocks with highlightjs
-     "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/github-dark-dimmed.min.css")
-
-   markdown-xhtml-header-content
-   (f-read-text
-    (file-truename
-     (expand-file-name
-      "markdown/header.html"
-      user-emacs-directory))))
   :config
   (setq whitespace-style '(face tabs empty trailing))
 
