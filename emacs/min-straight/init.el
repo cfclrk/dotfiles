@@ -30,6 +30,7 @@
 ;;  ----------------------------------------------------------------------------
 
 (blink-cursor-mode -1)
+(set-language-environment "UTF-8")
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -63,17 +64,17 @@
   :init
   (vertico-mode))
 
-;;;;; markdown-defaults
+;;;;; markdownx
 
-(use-package markdown-defaults
-  :straight (markdown-defaults
+(use-package markdownx
+  :straight (markdownx
              :type git
              :host github
-             :repo "cfclrk/markdown-defaults"
+             :repo "cfclrk/markdownx"
              :files (:defaults "resources"))
   :config
-  (setq markdown-defaults-github-theme "light-high-contrast"
-        markdown-defaults-mermaid-theme "neutral"
-        markdown-defaults-code-block-theme "github"))
+  (setq markdownx-github-theme "light-high-contrast"
+        markdownx-mermaid-theme "forest"
+        markdownx-code-block-theme "github"))
 
 ;;; init.el ends here

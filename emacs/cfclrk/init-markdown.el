@@ -29,17 +29,18 @@
     (setq grip-github-user (car credential)
           grip-github-password (cadr credential))))
 
-;;;; markdown-defaults
+;;;; markdownx
 
-(use-package markdown-defaults
-  :straight (markdown-defaults
+(use-package markdownx
+  :straight (markdownx
              :type git
              :host github
-             :repo "cfclrk/markdown-defaults"
+             :repo "cfclrk/markdownx"
              :files (:defaults "resources"))
   :config
-  (setq markdown-defaults-theme "dark-dimmed"
-        markdown-defaults-mermaid-theme "dark"))
+  (setq markdownx-github-theme "dark-dimmed"
+        markdownx-mermaid-theme "dark"
+        markdownx-code-block-theme "github-dark-dimmed"))
 
 ;;;; markdown
 
@@ -53,13 +54,12 @@
               ("C-c C-z" . markdown-live-preview-switch-to-output))
   :init
   (setq markdown-split-window-direction 'right)
-
-  ;; A file I made using generate-github-markdown-css
-  (setq my-markdown-css (expand-file-name
-                         "github_dark_dimmed.css"
-                         user-emacs-directory))
-
   :config
+  (setq markdown-italic-underscore t
+        markdown-list-indent-width 2
+        markdown-enable-wiki-links t
+        markdown-enable-math t)
+
   (setq whitespace-style '(face tabs empty trailing))
 
   ;; Restart whitespace mode so that is properly uses `whitespace-style'.

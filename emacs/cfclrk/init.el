@@ -135,20 +135,10 @@ See: https://stackoverflow.com/questions/6133799"
 ;;; Theme, Font, Display
 ;;  ----------------------------------------------------------------------------
 
-;; Use Source Code Pro on MacOS
-(when (eq system-type 'darwin)
-  ;; (set-face-attribute 'default nil :family "Source Code Pro")
-
-  ;; Requires installing the Hasklig font. See:
-  ;; https://github.com/i-tu/Hasklig
-  (set-face-attribute 'default nil
-                      :family "Hasklig"
-                      :weight 'normal))
-
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 170)))
+      (set-face-attribute 'default nil :height 160)))
 
 ;; Use the doom-one theme
 (use-package doom-themes

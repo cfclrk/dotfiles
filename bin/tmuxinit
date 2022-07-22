@@ -10,8 +10,8 @@ tmux new-session -d -s Home
 
 tmux new-session -d -s Work
 
-# Session: Dply
-# -------------
+# Session: Deployments
+# --------------------
 
 tmux new-session -d -s Dply -n dev
 
