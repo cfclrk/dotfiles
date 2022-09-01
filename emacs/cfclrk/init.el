@@ -138,7 +138,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 160)))
+      (set-face-attribute 'default nil :height 150)))
 
 ;; Use the doom-one theme
 (use-package doom-themes
@@ -584,10 +584,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (load (expand-file-name "~/emacs/projectile-discovery.el"))
   (projectile-mode +1)
   (setq projectile-use-git-grep t))
-
-;;;; protobuf
-
-(use-package protobuf-mode)
 
 ;;;; rainbow-delimiters
 
