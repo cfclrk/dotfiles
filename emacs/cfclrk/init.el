@@ -456,7 +456,7 @@ From: https://stackoverflow.com/a/3072831/340613"
 (use-package orderless
   :after vertico
   :custom
-  (completion-styles '(orderless basic))
+  (completion-styles '(substring orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package consult)
