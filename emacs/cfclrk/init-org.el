@@ -19,7 +19,8 @@
         ("\\.mm\\'" . default)
         ("\\.x?html?\\'" . default)
         ("\\.pdf\\'" . default)
-        ("\\.crt\\'" . emacs)))
+        ("\\.crt\\'" . emacs)
+        (t . emacs)))
 
 ;;; Packages
 
@@ -154,12 +155,7 @@ non-nil, use sudo on the remote host."
 
 ;;; ob-mermaid
 
-(use-package ob-mermaid
-  :straight (ob-mermaid
-             :host github
-             :repo "arnm/ob-mermaid"
-             :fork (:host github
-                    :repo "tonyaldon/ob-mermaid")))
+(use-package ob-mermaid)
 
 ;;; org mode
 
