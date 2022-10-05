@@ -7,7 +7,7 @@ s() {
     }
     envFile="$1"
 
-    while read line; do
+    while read -r line; do
         if test -n "$line"; then
             eval "export $line"
         fi
