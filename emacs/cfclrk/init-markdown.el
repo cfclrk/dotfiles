@@ -29,24 +29,11 @@
     (setq grip-github-user (car credential)
           grip-github-password (cadr credential))))
 
-;;;; markdownx
-
-(use-package markdownx
-  :straight (markdownx
-             :type git
-             :host github
-             :repo "cfclrk/markdownx"
-             :files (:defaults "resources"))
-  :config
-  (setq markdownx-github-theme "dark-dimmed"
-        markdownx-mermaid-theme "dark"
-        markdownx-code-block-theme "github-dark-dimmed"))
-
 ;;;; markdown
 
 (use-package markdown-mode
-  :hook ((markdown-mode . visual-line-mode)
-         (markdown-mode . markdown-toc-mode))
+  :hook ((markdown-mode . markdown-toc-mode)
+         (markdown-mode . visual-line-mode))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
@@ -55,7 +42,8 @@
   :init
   (setq markdown-split-window-direction 'right)
   :config
-  (setq markdown-italic-underscore t
+  (setq markdown-spaces-after-code-fence 0
+        markdown-italic-underscore t
         markdown-list-indent-width 2
         markdown-enable-wiki-links t
         markdown-enable-math t)
@@ -65,6 +53,8 @@
   ;; Restart whitespace mode so that is properly uses `whitespace-style'.
   (whitespace-mode -1)
   (whitespace-mode +1))
+
+;;;; markdown-toc
 
 (use-package markdown-toc
   :straight (markdown-toc
@@ -81,6 +71,20 @@
    ;; markdown-toc-title nil
    ;; Do not include first h1
    markdown-toc-transform-fn 'cdr))
+
+;;;; markdown-xwidget
+
+(use-package markdown-xwidget
+  :straight (markdown-xwidget
+             :type git
+             :host github
+             :repo "cfclrk/markdown-xwidget"
+             :files (:defaults "resources"))
+  :config
+  (setq markdown-xwidget-github-theme "dark-dimmed"
+        markdown-xwidget-mermaid-theme "dark"
+        markdown-xwidget-code-block-theme "github-dark-dimmed"))
+
 
 ;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
 ;; you edit source blocks in another buffer (similar to org-edit-special)

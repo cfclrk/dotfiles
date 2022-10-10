@@ -5,4 +5,5 @@
  ("min-straight" . ((user-emacs-directory . "~/emacs/min-straight")))
  ("min-package" . ((user-emacs-directory . "~/emacs/min-package")))
  ("min-clojure" . ((user-emacs-directory . "~/emacs/min-clojure")))
+ ("nano" . ((user-emacs-directory . "~/emacs/nano")))
  ("prelude" . ((user-emacs-directory . "~/emacs/prelude"))))

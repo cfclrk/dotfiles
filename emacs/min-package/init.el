@@ -44,11 +44,7 @@
   ;; Enable emoji
   (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
-(unless (package-installed-p 'cljstyle)
-  (package-install-file
-   "~/emacs/cfclrk/straight/repos/cljstyle.el/cljstyle.el"))
-
-(require 'cljstyle)
+(use-package quelpa)
 
 (unless (package-installed-p 'clojure-mode)
   (package-install 'clojure-mode))
