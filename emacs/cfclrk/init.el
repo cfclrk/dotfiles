@@ -74,18 +74,19 @@
 
 (defun upsert-alist (quoted-alist entry)
   "Insert or update ENTRY in QUOTED-ALIST.
-This first deletes the existing item if it is there, then enserts
-the new ENTRY.
 
-Example (backslashes not necessary, FFS Elisp!):
+First delete the entry if it is in QUOTED-ALIST, then insert the
+new ENTRY.
 
-    (upsert-alist '(:noweb . \"yes\") 'org-babel-default-header-args)
+Examples:
 
-Without the backslashes. Elisp strings suck."
-  (let ((keyword (car entry))
+  (setq my-alist '((:foo . :fooo)))
+  (upsert-alist 'my-alist '(:bar . :baar))
+."
+  (let ((entry-key (car entry))
         (orig-alist (symbol-value quoted-alist)))
     (set quoted-alist
-         (cons entry (assoc-delete-all keyword orig-alist)))))
+         (cons entry (assoc-delete-all entry-key orig-alist)))))
 
 (defun pprint (form &optional printcharfun)
   "Return a pretty-printed version of FORM.
@@ -138,7 +139,7 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Use a larger font on big monitors
 (when window-system
   (if (> (nth 2 (frame-monitor-attribute 'geometry)) 1600)
-      (set-face-attribute 'default nil :height 150)))
+      (set-face-attribute 'default nil :height 140)))
 
 ;; Use the doom-one theme
 (use-package doom-themes
@@ -201,20 +202,6 @@ See: https://stackoverflow.com/questions/6133799"
 (add-hook 'text-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
-;; whitespace
-(require 'whitespace)
-(setq whitespace-style '(face tabs empty trailing lines-tail)
-      whitespace-line-column nil)
-(add-hook 'before-save-hook 'whitespace-cleanup)
-
-;; text mode
-(defun cfclrk/text-editing-hook ()
-  "Minor modes that I want enabled in pretty much every textual buffer."
-  (smartparens-mode +1)
-  (whitespace-mode +1)
-  (delete-selection-mode +1))
-
-(add-hook 'text-mode-hook 'cfclrk/text-editing-hook)
 
 ;; Make shell scripts executable when saved
 (add-hook 'after-save-hook
@@ -243,12 +230,28 @@ See: https://stackoverflow.com/questions/6133799"
         mac-function-modifier 'hyper)
 
   ;; Enable emoji
-  (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)
+  (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
-  ;; Set the PATH env var as we set it in the shell
-  (use-package exec-path-from-shell
-    :config
-    (exec-path-from-shell-initialize)))
+;;; Text
+;;  ----------------------------------------------------------------------------
+
+;; whitespace
+(require 'whitespace)
+(setq whitespace-style '(face tabs empty trailing lines-tail)
+      whitespace-line-column nil)
+(add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; text mode
+(defun cfclrk/text-editing-hook ()
+  "Minor modes that I want enabled in pretty much every textual buffer."
+  (smartparens-mode +1)
+  (whitespace-mode +1)
+  (delete-selection-mode +1))
+
+(add-hook 'text-mode-hook 'cfclrk/text-editing-hook)
+
+;; Convert a string to titlecase
+(use-package titlecase)
 
 ;;;; URLs
 
@@ -371,6 +374,9 @@ From: https://stackoverflow.com/a/3072831/340613"
 ;; Always delete and copy recursively
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)
+
+;; Automatically refresh ("revert") Dired buffers
+(setq dired-auto-revert-buffer t)
 
 ;;;; docker
 
@@ -598,6 +604,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 	  recentf-max-menu-items 15)
 (recentf-mode +1)
 
+;;;; restclient
+
+(use-package restclient)
+
 ;;;; reveal-in-osx-finder
 
 (use-package reveal-in-osx-finder)
@@ -746,15 +756,16 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (setq clojure-indent-style 'always-indent))
 
-(use-package cljstyle
-  :after clojure-mode
-  :straight (cljstyle
-             :host github
-             :repo "cfclrk/cljstyle.el"))
+(use-package cljstyle-format
+  :after clojure-mode)
 
 (use-package zprint-format)
 
-(use-package clj-refactor)
+;; Use C-c C-r
+(use-package clj-refactor
+  :hook ((clojure-mode . (lambda () (clj-refactor-mode 1))))
+  :config
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
 
 ;; From: https://ag91.github.io/blog/2022/06/09/
 ;; make-adding-a-clojure-require-more-interactive-with-cider-and-cljr/
@@ -792,26 +803,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (setq monorepl-STONEHENGE-PATH
         (expand-file-name "~/Work/stonehenge")))
-
-(with-eval-after-load 'clojure-mode
-  ;;; ns manipulation to comply with stonehenge
-  (defun clojure-expected-ns (&optional path)
-    "Return the namespace matching PATH.
-PATH is expected to be an absolute file path.
-If PATH is nil, use the path to the file backing the current buffer."
-    (let* ((path (or path (file-truename (buffer-file-name))))
-           (relative (clojure-project-relative-path path))
-           (sans-file-type (substring relative 0 (- (length (file-name-extension path t)))))
-           (splitted-parts (split-string sans-file-type "/"))
-           (usable-parts (if (string= "splash" (car splitted-parts))
-                             splitted-parts
-                           (cdr splitted-parts)))
-           (sans-file-sep (mapconcat 'identity usable-parts  "."))
-           (sans-underscores (replace-regexp-in-string "_" "-" sans-file-sep)))
-      ;; Drop prefix from ns for projects with structure src/{clj,cljs,cljc}
-      (cl-reduce (lambda (a x) (replace-regexp-in-string x "" a))
-                 clojure-directory-prefixes
-                 :initial-value sans-underscores))))
 
 ;;;; CSS and SCSS
 
