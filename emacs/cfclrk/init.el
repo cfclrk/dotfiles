@@ -572,6 +572,16 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
         lsp-ui-doc-max-height 20))
 
 
+;;;; magic-mode-alist
+
+;; Use restclient mode for buffers that start with HTTP verbs. This could be a
+;; cool idea for `http' blocks in markdown files. But, I'd want the buffers to
+;; also be able to include some generated authentication stuff.
+
+;; (upsert-alist
+;;  'magic-mode-alist
+;;  '("^GET " . restclient-mode))
+
 ;;;; markdown
 
 (load

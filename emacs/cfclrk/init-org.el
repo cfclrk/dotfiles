@@ -155,7 +155,12 @@ non-nil, use sudo on the remote host."
 
 ;;; ob-mermaid
 
-(use-package ob-mermaid)
+(use-package ob-mermaid
+  :straight (ob-mermaid
+             :host github
+             :repo "arnm/ob-mermaid"
+             :fork (:host github
+                    :repo "tonyaldon/ob-mermaid")))
 
 ;;; org mode
 
