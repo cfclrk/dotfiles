@@ -280,6 +280,11 @@ Uses babashka script."
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
 
+;;;; adoc-mode
+
+;; For reading asciidoc
+(use-package adoc-mode)
+
 ;;;; ace-window
 
 ;; Switch focus between visible windows.
