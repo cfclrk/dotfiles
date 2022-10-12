@@ -31,9 +31,17 @@
 
 ;;;; markdown
 
+(defun my/markdown-mode-hook ()
+  "Init hook for markdown-mode."
+  (setq fill-column 100
+        visual-fill-column-center-text t))
+
 (use-package markdown-mode
-  :hook ((markdown-mode . markdown-toc-mode)
-         (markdown-mode . visual-line-mode))
+  :after visual-fill-column
+  :hook ((markdown-mode . my/markdown-mode-hook)
+         (markdown-mode . markdown-toc-mode)
+         (markdown-mode . visual-line-mode)
+         (markdown-mode . visual-fill-column-mode))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))

@@ -211,9 +211,8 @@ Uses babashka script."
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Show line numbers in any text or prog mode.
-(add-hook 'text-mode-hook #'display-line-numbers-mode)
+; (add-hook 'text-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-
 
 ;; Make shell scripts executable when saved
 (add-hook 'after-save-hook
