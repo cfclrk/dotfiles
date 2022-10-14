@@ -1,0 +1,39 @@
+* Clojure with cider
+
+** Install clojure
+
+** Test
+
+   #+header: :session foo
+   #+header: :backend cider
+   #+begin_src clojure
+     (def foo "hello")
+     (range 2)
+   #+end_src
+
+   #+RESULTS:
+   | #'user/foo |
+   | (0 1)      |
+
+   #+header: :session foo
+   #+header: :backend cider
+   #+begin_src clojure
+     foo
+   #+end_src
+
+   #+RESULTS:
+   : hello
+
+* Clojure with babashka
+
+** Install babashka
+
+** Test
+
+   #+header: :backend babashka
+   #+begin_src clojure
+     (range 3)
+   #+end_src
+
+   #+RESULTS:
+   : (0 1 2)
