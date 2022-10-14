@@ -32,6 +32,19 @@
 
 (use-package ob-async)
 
+;;;; ob-http
+
+(use-package ob-http)
+
+;;;; ob-mermaid
+
+(use-package ob-mermaid
+  :straight (ob-mermaid
+             :host github
+             :repo "arnm/ob-mermaid"
+             :fork (:host github
+                    :repo "tonyaldon/ob-mermaid")))
+
 ;;;; org-superstar
 
 (use-package org-superstar
@@ -140,7 +153,9 @@ non-nil, use sudo on the remote host."
           (load cloudformation.el)))
         )))
 
-;;; org-src mode
+;;; Hooks
+
+;;;; org-src mode hook
 
 (defun cfclrk/org-src-mode-hook ()
   "Customize `org-src-mode' in buffers created by `org-edit-special'."
@@ -149,20 +164,7 @@ non-nil, use sudo on the remote host."
 
 (add-hook 'org-src-mode-hook 'cfclrk/org-src-mode-hook)
 
-;;; ob-http
-
-(use-package ob-http)
-
-;;; ob-mermaid
-
-(use-package ob-mermaid
-  :straight (ob-mermaid
-             :host github
-             :repo "arnm/ob-mermaid"
-             :fork (:host github
-                    :repo "tonyaldon/ob-mermaid")))
-
-;;; org mode
+;;;; org mode hook
 
 (defun cfclrk/org-mode-hook ()
   "Customize `org-mode'."

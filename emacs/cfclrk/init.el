@@ -133,18 +133,6 @@ See: https://stackoverflow.com/questions/6133799"
 ;; What was this before?
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
 
-(defun my/set-aws-creds (deployment)
-  "Set AWS env vars for deployment DEPLOYMENT.
-
-Uses babashka script."
-  (interactive
-   (list
-    (completing-read "Deployment: " '("dev" "stage" "prod") nil t)))
-  (let ((default-directory "/Users/cclark/scripts/sso")
-        (command (format "bb --main splash.sso.core -e %s" deployment)))
-    (setenv-file-str
-     (shell-command-to-string command))))
-
 ;;; Theme, Font, Display
 ;;  ----------------------------------------------------------------------------
 
