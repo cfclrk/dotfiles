@@ -24,6 +24,13 @@
 
 ;;; Packages
 
+;;;; org-jira
+
+(use-package org-jira
+  :config
+  (setq org-jira-working-dir "~/Work/.org-jira"
+        jiralib-url "https://splashfinancial.atlassian.net"))
+
 ;;;; htmlize
 
 (use-package htmlize)
@@ -137,6 +144,13 @@ non-nil, use sudo on the remote host."
       (s-lex-format "/ssh:${user}@${ip}|sudo:${ip}:${path}")
     (s-lex-format "/ssh:${user}@${ip}:${path}")))
 
+;;; Agenda
+
+(setq org-agenda-files '("~/Work/notes/todo.org"))
+
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "IN-PROGRESS(n)" "|" "DONE(d)")))
+
 ;;; Publishing
 
 ;; Load my projects
@@ -180,6 +194,12 @@ non-nil, use sudo on the remote host."
 
   ;; Note: This smartparens config also pulls in 'smartparens-org
   (smartparens-mode +1)
+
+  ;; Unset some keybindings
+  (local-unset-key (kbd "C-c [")) ; `org-agenda-file-to-front'
+  (local-unset-key (kbd "C-c ]")) ; `org-remove-file'
+  (local-unset-key (kbd "C-'"))   ; `org-cycle-agenda-files'
+  (local-unset-key (kbd "C-,"))   ; `org-cycle-agenda-files'
 
   ;; Babel languages to load
   (org-babel-do-load-languages
