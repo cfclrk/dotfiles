@@ -1,21 +1,39 @@
-* Clojure with cider
+* Org mode with clojure and cider
 
 ** Install clojure
 
-** Test
+** Start a cider session
 
-   #+header: :session foo
+   Start a cider session by running =M-x cider-jack-in=. When it prompts you
+   "Are you sure you want to run `cider-jack-in` without a Clojure project?",
+   type "yes".
+
+   Or, from elisp:
+
+   #+begin_src emacs-lisp
+     (let ((cider-allow-jack-in-without-project t))
+       (cider-jack-in '()))
+   #+end_src
+
+   #+RESULTS:
+   : #<process nrepl-server>
+
+** Execute code blocks
+
    #+header: :backend cider
    #+begin_src clojure
      (def foo "hello")
-     (range 2)
+     (range 3)
    #+end_src
 
    #+RESULTS:
    | #'user/foo |
-   | (0 1)      |
+   | (0 1 2)    |
 
-   #+header: :session foo
+   Since all code blocks are backed by the same cider session, there is no need
+   for the =:session= header arg. Previously defined variables are available for
+   use:
+
    #+header: :backend cider
    #+begin_src clojure
      foo
@@ -24,11 +42,11 @@
    #+RESULTS:
    : hello
 
-* Clojure with babashka
+* Org mode with clojure and babashka
 
 ** Install babashka
 
-** Test
+** Execute code blocks
 
    #+header: :backend babashka
    #+begin_src clojure

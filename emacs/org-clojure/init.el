@@ -56,18 +56,6 @@
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
 
-;;;; ace
-
-(use-package ace-window
-  :bind ("M-l" . ace-window)
-  :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
-
-;;;; vertico
-
-(use-package vertico
-  :init
-  (vertico-mode))
-
 ;;;; clojure
 
 (use-package clojure-mode)
@@ -80,8 +68,7 @@
 (org-babel-do-load-languages
    'org-babel-load-languages
    '((clojure . t)
-     (emacs-lisp . t)
-     (shell . t)))
+     (emacs-lisp . t)))
 
 (setq org-adapt-indentation t
       org-confirm-babel-evaluate nil)
