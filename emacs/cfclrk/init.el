@@ -559,6 +559,15 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;;    '("->" "->>" "<>" "=>"))
 ;;   (global-ligature-mode t))
 
+;;;; line
+
+;; Highlight the current line in certain modes. The modes in which this is
+;; active is defined by `lin-mode-hooks'.
+(use-package lin
+  :config
+  (customize-set-variable 'lin-face 'consult-preview-line)
+  (lin-global-mode 1))
+
 ;;;; LSP
 
 (use-package lsp-mode
