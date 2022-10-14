@@ -44,15 +44,6 @@
   ;; Enable emoji
   (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
 
-(use-package quelpa)
-
-(unless (package-installed-p 'clojure-mode)
-  (package-install 'clojure-mode))
-
-(add-hook
- 'clojure-mode-hook
- #'cljstyle-format-on-save-mode)
-
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
 
@@ -72,6 +63,10 @@
 
 (add-hook 'prog-mode-hook 'outline-minor-mode)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
+
+;;;; quelpa
+
+(use-package quelpa)
 
 ;;;; rainbow-delimiters
 

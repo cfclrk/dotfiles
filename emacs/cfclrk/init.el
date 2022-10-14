@@ -47,10 +47,9 @@
 ;;  ----------------------------------------------------------------------------
 
 ;; Prevent loading the built-in org-mode. Instead, use straight to get org-mode.
-;; We must run this before anything else loads the built-in org-mode. These come
-;; from the straight mirror here: https://github.com/emacs-straight
+;; We must run this before anything else loads the built-in org-mode. Straight
+;; gets org-mode from the mirror here: https://github.com/emacs-straight
 (use-package org)
-(use-package org-contrib)
 
 ;; At the top because I use dash in my own functions.
 (use-package dash

@@ -36,12 +36,8 @@
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
-(setq help-window-select t    ;; Always select the help window
-      inhibit-splash-screen t ;; Do not show the welcome page
+(setq inhibit-splash-screen t ;; Do not show the welcome page
       make-backup-files nil)  ;; Do not save ~ backup files
-
-;; Use a larger font on bigger screens
-(set-face-attribute 'default nil :height 170)
 
 ;; ⌘ as Meta and ⎇ as Super on MacOS
 (when (eq system-type 'darwin)

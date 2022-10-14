@@ -6,10 +6,7 @@
 
 ;;; Code:
 
-;; TODO: Try out https://github.com/Fuco1/org-radiobutton
-
 (require 'org)
-(require 'ob)  ;; Do I still need this? Once got error loading org-babel-comint-use-async.
 
 ;;; General
 
@@ -23,13 +20,6 @@
         (t . emacs)))
 
 ;;; Packages
-
-;;;; org-jira
-
-(use-package org-jira
-  :config
-  (setq org-jira-working-dir "~/Work/.org-jira"
-        jiralib-url "https://splashfinancial.atlassian.net"))
 
 ;;;; htmlize
 
@@ -50,7 +40,18 @@
              :host github
              :repo "arnm/ob-mermaid"
              :fork (:host github
-                    :repo "tonyaldon/ob-mermaid")))
+                          :repo "tonyaldon/ob-mermaid")))
+
+;;;; org-contrib
+
+(use-package org-contrib)
+
+;;;; org-jira
+
+(use-package org-jira
+  :config
+  (setq org-jira-working-dir "~/Work/.org-jira"
+        jiralib-url "https://splashfinancial.atlassian.net"))
 
 ;;;; org-superstar
 
@@ -151,11 +152,28 @@ non-nil, use sudo on the remote host."
 (setq org-todo-keywords
       '((sequence "TODO(t)" "IN-PROGRESS(n)" "|" "DONE(d)")))
 
+;;; Babel
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((clojure . t)
+   (dot . t)
+   (emacs-lisp . t)
+   (gnuplot . t)
+   (groovy . t)
+   (http . t)
+   (js . t)
+   (latex . t)
+   (mermaid . t)
+   (python . t)
+   (shell . t)
+   (sql . t)))
+
 ;;; Publishing
 
 ;; Load my projects
 (let ((site.el (expand-file-name "~/Projects/cfclrk.com/site.el")))
-   (when (f-exists? site.el)
+  (when (f-exists? site.el)
     (progn
       (load site.el)
       (let ((notes.el (expand-file-name "notes/notes.el" site/project-directory))
@@ -164,8 +182,7 @@ non-nil, use sudo on the remote host."
         (load notes.el)
         (load articles.el)
         (when (f-exists? cloudformation.el)
-          (load cloudformation.el)))
-        )))
+          (load cloudformation.el))))))
 
 ;;; Hooks
 
@@ -185,11 +202,11 @@ non-nil, use sudo on the remote host."
   (turn-on-auto-fill)
 
   (setq org-startup-folded t
-		org-confirm-babel-evaluate nil
+        org-confirm-babel-evaluate nil
         org-adapt-indentation t
-		org-src-window-setup 'split-window-below
-		org-special-ctrl-a/e t
-		org-babel-clojure-backend 'cider
+        org-src-window-setup 'split-window-below
+        org-special-ctrl-a/e t
+        org-babel-clojure-backend 'cider
         org-babel-min-lines-for-block-output 40)
 
   ;; Note: This smartparens config also pulls in 'smartparens-org
@@ -200,22 +217,6 @@ non-nil, use sudo on the remote host."
   (local-unset-key (kbd "C-c ]")) ; `org-remove-file'
   (local-unset-key (kbd "C-'"))   ; `org-cycle-agenda-files'
   (local-unset-key (kbd "C-,"))   ; `org-cycle-agenda-files'
-
-  ;; Babel languages to load
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((clojure . t)
-     (dot . t)
-     (emacs-lisp . t)
-	 (gnuplot . t)
-     (groovy . t)
-     (http . t)
-     (js . t)
-     (latex . t)
-     (mermaid . t)
-	 (python . t)
-     (shell . t)
-     (sql . t)))
 
   ;; Babel default header arguments
   (upsert-alist 'org-babel-default-header-args '(:noweb . "yes"))
@@ -231,10 +232,10 @@ non-nil, use sudo on the remote host."
 
   ;; HTML exporting
   (setq org-html-checkbox-type 'html
-		org-html-doctype "html5"
-		org-html-html5-fancy t
-		org-html-postamble nil
-		org-html-validation-link nil
+        org-html-doctype "html5"
+        org-html-html5-fancy t
+        org-html-postamble nil
+        org-html-validation-link nil
         ;; Prevent timestamps from being inserted in generated HTML
         org-export-time-stamp-file nil))
 
