@@ -2,6 +2,8 @@
 
 ** Install clojure
 
+   See: https://clojure.org/guides/install_clojure
+
 ** Start a cider session
 
    Start a cider session by running =M-x cider-jack-in=. When it prompts you
@@ -47,6 +49,11 @@
 ** Install babashka
 
 ** Execute code blocks
+
+   Babashka code blocks are convenient because they don't require an
+   already-running repl session. The trade-off is that they *can not* use a
+   session; a babashka subprocess starts and ends with the execution of a code
+   block, so state cannot be saved between one code block and another.
 
    #+header: :backend babashka
    #+begin_src clojure

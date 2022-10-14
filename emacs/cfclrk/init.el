@@ -643,14 +643,14 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (setq history-length 25))
 
-;;;; setenv-file
+;;;; envars
 
-(use-package setenv-file
-  :straight (setenv-file
+(use-package envars
+  :straight (envars
              :host github
-             :repo "cfclrk/setenv-file")
+             :repo "cfclrk/envars")
   :config
-  (setq setenv-file-dir (expand-file-name "~/.env/")))
+  (setq envars-dir (expand-file-name "~/.env/")))
 
 ;;;; smartparens
 
@@ -815,15 +815,22 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (setq cider-save-file-on-load t)
   (setq cider-repl-prompt-function (lambda (namespace)
-                                     (format "%s\n> " namespace))))
+                                     (format "%s\n> " namespace)))
 
-(use-package monorepl
-  ;;:after cider
-  :straight (monorepl
+  (defun my/cider-pprint-eval-last-sexp-insert ()
+    (interactive)
+    (let ((cider-comment-prefix "")
+          (cider-comment-continued-prefix " ")
+          (cider-comment-postfix ""))
+      (cider-pprint-eval-last-sexp-to-comment))))
+
+(use-package stonehenge
+  ;; :after cider ; Why don't I need this?
+  :straight (stonehenge
              :local-repo "~/Work/stonehenge"
-             :files ("development/emacs/monorepl.el"))
+             :files ("development/emacs/stonehenge.el"))
   :config
-  (setq monorepl-STONEHENGE-PATH
+  (setq stonehenge-dir
         (expand-file-name "~/Work/stonehenge")))
 
 ;;;; CSS and SCSS
