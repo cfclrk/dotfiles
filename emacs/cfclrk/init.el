@@ -814,30 +814,32 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;; - TODO: Figure out how to make `xref-find-definitions' work when a file is
 ;;         not loaded in cider
 (use-package cider
+  :straight (cider
+             :host github
+             :repo "clojure-emacs/cider"
+             :fork (:host github
+                    :repo "cfclrk/cider"
+                    :branch "bazel-support"))
   :after clojure-mode
   :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1)))
          (cider-mode . my/make-cljr-add-use-snippet-interactive))
   :config
+  ;; Automatically save files before they are loaded
   (setq cider-save-file-on-load t)
-  (setq cider-repl-prompt-function (lambda (namespace)
-                                     (format "%s\n> " namespace)))
 
-  (defun my/cider-pprint-eval-last-sexp-insert ()
-    (interactive)
-    (let ((cider-comment-prefix "")
-          (cider-comment-continued-prefix " ")
-          (cider-comment-postfix ""))
-      (cider-pprint-eval-last-sexp-to-comment))))
+  ;; Add a newline to the repl prompt
+  (setq cider-repl-prompt-function (lambda (namespace)
+                                     (format "%s\n> " namespace))))
 
 (use-package stonehenge
-  ;; :after cider ; Why don't I need this?
+  :after cider
   :straight (stonehenge
              :local-repo "~/Work/stonehenge"
              :files ("development/emacs/stonehenge.el"))
   :config
-  (setq stonehenge-dir
-        (expand-file-name "~/Work/stonehenge")))
+  (setq stonehenge-dir (expand-file-name "~/Work/stonehenge")
+        cider-bazel-target "//development/repl:repl"))
 
 ;;;; CSS and SCSS
 
