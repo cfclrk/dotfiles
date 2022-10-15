@@ -32,7 +32,7 @@
  straight-vc-git-default-protocol 'ssh)
 
 ;; Log a message about startup time
-(defun cfclrk/startup-hook ()
+(defun my/startup-hook ()
   "Show me some Emacs startup stats."
   (interactive)
   (message "*** Emacs loaded in %s with %d garbage collections."
@@ -41,7 +41,7 @@
                     (time-subtract after-init-time before-init-time)))
            gcs-done))
 
-(add-hook 'emacs-startup-hook 'cfclrk/startup-hook)
+(add-hook 'emacs-startup-hook 'my/startup-hook)
 
 ;;; Early init - Org Mode and dash
 ;;  ----------------------------------------------------------------------------
@@ -96,7 +96,7 @@ Optional PRINTCHARFUN is as defined by `princ'."
            (buffer-string))
          printcharfun))
 
-(defun cfclrk/show-buffer-file-name ()
+(defun my/show-buffer-file-name ()
   "Display and copy the full path to the current file.
 Adapted from Emacs Redux (emacsredux.com)."
   (interactive)
@@ -107,9 +107,9 @@ Adapted from Emacs Redux (emacsredux.com)."
     (kill-new filename)))
 
 ;; C-c z to see full path of file in the current buffer
-(global-set-key (kbd "C-c z") 'cfclrk/show-buffer-file-name)
+(global-set-key (kbd "C-c z") 'my/show-buffer-file-name)
 
-(defun cfclrk/set-font-size (font-size)
+(defun my/set-font-size (font-size)
   "Set font height to the given FONT-SIZE.
 This updates font size without changing the Emacs frame (i.e.
 window) size.
@@ -152,12 +152,12 @@ See: https://stackoverflow.com/questions/6133799"
 ;; Make line-number color more visible. Original is 'dim gray.
 (set-face-foreground 'line-number "gray")
 
-(defun cfclrk/font-installed-p (font-name)
+(defun my/font-installed-p (font-name)
   "Check if font with FONT-NAME is available."
   (find-font (font-spec :name font-name)))
 
 (use-package all-the-icons
-  :config (unless (cfclrk/font-installed-p "all-the-icons")
+  :config (unless (my/font-installed-p "all-the-icons")
             (all-the-icons-install-fonts t)))
 
 (use-package doom-modeline
@@ -240,13 +240,13 @@ See: https://stackoverflow.com/questions/6133799"
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 ;; text mode
-(defun cfclrk/text-editing-hook ()
+(defun my/text-editing-hook ()
   "Minor modes that I want enabled in pretty much every textual buffer."
   (smartparens-mode +1)
   (whitespace-mode +1)
   (delete-selection-mode +1))
 
-(add-hook 'text-mode-hook 'cfclrk/text-editing-hook)
+(add-hook 'text-mode-hook 'my/text-editing-hook)
 
 ;; Convert a string to titlecase
 (use-package titlecase)
@@ -601,7 +601,18 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;;;; page-break-lines
 
 (use-package page-break-lines
-  :config (global-page-break-lines-mode))
+  :config
+  (global-page-break-lines-mode)
+
+  ;; On MacOS, the lines were a little too long and wrapped a bit. This snippet
+  ;; is verbatim from the [README][1]. Apparently, a different font was being
+  ;; used for the symbol used to create the horizontal rule.
+  ;;
+  ;; [1]: https://github.com/purcell/page-break-lines#issues-and-limitations
+  (set-fontset-font
+   "fontset-default"
+   (cons page-break-lines-char page-break-lines-char)
+   (face-attribute 'default :family)))
 
 ;;;; projectile
 
@@ -743,9 +754,9 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; General
 
-(add-hook 'prog-mode-hook 'cfclrk/text-editing-hook)
+(add-hook 'prog-mode-hook 'my/text-editing-hook)
 
-(defun my-lisp-mode-hook ()
+(defun my/lisp-mode-hook ()
   "General configuration for any LISP."
   (smartparens-strict-mode +1)
   (rainbow-delimiters-mode +1)
@@ -773,7 +784,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
               ("C-t p" . cider-test-run-project-tests)
               ("C-t t" . cider-test-run-test))
   :hook ((clojure-mode . lsp-deferred)
-         (clojure-mode . my-lisp-mode-hook)
+         (clojure-mode . my/lisp-mode-hook)
          (clojure-mode . cljstyle-format-on-save-mode))
   :config
   (setq clojure-indent-style 'always-indent))
@@ -789,19 +800,14 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (cljr-add-keybindings-with-prefix "C-c C-m"))
 
-;; From: https://ag91.github.io/blog/2022/06/09/
-;; make-adding-a-clojure-require-more-interactive-with-cider-and-cljr/
+;; From:
+;; https://ag91.github.io/blog/2022/06/09/make-adding-a-clojure-require-more-interactive-with-cider-and-cljr/
 (defun my/make-cljr-add-use-snippet-interactive ()
   (setq-local
    cljr--add-use-snippet
    "[${1:$$(yas-choose-value
              (ignore-errors
                (cider-sync-request:ns-list)))} :refer ${2:[$3]}]"))
-
-(defun my-cljr-add-require-snippet-interactive ()
-  (setq-local
-   cljr--add-require-snippet
-   "${1:[${2:${3:} :as ${4:${3:$(cljr--ns-name yas-text)}}}]}"))
 
 ;; - TODO: The cider-test-* key bindings should be declared here
 ;;
@@ -835,28 +841,35 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; CSS and SCSS
 
-(defun cfclrk/css-mode-hook ()
+(defun my/css-mode-hook ()
   "Customize `css-mode' and derived modes like `scss-mode'."
   (setq indent-tabs-mode nil
         css-indent-offset 2))
 
-(add-hook 'css-mode-hook #'cfclrk/css-mode-hook)
+(add-hook 'css-mode-hook #'my/css-mode-hook)
 ;; (add-hook 'css-mode-hook #'lsp-deferred)
 
 ;;;; Emacs Lisp
 
-(add-hook 'emacs-lisp-mode-hook #'my-lisp-mode-hook)
+(defun my/emacs-lisp-mode-hook ()
+  "Customize `emacs-lisp-mode'."
+  ;; Fix the ridiculous default indentation for plists. See:
+  ;; https://stackoverflow.com/q/22166895/340613
+  (setq lisp-indent-function 'common-lisp-indent-function))
+
+(add-hook 'emacs-lisp-mode-hook #'my/lisp-mode-hook)
+;(add-hook 'emacs-lisp-mode-hook #'my/emacs-lisp-mode-hook)
 
 ;;;; Golang
 
-(defun cfclrk/go-mode-hook ()
+(defun my/go-mode-hook ()
   "Hooks to add in `go-mode' buffers."
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (use-package go-mode
   :hook ((go-mode . lsp-deferred)
-         (go-mode . cfclrk/go-mode-hook))
+         (go-mode . my/go-mode-hook))
   :config
   (setq godoc-at-point-function 'godoc-gogetdoc
         gofmt-command (executable-find "gci")
@@ -944,11 +957,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Javascript and JSON
 
-(defun cfclrk/js-mode-hook ()
+(defun my/js-mode-hook ()
   "Customize `js-mode'."
   (setq js-indent-level 2))
 
-(add-hook 'js-mode-hook #'cfclrk/js-mode-hook)
+(add-hook 'js-mode-hook #'my/js-mode-hook)
 (add-hook 'js-mode-hook #'lsp-deferred)
 
 (use-package js2-mode)
@@ -960,7 +973,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (dolist (hook '(lisp-mode-hook
                 lisp-data-mode-hook))
-  (add-hook hook #'my-lisp-mode-hook))
+  (add-hook hook #'my/lisp-mode-hook))
 
 ;;;; PHP
 
@@ -968,7 +981,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Python
 
-(defun cfclrk/python-mode-hook ()
+(defun my/python-mode-hook ()
   "Customize `python-mode'."
   (setq fill-column 88
         python-fill-docstring-style 'pep-257-nn
@@ -979,7 +992,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (whitespace-mode -1)
   (whitespace-mode +1))
 
-(add-hook 'python-mode-hook #'cfclrk/python-mode-hook)
+(add-hook 'python-mode-hook #'my/python-mode-hook)
 
 (use-package python-pytest
   ;; To run as "pytest -s", save "-s" opt to `transient-values-file'
