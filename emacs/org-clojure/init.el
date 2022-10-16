@@ -71,6 +71,7 @@
      (emacs-lisp . t)))
 
 (setq org-adapt-indentation t
-      org-confirm-babel-evaluate nil)
+      org-confirm-babel-evaluate nil
+      org-babel-clojure-backend 'cider)
 
 ;;; init.el ends here
