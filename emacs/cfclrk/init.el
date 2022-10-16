@@ -776,30 +776,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; Clojure
 
-(use-package clojure-mode
-  :mode "\\.cljstyle\\'"  ; Use clojure-mode for ".cljstyle" files
-  ;; TODO: :bind cider-pprint-eval-last-sexp-to-comment to C-j
-  :bind (:map clojure-mode-map
-              ("C-t n" . cider-test-run-ns-tests)
-              ("C-t p" . cider-test-run-project-tests)
-              ("C-t t" . cider-test-run-test))
-  :hook ((clojure-mode . lsp-deferred)
-         (clojure-mode . my/lisp-mode-hook)
-         (clojure-mode . cljstyle-format-on-save-mode))
-  :config
-  (setq clojure-indent-style 'always-indent))
-
-(use-package cljstyle-format
-  :after clojure-mode)
-
-(use-package zprint-format)
-
-;; Use C-c C-r
-(use-package clj-refactor
-  :hook ((clojure-mode . (lambda () (clj-refactor-mode 1))))
-  :config
-  (cljr-add-keybindings-with-prefix "C-c C-m"))
-
 ;; From:
 ;; https://ag91.github.io/blog/2022/06/09/make-adding-a-clojure-require-more-interactive-with-cider-and-cljr/
 (defun my/make-cljr-add-use-snippet-interactive ()
@@ -821,16 +797,41 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
                     :repo "cfclrk/cider"
                     :branch "bazel-support"))
   :after clojure-mode
+  ;; TODO: :bind cider-pprint-eval-last-sexp-to-comment to C-j
+  :bind (:map cider-mode-map
+              ("C-t n" . cider-test-run-ns-tests)
+              ("C-t p" . cider-test-run-project-tests)
+              ("C-t t" . cider-test-run-test))
   :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1)))
          (cider-mode . my/make-cljr-add-use-snippet-interactive))
   :config
-  ;; Automatically save files before they are loaded
+  ;; Automatically save files before they are loaded in the repl
   (setq cider-save-file-on-load t)
 
   ;; Add a newline to the repl prompt
   (setq cider-repl-prompt-function (lambda (namespace)
                                      (format "%s\n> " namespace))))
+
+
+(use-package clojure-mode
+  :mode "\\.cljstyle\\'"  ; Use clojure-mode for ".cljstyle" files
+  :hook ((clojure-mode . lsp-deferred)
+         (clojure-mode . my/lisp-mode-hook)
+         (clojure-mode . cljstyle-format-on-save-mode))
+  :config
+  (setq clojure-indent-style 'always-indent))
+
+(use-package cljstyle-format
+  :after clojure-mode)
+
+(use-package zprint-format)
+
+;; Use C-c C-r
+(use-package clj-refactor
+  :hook ((clojure-mode . (lambda () (clj-refactor-mode 1))))
+  :config
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
 
 (use-package stonehenge
   :after cider
