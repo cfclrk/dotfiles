@@ -32,7 +32,7 @@
 ;; Prevent loading the built-in org-mode. Instead, use straight to get org-mode.
 ;; We must run this before anything else loads the built-in org-mode. Straight
 ;; gets org-mode from the mirror here: https://github.com/emacs-straight
-(use-package org)
+(straight-use-package 'org)
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
@@ -68,7 +68,8 @@
 (org-babel-do-load-languages
    'org-babel-load-languages
    '((clojure . t)
-     (emacs-lisp . t)))
+     (emacs-lisp . t)
+     (shell . t)))
 
 (setq org-adapt-indentation t
       org-confirm-babel-evaluate nil

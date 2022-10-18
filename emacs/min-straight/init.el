@@ -60,17 +60,4 @@
   :init
   (vertico-mode))
 
-;;;;; markdownx
-
-(use-package markdownx
-  :straight (markdownx
-             :type git
-             :host github
-             :repo "cfclrk/markdownx"
-             :files (:defaults "resources"))
-  :config
-  (setq markdownx-github-theme "light-high-contrast"
-        markdownx-mermaid-theme "forest"
-        markdownx-code-block-theme "github"))
-
 ;;; init.el ends here

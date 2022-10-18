@@ -49,13 +49,13 @@
               ("C-c C-z" . markdown-live-preview-switch-to-output))
   :init
   (setq markdown-split-window-direction 'right)
+  :custom
+  (markdown-spaces-after-code-fence 0)
+  (markdown-italic-underscore t)
+  (markdown-list-indent-width 2)
+  (markdown-enable-wiki-links t)
+  (markdown-enable-math t)
   :config
-  (setq markdown-spaces-after-code-fence 0
-        markdown-italic-underscore t
-        markdown-list-indent-width 2
-        markdown-enable-wiki-links t
-        markdown-enable-math t)
-
   (setq whitespace-style '(face tabs empty trailing))
 
   ;; Restart whitespace mode so that is properly uses `whitespace-style'.
@@ -69,7 +69,7 @@
              :host github
              :repo "ardumont/markdown-toc"
              :fork (:host github
-                          :repo "cfclrk/markdown-toc"))
+                    :repo "cfclrk/markdown-toc"))
   :bind (:map markdown-toc-mode-map
               ("M-." . markdown-toc-follow-link))
   :config
@@ -88,11 +88,12 @@
              :host github
              :repo "cfclrk/markdown-xwidget"
              :files (:defaults "resources"))
-  :config
-  (setq markdown-xwidget-github-theme "dark-dimmed"
-        markdown-xwidget-mermaid-theme "dark"
-        markdown-xwidget-code-block-theme "github-dark-dimmed"))
-
+  :bind (:map markdown-mode-command-map
+              ("x" . markdown-xwidget-preview-mode))
+  :custom
+  (markdown-xwidget-github-theme "dark-dimmed")
+  (markdown-xwidget-mermaid-theme "dark")
+  (markdown-xwidget-code-block-theme "github-dark-dimmed"))
 
 ;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
 ;; you edit source blocks in another buffer (similar to org-edit-special)
