@@ -64,7 +64,7 @@
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
 
-(defun cfc/lsp-remove-all-workspaces ()
+(defun my/lsp-remove-all-workspaces ()
   "Clear all LSP workspaces. Sometimes this fixes things."
   (interactive)
   (mapc
@@ -565,11 +565,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (use-package lsp-ui
   :commands lsp-ui
-  :config
-  (setq lsp-ui-sideline-show-diagnostics nil
-        lsp-ui-sideline-show-symbol nil
-        lsp-ui-peek-show-directory nil
-        lsp-ui-doc-max-height 20))
+  :custom
+  (lsp-ui-sideline-show-diagnostics nil)
+  (lsp-ui-sideline-show-symbol nil)
+  (lsp-ui-peek-show-directory nil)
+  (lsp-ui-doc-max-height 20))
 
 
 ;;;; magic-mode-alist
@@ -785,8 +785,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
              (ignore-errors
                (cider-sync-request:ns-list)))} :refer ${2:[$3]}]"))
 
-;; - TODO: The cider-test-* key bindings should be declared here
-;;
 ;; - TODO: Figure out how to make `xref-find-definitions' work when a file is
 ;;         not loaded in cider
 (use-package cider
@@ -805,13 +803,12 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1)))
          (cider-mode . my/make-cljr-add-use-snippet-interactive))
-  :config
+  :custom
   ;; Automatically save files before they are loaded in the repl
-  (setq cider-save-file-on-load t)
-
+  (cider-save-file-on-load t)
   ;; Add a newline to the repl prompt
-  (setq cider-repl-prompt-function (lambda (namespace)
-                                     (format "%s\n> " namespace))))
+  (cider-repl-prompt-function (lambda (namespace)
+                                (format "%s\n> " namespace))))
 
 
 (use-package clojure-mode
@@ -819,8 +816,16 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :hook ((clojure-mode . lsp-deferred)
          (clojure-mode . my/lisp-mode-hook)
          (clojure-mode . cljstyle-format-on-save-mode))
+  :custom
+  ;; Indent arguments instead of aligning them
+  (clojure-indent-style 'always-indent)
   :config
-  (setq clojure-indent-style 'always-indent))
+  (setq clojure-build-tool-files (add-to-list
+                                  'clojure-build-tool-files
+                                  "WORKSPACE"))
+  (setq clojure-build-tool-files (add-to-list
+                                  'clojure-build-tool-files
+                                  "WORKSPACE.bazel")))
 
 (use-package cljstyle-format
   :after clojure-mode)
@@ -839,8 +844,17 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
              :local-repo "~/Work/stonehenge"
              :files ("development/emacs/stonehenge.el"))
   :config
-  (setq stonehenge-dir (expand-file-name "~/Work/stonehenge")
-        cider-bazel-target "//development/repl:repl"))
+  (customize-set-variable 'stonehenge-dir
+                          (expand-file-name "~/Work/stonehenge")))
+
+;; (use-package monorepl
+;;   :after cider
+;;   :straight (monorepl
+;;              :local-repo "~/Work/stonehenge"
+;;              :files ("development/emacs/monorepl.el"))
+;;   :config
+;;   (setq monorepl-STONEHENGE-PATH
+;;         (expand-file-name "~/Work/stonehenge")))
 
 ;;;; CSS and SCSS
 
@@ -850,7 +864,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
         css-indent-offset 2))
 
 (add-hook 'css-mode-hook #'my/css-mode-hook)
-;; (add-hook 'css-mode-hook #'lsp-deferred)
+(add-hook 'css-mode-hook #'lsp-deferred)
 
 ;;;; Emacs Lisp
 
