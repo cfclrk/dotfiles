@@ -390,6 +390,15 @@ From: https://stackoverflow.com/a/3072831/340613"
 ;;   C-x C-f /docker:root@mycontainer:/app/server.py
 (use-package docker-tramp)
 
+;;;; envars
+
+(use-package envars
+  :straight (envars
+             :host github
+             :repo "cfclrk/envars")
+  :config
+  (setq envars-dir (expand-file-name "~/.env/")))
+
 ;;;; eshell
 
 (setq ;; Do TAB completion
@@ -446,6 +455,7 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 (use-package key-chord
   :config
+  (key-chord-define-global "\\a" 'treemacs-select-window)
   (key-chord-define-global "\\e" 'lsp-format-buffer)
   (key-chord-define-global "\\u" 'undo-tree-visualize)
   (key-chord-define-global "\\i" 'org-toggle-inline-images)
@@ -654,15 +664,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (setq history-length 25))
 
-;;;; envars
-
-(use-package envars
-  :straight (envars
-             :host github
-             :repo "cfclrk/envars")
-  :config
-  (setq envars-dir (expand-file-name "~/.env/")))
-
 ;;;; smartparens
 
 (use-package smartparens
@@ -681,6 +682,22 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (super-save-mode +1)
   (add-to-list 'super-save-triggers 'ace-window))
+
+;;;; treemacs
+
+(use-package treemacs
+  :config
+  (treemacs-resize-icons 18))
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
+
+(use-package treemacs-projectile
+  :after (treemacs projectile))
+
+(use-package treemacs-magit
+  :after (treemacs magit))
 
 ;;;; toml-mode
 

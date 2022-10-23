@@ -56,9 +56,6 @@
                "[/\\\\]\\bazel-stonehenge\\'"))
     (add-to-list 'lsp-file-watch-ignored-directories r)))
 
-(dolist (r '("foo" "bar"))
-  (message r))
-
 (use-package lsp-ui
   :commands lsp-ui
   :config

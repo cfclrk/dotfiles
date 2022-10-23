@@ -91,6 +91,7 @@
   :bind (:map markdown-mode-command-map
               ("x" . markdown-xwidget-preview-mode))
   :custom
+  (markdown-xwidget-command "pandoc")
   (markdown-xwidget-github-theme "dark-dimmed")
   (markdown-xwidget-mermaid-theme "dark")
   (markdown-xwidget-code-block-theme "github-dark-dimmed"))

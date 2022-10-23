@@ -6,7 +6,8 @@
 
 (require 'package)
 (setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/") ; http instead of https
+      '(("gnu" . "https://elpa.gnu.org/packages/")
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/")
         ("melpa" . "https://melpa.org/packages/")))
 
 (package-initialize)
@@ -16,8 +17,10 @@
   (package-install 'use-package))
 
 (require 'use-package)
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+
+(use-package use-package-ensure
+  :config
+  (setq use-package-always-ensure t))
 
 (blink-cursor-mode -1)
 (set-language-environment "UTF-8")
@@ -63,10 +66,6 @@
 
 (add-hook 'prog-mode-hook 'outline-minor-mode)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
-
-;;;; quelpa
-
-(use-package quelpa)
 
 ;;;; rainbow-delimiters
 
