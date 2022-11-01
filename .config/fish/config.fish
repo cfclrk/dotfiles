@@ -25,6 +25,10 @@ if not set -q TMUX
         $HOMEBREW_PREFIX/opt/texinfo/bin \
         $PATH
 
+    for i in (string split : (go env GOPATH))
+        set PATH $i/bin $PATH
+    end
+
     # Setting XDG_CONFIG_HOME makes more programs use it
     set -gx XDG_CONFIG_HOME ~/.config
 
