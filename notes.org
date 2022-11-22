@@ -64,6 +64,8 @@
 
 * TODO
 
+  Download Roboto Mono font if it's not already installed.
+
   Install 1Password with "brew mas 1Password"
 
   Update ssh .config link ownership to 600
@@ -77,9 +79,3 @@
 
   Execute basictex =.pkg= file if =pdflatex= command is not on =$PATH=. Then
   needs a new terminal sesison (installer adds path to =/etc/paths.d=).
-
-** Create ssh keys
-
-   github-home and github-work
-
-   Requires brew openssl to already be installed I think?
