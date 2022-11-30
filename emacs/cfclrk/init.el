@@ -515,6 +515,12 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 (use-package consult)
 
+(use-package all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
+
 ;;;; fish
 
 (use-package fish-mode)
