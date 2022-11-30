@@ -34,7 +34,9 @@
 (defun my/markdown-mode-hook ()
   "Init hook for markdown-mode."
   (setq fill-column 100
-        visual-fill-column-center-text t))
+        visual-fill-column-center-text t)
+
+  (add-to-list 'company-backends 'company-emoji))
 
 (use-package markdown-mode
   :after visual-fill-column
@@ -83,6 +85,7 @@
 ;;;; markdown-xwidget
 
 (use-package markdown-xwidget
+  :after markdown-mode
   :straight (markdown-xwidget
              :type git
              :host github
@@ -91,7 +94,7 @@
   :bind (:map markdown-mode-command-map
               ("x" . markdown-xwidget-preview-mode))
   :custom
-  (markdown-xwidget-command "pandoc")
+  (markdown-xwidget-command "multimarkdown")
   (markdown-xwidget-github-theme "dark-dimmed")
   (markdown-xwidget-mermaid-theme "dark")
   (markdown-xwidget-code-block-theme "github-dark-dimmed"))

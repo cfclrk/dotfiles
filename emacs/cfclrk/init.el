@@ -491,10 +491,8 @@ From: https://stackoverflow.com/a/3072831/340613"
 (use-package key-chord
   :config
   (key-chord-define-global "\\a" 'treemacs-select-window)
-  (key-chord-define-global "\\e" 'lsp-format-buffer)
+  (key-chord-define-global "\\o" 'treemacs)
   (key-chord-define-global "\\u" 'undo-tree-visualize)
-  (key-chord-define-global "\\i" 'org-toggle-inline-images)
-  (key-chord-define-global "\\p" 'python-pytest-dispatch)
   (key-chord-mode +1))
 
 ;;;; Minibuffer completion (vertico, orderless, marginalia, consult)
@@ -608,6 +606,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; LSP
 
+
+;; Next time I run into a problem with file watchers, try running
+;;
+;; (file-notify-rm-all-watches)
+
 (use-package lsp-mode
   :hook (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred)
@@ -619,7 +622,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :custom
   (lsp-ui-sideline-show-diagnostics nil)
   (lsp-ui-sideline-show-symbol nil)
-  (lsp-ui-peek-show-directory nil)
   (lsp-ui-doc-max-height 20))
 
 
@@ -1019,18 +1021,23 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;; lsp-java uses the Eclipse JDT Language Server. See:
 ;; https://github.com/eclipse/eclipse.jdt.ls
 
+(defun my/java-mode-hook ()
+  (setq c-basic-offset 4))
+
 (use-package lsp-java
   :hook (java-mode . lsp-deferred)
   :config
   (setq lsp-java-format-settings-url
         (concat "https://raw.githubusercontent.com/"
                 "google/styleguide/gh-pages/eclipse-java-google-style.xml"))
-  (setq lsp-java-format-settings-profile "GoogleStyle"
-        c-basic-offset 2))
+  (setq lsp-java-format-settings-profile "GoogleStyle"))
 
 (add-hook 'java-mode-hook #'lsp-deferred)
+(add-hook 'java-mode-hook #'my/java-mode-hook)
 
 ;;;; Javascript and JSON
+
+(use-package prettier-js)
 
 (defun my/js-mode-hook ()
   "Customize `js-mode'."
@@ -1040,6 +1047,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 (add-hook 'js-mode-hook #'lsp-deferred)
 
 (use-package js2-mode)
+
+(use-package jsonian)
 
 ;;;; Lisp
 
@@ -1122,6 +1131,10 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 ;;;; SQL
 
 ;; (setq sql-postgres-login-params nil)
+
+(with-eval-after-load 'sql
+  ;; sql-mode pretty much requires your psql to be uncustomised from stock settings
+  (add-to-list 'sql-postgres-options "--no-psqlrc"))
 
 (use-package sqlformat
   :config
