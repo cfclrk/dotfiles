@@ -379,14 +379,20 @@ From: https://stackoverflow.com/a/3072831/340613"
   :hook ((dired-mode . diff-hl-dired-mode)
          (magit-pre-refresh . diff-hl-magit-pre-refresh)
          (magit-post-refresh . diff-hl-magit-post-refresh))
-  :config (global-diff-hl-mode))
+  :config
+  (global-diff-hl-mode))
 
 ;;;; dired
 
 (define-key global-map (kbd "C-c d") 'dired-jump-other-window)
 
+;; Use coreutils version of ls so I can use the
+;; --group-directories-first flag
+(setq insert-directory-program "gls"
+      dired-use-ls-dired t)
+
 ;; Format for listing files
-(setq dired-listing-switches "-aoh")
+(setq dired-listing-switches "-aoh --group-directories-first")
 
 ;; If there is a Dired buffer displayed in some window, use its current
 ;; directory, instead of this Dired buffer's current directory.
@@ -401,6 +407,14 @@ From: https://stackoverflow.com/a/3072831/340613"
 
 ;; Automatically refresh ("revert") Dired buffers
 (setq dired-auto-revert-buffer t)
+
+;; In hide-details-mode, still show symlinks
+(setq dired-hide-details-hide-symlink-targets nil)
+
+(use-package all-the-icons-dired
+  :hook ((dired-mode . all-the-icons-dired-mode))
+  :custom
+  (all-the-icons-dired-monochrome nil))
 
 ;;;; docker
 
