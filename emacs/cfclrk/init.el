@@ -176,6 +176,20 @@ See: https://stackoverflow.com/questions/6133799"
       '(("\\*eshell\\*" display-buffer-use-some-window)
         ("\\*Help\\*" display-buffer-same-window)))
 
+;;; Emojis
+;;  ----------------------------------------------------------------------------
+
+;; To insert an emoji, use one of the following functions:
+;;
+;;  - all-the-icons-insert-*
+;;    [octicon, faicon, fileicon, material, wicon, alltheicon]
+;;  - emojify-insert-emoji
+;;
+;; How does this change in Emacs 29?
+
+;; Some more options for inserting emojis.
+(use-package emojify)
+
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
@@ -222,6 +236,11 @@ See: https://stackoverflow.com/questions/6133799"
 
 ;; MacOS
 (when (eq system-type 'darwin)
+  ;; Set the default font to Roboto Mono
+  (set-face-attribute 'default nil
+                      :family "Roboto Mono"
+                      :weight 'normal)
+
   ;; ⌘ as Meta and ⎇ as Super
   (setq mac-command-modifier 'meta
         mac-option-modifier 'super
