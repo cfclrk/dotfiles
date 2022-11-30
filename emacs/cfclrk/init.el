@@ -304,7 +304,9 @@ See: https://stackoverflow.com/questions/6133799"
 (use-package bazel
   :straight (bazel
              :host github
-             :repo "bazelbuild/emacs-bazel-mode"))
+             :repo "bazelbuild/emacs-bazel-mode")
+  :custom
+  (bazel-buildifier-before-save t))
 
 ;;;; bicycle
 
