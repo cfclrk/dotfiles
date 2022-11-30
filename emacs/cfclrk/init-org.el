@@ -46,13 +46,6 @@
 
 (use-package org-contrib)
 
-;;;; org-jira
-
-(use-package org-jira
-  :config
-  (setq org-jira-working-dir "~/Work/.org-jira"
-        jiralib-url "https://splashfinancial.atlassian.net"))
-
 ;;;; org-superstar
 
 (use-package org-superstar
