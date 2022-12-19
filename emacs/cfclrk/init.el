@@ -667,6 +667,16 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
    (cons page-break-lines-char page-break-lines-char)
    (face-attribute 'default :family)))
 
+;;;; pdf-tools
+
+;; pdf-tools is a replacement for DocView, which is what is used by default when
+;; you try to open a pdf in Emacs.
+;;
+;; Note: after the first install, I had to run M-x pdf-tools-install before it
+;; started working.
+
+(use-package pdf-tools)
+
 ;;;; projectile
 
 (use-package projectile
