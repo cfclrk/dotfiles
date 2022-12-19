@@ -2,6 +2,7 @@
  ("cfclrk" . ((user-emacs-directory . "~/emacs/cfclrk")))
  ("cfclrk-emacs-plus" . ((user-emacs-directory . "~/emacs/cfclrk-emacs-plus")))
  ("doom" . ((user-emacs-directory . "~/emacs/doomemacs")))
+ ("min-envars" . ((user-emacs-directory . "~/emacs/min-envars")))
  ("min-straight" . ((user-emacs-directory . "~/emacs/min-straight")))
  ("min-package" . ((user-emacs-directory . "~/emacs/min-package")))
  ("min-quelpa" . ((user-emacs-directory . "~/emacs/min-quelpa")))
