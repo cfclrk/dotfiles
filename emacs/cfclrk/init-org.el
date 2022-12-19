@@ -40,7 +40,7 @@
              :host github
              :repo "arnm/ob-mermaid"
              :fork (:host github
-                          :repo "tonyaldon/ob-mermaid")))
+                    :repo "cfclrk/ob-mermaid")))
 
 ;;;; org-contrib
 
