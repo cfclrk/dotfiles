@@ -40,20 +40,21 @@ function fish_prompt --description 'Defines the prompt'
     "$__fish_prompt_normal"
 end
 
-# function s-line
-#     test -z "$argv[1]"; and echo "Error: arg1 must be a string"; and return 1
-#     set line $argv[1]
-#     set item (string split -m 1 '=' $line)
-#     eval set -gx $item[1] $item[2]
-# end
+function s-line
+    test -z "$argv[1]"; and echo "Error [s-line]: arg1 must be a string"; and return 1
+    set line $argv[1]
+    set item (string split -m 1 '=' $line)
+    eval set -gx $item[1] $item[2]
+end
 
 function s --description "Export environment variables from a file"
     test -z "$argv[1]"; and echo "Error: arg1 must be a file path"; and return 1
     set envFile $argv[1]
     for line in (cat $envFile)
         if test -n $line
-            # s-line $line
-            export "$line"
+            # Another option is to just do "export $line", but that doesn't
+            # expand ~, and probably some other things.
+            s-line "$line"
         end
     end
 end

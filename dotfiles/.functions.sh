@@ -7,6 +7,8 @@ s() {
     }
     envFile="$1"
 
+    # Probably don't need to go line by line. Just run export on the whole
+    # thing.
     while read -r line; do
         if test -n "$line"; then
             eval "export $line"
