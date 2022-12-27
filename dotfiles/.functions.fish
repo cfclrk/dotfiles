@@ -136,7 +136,7 @@ function clear_aws
     set -e AWS_PROFILE
 end
 
-function export_aws --description "Export credentials from a profile in ~/.aws/credentials"
+function export-aws --description "Export credentials from a profile in ~/.aws/credentials"
     set profile "\[$argv[1]\]"
     set creds (grep "$profile" -A 3 ~/.aws/credentials \
         | tail -n 3 \
@@ -151,7 +151,7 @@ function export_aws --description "Export credentials from a profile in ~/.aws/c
     end
 end
 
-function clearBucket --description "Clear one S3 bucket"
+function clear-bucket --description "Clear one S3 bucket"
     set bucket $argv[1]
     test -z "$argv[1]"; and echo "Error: arg1 must be a string"; and return 1
 
@@ -166,7 +166,7 @@ function clearBucket --description "Clear one S3 bucket"
     end
 end
 
-function clearBuckets --description "Clear all S3 buckets matching a prefix"
+function clear-buckets --description "Clear all S3 buckets matching a prefix"
     test -z "$argv[1]"; and echo "Error: arg1 must be a string"; and return 1
     set prefix $argv[1]
 
