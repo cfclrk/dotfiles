@@ -267,9 +267,6 @@ See: https://stackoverflow.com/questions/6133799"
 
 (add-hook 'text-mode-hook 'my/text-editing-hook)
 
-;; Convert a string to titlecase
-(use-package titlecase)
-
 ;;;; URLs
 
 (require 'xwidget)
