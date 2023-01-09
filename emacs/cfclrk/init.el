@@ -783,9 +783,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (use-package which-key
   :config
-  (which-key-mode +1)
-  (setq which-key-idle-delay 0.5
-		which-key-idle-secondary-delay 0.1))
+  (which-key-mode +1))
 
 ;;;; winner-mode
 
