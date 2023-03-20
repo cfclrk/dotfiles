@@ -3,7 +3,7 @@ tap "homebrew/cask"
 tap "homebrew/core"
 tap "d12frosted/emacs-plus"
 brew "coreutils"
-brew "emacs-plus", args: ["with-xwidgets", "with-imagemagick"]
+brew "emacs-plus@29", args: ["with-xwidgets", "with-imagemagick"]
 brew "fish"
 brew "findutils"
 brew "gnupg"
