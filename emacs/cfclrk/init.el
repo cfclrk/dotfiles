@@ -422,19 +422,19 @@ From: https://stackoverflow.com/a/3072831/340613"
 ;;   C-x C-f /docker:root@mycontainer:/app/server.py
 (use-package docker-tramp)
 
-;;;; envars
+;;;; env
 
-(use-package envars
-  :straight (envars
+(use-package env
+  :straight (env
              :host github
-             :repo "cfclrk/envars")
+             :repo "cfclrk/env")
   :config
-  (setq envars-dir (expand-file-name "~/.env/")))
+  (setq env-dir (expand-file-name "~/.env/")))
 
 ;;;; eshell
 
-(setq ;; Do TAB completion
- eshell-cmpl-cycle-completions nil)
+;; Do TAB completion
+(setq eshell-cmpl-cycle-completions nil)
 
 ;;;; git, magit, forge
 
@@ -602,7 +602,6 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (lin-global-mode 1))
 
 ;;;; LSP
-
 
 ;; Next time I run into a problem with file watchers, try running
 ;;
