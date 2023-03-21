@@ -316,6 +316,13 @@ See: https://stackoverflow.com/questions/6133799"
 (add-hook 'prog-mode-hook 'outline-minor-mode)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
+;;;; code-review
+
+(use-package code-review
+  :hook ((code-review-mode . emojify-mode))
+  :custom
+  (code-review-auth-login-marker 'forge))
+
 ;;;; company
 
 (use-package company
@@ -464,6 +471,10 @@ From: https://stackoverflow.com/a/3072831/340613"
   (setq forge-owned-accounts '(("cfclrk" . nil)
                                ("cclark-splash" . nil))))
 
+;;;; gh-notify
+
+(use-package gh-notify)
+
 ;;;; github-browse-file
 
 (use-package github-browse-file
@@ -503,9 +514,8 @@ From: https://stackoverflow.com/a/3072831/340613"
   :init (marginalia-mode))
 
 (use-package orderless
-  :after vertico
   :custom
-  (completion-styles '(substring orderless basic))
+  (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package consult)
@@ -620,6 +630,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   (lsp-ui-sideline-show-symbol nil)
   (lsp-ui-doc-max-height 20))
 
+(use-package lsp-treemacs
+  :after lsp-mode)
 
 ;;;; magic-mode-alist
 
@@ -679,7 +691,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :demand t
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
-  (load (expand-file-name "~/emacs/projectile-discovery.el"))
+  ;;(load (expand-file-name "~/emacs/projectile-discovery.el"))
   (projectile-mode +1)
   (setq projectile-use-git-grep t))
 
@@ -708,10 +720,7 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
-  :init
-  (savehist-mode)
-  :config
-  (setq history-length 25))
+  :init (savehist-mode))
 
 ;;;; smartparens
 

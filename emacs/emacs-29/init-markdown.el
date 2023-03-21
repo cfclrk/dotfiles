@@ -14,7 +14,6 @@
 (use-package markdown-mode
   :after visual-fill-column
   :hook ((markdown-mode . my/markdown-mode-hook)
-         (markdown-mode . markdown-toc-mode)
          (markdown-mode . visual-line-mode)
          (markdown-mode . visual-fill-column-mode))
   :mode (("README\\.md\\'" . gfm-mode)

@@ -12,16 +12,6 @@
 
 (package-initialize)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require 'use-package)
-
-(use-package use-package-ensure
-  :config
-  (setq use-package-always-ensure t))
-
 (blink-cursor-mode -1)
 (set-language-environment "UTF-8")
 
@@ -29,23 +19,19 @@
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 
-(setq column-number-mode t    ;; Show line:column in mode line
-      help-window-select t
+(setq help-window-select t
       inhibit-splash-screen t ;; Do not show the welcome page
       make-backup-files nil)  ;; Do not save ~ backup files
-
-;; Keep customizations outside of init.el
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file t)
 
 ;; ⌘ as Meta and ⎇ as Super on MacOS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta
         mac-option-modifier 'super
-        mac-function-modifier 'hyper)
+        mac-function-modifier 'hyper))
 
-  ;; Enable emoji
-  (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
+(require 'use-package)
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
@@ -53,47 +39,32 @@
 ;;;; ace
 
 (use-package ace-window
+  :demand t
   :bind ("M-l" . ace-window)
-  :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
-
-;;;; bicycle
-
-(use-package bicycle
-  :after outline
-  :bind (:map outline-minor-mode-map
-              ([C-tab] . bicycle-cycle)
-              ([S-tab] . bicycle-cycle-global)))
-
-(add-hook 'prog-mode-hook 'outline-minor-mode)
-(add-hook 'prog-mode-hook 'hs-minor-mode)
+  :config
+  (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
 
 ;;;; rainbow-delimiters
 
-(use-package rainbow-delimiters)
+(use-package rainbow-delimiters
+  :ensure t)
 
-;;;; smartparens
+;; corfu
 
-(use-package smartparens
-  :bind (:map lisp-mode-map
-              ("M-f" . sp-next-sexp)
-              ("M-b" . sp-backward-sexp))
-  :init
-  (require 'smartparens-config)
-  :config
-  (load (expand-file-name "~/emacs/smartparens.el"))
-  (my-smartparens-config))
-
-;;;; undo-tree
-
-(use-package undo-tree
-  :config
-  (setq undo-tree-history-directory-alist
-      `((".*" . ,temporary-file-directory)))
-  (setq undo-tree-auto-save-history t)
-  (global-undo-tree-mode))
-
-;;;; yaml
-
-(use-package yaml-mode)
+;; (use-package corfu
+;;   :init
+;;   (global-corfu-mode))
 
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(rainbow-delimiters)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

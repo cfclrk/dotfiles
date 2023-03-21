@@ -63,10 +63,10 @@
         mac-option-modifier 'super
         mac-function-modifier 'hyper))
 
+(toggle-frame-maximized)
 (tool-bar-mode -1)
 (blink-cursor-mode -1)
 (global-auto-revert-mode t)  ; Revert buffers when their backing files change
-(delete-selection-mode t)    ; Typed text replaces selection
 (scroll-bar-mode -1)
 
 (setq-default tab-width 4)
@@ -131,6 +131,18 @@ FONT-NAME is a string like 'Roboto Mono'."
   (load-theme 'doom-one t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode +1)
+  :config
+  (setq doom-modeline-project-detection 'project
+        doom-modeline-buffer-encoding nil
+        doom-modeline-height 40
+        doom-modeline-hud t
+        doom-modeline-project-detection 'projectile
+        doom-modeline-buffer-file-name-style 'buffer-name
+        doom-modeline-vcs-max-length 15
+        doom-modeline-env-version nil))
 
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
@@ -233,6 +245,25 @@ Optional PRINTCHARFUN is as defined by `princ'."
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
+(use-package marginalia
+  :after vertico
+  :init (marginalia-mode))
+
+(use-package corfu
+  :init
+  (global-corfu-mode)
+  :custom
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  (corfu-scroll-margin 5)        ;; Use scroll margin
+  )
+
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
 
@@ -242,6 +273,15 @@ Optional PRINTCHARFUN is as defined by `princ'."
   :demand t
   :bind ("M-l" . ace-window)
   :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
+
+;;;; bazel
+
+(use-package bazel
+  :elpaca (bazel
+           :host github
+           :repo "bazelbuild/emacs-bazel-mode")
+  :custom
+  (bazel-buildifier-before-save t))
 
 ;;;; bicycle
 
@@ -255,7 +295,13 @@ Optional PRINTCHARFUN is as defined by `princ'."
 ;;;; ctrlf
 
 (use-package ctrlf
-    :config (ctrlf-mode +1))
+  :config (ctrlf-mode +1))
+
+;;;; code-review
+
+(use-package code-review
+  :custom
+  (code-review-auth-login-marker 'forge))
 
 ;;;; crux
 
@@ -293,7 +339,19 @@ Optional PRINTCHARFUN is as defined by `princ'."
 ;; In hide-details-mode, still show symlinks
 (setq dired-hide-details-hide-symlink-targets nil)
 
+(use-package all-the-icons-dired
+  :hook ((dired-mode . all-the-icons-dired-mode))
+  :custom
+  (all-the-icons-dired-monochrome nil))
+
 ;;;; env
+
+(use-package env
+  :elpaca (env
+           :host github
+           :repo "cfclrk/env")
+  :config
+  (setq env-dir (expand-file-name "~/.env/")))
 
 ;;;; helpful
 
@@ -303,6 +361,60 @@ Optional PRINTCHARFUN is as defined by `princ'."
          ("C-h k" . helpful-key)
          ("C-c C-d" . helpful-at-point)
          ("C-h C" . helpful-command)))
+
+;;;; git, magit, forge
+
+(use-package git-modes
+  :config
+  ;; gitconfig-mode
+  (add-to-list 'auto-mode-alist '("\\.gitconfig\\'" . gitconfig-mode))
+  ;; gitignore-mode
+  (add-to-list 'auto-mode-alist '("/.dockerignore\\'" . gitignore-mode))
+  (add-to-list 'auto-mode-alist '("CODEOWNERS\\'" . gitignore-mode)))
+
+(use-package magit
+  :bind (:map magit-diff-mode-map
+              ("<C-return>" . magit-diff-visit-file-other-window)
+              ("<M-return>" . magit-diff-visit-worktree-file-other-window))
+  :config
+  (setq magit-diff-refine-hunk 'all))
+
+;; Credentials are stored in ~/.authinfo
+(use-package forge
+  :after magit
+  :hook (after-save . magit-after-save-refresh-status)
+  :config
+  (setq forge-owned-accounts '(("cfclrk" . nil)
+                               ("cclark-splash" . nil))))
+
+;;;; github-browse-file
+
+(use-package github-browse-file
+  :bind ("C-h g" . github-browse-file))
+
+;;;; ispell
+
+(setq ispell-program-name "aspell")
+
+;;;; LSP
+
+(use-package lsp-mode
+  :hook (lsp-mode . lsp-enable-which-key-integration)
+  :commands (lsp lsp-deferred)
+  :config
+  (setq lsp-enable-file-watchers nil))
+
+(use-package lsp-ui
+  :commands lsp-ui
+  :custom
+  (lsp-ui-sideline-show-diagnostics nil)
+  (lsp-ui-sideline-show-symbol nil)
+  (lsp-ui-doc-max-height 20))
+
+;;;; markdown
+
+(load
+ (expand-file-name "init-markdown.el" user-emacs-directory))
 
 ;;;; occur
 
@@ -317,21 +429,19 @@ Optional PRINTCHARFUN is as defined by `princ'."
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
+;;;; projectile
+
+(use-package projectile
+  :demand t
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  ;;(load (expand-file-name "~/emacs/projectile-discovery.el"))
+  (projectile-mode +1)
+  (setq projectile-use-git-grep t))
+
 ;;;; rainbow-delimiters
 
 (use-package rainbow-delimiters)
-
-;;;; recentf
-
-;; Saves recent file names in $user-emacs-directory/recentf.
-
-(use-package recentf
-  :elpaca nil
-  :ensure nil
-  :config
-  (setq recentf-max-saved-items 500
-        recentf-max-menu-items 15)
-  (recentf-mode +1))
 
 ;;;; smartparens
 
@@ -346,9 +456,61 @@ Optional PRINTCHARFUN is as defined by `princ'."
   (load (expand-file-name "~/emacs/smartparens.el"))
   (my-smartparens-config))
 
+;;;; stonehenge
+
+(use-package stonehenge
+  :elpaca (stonehenge
+           :repo "~/Work/foo"
+           :files (:defaults))
+  :config
+  (customize-set-variable 'stonehenge-dir
+                          (expand-file-name "~/Work/stonehenge")))
+
+;;;; terraform
+
+(use-package terraform-mode
+  :hook (terraform-mode . lsp-deferred)
+  :init (setq lsp-terraform-server '("terraform-ls" "serve")))
+
+;;;; tramp
+
+(setq tramp-default-method "scp")
+
+;;;; undo-tree
+
+(use-package undo-tree
+  :config
+  (setq undo-tree-history-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq undo-tree-auto-save-history t)
+  (global-undo-tree-mode))
+
+;;;; unfill
+
+;; Unfill is the opposite of `fill-paragraph'
+(use-package unfill)
+
 ;;;; visual-fill-column
 
 (use-package visual-fill-column)
+
+;;;; which-key
+
+(use-package which-key
+  :config
+  (which-key-mode +1))
+
+;;;; yaml
+
+(use-package yaml-mode)
+
+;;;; yasnippet
+
+;; LSP uses yasnippet to expand snippets. So enabling yas-global-mode is
+;; necessary even if you don't load any snippets.
+
+(use-package yasnippet
+  :config (yas-global-mode 1))
 
 ;;; Programming Languages
 ;;  ----------------------------------------------------------------------------
@@ -366,4 +528,45 @@ Optional PRINTCHARFUN is as defined by `princ'."
 
 ;;;; Emacs Lisp
 
-(add-hook 'emacs-lisp-mode-hook #'my/lisp-mode-hook)
+;; (add-hook 'emacs-lisp-mode-hook #'my/lisp-mode-hook)
+
+;;;; Clojure
+
+(use-package clojure-mode
+  :mode "\\.cljstyle\\'"  ; Use clojure-mode for ".cljstyle" files
+  :hook ((clojure-mode . lsp-deferred)
+         (clojure-mode . my/lisp-mode-hook)
+         (clojure-mode . cljstyle-format-on-save-mode))
+  :bind (:map clojure-mode-map
+              ("S-SPC" . just-one-space))
+  :custom
+  ;; Indent arguments instead of aligning them
+  (clojure-indent-style 'always-indent)
+  :config
+  (setq clojure-build-tool-files (add-to-list
+                                  'clojure-build-tool-files
+                                  "WORKSPACE")))
+
+(use-package cider
+  :after clojure-mode
+  :bind (:map cider-mode-map
+              ("C-t n" . cider-test-run-ns-tests)
+              ("C-t p" . cider-test-run-project-tests)
+              ("C-t t" . cider-test-run-test)
+              ("C-c C-c" . cider-pprint-eval-defun-at-point)
+              ("C-j" . cider-pprint-eval-last-sexp-to-comment))
+  :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
+         (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1))))
+  :custom
+  ;; Changes how cider-pprint-eval-last-sexp displays things. More here:
+  ;; https://docs.cider.mx/cider/usage/pretty_printing.html. Original value was
+  ;; nil.
+  (cider-print-options '(("length" 50) ("right-margin" 70)))
+  ;; Automatically save files before they are loaded in the repl
+  (cider-save-file-on-load t)
+  ;; Add a newline to the repl prompt
+  (cider-repl-prompt-function (lambda (namespace)
+                                (format "%s\n> " namespace))))
+
+(use-package cljstyle-format
+  :after clojure-mode)
