@@ -54,6 +54,13 @@
 ;; To install a package defined with use-package, evaluate the use-package form
 ;; and then run (elpaca-process-queues).
 
+;; TODO:
+;;
+;; - precient.el might help with making last-used buffer show up at top of list
+;;   when switching buffers
+;; - consult?
+;; - embark?
+
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
@@ -63,11 +70,11 @@
         mac-option-modifier 'super
         mac-function-modifier 'hyper))
 
-(toggle-frame-maximized)
 (tool-bar-mode -1)
 (blink-cursor-mode -1)
 (global-auto-revert-mode t)  ; Revert buffers when their backing files change
 (scroll-bar-mode -1)
+(global-hl-line-mode 1)
 
 (setq-default tab-width 4)
 (setq-default fill-column 80)
@@ -124,6 +131,10 @@ FONT-NAME is a string like 'Roboto Mono'."
                     :weight 'normal
                     :height 140)
 
+(use-package all-the-icons
+  :config (unless (my/font-installed-p "all-the-icons")
+            (all-the-icons-install-fonts t)))
+
 (use-package doom-themes
   :config
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -147,8 +158,11 @@ FONT-NAME is a string like 'Roboto Mono'."
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
 
-(defun upsert-alist (quoted-alist entry)
-  "Insert or update ENTRY in QUOTED-ALIST.
+(elpaca nil
+  (message "Declaring my functions")
+
+  (defun upsert-alist (quoted-alist entry)
+    "Insert or update ENTRY in QUOTED-ALIST.
 
 First, if ENTRY is in QUOTED-ALIST, delete it. Then insert ENTRY.
 This prevents duplicates of ENTRY in the alist. Example:
@@ -161,68 +175,88 @@ This prevents duplicates of ENTRY in the alist. Example:
   (upsert-alist 'my-alist '(:foo . 2))
   ;; => ((:foo . 2) (:bar . 1))
 "
-  (let ((entry-key (car entry))
-        (orig-alist (symbol-value quoted-alist)))
-    (set quoted-alist
-         (cons entry (assoc-delete-all entry-key orig-alist)))))
+    (let ((entry-key (car entry))
+          (orig-alist (symbol-value quoted-alist)))
+      (set quoted-alist
+           (cons entry (assoc-delete-all entry-key orig-alist)))))
 
-(defun my/lsp-remove-all-workspaces ()
-  "Clear all LSP workspaces. Sometimes this fixes things."
-  (interactive)
-  (mapc
-   'lsp-workspace-folders-remove
-   (lsp-session-folders (lsp-session))))
+  (defun my/lsp-remove-all-workspaces ()
+    "Clear all LSP workspaces. Sometimes this fixes things."
+    (interactive)
+    (mapc
+     'lsp-workspace-folders-remove
+     (lsp-session-folders (lsp-session))))
 
-(defun my/show-buffer-file-name ()
-  "Display and copy the full path to the current file.
-Adapted from Emacs Redux (emacsredux.com)."
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (message filename)
-    (kill-new filename)))
+  (defun my/show-buffer-file-name ()
+    "Display and copy the full path to the current file.
+  Adapted from Emacs Redux (emacsredux.com)."
+    (interactive)
+    (let ((filename (if (equal major-mode 'dired-mode)
+                        default-directory
+                      (buffer-file-name))))
+      (message filename)
+      (kill-new filename)))
+
+  (defun my/set-font-size (font-size)
+    "Set font height to the given FONT-SIZE.
+  This updates font size without changing the Emacs frame (i.e.
+  window) size.
+  - TODO: display current font size in prompt. You can
+  get it with: (face-attribute 'default :height).
+  - TODO: Bind to M-F1/M-F2"
+    (interactive "nFont Size: ")
+    (let ((frame-inhibit-implied-resize t))
+      (set-face-attribute 'default nil :height font-size)
+      (set-face-attribute 'mode-line nil :height font-size)))
+
+  (defun backward-delete-word (arg)
+    "Delete characters backward until encountering the beginning of a word.
+  With argument ARG, do this that many times. Unlike
+  `backward-kill-word', do not add the word to the `kill-ring'.
+  See: https://stackoverflow.com/questions/6133799"
+    (interactive "p")
+    (delete-region (point) (progn (backward-word arg) (point))))
+
+  (defun pprint (form &optional printcharfun)
+    "Return a pretty-printed version of FORM.
+
+  Optional PRINTCHARFUN is as defined by `princ'."
+    (princ (with-temp-buffer
+             (cl-prettyprint form)
+             (buffer-string))
+           printcharfun)))
+
+(elpaca-wait)
 
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'my/show-buffer-file-name)
-
-(defun my/set-font-size (font-size)
-  "Set font height to the given FONT-SIZE.
-This updates font size without changing the Emacs frame (i.e.
-window) size.
-- TODO: display current font size in prompt. You can
-get it with: (face-attribute 'default :height).
-- TODO: Bind to M-F1/M-F2"
-  (interactive "nFont Size: ")
-  (let ((frame-inhibit-implied-resize t))
-    (set-face-attribute 'default nil :height font-size)
-    (set-face-attribute 'mode-line nil :height font-size)))
-
-(defun backward-delete-word (arg)
-  "Delete characters backward until encountering the beginning of a word.
-With argument ARG, do this that many times. Unlike
-`backward-kill-word', do not add the word to the `kill-ring'.
-See: https://stackoverflow.com/questions/6133799"
-  (interactive "p")
-  (delete-region (point) (progn (backward-word arg) (point))))
-
-(defun pprint (form &optional printcharfun)
-  "Return a pretty-printed version of FORM.
-
-Optional PRINTCHARFUN is as defined by `princ'."
-  (princ (with-temp-buffer
-           (cl-prettyprint form)
-           (buffer-string))
-         printcharfun))
 
 ;;; Text
 ;;  ----------------------------------------------------------------------------
 
 ;; whitespace
-(require 'whitespace)
-(setq whitespace-style '(face tabs empty trailing lines-tail)
-      whitespace-line-column nil)
-(add-hook 'before-save-hook 'whitespace-cleanup)
+(use-package whitespace
+  :ensure nil
+  :elpaca nil
+  :hook (before-save . whitespace-cleanup)
+  :custom
+  (whitespace-style '(face tabs empty trailing lines-tail))
+  (whitespace-line-column nil))
+
+;; text mode
+
+(use-package text-mode
+  :ensure nil
+  :elpaca nil
+  :after (smartparens whitespace)
+  :hook ((text-mode . my/text-mode-hook))
+  :config
+  (defun my/text-mode-hook ()
+    "Minor modes that I want enabled in pretty much every textual buffer."
+    (smartparens-mode +1)
+    (whitespace-mode +1)
+    ;; Typed text replaces selection
+    (delete-selection-mode +1)))
 
 ;;; Completion
 ;;  ----------------------------------------------------------------------------
@@ -253,16 +287,8 @@ Optional PRINTCHARFUN is as defined by `princ'."
   :init
   (global-corfu-mode)
   :custom
-  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-auto t)                 ;; Enable auto completion
-  ;; (corfu-separator ?\s)          ;; Orderless field separator
-  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
-  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  (corfu-scroll-margin 5)        ;; Use scroll margin
-  )
+  (corfu-auto t)
+  (corfu-scroll-margin 5))
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
@@ -413,8 +439,7 @@ Optional PRINTCHARFUN is as defined by `princ'."
 
 ;;;; markdown
 
-(load
- (expand-file-name "init-markdown.el" user-emacs-directory))
+(load (expand-file-name "init-markdown.el" user-emacs-directory))
 
 ;;;; occur
 
@@ -570,3 +595,8 @@ Optional PRINTCHARFUN is as defined by `princ'."
 
 (use-package cljstyle-format
   :after clojure-mode)
+
+;;;; PHP
+
+(use-package php-mode
+  :hook (php-mode . lsp-deferred))
