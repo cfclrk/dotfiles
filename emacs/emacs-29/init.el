@@ -16,6 +16,7 @@
 
 ;;; Code:
 
+;; elpaca
 (load (expand-file-name "bootstraps.el" user-emacs-directory))
 
 ;;; Editor General
@@ -405,6 +406,10 @@ This prevents duplicates of ENTRY in the alist. Example:
           #'(lambda ()
               (switch-to-buffer-other-window "*Occur*")))
 
+;;;; org
+
+(load (expand-file-name "org.el" user-emacs-directory))
+
 ;;;; prog-mode
 
 (add-hook 'prog-mode-hook 'outline-minor-mode)
@@ -424,6 +429,19 @@ This prevents duplicates of ENTRY in the alist. Example:
 ;;;; rainbow-delimiters
 
 (use-package rainbow-delimiters)
+
+;;;; recentf
+
+;; Saves recent file names in $user-emacs-directory/recentf. View recent files
+;; with C-c f (I configure that keybinding in the crux section).
+
+(use-package recentf
+  :ensure nil
+  :elpaca nil
+  :config
+  (setq recentf-max-saved-items 300
+	    recentf-max-menu-items 15)
+  (recentf-mode +1))
 
 ;;;; smartparens
 
@@ -501,6 +519,8 @@ This prevents duplicates of ENTRY in the alist. Example:
 
 (defun my/lisp-mode-hook ()
   "General configuration for any LISP."
+  (require 'smartparens)
+  (require 'rainbow-delimiters)
   (smartparens-strict-mode +1)
   (rainbow-delimiters-mode +1)
   (setq fill-column 80)
@@ -510,7 +530,16 @@ This prevents duplicates of ENTRY in the alist. Example:
 
 ;;;; Emacs Lisp
 
-;; (add-hook 'emacs-lisp-mode-hook #'my/lisp-mode-hook)
+(use-package emacs
+  :hook ((emacs-lisp-mode . my/lisp-mode-hook)
+         (emacs-lisp-mode . my/emacs-lisp-mode-hook))
+  :config
+  (defun my/emacs-lisp-mode-hook ()
+    "Customize `emacs-lisp-mode'."
+    ;; Fix the ridiculous default indentation for plists. See:
+    ;; https://stackoverflow.com/q/22166895/340613
+    (setq lisp-indent-function 'common-lisp-indent-function)
+    (local-set-key "C-c C-k" 'eval-buffer)))
 
 ;;;; Clojure
 
