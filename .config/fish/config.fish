@@ -34,26 +34,27 @@ if not set -q TMUX
     # Use the new Docker run engine
 	set -gx DOCKER_BUILDKIT 1
 
-    # frum - this prepends to $PATH
+    # frum for ruby - this prepends to $PATH
     if command -v frum > /dev/null
         frum init | source
     end
 
-    # pyenv - this prepends to $PATH
+    # pyenv for python - this prepends to $PATH
     if command -v pyenv > /dev/null
         pyenv init --path | source
         pyenv init - | source
         pyenv virtualenv-init - | source
     end
 
-    # pipenv
+    # pipenv - which I hope I never use again
     if command -v pipenv > /dev/null
         set -gx PIPENV_IGNORE_VIRTUALENVS 1
     end
 
-    # ghcup
+    # ghcup for haskell
     set GHCUP_INSTALL_BASE_PREFIX $HOME
 
+    # pyinstaller options for python binaries
     set os (uname)
     switch $os
         case Darwin
