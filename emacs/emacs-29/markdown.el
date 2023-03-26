@@ -36,5 +36,19 @@
   (whitespace-mode -1)
   (whitespace-mode +1))
 
+(use-package markdown-xwidget
+  :after markdown-mode
+  :elpaca (markdown-xwidget
+           :host github
+           :repo "cfclrk/markdown-xwidget"
+           :files (:defaults "resources"))
+  :bind (:map markdown-mode-command-map
+              ("x" . markdown-xwidget-preview-mode))
+  :custom
+  (markdown-xwidget-command "pandoc")
+  (markdown-xwidget-github-theme "light-high-contrast")
+  (markdown-xwidget-mermaid-theme "default")
+  (markdown-xwidget-code-block-theme "default"))
+
 (provide 'init-markdown)
 ;;; init-markdown.el ends here

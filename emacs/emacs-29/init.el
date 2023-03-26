@@ -381,7 +381,10 @@ This prevents duplicates of ENTRY in the alist. Example:
 
 ;; Update the fringe
 
-;; ;; Based on `magit-section-maybe-update-visibility-indicator'.
+;; Based on `magit-section-maybe-update-visibility-indicator'.
+;; Written by Ashraz in the System crafters discord here:
+;; https://discord.com/channels/767406463265538068/767410250608934932/1089592439746076752
+;;
 ;; (defun my/magit-section-maybe-update-visibility-indicator (section)
 ;;   (when (and magit-section-visibility-indicator
 ;;              (magit-section-content-p section))
@@ -559,16 +562,11 @@ This prevents duplicates of ENTRY in the alist. Example:
 
 ;;;; Emacs Lisp
 
-(use-package emacs
-  :hook ((emacs-lisp-mode . my/lisp-mode-hook)
-         (emacs-lisp-mode . my/emacs-lisp-mode-hook))
-  :config
-  (defun my/emacs-lisp-mode-hook ()
-    "Customize `emacs-lisp-mode'."
-    ;; Fix the ridiculous default indentation for plists. See:
-    ;; https://stackoverflow.com/q/22166895/340613
-    (setq lisp-indent-function 'common-lisp-indent-function)
-    (local-set-key "C-c C-k" 'eval-buffer)))
+(use-package elisp-mode
+  :ensure nil
+  :elpaca nil
+  :hook (emacs-lisp-mode . my/lisp-mode-hook)
+  :bind ("C-c C-k" . eval-buffer))
 
 ;;;; Clojure
 
