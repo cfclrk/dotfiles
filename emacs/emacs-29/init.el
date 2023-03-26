@@ -9,6 +9,8 @@
 ;;
 ;; TODO:
 ;;
+;; - Magit section for team PRs
+;; - Magit auto-refresh
 ;; - precient.el might help with making last-used buffer show up at top of list
 ;;   when switching buffers
 ;; - consult?
@@ -18,100 +20,6 @@
 
 ;; elpaca
 (load (expand-file-name "bootstraps.el" user-emacs-directory))
-
-;;; Editor General
-;;  ----------------------------------------------------------------------------
-
-;; ⌘ as Meta and ⎇ as Super on MacOS
-(when (eq system-type 'darwin)
-  (setq mac-command-modifier 'meta
-        mac-option-modifier 'super
-        mac-function-modifier 'hyper))
-
-(tool-bar-mode -1)
-(blink-cursor-mode -1)
-(global-auto-revert-mode t)  ; Revert buffers when their backing files change
-(scroll-bar-mode -1)
-(global-hl-line-mode 1)
-
-(setq-default tab-width 4)
-(setq-default fill-column 80)
-(setq-default indent-tabs-mode nil)
-
-(setq make-backup-files nil          ; Don't make those file~ backups
-      inhibit-splash-screen t        ; Do not show the welcome screen
-      sentence-end-double-space nil
-      help-window-select t
-      delete-by-moving-to-trash t
-      scroll-margin 5)
-
-;; The mode line
-(column-number-mode t)
-(size-indication-mode t)
-
-;; Change all yes/no prompts to y/n
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; Replace buffer-menu with ibuffer
-(global-set-key (kbd "C-x C-b") #'ibuffer)
-
-;; Make shell scripts executable when saved
-(add-hook 'after-save-hook
-          'executable-make-buffer-file-executable-if-script-p)
-
-;; Keep customizations outside of init.el
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(add-hook 'elpaca-after-init-hook
-          (lambda () (load custom-file 'noerror)))
-
-;; A .zsh file is a shell script too
-(add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
-
-;; Make nicer keybinding for `xref-find-definitions-other-window'
-(define-key global-map
-            (kbd "C-c M-.")
-            'xref-find-definitions-other-window)
-
-;; C-<backspace> was backward-kill-word. That pollutes kill ring.
-(global-set-key (kbd "C-<backspace>") 'backward-delete-word)
-
-;;; Theme, Font, Display
-;;  ----------------------------------------------------------------------------
-
-(defun my/font-installed-p (font-name)
-  "Check if font with FONT-NAME is available.
-FONT-NAME is a string like 'Roboto Mono'."
-  (find-font (font-spec :name font-name)))
-
-;; Set the default font to Roboto Mono
-(set-face-attribute 'default nil
-                    :family "Roboto Mono"
-                    :weight 'normal
-                    :height 140)
-
-(use-package all-the-icons
-  :config (unless (my/font-installed-p "all-the-icons")
-            (all-the-icons-install-fonts t)))
-
-(use-package doom-themes
-  :config
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
-
-(use-package doom-modeline
-  :init (doom-modeline-mode +1)
-  :config
-  (setq doom-modeline-project-detection 'project
-        doom-modeline-buffer-encoding nil
-        doom-modeline-height 40
-        doom-modeline-hud t
-        doom-modeline-project-detection 'projectile
-        doom-modeline-buffer-file-name-style 'buffer-name
-        doom-modeline-vcs-max-length 15
-        doom-modeline-env-version nil))
 
 ;;; Functions
 ;;  ----------------------------------------------------------------------------
@@ -182,12 +90,100 @@ This prevents duplicates of ENTRY in the alist. Example:
     (princ (with-temp-buffer
              (cl-prettyprint form)
              (buffer-string))
-           printcharfun)))
+           printcharfun))
+
+  (defun my/font-installed-p (font-name)
+    "Check if font with FONT-NAME is available.
+  FONT-NAME is a string like 'Roboto Mono'."
+    (find-font (font-spec :name font-name))))
 
 (elpaca-wait)
 
+;;; Editor General
+;;  ----------------------------------------------------------------------------
+
+;; ⌘ as Meta and ⎇ as Super on MacOS
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta
+        mac-option-modifier 'super
+        mac-function-modifier 'hyper))
+
+(tool-bar-mode -1)
+(blink-cursor-mode -1)
+(global-auto-revert-mode t)  ; Revert buffers when their backing files change
+(scroll-bar-mode -1)
+(global-hl-line-mode 1)
+
+(setq-default tab-width 4)
+(setq-default fill-column 80)
+(setq-default indent-tabs-mode nil)
+
+(setq make-backup-files nil          ; Don't make those file~ backups
+      inhibit-splash-screen t        ; Do not show the welcome screen
+      sentence-end-double-space nil
+      help-window-select t
+      delete-by-moving-to-trash t
+      scroll-margin 5)
+
+;; The mode line
+(column-number-mode t)
+(size-indication-mode t)
+
+;; Change all yes/no prompts to y/n
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Replace buffer-menu with ibuffer
+(global-set-key (kbd "C-x C-b") #'ibuffer)
+
+;; Make shell scripts executable when saved
+(add-hook 'after-save-hook
+          'executable-make-buffer-file-executable-if-script-p)
+
+;; Keep customizations outside of init.el
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(add-hook 'elpaca-after-init-hook
+          (lambda () (load custom-file 'noerror)))
+
+;; A .zsh file is a shell script too
+(add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
+
+;; Make nicer keybinding for `xref-find-definitions-other-window'
+(define-key global-map
+            (kbd "C-c M-.")
+            'xref-find-definitions-other-window)
+
+;; C-<backspace> was backward-kill-word. That pollutes kill ring.
+(global-set-key (kbd "C-<backspace>") 'backward-delete-word)
+
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'my/show-buffer-file-name)
+
+;;; Theme, Font, Display
+;;  ----------------------------------------------------------------------------
+
+(load-theme 'modus-operandi)
+
+;; Set the default font to Roboto Mono
+(set-face-attribute 'default nil
+                    :family "Roboto Mono"
+                    :weight 'normal
+                    :height 140)
+
+(use-package all-the-icons
+  :config (unless (my/font-installed-p "all-the-icons")
+            (all-the-icons-install-fonts t)))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode +1)
+  :config
+  (setq doom-modeline-project-detection 'project
+        doom-modeline-buffer-encoding nil
+        doom-modeline-height 40
+        doom-modeline-hud t
+        doom-modeline-project-detection 'projectile
+        doom-modeline-buffer-file-name-style 'buffer-name
+        doom-modeline-vcs-max-length 15
+        doom-modeline-env-version nil))
 
 ;;; Text
 ;;  ----------------------------------------------------------------------------
@@ -294,6 +290,16 @@ This prevents duplicates of ENTRY in the alist. Example:
          ("C-c D" . crux-delete-file-and-buffer)
          ("C-c f" . crux-recentf-find-file)))
 
+;;;; diff-hl
+
+(use-package diff-hl
+  :demand t
+  :hook ((dired-mode . diff-hl-dired-mode)
+         (magit-pre-refresh . diff-hl-magit-pre-refresh)
+         (magit-post-refresh . diff-hl-magit-post-refresh))
+  :config
+  (global-diff-hl-mode))
+
 ;;;; dired
 
 (define-key global-map (kbd "C-c d") 'dired-jump-other-window)
@@ -361,7 +367,9 @@ This prevents duplicates of ENTRY in the alist. Example:
               ("<C-return>" . magit-diff-visit-file-other-window)
               ("<M-return>" . magit-diff-visit-worktree-file-other-window))
   :config
-  (setq magit-diff-refine-hunk 'all))
+  (setq magit-diff-refine-hunk 'all)
+  :custom
+  (magit-save-repository-buffers 'dontask))
 
 ;; Credentials are stored in ~/.authinfo
 (use-package forge
@@ -370,6 +378,27 @@ This prevents duplicates of ENTRY in the alist. Example:
   :config
   (setq forge-owned-accounts '(("cfclrk" . nil)
                                ("cclark-splash" . nil))))
+
+;; Update the fringe
+
+;; ;; Based on `magit-section-maybe-update-visibility-indicator'.
+;; (defun my/magit-section-maybe-update-visibility-indicator (section)
+;;   (when (and magit-section-visibility-indicator
+;;              (magit-section-content-p section))
+;;     (let* ((beg (oref section start))
+;;            (ov (magit--overlay-at beg 'custom-magit-vis-indicator 'beg)))
+;;       (unless ov
+;;         (setq ov (make-overlay beg (1+ beg)))
+;;         (overlay-put ov 'evaporate t)
+;;         (overlay-put ov 'custom-magit-vis-indicator 'beg))
+;;       (cond ((oref section hidden)
+;;              (overlay-put ov 'before-string "▶ "))
+;;             (t
+;;              (overlay-put ov 'before-string "▼ "))))))
+
+;; (advice-add #'magit-section-maybe-update-visibility-indicator
+;;             :override
+;;             #'my/magit-section-maybe-update-visibility-indicator)
 
 ;;;; github-browse-file
 

@@ -132,6 +132,17 @@ See: https://stackoverflow.com/questions/6133799"
 ;; What was this before?
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
 
+;;;; PR checkout
+
+;; TODO: prompt for PR number. Filter to PRs that need our team review.
+;; execute gh pr checkout number
+;; See also: https://github.com/alhassy/emacs.d/blob/master/init.org#88-a-nice-emacs-interface-for-a-portion-of-the-gh-cli
+(defun pr-checkout ()
+  (interactive)
+  (shell-command-to-string "git config user.email")
+  (env-set-file (expand-file-name "github-work" env-dir))
+  )
+
 ;;; Theme, Font, Display
 ;;  ----------------------------------------------------------------------------
 
@@ -206,7 +217,8 @@ See: https://stackoverflow.com/questions/6133799"
       inhibit-splash-screen t        ; Do not show the welcome screen
       sentence-end-double-space nil
       help-window-select t
-      delete-by-moving-to-trash t)
+      delete-by-moving-to-trash t
+      scroll-margin 5)
 
 ;; Change all yes/no prompts to y/n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -730,6 +742,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
               ("M-b" . sp-backward-sexp))
   :init
   (require 'smartparens-config)
+  :custom
+  (sp-wrap-repeat-last 0)
   :config
   (load (expand-file-name "~/emacs/smartparens.el"))
   (my-smartparens-config))
@@ -745,17 +759,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 (use-package treemacs
   :config
-  (treemacs-resize-icons 18))
-
-(use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
-
-(use-package treemacs-projectile
-  :after (treemacs projectile))
-
-(use-package treemacs-magit
-  :after (treemacs magit))
+  ;(treemacs-resize-icons 18)
+  )
 
 ;;;; toml-mode
 
@@ -860,35 +865,41 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;; - TODO: Figure out how to make `xref-find-definitions' work when a file is
 ;;         not loaded in cider
+;; :straight (cider
+;;              :host github
+;;              :repo "clojure-emacs/cider"
+;;              :fork (:host github
+;;                     :repo "cfclrk/cider"
+;;                     :branch "bazel-support"))
 (use-package cider
-  :straight (cider
-             :host github
-             :repo "clojure-emacs/cider"
-             :fork (:host github
-                    :repo "cfclrk/cider"
-                    :branch "bazel-support"))
   :after clojure-mode
   ;; TODO: :bind cider-pprint-eval-last-sexp-to-comment to C-j
   :bind (:map cider-mode-map
               ("C-t n" . cider-test-run-ns-tests)
               ("C-t p" . cider-test-run-project-tests)
-              ("C-t t" . cider-test-run-test))
+              ("C-t t" . cider-test-run-test)
+              ("C-c C-c" . cider-pprint-eval-defun-at-point))
   :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1)))
          (cider-mode . my/make-cljr-add-use-snippet-interactive))
   :custom
+  ;; Changes how cider-pprint-eval-last-sexp displays things. More here:
+  ;; https://docs.cider.mx/cider/usage/pretty_printing.html. Original value was
+  ;; nil.
+  (cider-print-options '(("length" 50) ("right-margin" 70)))
   ;; Automatically save files before they are loaded in the repl
   (cider-save-file-on-load t)
   ;; Add a newline to the repl prompt
   (cider-repl-prompt-function (lambda (namespace)
                                 (format "%s\n> " namespace))))
 
-
 (use-package clojure-mode
   :mode "\\.cljstyle\\'"  ; Use clojure-mode for ".cljstyle" files
   :hook ((clojure-mode . lsp-deferred)
          (clojure-mode . my/lisp-mode-hook)
          (clojure-mode . cljstyle-format-on-save-mode))
+  :bind (:map clojure-mode-map
+              ("S-SPC" . just-one-space))
   :custom
   ;; Indent arguments instead of aligning them
   (clojure-indent-style 'always-indent)
@@ -906,10 +917,19 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 (use-package zprint-format)
 
 ;; Use C-c C-r
-(use-package clj-refactor
-  :hook ((clojure-mode . (lambda () (clj-refactor-mode 1))))
+;; (use-package clj-refactor
+;;   :hook ((clojure-mode . (lambda () (clj-refactor-mode 1))))
+;;   :config
+;;   (cljr-add-keybindings-with-prefix "C-c C-m"))
+
+(use-package jarchive
   :config
-  (cljr-add-keybindings-with-prefix "C-c C-m"))
+  (jarchive-setup))
+
+(use-package jet
+  :straight (jet
+             :host github
+             :repo "ericdallo/jet.el"))
 
 (use-package stonehenge
   :after cider
@@ -919,6 +939,45 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   :config
   (customize-set-variable 'stonehenge-dir
                           (expand-file-name "~/Work/stonehenge")))
+
+;;;; clerk
+
+(defun clerk-run (cmd)
+  "Run given clerk CMD in the active cider session."
+  (when-let ((filename (buffer-file-name)))
+    (save-buffer)
+    (cider-interactive-eval
+     (concat "(nextjournal.clerk/" cmd ")"))))
+
+(defun clerk-serve ()
+  "Run (clerk/serve! {}) in active cider session."
+  (interactive)
+  (when-let
+      ((filename
+        (buffer-file-name)))
+    (save-buffer)
+    (cider-interactive-eval
+     (concat "(nextjournal.clerk/serve! {})"))))
+
+(defun clerk-show ()
+  "Run (clerk/show! filename) in active cider session."
+  (interactive)
+  (when-let
+      ((filename
+        (buffer-file-name)))
+    (save-buffer)
+    (cider-interactive-eval
+     (concat "(nextjournal.clerk/show! \"" filename "\")"))))
+
+(defun clerk-clear-cache ()
+  "Run (clerk/clear-cache!) in active cider session."
+  (interactive)
+  (when-let
+      ((filename
+        (buffer-file-name)))
+    (save-buffer)
+    (cider-interactive-eval
+     (concat "(nextjournal.clerk/clear-cache!)"))))
 
 ;; (use-package monorepl
 ;;   :after cider
@@ -945,7 +1004,9 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
   "Customize `emacs-lisp-mode'."
   ;; Fix the ridiculous default indentation for plists. See:
   ;; https://stackoverflow.com/q/22166895/340613
-  (setq lisp-indent-function 'common-lisp-indent-function))
+  (setq lisp-indent-function 'common-lisp-indent-function)
+
+  (local-set-key "C-c C-k" 'eval-buffer))
 
 (add-hook 'emacs-lisp-mode-hook #'my/lisp-mode-hook)
 ;(add-hook 'emacs-lisp-mode-hook #'my/emacs-lisp-mode-hook)
@@ -1023,11 +1084,11 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
          (inferior-haskell-mode)))
 
 ;; projectile -- discover projects with a ".cabal" file
-(add-to-list
- 'my-project-root-files
- (lambda (dir)
-   "Non-nil if a file with a .cabal extension is in dir"
-   (member "cabal" (-map 'f-ext (f-entries dir)))))
+;; (add-to-list
+;;  'my-project-root-files
+;;  (lambda (dir)
+;;    "Non-nil if a file with a .cabal extension is in dir"
+;;    (member "cabal" (-map 'f-ext (f-entries dir)))))
 
 ;;;; Java
 
@@ -1074,7 +1135,8 @@ FN, CHECKER, PROPERTY as documented in flycheck-checker-get."
 
 ;;;; PHP
 
-(use-package php-mode)
+(use-package php-mode
+  :hook (php-mode . lsp-deferred))
 
 ;;;; Python
 
