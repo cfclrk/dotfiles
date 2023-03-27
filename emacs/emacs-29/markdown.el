@@ -8,7 +8,7 @@
 
 (defun my/markdown-mode-hook ()
   "Init hook for markdown-mode."
-  (setq fill-column 100
+  (setq fill-column 80
         visual-fill-column-center-text t))
 
 (use-package markdown-mode
@@ -41,7 +41,8 @@
   :elpaca (markdown-xwidget
            :host github
            :repo "cfclrk/markdown-xwidget"
-           :files (:defaults "resources"))
+           :files (:defaults "resources")
+           :depth nil)
   :bind (:map markdown-mode-command-map
               ("x" . markdown-xwidget-preview-mode))
   :custom

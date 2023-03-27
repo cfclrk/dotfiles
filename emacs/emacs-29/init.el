@@ -18,86 +18,8 @@
 
 ;;; Code:
 
-;; elpaca
 (load (expand-file-name "bootstraps.el" user-emacs-directory))
-
-;;; Functions
-;;  ----------------------------------------------------------------------------
-
-(elpaca nil
-  (message "Declaring my functions")
-
-  (defun upsert-alist (quoted-alist entry)
-    "Insert or update ENTRY in QUOTED-ALIST.
-
-First, if ENTRY is in QUOTED-ALIST, delete it. Then insert ENTRY.
-This prevents duplicates of ENTRY in the alist. Example:
-
-  (setq my-alist '((:foo . 1)))
-
-  (upsert-alist 'my-alist '(:bar . 1))
-  ;; => ((:bar . 1) (:foo . 1))
-
-  (upsert-alist 'my-alist '(:foo . 2))
-  ;; => ((:foo . 2) (:bar . 1))
-"
-    (let ((entry-key (car entry))
-          (orig-alist (symbol-value quoted-alist)))
-      (set quoted-alist
-           (cons entry (assoc-delete-all entry-key orig-alist)))))
-
-  (defun my/lsp-remove-all-workspaces ()
-    "Clear all LSP workspaces. Sometimes this fixes things."
-    (interactive)
-    (mapc
-     'lsp-workspace-folders-remove
-     (lsp-session-folders (lsp-session))))
-
-  (defun my/show-buffer-file-name ()
-    "Display and copy the full path to the current file.
-  Adapted from Emacs Redux (emacsredux.com)."
-    (interactive)
-    (let ((filename (if (equal major-mode 'dired-mode)
-                        default-directory
-                      (buffer-file-name))))
-      (message filename)
-      (kill-new filename)))
-
-  (defun my/set-font-size (font-size)
-    "Set font height to the given FONT-SIZE.
-  This updates font size without changing the Emacs frame (i.e.
-  window) size.
-  - TODO: display current font size in prompt. You can
-  get it with: (face-attribute 'default :height).
-  - TODO: Bind to M-F1/M-F2"
-    (interactive "nFont Size: ")
-    (let ((frame-inhibit-implied-resize t))
-      (set-face-attribute 'default nil :height font-size)
-      (set-face-attribute 'mode-line nil :height font-size)))
-
-  (defun backward-delete-word (arg)
-    "Delete characters backward until encountering the beginning of a word.
-  With argument ARG, do this that many times. Unlike
-  `backward-kill-word', do not add the word to the `kill-ring'.
-  See: https://stackoverflow.com/questions/6133799"
-    (interactive "p")
-    (delete-region (point) (progn (backward-word arg) (point))))
-
-  (defun pprint (form &optional printcharfun)
-    "Return a pretty-printed version of FORM.
-
-  Optional PRINTCHARFUN is as defined by `princ'."
-    (princ (with-temp-buffer
-             (cl-prettyprint form)
-             (buffer-string))
-           printcharfun))
-
-  (defun my/font-installed-p (font-name)
-    "Check if font with FONT-NAME is available.
-  FONT-NAME is a string like 'Roboto Mono'."
-    (find-font (font-spec :name font-name))))
-
-(elpaca-wait)
+(load (expand-file-name "functions.el" user-emacs-directory))
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
@@ -177,7 +99,7 @@ This prevents duplicates of ENTRY in the alist. Example:
             (all-the-icons-install-fonts t)))
 
 (use-package doom-modeline
-  :init (doom-modeline-mode +1)
+  :init (doom-modeline-mode)
   :config
   (setq doom-modeline-project-detection 'project
         doom-modeline-buffer-encoding nil
@@ -210,10 +132,10 @@ This prevents duplicates of ENTRY in the alist. Example:
   :config
   (defun my/text-mode-hook ()
     "Minor modes that I want enabled in pretty much every textual buffer."
-    (smartparens-mode +1)
-    (whitespace-mode +1)
+    (smartparens-mode)
+    (whitespace-mode)
     ;; Typed text replaces selection
-    (delete-selection-mode +1)))
+    (delete-selection-mode)))
 
 ;;; Completion
 ;;  ----------------------------------------------------------------------------
@@ -313,32 +235,40 @@ This prevents duplicates of ENTRY in the alist. Example:
 
 ;;;; dired
 
-(define-key global-map (kbd "C-c d") 'dired-jump-other-window)
+(use-package dired
+  :ensure nil
+  :elpaca nil
+  :bind (:map global-map
+              ("C-c d" . dired-jump-other-window))
+  :config
+  ;; Reuse current buffer when pressing 'a'
+  (put 'dired-find-alternate-file 'disabled nil)
+  :custom
+  ;; If there is a Dired buffer displayed in some window, use its current
+  ;; directory, instead of this Dired buffer's current directory.
+  (dired-dwim-target t)
+
+  ;; Automatically refresh ("revert") Dired buffers
+  (dired-auto-revert-buffer t)
+
+  ;; Format for listing files
+  (dired-listing-switches "-aoh --group-directories-first")
+
+  ;; Always delete and copy recursively
+  (dired-recursive-deletes 'always)
+  (dired-recursive-copies 'always)
+
+  ;; In hide-details-mode, still show symlinks
+  (dired-hide-details-hide-symlink-targets nil)
+
+  ;; Pass the "--dired" option to "ls"
+  (dired-use-ls-dired t))
+
+;; (define-key global-map (kbd "C-c d") 'dired-jump-other-window)
 
 ;; Use coreutils version of ls so I can use the
 ;; --group-directories-first flag
-(setq insert-directory-program "gls"
-      dired-use-ls-dired t)
-
-;; Format for listing files
-(setq dired-listing-switches "-aoh --group-directories-first")
-
-;; If there is a Dired buffer displayed in some window, use its current
-;; directory, instead of this Dired buffer's current directory.
-(setq dired-dwim-target t)
-
-;; Reuse current buffer when pressing 'a'
-(put 'dired-find-alternate-file 'disabled nil)
-
-;; Always delete and copy recursively
-(setq dired-recursive-deletes 'always)
-(setq dired-recursive-copies 'always)
-
-;; Automatically refresh ("revert") Dired buffers
-(setq dired-auto-revert-buffer t)
-
-;; In hide-details-mode, still show symlinks
-(setq dired-hide-details-hide-symlink-targets nil)
+(setq insert-directory-program "gls")
 
 (use-package all-the-icons-dired
   :hook ((dired-mode . all-the-icons-dired-mode))
@@ -350,7 +280,8 @@ This prevents duplicates of ENTRY in the alist. Example:
 (use-package env
   :elpaca (env
            :host github
-           :repo "cfclrk/env")
+           :repo "cfclrk/env"
+           :depth nil)
   :config
   (setq env-dir (expand-file-name "~/.env/")))
 
@@ -377,9 +308,8 @@ This prevents duplicates of ENTRY in the alist. Example:
   :bind (:map magit-diff-mode-map
               ("<C-return>" . magit-diff-visit-file-other-window)
               ("<M-return>" . magit-diff-visit-worktree-file-other-window))
-  :config
-  (setq magit-diff-refine-hunk 'all)
   :custom
+  (magit-diff-refine-hunk 'all)
   (magit-save-repository-buffers 'dontask))
 
 ;; Credentials are stored in ~/.authinfo
@@ -517,7 +447,7 @@ This prevents duplicates of ENTRY in the alist. Example:
 
 (use-package which-key
   :config
-  (which-key-mode +1))
+  (which-key-mode))
 
 ;;;; yaml
 
@@ -529,7 +459,7 @@ This prevents duplicates of ENTRY in the alist. Example:
 ;; necessary even if you don't load any snippets.
 
 (use-package yasnippet
-  :config (yas-global-mode 1))
+  :config (yas-global-mode))
 
 ;;; Programming Languages
 ;;  ----------------------------------------------------------------------------
@@ -540,8 +470,8 @@ This prevents duplicates of ENTRY in the alist. Example:
   "General configuration for any LISP."
   (require 'smartparens)
   (require 'rainbow-delimiters)
-  (smartparens-strict-mode +1)
-  (rainbow-delimiters-mode +1)
+  (smartparens-strict-mode)
+  (rainbow-delimiters-mode)
   (setq fill-column 80)
   ;; Restart whitespace mode so that it properly uses `fill-column'.
   (whitespace-mode -1)
@@ -580,8 +510,8 @@ This prevents duplicates of ENTRY in the alist. Example:
               ("C-t t" . cider-test-run-test)
               ("C-c C-c" . cider-pprint-eval-defun-at-point)
               ("C-j" . cider-pprint-eval-last-sexp-to-comment))
-  :hook ((cider-repl-mode . (lambda () (smartparens-mode +1)))
-         (cider-repl-mode . (lambda () (rainbow-delimiters-mode +1))))
+  :hook ((cider-repl-mode . (lambda () (smartparens-mode)))
+         (cider-repl-mode . (lambda () (rainbow-delimiters-mode))))
   :custom
   ;; Changes how cider-pprint-eval-last-sexp displays things. More here:
   ;; https://docs.cider.mx/cider/usage/pretty_printing.html. Original value was
