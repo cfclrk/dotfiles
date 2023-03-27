@@ -169,6 +169,9 @@ This prevents duplicates of ENTRY in the alist. Example:
                     :weight 'normal
                     :height 140)
 
+;; Leave left fringe to its default 8px, and set right fringe to 0px
+(fringe-mode '(nil . 0))
+
 (use-package all-the-icons
   :config (unless (my/font-installed-p "all-the-icons")
             (all-the-icons-install-fonts t)))
@@ -215,11 +218,17 @@ This prevents duplicates of ENTRY in the alist. Example:
 ;;; Completion
 ;;  ----------------------------------------------------------------------------
 
+(use-package prescient
+  :elpaca (prescient
+           :files ("*.el")))
+
 (use-package vertico
+  :after prescient
   :elpaca (vertico
            :files (:defaults "extensions/*"))
   :init
-  (vertico-mode))
+  (vertico-mode)
+  (vertico-prescient-mode))
 
 (use-package vertico-directory
   :after vertico
@@ -228,16 +237,18 @@ This prevents duplicates of ENTRY in the alist. Example:
   :bind (:map vertico-map
               ("M-DEL" . vertico-directory-delete-word)))
 
-(use-package orderless
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion)))))
+;; (use-package orderless
+;;   :custom
+;;   (completion-styles '(orderless basic))
+;;   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package marginalia
   :after vertico
   :init (marginalia-mode))
 
 (use-package corfu
+  :after prescient
+  :hook (corfu-mode . corfu-prescient-mode)
   :init
   (global-corfu-mode)
   :custom
@@ -378,30 +389,6 @@ This prevents duplicates of ENTRY in the alist. Example:
   :config
   (setq forge-owned-accounts '(("cfclrk" . nil)
                                ("cclark-splash" . nil))))
-
-;; Update the fringe
-
-;; Based on `magit-section-maybe-update-visibility-indicator'.
-;; Written by Ashraz in the System crafters discord here:
-;; https://discord.com/channels/767406463265538068/767410250608934932/1089592439746076752
-;;
-;; (defun my/magit-section-maybe-update-visibility-indicator (section)
-;;   (when (and magit-section-visibility-indicator
-;;              (magit-section-content-p section))
-;;     (let* ((beg (oref section start))
-;;            (ov (magit--overlay-at beg 'custom-magit-vis-indicator 'beg)))
-;;       (unless ov
-;;         (setq ov (make-overlay beg (1+ beg)))
-;;         (overlay-put ov 'evaporate t)
-;;         (overlay-put ov 'custom-magit-vis-indicator 'beg))
-;;       (cond ((oref section hidden)
-;;              (overlay-put ov 'before-string "▶ "))
-;;             (t
-;;              (overlay-put ov 'before-string "▼ "))))))
-
-;; (advice-add #'magit-section-maybe-update-visibility-indicator
-;;             :override
-;;             #'my/magit-section-maybe-update-visibility-indicator)
 
 ;;;; github-browse-file
 
