@@ -32,7 +32,7 @@
 
 (tool-bar-mode -1)
 (blink-cursor-mode -1)
-(global-auto-revert-mode t)  ; Revert buffers when their backing files change
+(global-auto-revert-mode t)
 (scroll-bar-mode -1)
 (global-hl-line-mode 1)
 
@@ -40,8 +40,8 @@
 (setq-default fill-column 80)
 (setq-default indent-tabs-mode nil)
 
-(setq make-backup-files nil          ; Don't make those file~ backups
-      inhibit-splash-screen t        ; Do not show the welcome screen
+(setq make-backup-files nil
+      inhibit-splash-screen t
       sentence-end-double-space nil
       help-window-select t
       delete-by-moving-to-trash t
@@ -131,10 +131,8 @@
   :hook ((text-mode . my/text-mode-hook))
   :config
   (defun my/text-mode-hook ()
-    "Minor modes that I want enabled in pretty much every textual buffer."
     (smartparens-mode)
     (whitespace-mode)
-    ;; Typed text replaces selection
     (delete-selection-mode)))
 
 ;;; Completion
@@ -264,8 +262,6 @@
   ;; Pass the "--dired" option to "ls"
   (dired-use-ls-dired t))
 
-;; (define-key global-map (kbd "C-c d") 'dired-jump-other-window)
-
 ;; Use coreutils version of ls so I can use the
 ;; --group-directories-first flag
 (setq insert-directory-program "gls")
@@ -371,9 +367,9 @@
   :demand t
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
-  ;;(load (expand-file-name "~/emacs/projectile-discovery.el"))
-  (projectile-mode +1)
-  (setq projectile-use-git-grep t))
+  (projectile-mode)
+  :custom
+  (projectile-use-git-grep t))
 
 ;;;; rainbow-delimiters
 
@@ -388,9 +384,10 @@
   :ensure nil
   :elpaca nil
   :config
-  (setq recentf-max-saved-items 300
-	    recentf-max-menu-items 15)
-  (recentf-mode +1))
+  (recentf-mode)
+  :custom
+  (recentf-max-saved-items 300)
+  (recentf-max-menu-items 15))
 
 ;;;; smartparens
 
@@ -408,12 +405,20 @@
 ;;;; stonehenge
 
 (use-package stonehenge
-  :elpaca (stonehenge
-           :repo "~/Work/foo"
-           :files (:defaults))
+  :ensure nil
+  :elpaca nil
+  :after (bazel cider env)
+  :load-path "~/Work/stonehenge/splash/chris/development/emacs"
   :config
   (customize-set-variable 'stonehenge-dir
                           (expand-file-name "~/Work/stonehenge")))
+
+;;;; super-save
+
+(use-package super-save
+  :config
+  (super-save-mode)
+  (add-to-list 'super-save-triggers 'ace-window))
 
 ;;;; terraform
 
@@ -431,8 +436,9 @@
   :config
   (setq undo-tree-history-directory-alist
         `((".*" . ,temporary-file-directory)))
-  (setq undo-tree-auto-save-history t)
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  :custom
+  (undo-tree-auto-save-history t))
 
 ;;;; unfill
 
@@ -467,7 +473,6 @@
 ;;;; Lisp
 
 (defun my/lisp-mode-hook ()
-  "General configuration for any LISP."
   (require 'smartparens)
   (require 'rainbow-delimiters)
   (smartparens-strict-mode)
