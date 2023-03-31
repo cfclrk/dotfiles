@@ -24,13 +24,6 @@
           ("\\.crt\\'" . emacs)
           (t . emacs)))
 
-  (setq org-startup-folded t
-        org-confirm-babel-evaluate nil
-        org-adapt-indentation t
-        org-src-window-setup 'split-window-below
-        org-special-ctrl-a/e t
-        org-babel-min-lines-for-block-output 40)
-
   ;;Exporting
   (require 'ox)
   (setq org-html-checkbox-type 'html
@@ -49,4 +42,12 @@
      (js . t)
      (python . t)
      (shell . t)
-     (sql . t))))
+     (sql . t)))
+  :custom
+  (org-startup-folded t)
+  (org-confirm-babel-evaluate nil)
+  (org-adapt-indentation t)
+  (org-src-window-setup 'split-window-below)
+  (org-special-ctrl-a/e t)
+  (org-babel-min-lines-for-block-output 40)
+  (org-hide-leading-stars t))

@@ -8,7 +8,7 @@
 
 (defun my/markdown-mode-hook ()
   "Init hook for markdown-mode."
-  (setq fill-column 80
+  (setq fill-column 82
         visual-fill-column-center-text t))
 
 (use-package markdown-mode
@@ -21,9 +21,8 @@
          ("\\.markdown\\'" . markdown-mode))
   :bind (:map markdown-mode-map
               ("C-c C-z" . markdown-live-preview-switch-to-output))
-  :init
-  (setq markdown-split-window-direction 'right)
   :custom
+  (markdown-split-window-direction 'right)
   (markdown-spaces-after-code-fence 0)
   (markdown-italic-underscore t)
   (markdown-list-indent-width 2)
@@ -31,7 +30,6 @@
   (markdown-enable-math t)
   :config
   (setq whitespace-style '(face tabs empty trailing))
-
   ;; Restart whitespace mode so that is properly uses `whitespace-style'.
   (whitespace-mode -1)
   (whitespace-mode +1))
