@@ -9,8 +9,10 @@
 ;;
 ;; TODO:
 ;;
+;; - C-x c to go to *Code Review* buffer if it exists
 ;; - Magit section for team PRs
-;; - Magit auto-refresh
+;; - Magit auto-refresh?
+;; - Cape?
 ;; - precient.el might help with making last-used buffer show up at top of list
 ;;   when switching buffers
 ;; - consult?
@@ -157,11 +159,6 @@
   :bind (:map vertico-map
               ("M-DEL" . vertico-directory-delete-word)))
 
-;; (use-package orderless
-;;   :custom
-;;   (completion-styles '(orderless basic))
-;;   (completion-category-overrides '((file (styles basic partial-completion)))))
-
 (use-package marginalia
   :after vertico
   :init (marginalia-mode))
@@ -174,6 +171,11 @@
   :custom
   (corfu-auto t)
   (corfu-scroll-margin 5))
+
+;; (use-package orderless
+;;   :custom
+;;   (completion-styles '(orderless basic))
+;;   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
@@ -206,7 +208,7 @@
 ;;;; ctrlf
 
 (use-package ctrlf
-  :config (ctrlf-mode +1))
+  :config (ctrlf-mode))
 
 ;;;; code-review
 
@@ -280,6 +282,13 @@
            :depth nil)
   :config
   (setq env-dir (expand-file-name "~/.env/")))
+
+;;;; flycheck
+
+(use-package flycheck
+  :config
+  (setq flycheck-emacs-lisp-load-path 'inherit)
+  (global-flycheck-mode))
 
 ;;;; helpful
 
@@ -389,6 +398,11 @@
   (recentf-max-saved-items 300)
   (recentf-max-menu-items 15))
 
+;;;; rg
+
+;; Library for Emacs to use ripgrep. Projectile can use this.
+(use-package rg)
+
 ;;;; smartparens
 
 (use-package smartparens
@@ -401,17 +415,6 @@
   :config
   (load (expand-file-name "~/emacs/smartparens.el"))
   (my-smartparens-config))
-
-;;;; stonehenge
-
-(use-package stonehenge
-  :ensure nil
-  :elpaca nil
-  :after (bazel cider env)
-  :load-path "~/Work/stonehenge/splash/chris/development/emacs"
-  :config
-  (customize-set-variable 'stonehenge-dir
-                          (expand-file-name "~/Work/stonehenge")))
 
 ;;;; super-save
 
@@ -535,3 +538,22 @@
 
 (use-package php-mode
   :hook (php-mode . lsp-deferred))
+
+;;; Work
+
+;; (use-package stonehenge
+;;   :ensure nil
+;;   :elpaca nil
+;;   :after (bazel cider env)
+;;   :load-path "~/Work/stonehenge/splash/chris/development/emacs"
+;;   :config
+;;   (customize-set-variable 'stonehenge-dir
+;;                           (expand-file-name "~/Work/stonehenge")))
+
+(elpaca-wait)
+
+(load (expand-file-name
+       "~/Work/stonehenge/splash/chris/development/emacs/stonehenge.el"))
+
+(customize-set-variable 'stonehenge-dir
+                          (expand-file-name "~/Work/stonehenge"))
