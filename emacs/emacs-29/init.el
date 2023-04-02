@@ -102,15 +102,13 @@
 
 (use-package doom-modeline
   :init (doom-modeline-mode)
-  :config
-  (setq doom-modeline-project-detection 'project
-        doom-modeline-buffer-encoding nil
-        doom-modeline-height 40
-        doom-modeline-hud t
-        doom-modeline-project-detection 'projectile
-        doom-modeline-buffer-file-name-style 'buffer-name
-        doom-modeline-vcs-max-length 15
-        doom-modeline-env-version nil))
+  :custom
+  (doom-modeline-buffer-encoding nil)
+  (doom-modeline-buffer-file-name-style 'buffer-name)
+  (doom-modeline-env-version nil)
+  (doom-modeline-hud t)
+  (doom-modeline-project-detection 'projectile)
+  (doom-modeline-vcs-max-length 15))
 
 ;;; Text
 ;;  ----------------------------------------------------------------------------
@@ -171,11 +169,6 @@
   :custom
   (corfu-auto t)
   (corfu-scroll-margin 5))
-
-;; (use-package orderless
-;;   :custom
-;;   (completion-styles '(orderless basic))
-;;   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
@@ -272,6 +265,10 @@
   :hook ((dired-mode . all-the-icons-dired-mode))
   :custom
   (all-the-icons-dired-monochrome nil))
+
+;;;; ejc-sql
+
+(use-package ejc-sql)
 
 ;;;; env
 
@@ -553,7 +550,7 @@
 (elpaca-wait)
 
 (load (expand-file-name
-       "~/Work/stonehenge/splash/chris/development/emacs/stonehenge.el"))
+       "~/Work/stonehenge/splash/chris/development/emacs/splash.el"))
 
-(customize-set-variable 'stonehenge-dir
+(customize-set-variable 'splash-stonehenge-dir
                           (expand-file-name "~/Work/stonehenge"))
