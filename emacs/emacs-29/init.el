@@ -82,6 +82,9 @@
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'my/show-buffer-file-name)
 
+;; Clean up global-map
+(load (expand-file-name "clean-global-map.el" user-emacs-directory))
+
 ;;; Theme, Font, Display
 ;;  ----------------------------------------------------------------------------
 
@@ -169,6 +172,12 @@
   :custom
   (corfu-auto t)
   (corfu-scroll-margin 5))
+
+(use-package cape)
+
+(use-package consult
+  :bind (:map global-map
+              ("M-g g" . consult-goto-line)))
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
@@ -455,7 +464,10 @@
 
 ;;;; visual-fill-column
 
-(use-package visual-fill-column)
+(use-package visual-fill-column
+  :config
+  ;; Fix a problem where visual-fill-column cuts lines early
+  (setq visual-fill-column-extra-text-width (cons 1 0)))
 
 ;;;; which-key
 
@@ -527,8 +539,7 @@
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode))))
   :custom
   ;; Changes how cider-pprint-eval-last-sexp displays things. More here:
-  ;; https://docs.cider.mx/cider/usage/pretty_printing.html. Original value was
-  ;; nil.
+  ;; https://docs.cider.mx/cider/usage/pretty_printing.html.
   (cider-print-options '(("length" 50) ("right-margin" 70)))
   ;; Automatically save files before they are loaded in the repl
   (cider-save-file-on-load t)
@@ -545,15 +556,6 @@
   :hook (php-mode . lsp-deferred))
 
 ;;; Work
-
-;; (use-package stonehenge
-;;   :ensure nil
-;;   :elpaca nil
-;;   :after (bazel cider env)
-;;   :load-path "~/Work/stonehenge/splash/chris/development/emacs"
-;;   :config
-;;   (customize-set-variable 'stonehenge-dir
-;;                           (expand-file-name "~/Work/stonehenge")))
 
 (elpaca-wait)
 
