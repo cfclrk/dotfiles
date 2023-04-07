@@ -1,4 +1,4 @@
-;;; org.el -- Org mode config  -*- lexical-binding: t; -*-
+;;; init-org.el -- Org mode config  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -51,3 +51,6 @@
   (org-special-ctrl-a/e t)
   (org-babel-min-lines-for-block-output 40)
   (org-hide-leading-stars t))
+
+(provide 'init-org)
+;;; init-org.el ends here

@@ -1,3 +1,9 @@
+;;; init-functions.el -- My emacs functions  -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
+
 (elpaca nil
   (message "Declaring my functions")
 
@@ -73,3 +79,6 @@ This prevents duplicates of ENTRY in the alist. Example:
 
 ;; Block until the current queue is processed
 (elpaca-wait)
+
+(provide 'init-functions)
+;;; init-functions.el ends here

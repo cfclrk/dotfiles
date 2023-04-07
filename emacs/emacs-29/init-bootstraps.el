@@ -34,6 +34,10 @@
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
 
+;; Make elpaca use SSH for cloning repos
+(setq elpaca-recipe-functions
+      (lambda (recipe) '(:protocol ssh)))
+
 ;; Install use-package support
 (elpaca elpaca-use-package
   (elpaca-use-package-mode)

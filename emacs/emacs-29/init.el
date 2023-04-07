@@ -20,8 +20,8 @@
 
 ;;; Code:
 
-(load (expand-file-name "bootstraps.el" user-emacs-directory))
-(load (expand-file-name "functions.el" user-emacs-directory))
+(load (expand-file-name "init-bootstraps.el" user-emacs-directory))
+(load (expand-file-name "init-functions.el" user-emacs-directory))
 
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
@@ -268,17 +268,25 @@
 
 ;;;; ejc-sql
 
-(use-package ejc-sql)
+(use-package ejc-sql
+  :elpaca (ejc-sql
+           :depth nil))
 
 ;;;; env
 
-(use-package env
-  :elpaca (env
+(use-package environ
+  :elpaca (environ
            :host github
-           :repo "cfclrk/env"
+           :repo "cfclrk/environ"
            :depth nil)
   :config
-  (setq env-dir (expand-file-name "~/.env/")))
+  (setq environ-dir (expand-file-name "~/.env/")))
+
+;;;; fish
+
+(use-package fish-mode
+  :config
+  (add-to-list 'completion-at-point-functions 'cape-file))
 
 ;;;; flycheck
 
@@ -348,7 +356,7 @@
 
 ;;;; markdown
 
-(load (expand-file-name "markdown.el" user-emacs-directory))
+(load (expand-file-name "init-markdown.el" user-emacs-directory))
 
 ;;;; occur
 
@@ -359,7 +367,7 @@
 
 ;;;; org
 
-(load (expand-file-name "org.el" user-emacs-directory))
+(load (expand-file-name "init-org.el" user-emacs-directory))
 
 ;;;; prog-mode
 

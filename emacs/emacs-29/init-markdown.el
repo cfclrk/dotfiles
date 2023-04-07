@@ -4,16 +4,16 @@
 
 ;;; Code:
 
-;;;; markdown
-
 (defun my/markdown-mode-hook ()
   "Init hook for markdown-mode."
-  (setq fill-column 82
+  (message "Running my/markdown-mode-hook, setting fill-column to 83")
+  (setq fill-column 85
         visual-fill-column-center-text t))
 
 (use-package markdown-mode
   :after visual-fill-column
   :hook ((markdown-mode . my/markdown-mode-hook)
+         (gfm-mode . my/markdown-mode-hook)
          (markdown-mode . visual-line-mode)
          (markdown-mode . visual-fill-column-mode))
   :mode (("README\\.md\\'" . gfm-mode)
