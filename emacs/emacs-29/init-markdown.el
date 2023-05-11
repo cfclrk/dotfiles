@@ -49,5 +49,9 @@
   (markdown-xwidget-mermaid-theme "default")
   (markdown-xwidget-code-block-theme "default"))
 
+;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
+;; you edit source blocks in another buffer (similar to org-edit-special)
+(use-package edit-indirect)
+
 (provide 'init-markdown)
 ;;; init-markdown.el ends here

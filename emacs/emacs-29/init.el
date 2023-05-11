@@ -214,9 +214,11 @@
 
 ;;;; code-review
 
-(use-package code-review
-  :custom
-  (code-review-auth-login-marker 'forge))
+;; Commenting out until this issue is addressed:
+;; https://github.com/wandersoncferreira/code-review/issues/245
+;; (use-package code-review
+;;   :custom
+;;   (code-review-auth-login-marker 'forge))
 
 ;;;; crux
 
@@ -339,6 +341,10 @@
   (setq forge-owned-accounts '(("cfclrk" . nil)
                                ("cclark-splash" . nil))))
 
+;;;; gh-notify
+
+(use-package gh-notify)
+
 ;;;; github-browse-file
 
 (use-package github-browse-file
@@ -347,6 +353,14 @@
 ;;;; ispell
 
 (setq ispell-program-name "aspell")
+
+;;;; key-chord
+
+(use-package key-chord
+  :config
+  (key-chord-define-global "\\a" 'treemacs-select-window)
+  (key-chord-define-global "\\o" 'treemacs)
+  (key-chord-mode +1))
 
 ;;;; LSP
 
@@ -447,6 +461,28 @@
 
 (setq tramp-default-method "scp")
 
+;;;; treemacs
+
+(use-package treemacs
+  :hook (treemacs-mode . (lambda () (treemacs-load-theme "all-the-icons"))))
+
+(use-package treemacs-all-the-icons
+  :after (treemacs all-the-icons))
+
+(use-package lsp-treemacs
+  :init
+  (defun my/lsp-treemacs-symbols-toggle ()
+    "Toggle the lsp-treemacs-symbols buffer."
+    (interactive)
+    (let ((buffer-name "*LSP Symbols List*"))
+      (if (get-buffer buffer-name)
+          (kill-buffer buffer-name)
+        (progn
+          (lsp-treemacs-symbols)
+          (other-window -1)))))
+  :custom
+  (lsp-treemacs-theme "all-the-icons"))
+
 ;;;; undo-tree
 
 (use-package undo-tree
@@ -465,9 +501,9 @@
 ;;;; visual-fill-column
 
 (use-package visual-fill-column
-  :config
+  :custom
   ;; Fix a problem where visual-fill-column cuts lines early
-  (setq visual-fill-column-extra-text-width (cons 1 0)))
+  (visual-fill-column-extra-text-width '(1 . 1)))
 
 ;;;; which-key
 
@@ -521,11 +557,7 @@
               ("S-SPC" . just-one-space))
   :custom
   ;; Indent arguments instead of aligning them
-  (clojure-indent-style 'always-indent)
-  :config
-  (setq clojure-build-tool-files (add-to-list
-                                  'clojure-build-tool-files
-                                  "WORKSPACE")))
+  (clojure-indent-style 'always-indent))
 
 (use-package cider
   :after clojure-mode
@@ -540,7 +572,7 @@
   :custom
   ;; Changes how cider-pprint-eval-last-sexp displays things. More here:
   ;; https://docs.cider.mx/cider/usage/pretty_printing.html.
-  (cider-print-options '(("length" 50) ("right-margin" 70)))
+  (cider-print-fn 'zprint)
   ;; Automatically save files before they are loaded in the repl
   (cider-save-file-on-load t)
   ;; Add a newline to the repl prompt
@@ -555,12 +587,20 @@
 (use-package php-mode
   :hook (php-mode . lsp-deferred))
 
+;;;; SQL
+
+(use-package sqlformat
+  :config
+  (setq sqlformat-command 'pgformatter
+        sqlformat-args '("-s2")))
+
 ;;; Work
 
 (elpaca-wait)
 
 (load (expand-file-name
-       "~/Work/stonehenge/splash/chris/development/emacs/splash.el"))
-
+       "~/Work/stonehenge/development/emacs/splash.el"))
+(load (expand-file-name
+       "~/Work/stonehenge/splash/chris/development/emacs/splash-env.el"))
 (customize-set-variable 'splash-stonehenge-dir
                           (expand-file-name "~/Work/stonehenge"))
