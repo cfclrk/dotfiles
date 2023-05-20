@@ -2,3 +2,5 @@
 .projectile
 .clj-kondo
 .lsp
+experimental/pgpass
+splash/chris

@@ -9,6 +9,14 @@
 ;;
 ;; TODO:
 ;;
+;; - forge View Topic mode - q should kill buffer (maybe winner-undo)
+;; - visual-line-mode in magit diff buffers (to wrap long lines in diff)
+;; - Create jira link in forge topic buffers
+;;  - Would be cool if I could hover over a ticket number and get the description
+;; - gh-notify
+;;   - gh-notify-copy-url is an API URL that can't be used in the browser
+;;   - merged state should be the merged emoji
+;;   - open state could be green circle
 ;; - C-x c to go to *Code Review* buffer if it exists
 ;; - Magit section for team PRs
 ;; - Magit auto-refresh?
@@ -122,7 +130,7 @@
   :elpaca nil
   :hook (before-save . whitespace-cleanup)
   :custom
-  (whitespace-style '(face tabs empty trailing lines-tail))
+  (whitespace-style '(face tabs empty trailing))
   (whitespace-line-column nil))
 
 ;; text mode
@@ -214,11 +222,16 @@
 
 ;;;; code-review
 
-;; Commenting out until this issue is addressed:
+;; Using branch until this issue is addressed:
 ;; https://github.com/wandersoncferreira/code-review/issues/245
-;; (use-package code-review
-;;   :custom
-;;   (code-review-auth-login-marker 'forge))
+(use-package code-review
+  :elpaca (code-review
+           :host github
+           :repo "phelrine/code-review"
+           :branch "fix/closql-update"
+           :depth nil)
+  :custom
+  (code-review-auth-login-marker 'forge))
 
 ;;;; crux
 
@@ -444,13 +457,6 @@
   (load (expand-file-name "~/emacs/smartparens.el"))
   (my-smartparens-config))
 
-;;;; super-save
-
-(use-package super-save
-  :config
-  (super-save-mode)
-  (add-to-list 'super-save-triggers 'ace-window))
-
 ;;;; terraform
 
 (use-package terraform-mode
@@ -510,6 +516,10 @@
 (use-package which-key
   :config
   (which-key-mode))
+
+;;;; winner
+
+(winner-mode)
 
 ;;;; yaml
 
@@ -600,7 +610,11 @@
 
 (load (expand-file-name
        "~/Work/stonehenge/development/emacs/splash.el"))
+
+(customize-set-variable 'splash-stonehenge-dir
+                        (expand-file-name "~/Work/stonehenge"))
+(customize-set-variable 'splash-website-dir
+                        (expand-file-name "~/Work/Website"))
+
 (load (expand-file-name
        "~/Work/stonehenge/splash/chris/development/emacs/splash-env.el"))
-(customize-set-variable 'splash-stonehenge-dir
-                          (expand-file-name "~/Work/stonehenge"))
