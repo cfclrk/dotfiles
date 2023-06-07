@@ -29,6 +29,24 @@
 ;;; Code:
 
 (load (expand-file-name "init-bootstraps.el" user-emacs-directory))
+
+(elpaca-wait)
+
+;; Load dash, s, and f so that I can use them in my own functions.
+(use-package dash
+  :config
+  ;; Fontify dash-defined anaphoric vars ("it", "acc", etc)
+  (global-dash-fontify-mode)
+
+  ;; Enable C-h S (info-lookup-symbol) on dash symbols
+  (with-eval-after-load 'info-look
+    (dash-register-info-lookup)))
+
+(use-package s)
+(use-package f)
+
+(elpaca-wait)
+
 (load (expand-file-name "init-functions.el" user-emacs-directory))
 
 ;;; Editor General

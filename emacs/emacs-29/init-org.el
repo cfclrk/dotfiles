@@ -6,6 +6,12 @@
 
 ;;; Code:
 
+(require 's)
+
+;; htmlize is required to provide syntax highlighting in published source blocks
+;; (i.e. HTML code blocks generating from `org-publish-project').
+(use-package htmlize)
+
 (use-package org
   :elpaca nil
   :ensure nil
@@ -98,6 +104,31 @@ Returns the directory name."
 (defun org-outline-tempdir-dired ()
   "Open Dired in a temporary directory for this outline section."
   (dired (make-directory (org-outline-tempdir) 'parents)))
+
+(defun my/on-every-src-block (fn)
+  "Visit every source block and evaluate FN."
+  (save-excursion
+    (goto-char (point-min))
+    (let ((case-fold-search t))
+      (while (re-search-forward "^\s*#[+]BEGIN_SRC" nil t)
+        (let ((element (org-element-at-point)))
+          (when (eq (org-element-type element) 'src-block)
+            (funcall fn element)))))
+    (save-buffer)))
+
+(defun my/org-remove-results ()
+  "Remove all RESULTS blocks in an org file."
+  (interactive)
+  (my/on-every-src-block 'org-babel-remove-result))
+
+(defun host (user ip path &optional sudo)
+  "Return a TRAMP string for SSHing to a remote host.
+USER is a user name on the remote host IP. PATH is the path on
+the remote host at which to execute the source block. If SUDO is
+non-nil, use sudo on the remote host."
+  (if sudo
+      (s-lex-format "/ssh:${user}@${ip}|sudo:${ip}:${path}")
+    (s-lex-format "/ssh:${user}@${ip}:${path}")))
 
 (provide 'init-org)
 ;;; init-org.el ends here
