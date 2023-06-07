@@ -439,6 +439,11 @@
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (projectile-mode)
+  (setq projectile-project-root-files-bottom-up
+        (-concat
+         '("go.mod")
+         projectile-project-root-files-bottom-up
+         projectile-project-root-files))
   :custom
   (projectile-use-git-grep t))
 
