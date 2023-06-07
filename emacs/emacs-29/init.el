@@ -619,6 +619,19 @@
 (use-package cljstyle-format
   :after clojure-mode)
 
+;;;; CSS
+
+(use-package css-mode
+  :ensure nil
+  :elpaca nil
+  :hook (css-mode . lsp-deferred)
+  :config
+  ;; This should probably be project-local.
+  (setq lsp-css-experimental-custom-data
+      '("/Users/cclark/Projects/codenotes/css/lsp_tailwind_custom_data.json"))
+  :custom
+  css-indent-offset 2)
+
 ;;;; PHP
 
 (use-package php-mode
