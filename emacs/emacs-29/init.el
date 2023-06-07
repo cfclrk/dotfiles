@@ -593,7 +593,8 @@
               ("S-SPC" . just-one-space))
   :custom
   ;; Indent arguments instead of aligning them
-  (clojure-indent-style 'always-indent))
+  (clojure-indent-style 'always-indent)
+  (clojure-toplevel-inside-comment-form t))
 
 (use-package cider
   :after clojure-mode
