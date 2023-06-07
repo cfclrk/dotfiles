@@ -303,10 +303,8 @@
 ;; --group-directories-first flag
 (setq insert-directory-program "gls")
 
-(use-package all-the-icons-dired
-  :hook ((dired-mode . all-the-icons-dired-mode))
-  :custom
-  (all-the-icons-dired-monochrome nil))
+(use-package nerd-icons-dired
+  :hook ((dired-mode . nerd-icons-dired-mode)))
 
 ;;;; ejc-sql
 
@@ -384,6 +382,11 @@
 ;;;; ispell
 
 (setq ispell-program-name "aspell")
+
+;;;; jsonian
+
+;; Better json
+(use-package jsonian)
 
 ;;;; key-chord
 
