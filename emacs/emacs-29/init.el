@@ -124,6 +124,8 @@
                     :weight 'normal
                     :height 140)
 
+(setq-default line-spacing 0.2)
+
 ;; Leave left fringe to its default 8px, and set right fringe to 0px
 (fringe-mode '(nil . 0))
 
@@ -637,7 +639,14 @@
 ;;;; PHP
 
 (use-package php-mode
-  :hook (php-mode . lsp-deferred))
+  :hook ((php-mode . lsp)
+         (php-mode . smartparens-strict-mode)))
+
+(use-package phpunit
+  :after php-mode
+  :bind (:map php-mode-map
+              ("C-t c" . phpunit-current-class)
+              ("C-t t" . phpunit-current-test)))
 
 ;;;; SQL
 
