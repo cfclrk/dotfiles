@@ -91,6 +91,8 @@
 
 ;; Keep customizations outside of init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file)
+
 (add-hook 'elpaca-after-init-hook
           (lambda () (load custom-file 'noerror)))
 
