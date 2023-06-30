@@ -126,7 +126,7 @@
 
 (setq-default line-spacing 0.2)
 
-;; Leave left fringe to its default 8px, and set right fringe to 0px
+;; Leave left fringe to its default (8px), and set right fringe to 0px
 (fringe-mode '(nil . 0))
 
 (use-package all-the-icons
@@ -486,6 +486,15 @@
   :config
   (load (expand-file-name "~/emacs/smartparens.el"))
   (my-smartparens-config))
+
+;;;; spacious-padding
+
+(use-package spacious-padding
+  :elpaca (spacious-padding
+           :host github
+           :repo "protesilaos/spacious-padding")
+  :config
+  (spacious-padding-mode))
 
 ;;;; terraform
 
