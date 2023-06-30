@@ -499,7 +499,7 @@
 ;;;; terraform
 
 (use-package terraform-mode
-  :hook (terraform-mode . lsp-deferred)
+  :hook (terraform-mode . lsp)
   :init (setq lsp-terraform-server '("terraform-ls" "serve")))
 
 ;;;; tramp
@@ -599,7 +599,7 @@
 
 (use-package clojure-mode
   :mode "\\.cljstyle\\'"  ; Use clojure-mode for ".cljstyle" files
-  :hook ((clojure-mode . lsp-deferred)
+  :hook ((clojure-mode . lsp)
          (clojure-mode . my/lisp-mode-hook)
          (clojure-mode . cljstyle-format-on-save-mode))
   :bind (:map clojure-mode-map
@@ -637,7 +637,7 @@
 (use-package css-mode
   :ensure nil
   :elpaca nil
-  :hook (css-mode . lsp-deferred)
+  :hook (css-mode . lsp)
   :config
   ;; This should probably be project-local.
   (setq lsp-css-experimental-custom-data
