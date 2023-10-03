@@ -64,6 +64,10 @@
 (scroll-bar-mode -1)
 (global-hl-line-mode 1)
 
+;; See: https://github.com/doomemacs/doomemacs/blob/e47accb77324ffff6e9a72bf820a0f73d2e804f3/lisp/doom-start.el#L134-L137
+(set-language-environment "UTF-8")
+(setq default-input-method nil)
+
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 (setq-default indent-tabs-mode nil)
