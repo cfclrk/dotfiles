@@ -77,7 +77,7 @@
       sentence-end-double-space nil
       help-window-select t
       delete-by-moving-to-trash t
-      scroll-margin 5)
+      scroll-margin 0)
 
 ;; The mode line
 (column-number-mode t)
@@ -120,13 +120,13 @@
 ;;; Theme, Font, Display
 ;;  ----------------------------------------------------------------------------
 
-(load-theme 'modus-operandi)
+(load-theme 'leuven)
 
 ;; Set the default font to Roboto Mono
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 140)
+                    :height 120)
 
 (setq-default line-spacing 0.2)
 
