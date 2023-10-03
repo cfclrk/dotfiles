@@ -696,22 +696,21 @@
 
 ;;;; SQL
 
+;; This doesn't work, even though "sqlfluff format --dialect snowflake
+;; <file>.sql" does. Need to figure this out.
 (use-package sqlformat
   :config
-  (setq sqlformat-command 'pgformatter
-        sqlformat-args '("-s2")))
+  (setq sqlformat-command 'sqlfluff
+        sqlformat-args '("--dialect"
+                         "snowflake")))
 
 ;;; Work
 
-(elpaca-wait)
-
-(load (expand-file-name
-       "~/Work/stonehenge/development/emacs/splash.el"))
-
-(customize-set-variable 'splash-stonehenge-dir
-                        (expand-file-name "~/Work/stonehenge"))
-(customize-set-variable 'splash-website-dir
-                        (expand-file-name "~/Work/Website"))
-
-(load (expand-file-name
-       "~/Work/stonehenge/splash/chris/development/emacs/splash-env.el"))
+(use-package splash
+  :elpaca (splash :repo "~/Work/stonehenge"
+                  :depth 1
+                  :files ("development/emacs/splash.el"
+                          "splash/chris/development/emacs/splash-env.el"))
+  :custom
+  (splash-stonehenge-dir "/Users/cclark/Work/stonehenge")
+  (splash-website-dir "/Users/cclark/Work/Website"))
