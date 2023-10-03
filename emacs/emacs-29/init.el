@@ -661,6 +661,39 @@
               ("C-t c" . phpunit-current-class)
               ("C-t t" . phpunit-current-test)))
 
+;;;; Python
+
+(defun my/python-mode-hook ()
+  "Customize `python-mode'."
+  (setq fill-column 88
+        python-fill-docstring-style 'pep-257-nn
+        python-shell-interpreter "ipython"
+        python-shell-interpreter-args "--simple-prompt -i")
+
+  ;; Restart whitespace-mode so that it properly uses `fill-column'
+  (whitespace-mode -1)
+  (whitespace-mode +1))
+
+(use-package python-mode
+  :ensure nil
+  :elpaca nil
+  :hook (python-mode . my/python-mode-hook))
+
+;; LSP using the pyright language server
+(use-package lsp-pyright
+  :init (setq lsp-pyright-multi-root nil)
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp-deferred))))
+
+;; Code formatter
+(use-package python-black
+  :after python)
+
+;; Sort imports
+(use-package python-isort
+  :after python)
+
 ;;;; SQL
 
 (use-package sqlformat
