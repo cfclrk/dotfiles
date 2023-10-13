@@ -126,7 +126,7 @@
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 120)
+                    :height 130)
 
 (setq-default line-spacing 0.2)
 
@@ -596,7 +596,12 @@
 (use-package elisp-mode
   :ensure nil
   :elpaca nil
-  :hook (emacs-lisp-mode . my/lisp-mode-hook)
+  :hook ((emacs-lisp-mode . my/lisp-mode-hook)
+         ;; In scratch buffer, don't do elisp linting stuff
+         (lisp-interaction-mode . (lambda ()
+                                    (setq flycheck-disabled-checkers
+                                          '(emacs-lisp
+                                            emacs-lisp-checkdoc)))))
   :bind ("C-c C-k" . eval-buffer))
 
 ;;;; Clojure
