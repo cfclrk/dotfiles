@@ -591,6 +591,11 @@
   (whitespace-mode -1)
   (whitespace-mode +1))
 
+(use-package lisp-mode
+  :ensure nil
+  :elpaca nil
+  :hook ((lisp-data-mode . my/lisp-mode-hook)))
+
 ;;;; Emacs Lisp
 
 (use-package elisp-mode
