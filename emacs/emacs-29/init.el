@@ -314,13 +314,18 @@
 (use-package nerd-icons-dired
   :hook ((dired-mode . nerd-icons-dired-mode)))
 
+;;;; eat
+
+(use-package eat
+  :hook (eat-mode . (lambda () (setq-local global-hl-line-mode nil))))
+
 ;;;; ejc-sql
 
 (use-package ejc-sql
   :elpaca (ejc-sql
            :depth nil))
 
-;;;; env
+;;;; environ
 
 (use-package environ
   :elpaca (environ
