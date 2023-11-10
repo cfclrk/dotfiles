@@ -130,9 +130,6 @@
 
 (setq-default line-spacing 2)
 
-;; Leave left fringe to its default (8px), and set right fringe to 0px
-(fringe-mode '(nil . 0))
-
 (use-package all-the-icons
   :config (unless (my/font-installed-p "all-the-icons")
             (all-the-icons-install-fonts t)))
