@@ -130,9 +130,9 @@
 
 (setq-default line-spacing 2)
 
-(use-package all-the-icons
-  :config (unless (my/font-installed-p "all-the-icons")
-            (all-the-icons-install-fonts t)))
+(use-package nerd-icons
+  :config (unless (my/font-installed-p "Symbols Nerd Font Mono")
+            (nerd-icons-install-fonts t)))
 
 (use-package doom-modeline
   :init (doom-modeline-mode)
@@ -514,11 +514,11 @@
 
 ;;;; treemacs
 
-(use-package treemacs
-  :hook (treemacs-mode . (lambda () (treemacs-load-theme "all-the-icons"))))
+(use-package treemacs)
 
-(use-package treemacs-all-the-icons
-  :after (treemacs all-the-icons))
+(use-package treemacs-nerd-icons
+  :config
+  (treemacs-load-theme "nerd-icons"))
 
 (use-package lsp-treemacs
   :init
@@ -530,9 +530,7 @@
           (kill-buffer buffer-name)
         (progn
           (lsp-treemacs-symbols)
-          (other-window -1)))))
-  :custom
-  (lsp-treemacs-theme "all-the-icons"))
+          (other-window -1))))))
 
 ;;;; undo-tree
 
