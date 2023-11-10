@@ -126,9 +126,9 @@
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 130)
+                    :height 140)
 
-(setq-default line-spacing 0.2)
+(setq-default line-spacing 2)
 
 ;; Leave left fringe to its default (8px), and set right fringe to 0px
 (fringe-mode '(nil . 0))
