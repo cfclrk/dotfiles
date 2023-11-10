@@ -138,6 +138,7 @@
   :init (doom-modeline-mode)
   :custom
   (doom-modeline-buffer-encoding nil)
+  (doom-modeline-height 40)
   (doom-modeline-buffer-file-name-style 'buffer-name)
   (doom-modeline-env-version nil)
   (doom-modeline-hud t)
