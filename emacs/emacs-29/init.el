@@ -534,12 +534,10 @@
   (defun my/lsp-treemacs-symbols-toggle ()
     "Toggle the lsp-treemacs-symbols buffer."
     (interactive)
-    (let ((buffer-name "*LSP Symbols List*"))
-      (if (get-buffer buffer-name)
-          (kill-buffer buffer-name)
-        (progn
-          (lsp-treemacs-symbols)
-          (other-window -1))))))
+    (if (get-buffer "*LSP Symbols List*")
+        (kill-buffer "*LSP Symbols List*")
+      (progn (lsp-treemacs-symbols)
+             (other-window -1)))))
 
 ;;;; undo-tree
 
