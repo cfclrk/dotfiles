@@ -221,6 +221,14 @@
   :bind ("M-l" . ace-window)
   :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
 
+;;;; ansi-color
+
+(use-package ansi-color
+  :ensure nil
+  :elpaca nil
+  ;; Interpret ANSI color codes in compilation buffer
+  :hook (compilation-filter . ansi-color-compilation-filter))
+
 ;;;; bazel
 
 (use-package bazel
