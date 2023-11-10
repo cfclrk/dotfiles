@@ -36,35 +36,9 @@
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
 
-;;;; ace
-
-(use-package ace-window
-  :demand t
-  :bind ("M-l" . ace-window)
-  :config
-  (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
-
 ;;;; rainbow-delimiters
 
 (use-package rainbow-delimiters
   :ensure t)
 
-;; corfu
-
-;; (use-package corfu
-;;   :init
-;;   (global-corfu-mode))
-
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages '(rainbow-delimiters)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
