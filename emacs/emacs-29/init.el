@@ -735,8 +735,8 @@
 (use-package splash
   :elpaca (splash :repo "~/Work/stonehenge"
                   :depth 1
-                  :files ("development/emacs/splash.el"
-                          "splash/chris/development/emacs/splash-env.el"))
+                  :branch "emacs-website"
+                  :files ("development/emacs/splash.el"))
   :custom
   (splash-stonehenge-dir "/Users/cclark/Work/stonehenge")
   (splash-website-dir "/Users/cclark/Work/Website"))
