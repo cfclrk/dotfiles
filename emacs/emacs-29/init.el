@@ -638,10 +638,17 @@
               ("C-t n" . cider-test-run-ns-tests)
               ("C-t p" . cider-test-run-project-tests)
               ("C-t t" . cider-test-run-test)
+              ("C-t r" . cider-test-show-report-other-window)
               ("C-c C-c" . cider-pprint-eval-defun-at-point)
               ("C-j" . cider-pprint-eval-last-sexp-to-comment))
   :hook ((cider-repl-mode . (lambda () (smartparens-mode)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode))))
+  :config
+  (defun cider-test-show-report-other-window ()
+    "Show the test report buffer in other window, if one exists."
+    (interactive)
+    (other-window 1)
+    (cider-test-show-report))
   :custom
   ;; Changes how cider-pprint-eval-last-sexp displays things. More here:
   ;; https://docs.cider.mx/cider/usage/pretty_printing.html.
