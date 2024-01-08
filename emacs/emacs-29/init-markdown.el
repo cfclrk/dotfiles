@@ -41,6 +41,8 @@
            :repo "cfclrk/markdown-xwidget"
            :files (:defaults "resources")
            :depth nil)
+  ;; The :bind directive is not strictly necessary, but allows you to use C-c
+  ;; C-c x to launch the markdown preview.
   :bind (:map markdown-mode-command-map
               ("x" . markdown-xwidget-preview-mode))
   :custom
