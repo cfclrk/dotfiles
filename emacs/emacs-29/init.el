@@ -173,17 +173,11 @@
 ;;; Completion
 ;;  ----------------------------------------------------------------------------
 
-(use-package prescient
-  :elpaca (prescient
-           :files ("*.el")))
-
 (use-package vertico
-  :after prescient
   :elpaca (vertico
            :files (:defaults "extensions/*"))
   :init
-  (vertico-mode)
-  (vertico-prescient-mode))
+  (vertico-mode))
 
 (use-package vertico-directory
   :after vertico
@@ -197,8 +191,6 @@
   :init (marginalia-mode))
 
 (use-package corfu
-  :after prescient
-  :hook (corfu-mode . corfu-prescient-mode)
   :init
   (global-corfu-mode)
   :custom
