@@ -728,9 +728,20 @@
 ;; <file>.sql" does. Need to figure this out.
 (use-package sqlformat
   :config
+  ;; (setq sqlformat-command 'sqlfluff
+  ;;       sqlformat-args '("--dialect" "snowflake"))
   (setq sqlformat-command 'sqlfluff
-        sqlformat-args '("--dialect"
-                         "snowflake")))
+        sqlformat-args '("--dialect" "postgres"))
+  ;; (setq sqlformat-command 'pgformatter
+  ;;       sqlformat-args '("-s2" "-g"))
+  )
+
+;;;; Typescript
+
+(use-package typescript-mode
+  :hook (typescript-mode . lsp)
+  :custom
+  (typescript-indent-level 2))
 
 ;;; Work
 
