@@ -445,6 +445,10 @@
 
 (load (expand-file-name "init-org.el" user-emacs-directory))
 
+;;;; prettier
+
+(use-package prettier)
+
 ;;;; prog-mode
 
 (add-hook 'prog-mode-hook 'outline-minor-mode)
