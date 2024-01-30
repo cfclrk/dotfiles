@@ -34,7 +34,10 @@ if not set -q TMUX
     # Use the new Docker run engine
 	set -gx DOCKER_BUILDKIT 1
 
-    # frum for ruby - this prepends to $PATH
+    # nvm for managing node versions
+    set -gx NVM_DIR "$HOME/.nvm"
+
+    # frum for managing ruby versions - this prepends to $PATH
     if command -v frum > /dev/null
         frum init | source
     end
@@ -63,6 +66,10 @@ if not set -q TMUX
         case '*'
             echo "Set PYTHON_CONFIGURE_OPTS"
     end
+end
+
+function nvm
+    bass source (brew --prefix nvm)/nvm.sh --no-use ';' nvm $argv
 end
 
 alias md5sum "md5 -r"
