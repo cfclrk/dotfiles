@@ -194,6 +194,12 @@
   :bind (:map vertico-map
               ("M-DEL" . vertico-directory-delete-word)))
 
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
 (use-package marginalia
   :after vertico
   :init (marginalia-mode))
