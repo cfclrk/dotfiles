@@ -331,6 +331,15 @@
 (use-package eat
   :hook (eat-mode . (lambda () (setq-local global-hl-line-mode nil))))
 
+;;;; ediff
+
+(use-package ediff
+  :elpaca nil
+  :ensure nil
+  :custom
+  (ediff-split-window-function #'split-window-horizontally)
+  (ediff-window-setup-function #'ediff-setup-windows-plain))
+
 ;;;; ejc-sql
 
 (use-package ejc-sql
