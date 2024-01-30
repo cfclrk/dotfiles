@@ -41,8 +41,6 @@
            :repo "cfclrk/markdown-xwidget"
            :files (:defaults "resources")
            :depth nil)
-  ;; The :bind directive is not strictly necessary, but allows you to use C-c
-  ;; C-c x to launch the markdown preview.
   :bind (:map markdown-mode-command-map
               ("x" . markdown-xwidget-preview-mode))
   :custom
@@ -54,6 +52,18 @@
 ;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
 ;; you edit source blocks in another buffer (similar to org-edit-special)
 (use-package edit-indirect)
+
+(use-package grip-mode
+  :after markdown-mode
+  ;; TODO: bind C-c C-z to markdown-live-preview-switch-to-output
+  :bind (:map markdown-mode-command-map
+              ("g" . grip-mode))
+  :config
+  (require 'auth-source)
+  (let ((credential (auth-source-user-and-password
+                     "api.github.com" "cclark-splash^forge")))
+    (setq grip-github-user (car credential)
+          grip-github-password (cadr credential))))
 
 (provide 'init-markdown)
 ;;; init-markdown.el ends here
