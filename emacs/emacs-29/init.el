@@ -657,6 +657,7 @@
   (cider-print-fn 'zprint)
   ;; Automatically save files before they are loaded in the repl
   (cider-save-file-on-load t)
+  (cider-test-show-report-on-success t)
   ;; Add a newline to the repl prompt
   (cider-repl-prompt-function (lambda (namespace)
                                 (format "%s\n> " namespace))))
