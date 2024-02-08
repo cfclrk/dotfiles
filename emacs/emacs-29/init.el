@@ -389,9 +389,11 @@
   (add-to-list 'auto-mode-alist '("CODEOWNERS\\'" . gitignore-mode)))
 
 (use-package magit
-  :bind (:map magit-diff-mode-map
-              ("<C-return>" . magit-diff-visit-file-other-window)
-              ("<M-return>" . magit-diff-visit-worktree-file-other-window))
+  :bind ((:map magit-diff-mode-map
+               ("<C-return>" . magit-diff-visit-file-other-window)
+               ("<M-return>" . magit-diff-visit-worktree-file-other-window))
+         (:map magit-diff-section-map
+               ("<M-return>" . magit-diff-visit-worktree-file-other-window)))
   :custom
   (magit-diff-refine-hunk 'all)
   (magit-save-repository-buffers 'dontask))
