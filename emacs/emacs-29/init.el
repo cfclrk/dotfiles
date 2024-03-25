@@ -30,6 +30,15 @@
 
 (load (expand-file-name "init-bootstraps.el" user-emacs-directory))
 
+;; Make elpaca use SSH for cloning repos
+(setq elpaca-recipe-functions
+      (lambda (recipe) '(:protocol ssh)))
+
+;; Install use-package support
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode)
+  (setq elpaca-use-package-by-default t))
+
 (elpaca-wait)
 
 ;; Load dash, s, and f so that I can use them in my own functions.
