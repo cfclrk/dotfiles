@@ -765,7 +765,8 @@
 ;;;; Typescript
 
 (use-package typescript-mode
-  :hook (typescript-mode . lsp)
+  :hook ((typescript-mode . lsp)
+         (typescript-mode . (lambda () (smartparens-mode))))
   :custom
   (typescript-indent-level 2))
 
@@ -773,7 +774,6 @@
 
 (use-package splash
   :elpaca (splash :repo "~/Work/stonehenge"
-                  :depth 1
                   :branch "emacs-website"
                   :files ("development/emacs/splash.el"))
   :custom
