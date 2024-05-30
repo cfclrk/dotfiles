@@ -39,9 +39,11 @@
   (elpaca-use-package-mode)
   (setq elpaca-use-package-by-default t))
 
+;; Block until the current queue is processed
 (elpaca-wait)
 
-;; Load dash, s, and f so that I can use them in my own functions.
+;; Load packages I use in my own functions
+
 (use-package dash
   :config
   ;; Fontify dash-defined anaphoric vars ("it", "acc", etc)

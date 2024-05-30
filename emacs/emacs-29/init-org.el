@@ -46,6 +46,7 @@
      (dot . t)
      (emacs-lisp . t)
      (js . t)
+     (mermaid . t)
      (python . t)
      (shell . t)
      (sql . t)))
@@ -71,6 +72,8 @@
   (org-babel-min-lines-for-block-output 40)
   (org-hide-leading-stars t))
 
+(use-package ob-mermaid)
+
 ;;; Functions
 
 (defun org-outline-tempdir (&optional empty)
@@ -83,7 +86,9 @@ The directory is created relative to
 
     org-outline/<file-name>/<heading 1>/<heading 2>/...
 
-Returns the directory name."
+Returns the directory name.
+
+TODO: look into function org-attach-dir."
   (interactive)
   (let ((outline-path (org-get-outline-path 'with-self))
         (doc-path (list temporary-file-directory
