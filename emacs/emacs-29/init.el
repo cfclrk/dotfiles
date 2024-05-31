@@ -137,13 +137,13 @@
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
-  (load-theme 'doom-one-light))
+  (load-theme 'doom-one-light t))
 
 ;; Set the default font to Roboto Mono
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 140)
+                    :height 120)
 
 (setq-default line-spacing 2)
 
@@ -249,7 +249,8 @@
 (use-package bazel
   :elpaca (bazel
            :host github
-           :repo "bazelbuild/emacs-bazel-mode")
+           :depth nil
+           :repo "cfclrk/emacs-bazel-mode")
   :custom
   (bazel-buildifier-before-save t))
 
@@ -514,6 +515,10 @@
   :custom
   (recentf-max-saved-items 300)
   (recentf-max-menu-items 15))
+
+;;;; reveal-in-osx-finder
+
+(use-package reveal-in-osx-finder)
 
 ;;;; rg
 
