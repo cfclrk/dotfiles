@@ -72,7 +72,11 @@
   (org-babel-min-lines-for-block-output 40)
   (org-hide-leading-stars t))
 
-(use-package ob-mermaid)
+(use-package ob-mermaid
+  :elpaca (ob-mermaid
+           :host github
+           :depth nil
+           :repo "cfclrk/ob-mermaid"))
 
 ;;; Functions
 
