@@ -662,21 +662,30 @@
   :bind (:map clojure-mode-map
               ("S-SPC" . just-one-space))
   :custom
-  ;; Indent arguments instead of aligning them
-  (clojure-indent-style 'always-indent)
+  (clojure-indent-style 'always-indent) ; Indent arguments instead of aligning them
   (clojure-toplevel-inside-comment-form t))
 
 (use-package cider
   :after clojure-mode
-  :bind (:map cider-mode-map
-              ("C-t n" . cider-test-run-ns-tests)
-              ("C-t p" . cider-test-run-project-tests)
-              ("C-t t" . cider-test-run-test)
-              ("C-t r" . cider-test-show-report-other-window)
-              ("C-c C-c" . cider-pprint-eval-defun-at-point)
-              ("C-j" . cider-pprint-eval-last-sexp-to-comment))
+  :bind ((:map cider-mode-map
+               ("C-t n" . cider-test-run-ns-tests)
+               ("C-t p" . cider-test-run-project-tests)
+               ("C-t t" . cider-test-run-test)
+               ("C-t r" . cider-test-show-report-other-window)
+               ("C-c C-c" . cider-pprint-eval-defun-at-point)
+               ("C-j" . cider-pprint-eval-last-sexp-to-comment)
+               ("C-c x" . cider-scratch))
+         ;; TODO: Update C-t to point to cider-test-commands-map, which shoul
+         ;; allow me to delete a lot of the stuff above.
+         ;; (:map cider-test-report-mode-map
+         ;;       ("C-c x" . cider-scratch))
+         ;; TODO: add scratch to cider-clojure-interaction-mode-map (defined in cider-scratch)
+         ;; (:map cider-clojure-interaction-mode-map
+         ;;       ("C-c x" . cider-scratch))
+         )
   :hook ((cider-repl-mode . (lambda () (smartparens-mode)))
-         (cider-repl-mode . (lambda () (rainbow-delimiters-mode))))
+         (cider-repl-mode . (lambda () (rainbow-delimiters-mode)))
+         (cider-test-report-mode . (lambda () (visual-line-mode))))
   :config
   (defun cider-test-show-report-other-window ()
     "Show the test report buffer in other window, if one exists."
@@ -686,10 +695,14 @@
   :custom
   ;; Changes how cider-pprint-eval-last-sexp displays things. More here:
   ;; https://docs.cider.mx/cider/usage/pretty_printing.html.
-  (cider-print-fn 'zprint)
+  ;; COMMENTING THIS OUT: unfortunately that causes malli schemas to constantly
+  ;; print "Error in sarray?" problems. How can I make zprint handle that? I
+  ;; would love to use zprint.
+  ;; (setq cider-print-fn 'zprint)
+
   ;; Automatically save files before they are loaded in the repl
   (cider-save-file-on-load t)
-  (cider-test-show-report-on-success t)
+
   ;; Add a newline to the repl prompt
   (cider-repl-prompt-function (lambda (namespace)
                                 (format "%s\n> " namespace))))
