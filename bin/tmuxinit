@@ -10,21 +10,6 @@ tmux new-session -d -s Home
 
 tmux new-session -d -s Work
 
-# Session: Deployments
-# --------------------
-
-tmux new-session -d -s Dply -n dev
-
-tmux rename-window -t Dply:1 "dev"
-tmux send-keys -t Dply:1 's ~/.env/splash/dev' C-m
-
-tmux new-window -t Dply:2 -c ~/Work -n stage
-tmux send-keys -t Dply:2 's ~/.env/splash/stage' C-m
-
-tmux new-window -t Dply:3 -c ~/Work -n prod
-tmux send-keys -t Dply:3 's ~/.env/splash/prod' C-m
-
-# https://github.com/tmux-plugins/tmux-copycat/issues/116
-# tmux unbind -n n \; unbind -n N
+# -------------
 
 tmux attach-session -t Work:1
