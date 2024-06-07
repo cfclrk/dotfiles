@@ -76,5 +76,23 @@ Optional PRINTCHARFUN is as defined by `princ'."
 FONT-NAME is a string like 'Roboto Mono'."
   (find-font (font-spec :name font-name)))
 
+(defun move-line-up ()
+  "Move up the current line."
+  (interactive)
+  (transpose-lines 1)
+  (forward-line -2)
+  (indent-according-to-mode))
+
+(defun move-line-down ()
+  "Move down the current line."
+  (interactive)
+  (forward-line 1)
+  (transpose-lines 1)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(global-set-key [(meta up)]  'move-line-up)
+(global-set-key [(meta down)]  'move-line-down)
+
 (provide 'init-functions)
 ;;; init-functions.el ends here

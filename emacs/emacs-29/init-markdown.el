@@ -19,8 +19,10 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :bind (:map markdown-mode-map
-              ("C-c C-z" . markdown-live-preview-switch-to-output))
+  :bind ((:map markdown-mode-map
+               ("C-c C-z" . markdown-live-preview-switch-to-output))
+         (:map markdown-mode-command-map
+               ("v" . markdown-view-mode)))
   :custom
   (markdown-split-window-direction 'right)
   (markdown-spaces-after-code-fence 0)
@@ -64,6 +66,13 @@
                      "api.github.com" "cclark-splash^forge")))
     (setq grip-github-user (car credential)
           grip-github-password (cadr credential))))
+
+(use-package markdown-toc
+  :after markdown-mode
+  :elpaca (markdown-toc
+           :host github
+           :repo "cfclrk/markdown-toc"
+           :depth nil))
 
 (provide 'init-markdown)
 ;;; init-markdown.el ends here
