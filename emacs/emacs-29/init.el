@@ -336,10 +336,15 @@
 (use-package nerd-icons-dired
   :hook ((dired-mode . nerd-icons-dired-mode)))
 
+;;;; dockerfile-mode
+
+(use-package dockerfile-mode)
+
 ;;;; eat
 
 (use-package eat
-  :hook (eat-mode . (lambda () (setq-local global-hl-line-mode nil))))
+  :hook (eat-mode . (lambda ()
+                      (setq-local global-hl-line-mode nil))))
 
 ;;;; ediff
 
@@ -391,6 +396,14 @@
 
 ;;;; git, magit, forge
 
+;; ⛔ Emergency (magit): Magit requires ‘transient’ >= 0.5.0, but due to bad
+;; defaults, Emacs’ package manager, refuses to upgrade this and other built-in
+;; packages to higher releases from GNU Elpa. To fix this, you have to add this
+;; to your init file:
+(setq package-install-upgrade-built-in t)
+
+(use-package transient)
+
 (use-package git-modes
   :config
   ;; gitconfig-mode
@@ -424,7 +437,11 @@
 ;;;; github-browse-file
 
 (use-package github-browse-file
-  :bind ("C-h g" . github-browse-file))
+  :elpaca (github-browse-file
+           :host github
+           :repo "cfclrk/github-browse-file")
+  :bind (("C-h g" . github-browse-file)
+         ("C-h y" . github-browse-file-copy-url)))
 
 ;;;; ispell
 
