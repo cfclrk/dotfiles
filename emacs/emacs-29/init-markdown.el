@@ -46,7 +46,7 @@
   :bind (:map markdown-mode-command-map
               ("x" . markdown-xwidget-preview-mode))
   :custom
-  (markdown-xwidget-command "pandoc")
+  (markdown-xwidget-command "multimarkdown")
   (markdown-xwidget-github-theme "light-high-contrast")
   (markdown-xwidget-mermaid-theme "default")
   (markdown-xwidget-code-block-theme "default"))

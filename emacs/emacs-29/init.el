@@ -137,7 +137,7 @@
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (doom-themes-visual-bell-config)
   (doom-themes-org-config)
-  (load-theme 'doom-one-light t))
+  (load-theme 'tango t))
 
 ;; Set the default font to Roboto Mono
 (set-face-attribute 'default nil
@@ -432,7 +432,7 @@
 
 ;;;; gh-notify
 
-(use-package gh-notify)
+;; (use-package gh-notify)
 
 ;;;; github-browse-file
 
@@ -667,7 +667,8 @@
                                     (setq flycheck-disabled-checkers
                                           '(emacs-lisp
                                             emacs-lisp-checkdoc)))))
-  :bind ("C-c C-k" . eval-buffer))
+  :bind (("C-c C-k" . eval-buffer)
+         ("C-t i" . ert)))
 
 ;;;; Clojure
 
@@ -744,13 +745,24 @@
 
 (use-package php-mode
   :hook ((php-mode . lsp)
-         (php-mode . smartparens-strict-mode)))
+         (php-mode . smartparens-strict-mode)
+         (php-mode . php-cs-fixer-format-on-save-mode)))
 
 (use-package phpunit
   :after php-mode
   :bind (:map php-mode-map
               ("C-t c" . phpunit-current-class)
               ("C-t t" . phpunit-current-test)))
+
+(use-package php-cs-fixer-format
+  :after (php-mode splash)
+  :elpaca (php-cs-fixer-format
+           :host github
+           :depth nil
+           :repo "cfclrk/php-cs-fixer-format")
+  :config
+  (setq php-cs-fixer-format-arguments
+        (list "--config" (concat splash-website-dir "/.php-cs-fixer.php"))))
 
 ;;;; Python
 
