@@ -18,20 +18,6 @@ if [[ "$OS" == "Darwin" ]]; then
     brew bundle --no-lock --file Brewfile
 fi
 
-# Install the Hasklig font.
-fontDir=~/Library/Fonts/
-if [[ ! -f $fontDir/Hasklig-Regular.ttf ]]; then
-    # The font is not installed
-    repo="https://github.com/i-tu/Hasklig"
-    echo "Installing the Hasklig font from: $repo"
-    curl -L \
-         $repo/releases/download/v1.2/Hasklig-1.2.zip \
-         -o /tmp/hasklig.zip
-    tar xvf /tmp/hasklig.zip -C /tmp
-    mkdir -p $fontDir
-    cp /tmp/TTF/*.ttf $fontDir
-fi
-
 # Dotfiles
 dotFiles=$(ls -A "$DOTFILES_DIR/dotfiles")
 for f in $dotFiles; do

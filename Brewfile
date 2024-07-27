@@ -5,7 +5,7 @@ tap "d12frosted/emacs-plus"
 
 brew "imagemagick"
 brew "coreutils"
-brew "emacs-plus@29", args: ["with-xwidgets", "with-imagemagick"]
+brew "emacs-plus", args: ["with-xwidgets"]
 brew "fish"
 brew "findutils"
 brew "gnupg"
