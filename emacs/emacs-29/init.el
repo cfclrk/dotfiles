@@ -16,6 +16,9 @@
   (elpaca-use-package-mode)
   (setq elpaca-use-package-by-default t))
 
+;; For some reason, without this, it can't load dash, f, or s
+(elpaca-wait)
+
 ;; Load packages I use in my own functions
 
 (use-package dash

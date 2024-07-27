@@ -1,16 +1,18 @@
 * Usage
 
-  First time setup (clones this repo):
+  Install Homebrew. Then:
 
   #+begin_src sh
     f="https://raw.githubusercontent.com/cfclrk/dotfiles/master/bootstrap.sh"
     bash -c "$(curl -sSL $f)"
   #+end_src
 
-  Successive setups:
+  Install oh-my-zsh.
+
+  Change default shell to fish:
 
   #+begin_src sh
-    ./setup.sh
+    chsh -s /opt/homebrew/bin/fish
   #+end_src
 
 * Notes

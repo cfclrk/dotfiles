@@ -2,6 +2,11 @@
 
 set -eu -o pipefail
 
+if ! command -v brew >/dev/null; then
+    echo "Homebrew is not installed"
+    exit 1
+fi
+
 brew install git --force --overwrite
 brew install findutils
 

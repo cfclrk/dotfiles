@@ -5,18 +5,8 @@ set -eu -o pipefail
 # The absolute path to this directory
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-# This operating system name ("Darwin")
-OS=$(uname -s)
-
-# On MacOS, install the homebrew packages in Brewfile. Assumes homebrew is
-# already installed.
-if [[ "$OS" == "Darwin" ]]; then
-    if ! command -v brew >/dev/null; then
-        echo "Homebrew is not installed"
-        exit 1
-    fi
-    brew bundle --no-lock --file Brewfile
-fi
+# Install the homebrew packages in Brewfile
+brew bundle --no-lock --file Brewfile
 
 # Dotfiles
 dotFiles=$(ls -A "$DOTFILES_DIR/dotfiles")
@@ -25,6 +15,9 @@ for f in $dotFiles; do
        "$DOTFILES_DIR/dotfiles/$f" \
        "$HOME/$f"
 done
+
+# Update PATH for the remainder of this script
+. ~/.zprofile
 
 # ~/bin
 mkdir -p ~/bin
