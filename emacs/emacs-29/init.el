@@ -2,33 +2,10 @@
 
 ;;; Commentary:
 
-;; NOTES:
-;;
-;; To install a package defined with use-package, evaluate the use-package form
-;; and then run (elpaca-process-queues).
-;;
-;; TODO:
-;;
-;; - forge View Topic mode - q should kill buffer (maybe winner-undo)
-;; - visual-line-mode in magit diff buffers (to wrap long lines in diff)
-;; - Create jira link in forge topic buffers
-;;  - Would be cool if I could hover over a ticket number and get the description
-;; - gh-notify
-;;   - gh-notify-copy-url is an API URL that can't be used in the browser
-;;   - merged state should be the merged emoji
-;;   - open state could be green circle
-;; - C-x c to go to *Code Review* buffer if it exists
-;; - Magit section for team PRs
-;; - Magit auto-refresh?
-;; - Cape?
-;; - precient.el might help with making last-used buffer show up at top of list
-;;   when switching buffers
-;; - consult?
-;; - embark?
-
 ;;; Code:
 
-(load (expand-file-name "init-bootstraps.el" user-emacs-directory))
+;; Copied directly from https://github.com/progfolio/elpaca
+(load (expand-file-name "init-elpaca.el" user-emacs-directory))
 
 ;; Make elpaca use SSH for cloning repos
 (setq elpaca-recipe-functions
@@ -38,9 +15,6 @@
 (elpaca elpaca-use-package
   (elpaca-use-package-mode)
   (setq elpaca-use-package-by-default t))
-
-;; Block until the current queue is processed
-(elpaca-wait)
 
 ;; Load packages I use in my own functions
 
@@ -131,14 +105,6 @@
 ;;; Theme, Font, Display
 ;;  ----------------------------------------------------------------------------
 
-(use-package doom-themes
-  :config
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config)
-  (load-theme 'tango t))
-
 ;; Set the default font to Roboto Mono
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
@@ -147,9 +113,17 @@
 
 (setq-default line-spacing 2)
 
-(use-package nerd-icons
-  :config (unless (my/font-installed-p "Symbols Nerd Font Mono")
-            (nerd-icons-install-fonts t)))
+;;;; doom-themes
+
+(use-package doom-themes
+  :config
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config)
+  (load-theme 'tango t))
+
+;;;; doom-modeline
 
 (use-package doom-modeline
   :init (doom-modeline-mode)
@@ -161,6 +135,18 @@
   (doom-modeline-hud t)
   (doom-modeline-project-detection 'projectile)
   (doom-modeline-vcs-max-length 15))
+
+;;;; nerd-icons
+
+(use-package nerd-icons
+  :config (unless (my/font-installed-p "Symbols Nerd Font Mono")
+            (nerd-icons-install-fonts t)))
+
+;;;; spacious-padding
+
+(use-package spacious-padding
+  :config
+  (spacious-padding-mode))
 
 ;;; Text
 ;;  ----------------------------------------------------------------------------
@@ -267,19 +253,6 @@
 
 (use-package ctrlf
   :config (ctrlf-mode))
-
-;;;; code-review
-
-;; Using branch until this issue is addressed:
-;; https://github.com/wandersoncferreira/code-review/issues/245
-(use-package code-review
-  :elpaca (code-review
-           :host github
-           :repo "phelrine/code-review"
-           :branch "fix/closql-update"
-           :depth nil)
-  :custom
-  (code-review-auth-login-marker 'forge))
 
 ;;;; crux
 
@@ -554,15 +527,6 @@
   :config
   (load (expand-file-name "~/emacs/smartparens.el"))
   (my-smartparens-config))
-
-;;;; spacious-padding
-
-(use-package spacious-padding
-  :elpaca (spacious-padding
-           :host github
-           :repo "protesilaos/spacious-padding")
-  :config
-  (spacious-padding-mode))
 
 ;;;; terraform
 

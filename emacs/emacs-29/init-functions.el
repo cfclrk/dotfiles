@@ -94,5 +94,15 @@ FONT-NAME is a string like 'Roboto Mono'."
 (global-set-key [(meta up)]  'move-line-up)
 (global-set-key [(meta down)]  'move-line-down)
 
+(defun my/ert-run-all-tests-in-buffer ()
+  "Run all ert tests in current buffer.
+
+First deletes all loaded tests and evaluates the current buffer
+before running all tests."
+  (interactive)
+  (ert-delete-all-tests)
+  (eval-buffer)
+  (ert 't))
+
 (provide 'init-functions)
 ;;; init-functions.el ends here

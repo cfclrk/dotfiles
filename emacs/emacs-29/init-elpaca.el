@@ -1,4 +1,4 @@
-;; Copied directly from https://github.com/progfolio/elpaca
+;;; init-elpaca.el -- Elpaca initialization -*- lexical-binding: t; -*-
 
 (defvar elpaca-installer-version 0.7)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))

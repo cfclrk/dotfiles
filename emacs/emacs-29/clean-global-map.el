@@ -4,6 +4,9 @@
 
 ;;; Code:
 
+;; Unset `transpose-chars'. I use C-t as a prefix for testing functions.
+(keymap-unset global-map "C-t" 'remove)
+
 ;; Duplicates "M-g g" for `goto-line'
 (keymap-unset global-map "M-g M-g" 'remove)
 
