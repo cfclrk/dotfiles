@@ -17,7 +17,7 @@ for f in $dotFiles; do
 done
 
 # Update PATH for the remainder of this script
-. ~/.zprofile
+. ~/.profile
 
 # ~/bin
 mkdir -p ~/bin
