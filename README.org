@@ -1,3 +1,7 @@
+* TODO
+
+  GitHub actions uses bash, so I need to get path stuff set up for bash too.
+
 * Usage
 
   Install Homebrew. Then:
