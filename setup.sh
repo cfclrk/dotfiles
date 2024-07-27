@@ -5,9 +5,6 @@ set -e -o pipefail
 # The absolute path to this directory
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-# Install the homebrew packages in Brewfile
-brew bundle --no-lock --file Brewfile
-
 # Dotfiles
 dotFiles=$(ls -A "$DOTFILES_DIR/dotfiles")
 for f in $dotFiles; do
