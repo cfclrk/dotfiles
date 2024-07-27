@@ -10,14 +10,9 @@ jobs:
 
       - name: Debug
         run: |
-          echo '--- $SHELL is':
-          echo $SHELL
-          echo '--- $PATH is':
+          echo '$SHELL is' $SHELL
+          echo '$PATH is':
           echo $PATH
-          echo '--- Elements of $path':
-          for i in $path; do echo $i; done
-          echo '--- $0 is':
-          echo $0
 
       - name: Run bootstrap script
         run: bash -c "$(curl -sSL https://raw.githubusercontent.com/cfclrk/dotfiles/master/bootstrap.sh)"

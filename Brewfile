@@ -7,6 +7,8 @@ brew "coreutils"
 brew "d12frosted/emacs-plus/emacs-plus", args: ["with-xwidgets"]
 brew "fish"
 brew "findutils"
+brew "git"
+brew "go"
 brew "gnupg"
 brew "gnutls"
 brew "jq"
