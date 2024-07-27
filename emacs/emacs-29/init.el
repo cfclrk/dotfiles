@@ -105,14 +105,23 @@
 ;; Clean up global-map
 (load (expand-file-name "clean-global-map.el" user-emacs-directory))
 
+;; ⛔ Emergency (magit): Magit requires ‘transient’ >= 0.5.0, but due to bad
+;; defaults, Emacs’ package manager, refuses to upgrade this and other built-in
+;; packages to higher releases from GNU Elpa. To fix this, you have to add this
+;; to your init file:
+(setq package-install-upgrade-built-in t)
+
 ;;; Theme, Font, Display
 ;;  ----------------------------------------------------------------------------
+
+;; Start maxized
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 ;; Set the default font to Roboto Mono
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 120)
+                    :height 130)
 
 (setq-default line-spacing 2)
 
@@ -371,12 +380,6 @@
          ("C-h C" . helpful-command)))
 
 ;;;; git, magit, forge
-
-;; ⛔ Emergency (magit): Magit requires ‘transient’ >= 0.5.0, but due to bad
-;; defaults, Emacs’ package manager, refuses to upgrade this and other built-in
-;; packages to higher releases from GNU Elpa. To fix this, you have to add this
-;; to your init file:
-(setq package-install-upgrade-built-in t)
 
 (use-package transient)
 
