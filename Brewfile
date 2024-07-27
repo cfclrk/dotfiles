@@ -5,7 +5,7 @@ tap "d12frosted/emacs-plus"
 
 brew "imagemagick"
 brew "coreutils"
-brew "emacs-plus", args: ["with-xwidgets"]
+brew "d12frosted/emacs-plus/emacs-plus", args: ["with-xwidgets"]
 brew "fish"
 brew "findutils"
 brew "gnupg"
@@ -22,5 +22,6 @@ brew "tree"
 # Downloads a .pkg file in to $(brew --prefix)/Caskroom/basictex/, need to
 # manually run it
 cask "basictex"
+
 cask "cljstyle"
 cask "zprint"
