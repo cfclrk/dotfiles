@@ -19,5 +19,10 @@ cd ~/Projects
 git clone https://github.com/cfclrk/dotfiles.git
 
 cd ~/Projects/dotfiles
+pwd
+ls -alhF
+
+head Brewfile
 brew bundle --no-lock --file Brewfile
+
 ./setup.sh

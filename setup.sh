@@ -13,7 +13,7 @@ for f in $dotFiles; do
        "$HOME/$f"
 done
 
-# Update PATH for the remainder of this script
+# Now we have a ~/.profile. Source it to update $PATH.
 . ~/.profile
 
 # ~/bin
