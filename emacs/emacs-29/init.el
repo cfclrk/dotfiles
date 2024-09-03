@@ -370,15 +370,6 @@
   (setq flycheck-emacs-lisp-load-path 'inherit)
   (global-flycheck-mode))
 
-;;;; helpful
-
-(use-package helpful
-  :bind (("C-h f" . helpful-callable)
-         ("C-h v" . helpful-variable)
-         ("C-h k" . helpful-key)
-         ("C-c C-d" . helpful-at-point)
-         ("C-h C" . helpful-command)))
-
 ;;;; git, magit, forge
 
 (use-package transient)
@@ -409,10 +400,6 @@
   (setq forge-owned-accounts '(("cfclrk" . nil)
                                ("cclark-splash" . nil))))
 
-;;;; gh-notify
-
-;; (use-package gh-notify)
-
 ;;;; github-browse-file
 
 (use-package github-browse-file
@@ -422,13 +409,25 @@
   :bind (("C-h g" . github-browse-file)
          ("C-h y" . github-browse-file-copy-url)))
 
+;;;; graphql-mode
+
+(use-package graphql-mode)
+
+;;;; helpful
+
+(use-package helpful
+  :bind (("C-h f" . helpful-callable)
+         ("C-h v" . helpful-variable)
+         ("C-h k" . helpful-key)
+         ("C-c C-d" . helpful-at-point)
+         ("C-h C" . helpful-command)))
+
 ;;;; ispell
 
 (setq ispell-program-name "aspell")
 
 ;;;; jsonian
 
-;; Better json
 (use-package jsonian)
 
 ;;;; key-chord
@@ -673,7 +672,8 @@
          )
   :hook ((cider-repl-mode . (lambda () (smartparens-mode)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode)))
-         (cider-test-report-mode . (lambda () (visual-line-mode))))
+         (cider-test-report-mode . (lambda () (visual-line-mode)))
+         (cider-test-report-mode . (lambda () (smartparens-mode))))
   :config
   (defun cider-test-show-report-other-window ()
     "Show the test report buffer in other window, if one exists."
