@@ -430,14 +430,6 @@
 
 (use-package jsonian)
 
-;;;; key-chord
-
-(use-package key-chord
-  :config
-  (key-chord-define-global "\\a" 'treemacs-select-window)
-  (key-chord-define-global "\\o" 'treemacs)
-  (key-chord-mode +1))
-
 ;;;; LSP
 
 (use-package lsp-mode
