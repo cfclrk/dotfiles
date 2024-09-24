@@ -11,5 +11,6 @@
  ("min-clojure" . ((user-emacs-directory . "~/emacs/min-clojure")))
  ("org-clojure" . ((user-emacs-directory . "~/emacs/org-clojure")))
  ("nano" . ((user-emacs-directory . "~/emacs/nano")))
+ ("vc-use-package" . ((user-emacs-directory . "~/emacs/vc-use-package")))
  ("spacemacs" . ((user-emacs-directory . "~/emacs/spacemacs")))
  ("prelude" . ((user-emacs-directory . "~/emacs/prelude"))))
