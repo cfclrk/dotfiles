@@ -166,7 +166,6 @@
 ;; whitespace
 (use-package whitespace
   :ensure nil
-  :elpaca nil
   :hook (before-save . whitespace-cleanup)
   :custom
   (whitespace-style '(face tabs empty trailing))
@@ -176,7 +175,6 @@
 
 (use-package text-mode
   :ensure nil
-  :elpaca nil
   :after (smartparens whitespace)
   :hook ((text-mode . my/text-mode-hook))
   :config
@@ -197,7 +195,6 @@
 (use-package vertico-directory
   :after vertico
   :ensure nil
-  :elpaca nil
   :bind (:map vertico-map
               ("M-DEL" . vertico-directory-delete-word)))
 
@@ -238,7 +235,6 @@
 
 (use-package ansi-color
   :ensure nil
-  :elpaca nil
   ;; Interpret ANSI color codes in compilation buffer
   :hook (compilation-filter . ansi-color-compilation-filter))
 
@@ -287,7 +283,6 @@
 
 (use-package dired
   :ensure nil
-  :elpaca nil
   :bind (:map global-map
               ("C-c d" . dired-jump-other-window))
   :config
@@ -334,7 +329,6 @@
 ;;;; ediff
 
 (use-package ediff
-  :elpaca nil
   :ensure nil
   :custom
   (ediff-split-window-function #'split-window-horizontally)
@@ -489,6 +483,10 @@
 
 (use-package rainbow-delimiters)
 
+;;;; request
+
+;; (use-package request)
+
 ;;;; recentf
 
 ;; Saves recent file names in $user-emacs-directory/recentf. View recent files
@@ -496,7 +494,6 @@
 
 (use-package recentf
   :ensure nil
-  :elpaca nil
   :config
   (recentf-mode)
   :custom
@@ -614,14 +611,12 @@
 
 (use-package lisp-mode
   :ensure nil
-  :elpaca nil
   :hook ((lisp-data-mode . my/lisp-mode-hook)))
 
 ;;;; Emacs Lisp
 
 (use-package elisp-mode
   :ensure nil
-  :elpaca nil
   :hook ((emacs-lisp-mode . my/lisp-mode-hook)
          ;; In scratch buffer, don't do elisp linting stuff
          (lisp-interaction-mode . (lambda ()
@@ -694,7 +689,6 @@
 
 (use-package css-mode
   :ensure nil
-  :elpaca nil
   :hook (css-mode . lsp)
   :config
   ;; This should probably be project-local.
@@ -707,7 +701,7 @@
 
 (use-package php-mode
   :hook ((php-mode . lsp)
-         (php-mode . smartparens-strict-mode)
+         (php-mode . smartparens-mode)
          (php-mode . php-cs-fixer-format-on-save-mode)))
 
 (use-package phpunit
@@ -741,7 +735,6 @@
 
 (use-package python-mode
   :ensure nil
-  :elpaca nil
   :hook (python-mode . my/python-mode-hook))
 
 ;; LSP using the pyright language server
@@ -758,6 +751,16 @@
 ;; Sort imports
 (use-package python-isort
   :after python)
+
+(use-package python-pytest
+  ;; To run as "pytest -s", save "-s" opt to `transient-values-file'
+  :after python
+  :bind (:map python-mode-map
+              ("C-t t" . python-pytest-function)
+              ("C-t f" . python-pytest-file)
+              ("C-t l" . python-pytest-last-failed)))
+
+;; (use-package pyenv-mode)
 
 ;;;; SQL
 
