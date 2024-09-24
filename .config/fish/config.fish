@@ -68,10 +68,6 @@ if not set -q TMUX
     end
 end
 
-function nvm
-    bass source (brew --prefix nvm)/nvm.sh --no-use ';' nvm $argv
-end
-
 alias md5sum "md5 -r"
 source ~/.functions.fish
 source ~/Work/bin/fish.fish
