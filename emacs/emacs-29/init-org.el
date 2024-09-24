@@ -13,7 +13,6 @@
 (use-package htmlize)
 
 (use-package org
-  :elpaca nil
   :ensure nil
   :hook ((org-mode . my/org-mode-hook)
          (org-mode . smartparens-mode))
@@ -73,7 +72,7 @@
   (org-hide-leading-stars t))
 
 (use-package ob-mermaid
-  :elpaca (ob-mermaid
+  :ensure (ob-mermaid
            :host github
            :depth nil
            :repo "cfclrk/ob-mermaid"))

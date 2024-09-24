@@ -187,7 +187,7 @@
 ;;  ----------------------------------------------------------------------------
 
 (use-package vertico
-  :elpaca (vertico
+  :ensure (vertico
            :files (:defaults "extensions/*"))
   :init
   (vertico-mode))
@@ -241,7 +241,7 @@
 ;;;; bazel
 
 (use-package bazel
-  :elpaca (bazel
+  :ensure (bazel
            :host github
            :depth nil
            :repo "cfclrk/emacs-bazel-mode")
@@ -337,13 +337,13 @@
 ;;;; ejc-sql
 
 (use-package ejc-sql
-  :elpaca (ejc-sql
+  :ensure (ejc-sql
            :depth nil))
 
 ;;;; environ
 
 (use-package environ
-  :elpaca (environ
+  :ensure (environ
            :host github
            :repo "cfclrk/environ"
            :depth nil)
@@ -397,7 +397,7 @@
 ;;;; github-browse-file
 
 (use-package github-browse-file
-  :elpaca (github-browse-file
+  :ensure (github-browse-file
            :host github
            :repo "cfclrk/github-browse-file")
   :bind (("C-h g" . github-browse-file)
@@ -712,7 +712,7 @@
 
 (use-package php-cs-fixer-format
   :after (php-mode splash)
-  :elpaca (php-cs-fixer-format
+  :ensure (php-cs-fixer-format
            :host github
            :depth nil
            :repo "cfclrk/php-cs-fixer-format")
@@ -787,7 +787,7 @@
 ;;; Work
 
 (use-package splash
-  :elpaca (splash :repo "~/Work/stonehenge"
+  :ensure (splash :repo "~/Work/stonehenge"
                   :branch "emacs-website"
                   :files ("development/emacs/splash.el"))
   :custom

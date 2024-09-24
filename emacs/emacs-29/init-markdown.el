@@ -38,7 +38,7 @@
 
 (use-package markdown-xwidget
   :after markdown-mode
-  :elpaca (markdown-xwidget
+  :ensure (markdown-xwidget
            :host github
            :repo "cfclrk/markdown-xwidget"
            :files (:defaults "resources")
@@ -69,7 +69,7 @@
 
 (use-package markdown-toc
   :after markdown-mode
-  :elpaca (markdown-toc
+  :ensure (markdown-toc
            :host github
            :repo "cfclrk/markdown-toc"
            :depth nil))
