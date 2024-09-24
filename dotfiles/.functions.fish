@@ -77,20 +77,6 @@ function myip --description "What is my ip address?"
     curl https://checkip.amazonaws.com/
 end
 
-# Do not let computer go to sleep while Slack is running.
-# Notes:
-#  - Slack needs to *already be running*
-#  - This command starts a process that stops when Slack is closed
-#
-# So, if I must re-run this command every time I open Slack.
-function caff --description "caffeinate while Slack is running"
-    nohup caffeinate -d -i -m -s -u -w (pgrep -x Slack) &
-end
-
-function rlogin
-    rancher login $RANCHER_URL --token $RANCHER_TOKEN
-end
-
 # Ruby
 # -----------------------------------------------------------------------------
 
