@@ -382,7 +382,12 @@
                ("<M-return>" . magit-diff-visit-worktree-file-other-window)))
   :custom
   (magit-diff-refine-hunk 'all)
-  (magit-save-repository-buffers 'dontask))
+  (magit-save-repository-buffers 'dontask)
+  ;; I removed the tag list from here
+  (magit-refs-sections-hook '(magit-insert-error-header
+                              magit-insert-branch-description
+                              magit-insert-local-branches
+                              magit-insert-remote-branches)))
 
 ;; Credentials are stored in ~/.authinfo
 (use-package forge
