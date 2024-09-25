@@ -26,10 +26,6 @@ for path in "${paths[@]}"; do
 done
 
 PATH=$(go env GOPATH)/bin:$PATH
-PATH="$HOME/.poetry/bin:$PATH"
-
-# GNU programs installed with brew take precedence over pre-existing programs
-PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
 # pyenv
 if command -v pyenv > /dev/null; then
