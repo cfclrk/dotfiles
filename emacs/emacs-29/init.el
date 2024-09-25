@@ -83,8 +83,6 @@
 
 ;; Keep customizations outside of init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
-
 (add-hook 'elpaca-after-init-hook
           (lambda () (load custom-file 'noerror)))
 
@@ -482,10 +480,6 @@
 ;;;; rainbow-delimiters
 
 (use-package rainbow-delimiters)
-
-;;;; request
-
-;; (use-package request)
 
 ;;;; recentf
 
