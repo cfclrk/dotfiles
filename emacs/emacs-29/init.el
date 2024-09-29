@@ -119,7 +119,7 @@
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 130)
+                    :height 120)
 
 (setq-default line-spacing 2)
 
@@ -548,6 +548,18 @@
         (kill-buffer "*LSP Symbols List*")
       (progn (lsp-treemacs-symbols)
              (other-window -1)))))
+
+;;;; treesitter
+
+(setq treesit-language-source-alist
+      '((python "https://github.com/tree-sitter/tree-sitter-python")))
+
+(let ((python-dylib  (expand-file-name
+                      "tree-sitter/libtree-sitter-python.dylib"
+                      user-emacs-directory)))
+  (when (not (file-exists-p python-dylib))
+    (message "Installing python treesitter language grammar")
+    (treesit-install-language-grammar "python")))
 
 ;;;; undo-tree
 

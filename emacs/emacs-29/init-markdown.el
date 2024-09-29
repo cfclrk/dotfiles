@@ -6,8 +6,8 @@
 
 (defun my/markdown-mode-hook ()
   "Init hook for markdown-mode."
-  (message "Running my/markdown-mode-hook, setting fill-column to 83")
-  (setq fill-column 85
+  (message "Running my/markdown-mode-hook, setting fill-column to 90")
+  (setq fill-column 90
         visual-fill-column-center-text t))
 
 (use-package markdown-mode
@@ -46,7 +46,7 @@
   :bind (:map markdown-mode-command-map
               ("x" . markdown-xwidget-preview-mode))
   :custom
-  (markdown-xwidget-command "multimarkdown")
+  (markdown-xwidget-command "pandoc")
   (markdown-xwidget-github-theme "light-high-contrast")
   (markdown-xwidget-mermaid-theme "default")
   (markdown-xwidget-code-block-theme "default"))
