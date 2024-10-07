@@ -593,6 +593,10 @@
 
 (winner-mode)
 
+;;;; xml-mode
+
+(use-package xml-format)
+
 ;;;; yaml
 
 (use-package yaml-mode)
@@ -728,8 +732,8 @@
            :depth nil
            :repo "cfclrk/php-cs-fixer-format")
   :config
-  (setq php-cs-fixer-format-arguments
-        (list "--config" (concat splash-website-dir "/.php-cs-fixer.php"))))
+  (setq php-cs-fixer-format-arguments (list "--config"
+                                            (concat splash-website-dir "/.php-cs-fixer.php"))))
 
 ;;;; Python
 
@@ -767,11 +771,10 @@
   ;; To run as "pytest -s", save "-s" opt to `transient-values-file'
   :after python
   :bind (:map python-mode-map
-              ("C-t t" . python-pytest-function)
+              ("C-t t" . python-pytest-run-def-at-point-treesit)
               ("C-t f" . python-pytest-file)
+              ("C-t c" . python-pytest-run-class-at-point-treesit)
               ("C-t l" . python-pytest-last-failed)))
-
-;; (use-package pyenv-mode)
 
 ;;;; SQL
 
