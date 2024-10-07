@@ -4,7 +4,7 @@ tap "homebrew/core"
 tap "d12frosted/emacs-plus"
 
 brew "coreutils"
-brew "d12frosted/emacs-plus/emacs-plus", args: ["with-xwidgets"]
+brew "d12frosted/emacs-plus", args: ["with-xwidgets"]
 brew "fish"
 brew "findutils"
 brew "git"
