@@ -40,7 +40,7 @@
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
-;; ⌘ as Meta and ⎇ as Super on MacOS
+;; ⌘ as Meta and ⌥ as Super on MacOS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta
         mac-option-modifier 'super
