@@ -12,6 +12,8 @@ else
     echo "Homebrew is already installed!"
 fi
 
+brew update
+
 # Make the ~/Projects dir if it's not already there.
 mkdir -p ~/Projects
 cd ~/Projects

@@ -782,10 +782,12 @@
 ;; <file>.sql" does. Need to figure this out.
 (use-package sqlformat
   :config
+  (setq sqlformat-command 'sqlfluff
+        sqlformat-args '("--dialect" "mysql"))
+  ;; (setq sqlformat-command 'sqlfluff
+  ;;       sqlformat-args '("--dialect" "postgres"))
   ;; (setq sqlformat-command 'sqlfluff
   ;;       sqlformat-args '("--dialect" "snowflake"))
-  (setq sqlformat-command 'sqlfluff
-        sqlformat-args '("--dialect" "postgres"))
   ;; (setq sqlformat-command 'pgformatter
   ;;       sqlformat-args '("-s2" "-g"))
   )
