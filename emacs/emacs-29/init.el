@@ -123,16 +123,6 @@
 
 (setq-default line-spacing 2)
 
-;;;; doom-themes
-
-(use-package doom-themes
-  :config
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config)
-  (load-theme 'tango t))
-
 ;;;; doom-modeline
 
 (use-package doom-modeline
@@ -151,12 +141,6 @@
 (use-package nerd-icons
   :config (unless (my/font-installed-p "Symbols Nerd Font Mono")
             (nerd-icons-install-fonts t)))
-
-;;;; spacious-padding
-
-(use-package spacious-padding
-  :config
-  (spacious-padding-mode))
 
 ;;; Text
 ;;  ----------------------------------------------------------------------------
