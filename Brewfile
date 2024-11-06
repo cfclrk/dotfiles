@@ -5,6 +5,7 @@ tap "d12frosted/emacs-plus"
 
 brew "coreutils"
 brew "d12frosted/emacs-plus/emacs-plus", args: ["with-xwidgets"]
+brew "fd"
 brew "fish"
 brew "findutils"
 brew "git"
@@ -18,6 +19,7 @@ brew "rust-analyzer"
 brew "shellcheck"
 brew "tmux"
 brew "tree"
+brew "xmlstarlet"
 
 # Downloads a .pkg file in to $(brew --prefix)/Caskroom/basictex/, need to
 # manually run it

@@ -104,5 +104,13 @@ before running all tests."
   (eval-buffer)
   (ert 't))
 
+(defun my/xml-format-buffer ()
+  "Format an XML file using xmlstarlet."
+  (interactive)
+  (let ((file (buffer-file-name)))
+    (call-process "xmlstarlet"
+                  file nil nil
+                  "ed" "--inplace" file)))
+
 (provide 'init-functions)
 ;;; init-functions.el ends here
