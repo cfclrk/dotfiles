@@ -7,16 +7,16 @@
 ;; Copied directly from https://github.com/progfolio/elpaca
 (load (expand-file-name "init-elpaca.el" user-emacs-directory))
 
-;; Make elpaca use SSH for cloning repos
-(setq elpaca-recipe-functions
-      (lambda (recipe) '(:protocol ssh)))
-
-;; Install use-package support
 (elpaca elpaca-use-package
-  (elpaca-use-package-mode)
-  (setq elpaca-use-package-by-default t))
 
-;; For some reason, without this, it can't load dash, f, or s
+  ;; Install use-package support
+  (elpaca-use-package-mode)
+  (setq elpaca-use-package-by-default t)
+
+  ;; Use SSH for cloning repos
+  (setq elpaca-recipe-functions
+        (lambda (recipe) '(:protocol ssh))))
+
 (elpaca-wait)
 
 ;; Load packages I use in my own functions
@@ -58,9 +58,13 @@
 (scroll-bar-mode -1)
 (global-hl-line-mode 1)
 
-;; See: https://github.com/doomemacs/doomemacs/blob/e47accb77324ffff6e9a72bf820a0f73d2e804f3/lisp/doom-start.el#L134-L137
+;; https://github.com/doomemacs/doomemacs/blob/master/lisp/doom-start.el
 (set-language-environment "UTF-8")
 (setq default-input-method nil)
+(setq auto-mode-case-fold nil)
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right)
+(setq bidi-inhibit-bpa t)
 
 (setq-default tab-width 4)
 (setq-default fill-column 80)
@@ -125,7 +129,7 @@
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 120)
+                    :height 130)
 
 (setq-default line-spacing 2)
 
@@ -308,12 +312,6 @@
 
 (use-package dockerfile-mode)
 
-;;;; eat
-
-(use-package eat
-  :hook (eat-mode . (lambda ()
-                      (setq-local global-hl-line-mode nil))))
-
 ;;;; ediff
 
 (use-package ediff
@@ -428,9 +426,9 @@
 (use-package lsp-ui
   :commands lsp-ui
   :custom
+  (lsp-ui-doc-enable nil)
   (lsp-ui-sideline-show-diagnostics nil)
-  (lsp-ui-sideline-show-symbol nil)
-  (lsp-ui-doc-max-height 20))
+  (lsp-ui-sideline-show-symbol nil))
 
 ;;;; markdown
 
