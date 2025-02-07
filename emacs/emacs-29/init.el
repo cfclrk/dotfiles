@@ -171,7 +171,6 @@
   :hook ((text-mode . my/text-mode-hook))
   :config
   (defun my/text-mode-hook ()
-    (smartparens-mode)
     (whitespace-mode)
     (delete-selection-mode)))
 
@@ -378,12 +377,12 @@
                               magit-insert-remote-branches)))
 
 ;; Credentials are stored in ~/.authinfo
-(use-package forge
-  :after magit
-  :hook (after-save . magit-after-save-refresh-status)
-  :config
-  (setq forge-owned-accounts '(("cfclrk" . nil)
-                               ("cclark-splash" . nil))))
+;; (use-package forge
+;;   :after magit
+;;   :hook (after-save . magit-after-save-refresh-status)
+;;   :config
+;;   (setq forge-owned-accounts '(("cfclrk" . nil)
+;;                                ("cclark-splash" . nil))))
 
 ;;;; github-browse-file
 
@@ -561,7 +560,7 @@
 
 ;;;; unfill
 
-;; Unfill is the opposite of `fill-paragraph'
+;; unfill is the opposite of `fill-paragraph'
 (use-package unfill)
 
 ;;;; visual-fill-column
@@ -581,9 +580,14 @@
 
 (winner-mode)
 
-;;;; xml-mode
+;;;; nxml
 
-(use-package xml-format)
+(use-package nxml-mode
+  :after undo-tree smartparens
+  :ensure nil
+  :config
+  (undo-tree-mode -1)
+  (show-smartparens-mode -1))
 
 ;;;; yaml
 
@@ -645,7 +649,7 @@
 (use-package cider
   :after clojure-mode
   :bind ((:map cider-mode-map
-               ("C-t n" . cider-test-run-ns-tests)
+               ("C-t f" . cider-test-run-ns-tests)
                ("C-t p" . cider-test-run-project-tests)
                ("C-t t" . cider-test-run-test)
                ("C-t r" . cider-test-show-report-other-window)
@@ -792,7 +796,6 @@
 
 (use-package splash
   :ensure (splash :repo "~/Work/stonehenge"
-                  :branch "emacs-website"
                   :files ("development/emacs/splash.el"))
   :custom
   (splash-stonehenge-dir "/Users/cclark/Work/stonehenge")
