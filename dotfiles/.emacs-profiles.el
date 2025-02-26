@@ -1,7 +1,6 @@
 (("default" . ((user-emacs-directory . "~/emacs/emacs-29")))
  ("cfclrk" . ((user-emacs-directory . "~/emacs/cfclrk")))
  ("emacs-29" . ((user-emacs-directory . "~/emacs/emacs-29")))
- ("cfclrk-emacs-plus" . ((user-emacs-directory . "~/emacs/cfclrk-emacs-plus")))
  ("doom" . ((user-emacs-directory . "~/emacs/doomemacs")))
  ("min-elpaca" . ((user-emacs-directory . "~/emacs/min-elpaca")))
  ("min-envars" . ((user-emacs-directory . "~/emacs/min-envars")))
