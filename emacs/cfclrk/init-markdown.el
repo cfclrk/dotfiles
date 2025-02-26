@@ -4,18 +4,56 @@
 
 ;;; Code:
 
-;;;; grip
+(defun my/markdown-mode-hook ()
+  "Init hook for markdown-mode."
+  (message "Running my/markdown-mode-hook, setting fill-column to 90")
+  (setq fill-column 90
+        visual-fill-column-center-text t))
 
-;; `grip-mode' renders markdown files using GitHub's rendering API. That can be
-;; very useful, but it
-;;
-;; 1. Requires an internet connection
-;; 2. Can't be easily customized
-;; 3. Doesn't render mermaid diagrams
-;;
-;; `grip-mode' can be a great way to double-check how something will look in
-;; GitHub, but more commonly your day-to-day rendering should be done using
-;; `markdown-live-preview-mode'.
+(use-package markdown-mode
+  :after visual-fill-column
+  :hook ((markdown-mode . my/markdown-mode-hook)
+         (gfm-mode . my/markdown-mode-hook)
+         (markdown-mode . visual-line-mode)
+         (markdown-mode . visual-fill-column-mode))
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . gfm-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :bind ((:map markdown-mode-map
+               ("C-c C-z" . markdown-live-preview-switch-to-output))
+         (:map markdown-mode-command-map
+               ("v" . markdown-view-mode)))
+  :custom
+  (markdown-split-window-direction 'right)
+  (markdown-spaces-after-code-fence 0)
+  (markdown-italic-underscore t)
+  (markdown-list-indent-width 2)
+  (markdown-enable-wiki-links t)
+  (markdown-enable-math t)
+  :config
+  (setq whitespace-style '(face tabs empty trailing))
+  ;; Restart whitespace mode so that is properly uses `whitespace-style'.
+  (whitespace-mode -1)
+  (whitespace-mode +1))
+
+(use-package markdown-xwidget
+  :after markdown-mode
+  :ensure (markdown-xwidget
+           :host github
+           :repo "cfclrk/markdown-xwidget"
+           :files (:defaults "resources")
+           :depth nil)
+  :bind (:map markdown-mode-command-map
+              ("x" . markdown-xwidget-preview-mode))
+  :custom
+  (markdown-xwidget-command "pandoc")
+  (markdown-xwidget-github-theme "light-high-contrast")
+  (markdown-xwidget-mermaid-theme "default")
+  (markdown-xwidget-code-block-theme "default"))
+
+;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
+;; you edit source blocks in another buffer (similar to org-edit-special)
+(use-package edit-indirect)
 
 (use-package grip-mode
   :after markdown-mode
@@ -29,79 +67,12 @@
     (setq grip-github-user (car credential)
           grip-github-password (cadr credential))))
 
-;;;; markdown
-
-(defun my/markdown-mode-hook ()
-  "Init hook for markdown-mode."
-  (setq fill-column 100
-        visual-fill-column-center-text t)
-
-  (add-to-list 'company-backends 'company-emoji))
-
-(use-package markdown-mode
-  :after visual-fill-column
-  :hook ((markdown-mode . my/markdown-mode-hook)
-         (markdown-mode . markdown-toc-mode)
-         (markdown-mode . visual-line-mode)
-         (markdown-mode . visual-fill-column-mode))
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . gfm-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :bind (:map markdown-mode-map
-              ("C-c C-z" . markdown-live-preview-switch-to-output))
-  :init
-  (setq markdown-split-window-direction 'right)
-  :custom
-  (markdown-spaces-after-code-fence 0)
-  (markdown-italic-underscore t)
-  (markdown-list-indent-width 2)
-  (markdown-enable-wiki-links t)
-  (markdown-enable-math t)
-  :config
-  (setq whitespace-style '(face tabs empty trailing))
-
-  ;; Restart whitespace mode so that is properly uses `whitespace-style'.
-  (whitespace-mode -1)
-  (whitespace-mode +1))
-
-;;;; markdown-toc
-
 (use-package markdown-toc
-  :straight (markdown-toc
-             :host github
-             :repo "ardumont/markdown-toc"
-             :fork (:host github
-                    :repo "cfclrk/markdown-toc"))
-  :bind (:map markdown-toc-mode-map
-              ("M-." . markdown-toc-follow-link))
-  :config
-  (setq
-   ;; markdown-toc-start "<!--ts-->"
-   ;; markdown-toc-end "<!--te-->"
-   ;; markdown-toc-title nil
-   ;; Do not include first h1
-   markdown-toc-transform-fn 'cdr))
-
-;;;; markdown-xwidget
-
-(use-package markdown-xwidget
   :after markdown-mode
-  :straight (markdown-xwidget
-             :type git
-             :host github
-             :repo "cfclrk/markdown-xwidget"
-             :files (:defaults "resources"))
-  :bind (:map markdown-mode-command-map
-              ("x" . markdown-xwidget-preview-mode))
-  :custom
-  (markdown-xwidget-command "multimarkdown")
-  (markdown-xwidget-github-theme "dark-dimmed")
-  (markdown-xwidget-mermaid-theme "dark")
-  (markdown-xwidget-code-block-theme "github-dark-dimmed"))
-
-;; edit-inderect is required to use C-c ' (markdown-edit-code-block), which lets
-;; you edit source blocks in another buffer (similar to org-edit-special)
-(use-package edit-indirect)
+  :ensure (markdown-toc
+           :host github
+           :repo "cfclrk/markdown-toc"
+           :depth nil))
 
 (provide 'init-markdown)
 ;;; init-markdown.el ends here

@@ -1,4 +1,4 @@
-(("default" . ((user-emacs-directory . "~/emacs/emacs-29")))
+(("default" . ((user-emacs-directory . "~/emacs/cfclrk")))
  ("cfclrk" . ((user-emacs-directory . "~/emacs/cfclrk")))
  ("emacs-29" . ((user-emacs-directory . "~/emacs/emacs-29")))
  ("doom" . ((user-emacs-directory . "~/emacs/doomemacs")))
