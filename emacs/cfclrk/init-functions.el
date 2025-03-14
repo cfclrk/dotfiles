@@ -112,6 +112,11 @@ before running all tests."
                   file nil nil
                   "ed" "--inplace" file)))
 
+(defun my/ansi-color-apply-on-buffer ()
+  "Interpret ANSI color codes in the current buffer."
+  (interactive)
+  (ansi-color-apply-on-region (point-min) (point-max)))
+
 (defun splash-replace-clj-test ()
   "Replace t alias in test files."
   (interactive)

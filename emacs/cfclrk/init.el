@@ -344,7 +344,7 @@
   (setq flycheck-emacs-lisp-load-path 'inherit)
   (global-flycheck-mode))
 
-;;;; git, magit, forge
+;;;; git, magit
 
 (use-package transient)
 
@@ -430,6 +430,10 @@
 ;;;; org
 
 (load (expand-file-name "init-org.el" user-emacs-directory))
+
+;;;; pdf-tools
+
+(use-package pdf-tools)
 
 ;;;; prettier
 
