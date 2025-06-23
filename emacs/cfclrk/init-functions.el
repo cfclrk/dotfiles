@@ -117,6 +117,11 @@ before running all tests."
   (interactive)
   (ansi-color-apply-on-region (point-min) (point-max)))
 
+(defun my/eval-last-sexp-pprint ()
+  (interactive)
+  (with-output-to-temp-buffer "*elisp-out*"
+    (princ (eval-last-sexp nil))))
+
 (defun splash-replace-clj-test ()
   "Replace t alias in test files."
   (interactive)

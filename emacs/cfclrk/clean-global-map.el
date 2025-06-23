@@ -1,6 +1,9 @@
 ;;; clean-global-map.el -- Clean up the global-map  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
+;;
+;; The global map is so full of keybindings for stuff I never use, and has many
+;; duplicates. Here I start trying to clean it up a bit to free up keybindings.
 
 ;;; Code:
 

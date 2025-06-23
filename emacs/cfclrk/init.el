@@ -113,12 +113,6 @@
 ;; Clean up global-map
 (load (expand-file-name "clean-global-map.el" user-emacs-directory))
 
-;; Set the default font to Roboto Mono
-(set-face-attribute 'default nil
-                    :family "Roboto Mono"
-                    :weight 'normal
-                    :height 140)
-
 ;;; Theme, Font, Display
 ;;  ----------------------------------------------------------------------------
 
@@ -129,9 +123,9 @@
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 140)
+                    :height 130)
 
-(setq-default line-spacing 2)
+(setq-default line-spacing 6)
 
 ;;;; doom-modeline
 
@@ -181,7 +175,11 @@
   :ensure (vertico
            :files (:defaults "extensions/*"))
   :init
-  (vertico-mode))
+  (vertico-mode)
+  :custom
+  ;; Default sort function is vertico-sort-history-length-alpha. Does this do a
+  ;; better job of sorting by history?
+  (vertico-sort-function #'vertico-sort-history-alpha))
 
 (use-package vertico-directory
   :after vertico
@@ -610,7 +608,8 @@
                                           '(emacs-lisp
                                             emacs-lisp-checkdoc)))))
   :bind (("C-c C-k" . eval-buffer)
-         ("C-t i" . ert)))
+         ("C-t i" . ert)
+         ("C-c C-p" . my/eval-last-sexp-pprint)))
 
 ;;;; Clojure
 
@@ -646,6 +645,7 @@
   :hook ((cider-repl-mode . (lambda () (smartparens-mode)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode)))
          (cider-test-report-mode . (lambda () (visual-line-mode)))
+         (cider-stacktrace-mode . (lambda () (visual-line-mode)))
          (cider-test-report-mode . (lambda () (smartparens-mode))))
   :config
   (defun cider-test-show-report-other-window ()
@@ -703,8 +703,9 @@
            :depth nil
            :repo "cfclrk/php-cs-fixer-format")
   :config
-  (setq php-cs-fixer-format-arguments (list "--config"
-                                            (concat splash-website-dir "/.php-cs-fixer.php"))))
+  (setq php-cs-fixer-format-arguments
+        (list "--config"
+              (concat splash-website-dir "/.php-cs-fixer.php"))))
 
 ;;;; Python
 
