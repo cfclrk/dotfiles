@@ -625,15 +625,16 @@
               ("S-SPC" . just-one-space))
   :custom
   (clojure-indent-style 'always-indent) ; Indent arguments instead of aligning them
+  (clojure-docstring-fill-prefix-width 3) ; Was 2
   (clojure-toplevel-inside-comment-form t))
 
 (use-package cider
   :after clojure-mode
   :bind ((:map cider-mode-map
                ("C-t f" . cider-test-run-ns-tests)
-               ("C-t p" . cider-test-run-project-tests)
+               ("C-t p" . cider-test-show-report-other-window)
                ("C-t t" . cider-test-run-test)
-               ("C-t r" . cider-test-show-report-other-window)
+               ("C-t r" . cider-test-rerun-test)
                ("C-c C-c" . cider-pprint-eval-defun-at-point)
                ("C-j" . cider-pprint-eval-last-sexp-to-comment)
                ("C-c x" . cider-scratch))
