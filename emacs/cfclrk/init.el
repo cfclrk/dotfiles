@@ -110,6 +110,9 @@
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'my/show-buffer-file-name)
 
+;; Do not prompt about killing processes when closing Emacs
+(setq confirm-kill-processes nil)
+
 ;; Clean up global-map
 (load (expand-file-name "clean-global-map.el" user-emacs-directory))
 
