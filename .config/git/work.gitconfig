@@ -4,5 +4,3 @@
     sshCommand = "ssh -i ~/.ssh/github-work"
 [github]
     user = cclark-splash
-[blame]
-	ignoreRevsFile = .git-blame-ignore-revs
