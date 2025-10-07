@@ -584,7 +584,10 @@
   :ensure nil
   :config
   (undo-tree-mode -1)
-  (show-smartparens-mode -1))
+  (show-smartparens-mode -1)
+  (rng-validate-mode -1)
+  :custom
+  (rng-nxml-auto-validate-flag nil))
 
 ;;;; yaml
 
