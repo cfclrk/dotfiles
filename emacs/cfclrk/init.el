@@ -269,6 +269,10 @@
          ("C-c D" . crux-delete-file-and-buffer)
          ("C-c f" . crux-recentf-find-file)))
 
+;;;; define-word
+
+(use-package define-word)
+
 ;;;; diff-hl
 
 (use-package diff-hl
