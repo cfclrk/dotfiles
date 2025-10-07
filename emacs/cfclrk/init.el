@@ -143,6 +143,19 @@
   (doom-modeline-project-detection 'projectile)
   (doom-modeline-vcs-max-length 15))
 
+;;;; doom-themes
+
+(use-package doom-themes
+  :config
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-acario-light t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
+
+;; Make line-number color more visible in doom-one theme. Original is 'dim gray.
+;; (set-face-foreground 'line-number "gray")
+
 ;;;; nerd-icons
 
 (use-package nerd-icons
