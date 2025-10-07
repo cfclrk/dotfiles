@@ -22,5 +22,8 @@
 ;; Run's `compose-mail'. I don't use Emacs for email.
 (keymap-unset global-map "C-x m" 'remove)
 
+;; I don't need a sepecial binding for Ibuffer
+(keymap-unset global-map "C-x C-b" 'remove)
+
 ;;; clean-global-map.el ends here
 (provide 'clean-global-map)
