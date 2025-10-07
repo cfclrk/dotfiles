@@ -38,7 +38,9 @@ Adapted from Emacs Redux (emacsredux.com)."
   (interactive)
   (let ((filename (if (equal major-mode 'dired-mode)
                       default-directory
-                    (buffer-file-name))))
+                    (if (buffer-file-name)
+                        (buffer-file-name)
+                      (buffer-name)))))
     (message filename)
     (kill-new filename)))
 
@@ -122,7 +124,7 @@ before running all tests."
   (with-output-to-temp-buffer "*elisp-out*"
     (princ (eval-last-sexp nil))))
 
-(defun splash-replace-clj-test ()
+(defun splash-deftest ()
   "Replace t alias in test files."
   (interactive)
   (goto-char (point-min))
