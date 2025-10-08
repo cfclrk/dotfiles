@@ -49,11 +49,6 @@ if not set -q TMUX
         pyenv virtualenv-init - | source
     end
 
-    # pipenv - which I hope I never use again
-    if command -v pipenv > /dev/null
-        set -gx PIPENV_IGNORE_VIRTUALENVS 1
-    end
-
     # ghcup for haskell
     set GHCUP_INSTALL_BASE_PREFIX $HOME
 
