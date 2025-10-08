@@ -400,7 +400,9 @@
 
 ;;;; graphql-mode
 
-(use-package graphql-mode)
+(use-package graphql-mode
+  :custom
+  (graphql-indent-level 4))
 
 ;;;; helpful
 
