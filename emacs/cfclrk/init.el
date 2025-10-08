@@ -398,6 +398,18 @@
   :bind (("C-h g" . github-browse-file)
          ("C-h y" . github-browse-file-copy-url)))
 
+;;;; gptel
+
+(use-package gptel
+  :bind (:map global-map
+              ("C-c RET" . gptel-send))
+  :config
+  (setq
+   gptel-model 'gpt-4o
+   gptel-backend (gptel-make-gh-copilot "Copilot")))
+
+;; gptel-api-key (cadar (environ-read-file (expand-file-name "~/.env/openai")))
+
 ;;;; graphql-mode
 
 (use-package graphql-mode
@@ -674,6 +686,9 @@
          (cider-stacktrace-mode . (lambda () (visual-line-mode)))
          (cider-test-report-mode . (lambda () (smartparens-mode))))
   :config
+  ;; Unbind cider-macroexpand-1 (in favor of gptel-send)
+  (keymap-unset cider-mode-map "C-c RET" 'remove)
+
   (defun cider-test-show-report-other-window ()
     "Show the test report buffer in other window, if one exists."
     (interactive)
