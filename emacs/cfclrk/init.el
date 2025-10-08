@@ -346,8 +346,7 @@
            :repo "cfclrk/environ"
            :depth nil)
   :config
-  (setq environ-dir (expand-file-name "~/.env/"))
-  (environ-set-file (expand-file-name "github-work" environ-dir)))
+  (setq environ-dir (expand-file-name "~/.env/")))
 
 ;;;; fish
 
@@ -407,8 +406,6 @@
   (setq
    gptel-model 'gpt-4o
    gptel-backend (gptel-make-gh-copilot "Copilot")))
-
-;; gptel-api-key (cadar (environ-read-file (expand-file-name "~/.env/openai")))
 
 ;;;; graphql-mode
 
