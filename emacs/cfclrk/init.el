@@ -257,6 +257,10 @@
               ([C-tab] . bicycle-cycle)
               ([S-tab] . bicycle-cycle-global)))
 
+;;;; csv-mode
+
+(use-package csv-mode)
+
 ;;;; ctrlf
 
 (use-package ctrlf
