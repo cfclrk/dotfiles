@@ -409,7 +409,10 @@
   :config
   (setq
    gptel-model 'gpt-4o
-   gptel-backend (gptel-make-gh-copilot "Copilot")))
+   gptel-backend (gptel-make-gh-copilot "Copilot"))
+  :custom
+  (gptel-default-mode 'org-mode)
+  (gptel-track-media t))
 
 ;;;; graphql-mode
 
