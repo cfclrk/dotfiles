@@ -15,18 +15,11 @@
 (use-package org
   :ensure nil
   :hook ((org-mode . my/org-mode-hook)
-         (org-mode . smartparens-mode))
+         (org-mode . smartparens-mode)
+         (org-mode . visual-line-mode))
   :config
   (defun my/org-mode-hook ()
     (auto-fill-mode 1))
-
-  ;; TODO: This removes org-cycle-show-empty-lines from the hook. Does this
-  ;; accomplish anything? It doesn't work to remove the newline after a heading
-  ;; when pressing TAB.
-  (setq org-cycle-hook
-        '(org-cycle-hide-archived-subtrees
-          org-cycle-optimize-window-after-visibility-change
-          org-cycle-display-inline-images))
 
   (setq org-file-apps
         '((auto-mode . emacs)
