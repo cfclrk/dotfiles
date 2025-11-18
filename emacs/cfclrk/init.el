@@ -728,6 +728,12 @@
   :custom
   css-indent-offset 2)
 
+;;;; Java
+
+(use-package lsp-java
+  :after lsp-mode
+  :hook (java-mode . lsp))
+
 ;;;; PHP
 
 (use-package php-mode
@@ -771,6 +777,7 @@
 
 ;; LSP using the pyright language server
 (use-package lsp-pyright
+  :after lsp-mode
   :init (setq lsp-pyright-multi-root nil)
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
