@@ -383,14 +383,14 @@
                ("<M-return>" . magit-diff-visit-worktree-file-other-window))
          (:map magit-diff-section-map
                ("<M-return>" . magit-diff-visit-worktree-file-other-window)))
+  :config
+  ;; Set `magit-refresh-verbose' to view what takes longest in loading magit
+  ;; buffers
+  (remove-hook 'magit-status-headers-hook 'magit-insert-tags-header)
+  (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
   :custom
   (magit-diff-refine-hunk 'all)
-  (magit-save-repository-buffers 'dontask)
-  ;; I removed the tag list from here
-  (magit-refs-sections-hook '(magit-insert-error-header
-                              magit-insert-branch-description
-                              magit-insert-local-branches
-                              magit-insert-remote-branches)))
+  (magit-save-repository-buffers 'dontask))
 
 ;;;; github-browse-file
 
