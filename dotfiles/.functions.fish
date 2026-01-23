@@ -25,7 +25,7 @@ function fish_prompt --description 'Defines the prompt'
     end
 
     if not set -q __fish_prompt_cwd
-        set -g __fish_prompt_cwd (set_color $fish_color_cwd)
+        set -g __fish_prompt_cwd (set_color black)
     end
 
     printf '%s[%s]%s %s%s %s(%s) \f\r%s$%s ' \
@@ -207,6 +207,14 @@ end
 alias k "kubectl"
 alias kn "kubectl config set-context (kubectl config current-context) --namespace"
 alias rk "rancher kubectl"
+
+function kEnvVars --description "Get all env vars for service"
+    set serviceName $argv[1]
+    kubectl get configmap \
+        "$serviceName-config" \
+        -n staging \
+        -o go-template='{{range $k, $v := .data}}{{$k}}={{$v}}{{"\n"}}{{end}}'
+end
 
 # Azure
 # -----------------------------------------------------------------------------

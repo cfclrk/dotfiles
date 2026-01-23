@@ -42,6 +42,11 @@ if not set -q TMUX
         frum init | source
     end
 
+    # jenv for java - this prepends to $PATH
+    if command -v jenv > /dev/null
+        jenv init - | source
+    end
+
     # pyenv for python - this prepends to $PATH
     if command -v pyenv > /dev/null
         pyenv init --path | source
