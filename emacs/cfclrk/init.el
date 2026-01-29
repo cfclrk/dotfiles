@@ -513,7 +513,6 @@
 
 ;;;; rg
 
-;; Library for Emacs to use ripgrep. Projectile can use this.
 (use-package rg)
 
 ;;;; smartparens
@@ -598,6 +597,26 @@
   (undo-tree-mode -1)
   (show-smartparens-mode -1)
   (rng-validate-mode -1)
+
+  ;; From https://www.emacswiki.org/emacs/NxmlMode
+  (defun nxml-where ()
+    "Display the hierarchy of XML elements the point is on as a path."
+    (interactive)
+    (let ((path nil))
+      (save-excursion
+        (save-restriction
+          (widen)
+          (while (and (< (point-min) (point)) ;; Doesn't error if point is at beginning of buffer
+                      (condition-case nil
+                          (progn
+                            (nxml-backward-up-element) ; always returns nil
+                            t)
+                        (error nil)))
+            (setq path (cons (xmltok-start-tag-local-name) path)))
+          (if (called-interactively-p t)
+              (message "/%s" (mapconcat 'identity path "/"))
+            (format "/%s" (mapconcat 'identity path "/")))))))
+
   :custom
   (rng-nxml-auto-validate-flag nil))
 
