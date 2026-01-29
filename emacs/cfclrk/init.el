@@ -37,12 +37,6 @@
 
 (load (expand-file-name "init-functions.el" user-emacs-directory))
 
-;; TEMPORARY until bug is fixed:
-;; https://github.com/d12frosted/homebrew-emacs-plus/issues/720
-(use-package exec-path-from-shell
-  :init
-  (exec-path-from-shell-initialize))
-
 ;;; Editor General
 ;;  ----------------------------------------------------------------------------
 
@@ -128,7 +122,7 @@
                     :weight 'normal
                     :height 130)
 
-(setq-default line-spacing 6)
+(setq-default line-spacing 7)
 
 ;;;; doom-modeline
 
