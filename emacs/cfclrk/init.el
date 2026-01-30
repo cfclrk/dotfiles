@@ -426,6 +426,11 @@
               ("C-c RET" . gptel-send))
   :config
   (setq
+   ;; This is for ChatGPT, but you need a paid plan to actually use the API key
+   gptel-api-key (auth-source-pick-first-password
+                  :service "api.openai.com"
+                  :user "cfclrk@gmail.com")
+   ;; These two needed for Copilot
    gptel-model 'gpt-4o
    gptel-backend (gptel-make-gh-copilot "Copilot"))
   :custom
