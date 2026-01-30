@@ -107,6 +107,9 @@
 ;; Do not prompt about killing processes when closing Emacs
 (setq confirm-kill-processes nil)
 
+;; Where I store passwords
+(setq auth-sources '(macos-keychain-generic))
+
 ;; Clean up global-map
 (load (expand-file-name "clean-global-map.el" user-emacs-directory))
 
@@ -224,6 +227,18 @@
   :demand t
   :bind ("M-l" . ace-window)
   :config (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
+
+;;;; agent-shell
+
+(use-package agent-shell
+  :config
+  (setq agent-shell-prefer-viewport-interaction t)
+  (setq agent-shell-preferred-agent-config (agent-shell-anthropic-make-claude-code-config))
+  (setq agent-shell-anthropic-authentication
+        (agent-shell-anthropic-make-authentication :api-key
+                                                   (auth-source-pick-first-password
+                                                    :service "api.anthropic.com"
+                                                    :user "cfclrk@gmail.com"))))
 
 ;;;; ansi-color
 
