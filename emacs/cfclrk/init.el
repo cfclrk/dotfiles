@@ -797,20 +797,20 @@
 
 ;;;; Python
 
-(defun my/python-mode-hook ()
-  "Customize `python-mode'."
-  (setq fill-column 88
-        python-fill-docstring-style 'pep-257-nn
-        python-shell-interpreter "ipython"
-        python-shell-interpreter-args "--simple-prompt -i")
-
-  ;; Restart whitespace-mode so that it properly uses `fill-column'
-  (whitespace-mode -1)
-  (whitespace-mode +1))
-
 (use-package python-mode
   :ensure nil
-  :hook (python-mode . my/python-mode-hook))
+  :hook (python-mode . my/python-mode-hook)
+  :config
+  (defun my/python-mode-hook ()
+    "Customize `python-mode'."
+    (setq fill-column 88
+          python-fill-docstring-style 'pep-257-nn
+          python-shell-interpreter "ipython"
+          python-shell-interpreter-args "--simple-prompt -i")
+
+    ;; Restart whitespace-mode so that it properly uses `fill-column'
+    (whitespace-mode -1)
+    (whitespace-mode +1)))
 
 ;; LSP using the pyright language server
 (use-package lsp-pyright
