@@ -231,7 +231,16 @@
 ;;;; agent-shell
 
 (use-package agent-shell
+  :hook ((agent-shell-viewport-edit-mode . my/agent-shell-viewport-edit-mode-hook)
+         (agent-shell-viewport-view-mode . my/agent-shell-viewport-edit-mode-hook))
   :config
+  (defun my/agent-shell-viewport-edit-mode-hook ()
+    ;; Restart whitespace-mode for the new settings to take effect.
+    (setq-local whitespace-style '(tabs empty trailing))
+    (whitespace-mode -1)
+    (whitespace-mode +1)
+
+    (visual-line-mode))
   (setq agent-shell-prefer-viewport-interaction t)
   (setq agent-shell-preferred-agent-config (agent-shell-anthropic-make-claude-code-config))
   (setq agent-shell-anthropic-authentication

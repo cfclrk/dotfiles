@@ -19,7 +19,10 @@
          (org-mode . visual-line-mode))
   :config
   (defun my/org-mode-hook ()
-    (auto-fill-mode 1))
+    (auto-fill-mode 1)
+    (setq-local whitespace-style '(tabs empty trailing))
+    (whitespace-mode -1)
+    (whitespace-mode +1))
 
   (setq org-file-apps
         '((auto-mode . emacs)
@@ -132,6 +135,7 @@ TODO: look into function org-attach-dir."
 
 (defun host (user ip path &optional sudo)
   "Return a TRAMP string for SSHing to a remote host.
+
 USER is a user name on the remote host IP. PATH is the path on
 the remote host at which to execute the source block. If SUDO is
 non-nil, use sudo on the remote host."
