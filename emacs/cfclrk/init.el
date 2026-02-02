@@ -119,6 +119,10 @@
 ;; Start maxized
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
+;; Transparent titlebar
+(set-frame-parameter nil 'ns-transparent-titlebar t)
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+
 ;; Set the default font to Roboto Mono
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
@@ -235,19 +239,27 @@
          (agent-shell-viewport-view-mode . my/agent-shell-viewport-edit-mode-hook))
   :config
   (defun my/agent-shell-viewport-edit-mode-hook ()
-    ;; Restart whitespace-mode for the new settings to take effect.
+    (setq fill-column 100
+          visual-fill-column-center-text t)
+
     (setq-local whitespace-style '(tabs empty trailing))
+
+    ;; Restart whitespace-mode for the new settings to take effect.
     (whitespace-mode -1)
     (whitespace-mode +1)
 
-    (visual-line-mode))
-  (setq agent-shell-prefer-viewport-interaction t)
+    (visual-line-mode)
+    (visual-fill-column-mode))
+
   (setq agent-shell-preferred-agent-config (agent-shell-anthropic-make-claude-code-config))
   (setq agent-shell-anthropic-authentication
         (agent-shell-anthropic-make-authentication :api-key
                                                    (auth-source-pick-first-password
                                                     :service "api.anthropic.com"
-                                                    :user "cfclrk@gmail.com"))))
+                                                    :user "cclark@splashfinancial.com")))
+  :custom
+  (agent-shell-prefer-viewport-interaction t)
+  (agent-shell-highlight-blocks t))
 
 ;;;; ansi-color
 
@@ -406,6 +418,29 @@
   ;; buffers
   (remove-hook 'magit-status-headers-hook 'magit-insert-tags-header)
   (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
+
+  (defun my/magit-prune-and-cleanup ()
+    "Fetch with prune, checkout master, and delete branches without upstream."
+    (interactive)
+    (magit-fetch-all '("--prune"))
+    (magit-checkout "master")
+    (magit-pull)
+
+    ;; Delete branches without upstream
+    (let ((branches (magit-list-local-branch-names)))
+      (dolist (branch branches)
+        (unless (or (string= branch "master")
+                    (magit-get-upstream-branch branch))
+          (when (y-or-n-p (format "Delete branch %s? " branch))
+            (magit-branch-delete branch))))))
+
+  ;; Bind it to a key in magit-status-mode
+  ;; (define-key magit-status-mode-map (kbd "`'") 'my/magit-prune-and-cleanup)
+
+  ;; Or add it to the magit dispatch menu
+  (transient-append-suffix 'magit-dispatch "f"
+    '("P" "Prune and cleanup" my/magit-prune-and-cleanup))
+
   :custom
   (magit-diff-refine-hunk 'all)
   (magit-save-repository-buffers 'dontask))
