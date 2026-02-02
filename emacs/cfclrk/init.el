@@ -438,7 +438,7 @@
   ;; (define-key magit-status-mode-map (kbd "`'") 'my/magit-prune-and-cleanup)
 
   ;; Or add it to the magit dispatch menu
-  (transient-append-suffix 'magit-dispatch "f"
+  (transient-append-suffix 'magit-fetch "a"
     '("P" "Prune and cleanup" my/magit-prune-and-cleanup))
 
   :custom
