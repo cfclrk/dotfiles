@@ -1,10 +1,8 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
-tap "d12frosted/emacs-plus"
 
 brew "coreutils"
-brew "d12frosted/emacs-plus/emacs-plus", args: ["with-xwidgets"]
 brew "fd"
 brew "fish"
 brew "findutils"

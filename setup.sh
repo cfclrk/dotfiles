@@ -73,7 +73,7 @@ function linkEmacs {
     realEmacsDir=~/emacs/$dirName
 
     # Create ~/emacs/<dirName>
-    mkdir -p $realEmacsDir
+    mkdir -p "$realEmacsDir"
 
     # Create symlinks in $realEmacsDir to every file in $dotfilesEmacsDir
     files=$(find $dotfilesEmacsDir -type f -printf "%P\n")
