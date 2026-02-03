@@ -13,6 +13,7 @@ else
 fi
 
 brew update
+brew upgrade
 
 # Make the ~/Projects dir if it's not already there.
 mkdir -p ~/Projects
@@ -21,5 +22,5 @@ cd ~/Projects
 git clone https://github.com/cfclrk/dotfiles.git
 
 cd ~/Projects/dotfiles
-brew bundle install
+brew bundle install --verbose
 ./setup.sh
