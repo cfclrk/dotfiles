@@ -425,21 +425,20 @@
     (magit-fetch-all '("--prune"))
     (magit-checkout "master")
     (magit-pull)
+    (magit-status-refresh-buffer)
 
     ;; Delete branches without upstream
     (let ((branches (magit-list-local-branch-names)))
       (dolist (branch branches)
-        (unless (or (string= branch "master")
-                    (magit-get-upstream-branch branch))
+        (unless (magit-get-upstream-branch branch)
           (when (y-or-n-p (format "Delete branch %s? " branch))
             (magit-branch-delete branch))))))
 
   ;; Bind it to a key in magit-status-mode
   ;; (define-key magit-status-mode-map (kbd "`'") 'my/magit-prune-and-cleanup)
 
-  ;; Or add it to the magit dispatch menu
-  (transient-append-suffix 'magit-fetch "a"
-    '("P" "Prune and cleanup" my/magit-prune-and-cleanup))
+  (transient-append-suffix 'magit-dispatch "!"
+    '("1" "Prune and cleanup" my/magit-prune-and-cleanup))
 
   :custom
   (magit-diff-refine-hunk 'all)

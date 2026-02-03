@@ -21,5 +21,5 @@ cd ~/Projects
 git clone https://github.com/cfclrk/dotfiles.git
 
 cd ~/Projects/dotfiles
-brew bundle --no-lock --file Brewfile
+brew bundle install
 ./setup.sh
