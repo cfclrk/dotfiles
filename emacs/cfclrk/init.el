@@ -431,10 +431,11 @@
   (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
 
   (defun my/magit-prune-and-cleanup ()
-    "Fetch with prune, checkout master, and delete branches without upstream."
+    "Fetch with prune, checkout default branch, and delete branches without upstream."
     (interactive)
+    (message "Running my/magit-prune-and-cleanup")
     (magit-fetch-all '("--prune"))
-    (magit-checkout "master")
+    (magit-checkout (magit-main-branch))
     (magit-pull)
     (magit-status-refresh-buffer)
 
@@ -443,7 +444,9 @@
       (dolist (branch branches)
         (unless (magit-get-upstream-branch branch)
           (when (y-or-n-p (format "Delete branch %s? " branch))
-            (magit-branch-delete branch))))))
+            (magit-branch-delete branch)))))
+
+    (message "my/magit-prune-and-cleanup completed"))
 
   ;; Bind it to a key in magit-status-mode
   ;; (define-key magit-status-mode-map (kbd "`'") 'my/magit-prune-and-cleanup)
