@@ -110,6 +110,9 @@
 ;; Where I store passwords
 (setq auth-sources '(macos-keychain-generic))
 
+;; Use ripgrep for xref by default
+(setq xref-search-program 'ripgrep)
+
 ;; Clean up global-map
 (load (expand-file-name "clean-global-map.el" user-emacs-directory))
 
@@ -286,6 +289,14 @@
   :bind (:map outline-minor-mode-map
               ([C-tab] . bicycle-cycle)
               ([S-tab] . bicycle-cycle-global)))
+
+;;;; consult-xref-stack
+
+(use-package consult-xref-stack
+  :ensure (consult-xref-stack
+           :host github
+           :depth nil
+           :repo "brett-lempereur/consult-xref-stack"))
 
 ;;;; csv-mode
 
