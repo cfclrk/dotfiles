@@ -8,10 +8,9 @@
 (load (expand-file-name "init-elpaca.el" user-emacs-directory))
 
 (elpaca elpaca-use-package
-
   ;; Install use-package support
   (elpaca-use-package-mode)
-  (setq elpaca-use-package-by-default t)
+  (setq use-package-always-ensure t)
 
   ;; Use SSH for cloning repos
   (setq elpaca-recipe-functions
