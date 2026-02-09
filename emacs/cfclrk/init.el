@@ -436,20 +436,18 @@
     (message "Running my/magit-prune-and-cleanup")
     (magit-fetch-all '("--prune"))
     (magit-checkout (magit-main-branch))
-    (magit-pull-from-upstream nil)
-    (magit-status-refresh-buffer)
+
+    ;; Pull and wait for it to complete before deleting branches
+    (magit-git "pull")
 
     ;; Delete branches without upstream
     (let ((branches (magit-list-local-branch-names)))
       (dolist (branch branches)
         (unless (magit-get-upstream-branch branch)
           (when (y-or-n-p (format "Delete branch %s? " branch))
-            (magit-branch-delete branch)))))
+            (magit-run-git "branch" "-d" branch)))))
 
     (message "my/magit-prune-and-cleanup completed"))
-
-  ;; Bind it to a key in magit-status-mode
-  ;; (define-key magit-status-mode-map (kbd "`'") 'my/magit-prune-and-cleanup)
 
   (transient-append-suffix 'magit-fetch "a"
     '("f" "Prune and cleanup" my/magit-prune-and-cleanup))
