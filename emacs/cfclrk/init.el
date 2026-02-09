@@ -254,11 +254,15 @@
     (visual-fill-column-mode))
 
   (setq agent-shell-preferred-agent-config (agent-shell-anthropic-make-claude-code-config))
-  (setq agent-shell-anthropic-authentication
-        (agent-shell-anthropic-make-authentication :api-key
-                                                   (auth-source-pick-first-password
-                                                    :service "api.anthropic.com"
-                                                    :user "cclark@splashfinancial.com")))
+
+  (let ((work-auth (auth-source-pick-first-password
+                      :service "api.anthropic.com"
+                      :user "cclark@splashfinancial.com"))
+        (home-auth (auth-source-pick-first-password
+                      :service "api.anthropic.com"
+                      :user "cfclrk@gmail.com")))
+      (setq agent-shell-anthropic-authentication
+            (agent-shell-anthropic-make-authentication :api-key home-auth)))
   :custom
   (agent-shell-prefer-viewport-interaction t)
   (agent-shell-highlight-blocks t))
@@ -434,7 +438,7 @@
     (interactive)
     (transient-quit-one)
     (message "Running my/magit-prune-and-cleanup")
-    (magit-fetch-all '("--prune"))
+    (magit-fetch-all '("--prune" "--force"))
     (magit-checkout (magit-main-branch))
 
     ;; Pull and wait for it to complete before deleting branches
