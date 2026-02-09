@@ -825,6 +825,15 @@
   :after lsp-mode
   :hook (java-mode . lsp))
 
+;;;; Javascript
+
+(use-package js-mode
+  :ensure nil
+  :after lsp-mode
+  :hook (js-mode . lsp)
+  :custom
+  (js-indent-level 2))
+
 ;;;; PHP
 
 (use-package php-mode
