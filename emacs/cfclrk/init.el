@@ -433,10 +433,11 @@
   (defun my/magit-prune-and-cleanup ()
     "Fetch with prune, checkout default branch, and delete branches without upstream."
     (interactive)
+    (transient-quit-one)
     (message "Running my/magit-prune-and-cleanup")
     (magit-fetch-all '("--prune"))
     (magit-checkout (magit-main-branch))
-    (magit-pull)
+    (magit-pull-from-upstream nil)
     (magit-status-refresh-buffer)
 
     ;; Delete branches without upstream
@@ -451,8 +452,8 @@
   ;; Bind it to a key in magit-status-mode
   ;; (define-key magit-status-mode-map (kbd "`'") 'my/magit-prune-and-cleanup)
 
-  (transient-append-suffix 'magit-dispatch "!"
-    '("1" "Prune and cleanup" my/magit-prune-and-cleanup))
+  (transient-append-suffix 'magit-fetch "a"
+    '("f" "Prune and cleanup" my/magit-prune-and-cleanup))
 
   :custom
   (magit-diff-refine-hunk 'all)
