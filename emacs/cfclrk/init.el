@@ -447,9 +447,14 @@
     ;; Delete branches without upstream
     (let ((branches (magit-list-local-branch-names)))
       (dolist (branch branches)
+        ;; If there is no corresponding upstream branch, delete the local branch
         (unless (magit-get-upstream-branch branch)
-          (when (y-or-n-p (format "Delete branch %s? " branch))
-            (magit-run-git "branch" "-d" branch)))))
+          (message "If already merged, deleting local branch %s" branch)
+          (let ((result (magit-git-string "branch" "-d" branch)))
+            (unless result
+              ;; This branch is unmerged, ask if you really want to delete it
+              (when (y-or-n-p (format "Branch %s is not fully merged. Force delete? " branch))
+                (magit-run-git "branch" "-D" branch)))))))
 
     (message "my/magit-prune-and-cleanup completed"))
 
