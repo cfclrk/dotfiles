@@ -454,7 +454,7 @@
                 (progn
                   (message "Branch %s was merged on GitHub, deleting" branch)
                   (magit-run-git "branch" "-D" branch))
-              (when (y-or-n-p (format "Branch %s has no upstream and no merged PR found. Force delete? " branch))
+              (when (y-or-n-p (format "Branch %s is unmerged. Force delete? " branch))
                 (magit-run-git "branch" "-D" branch)))))))
 
     (message "my/magit-prune-and-cleanup completed"))
