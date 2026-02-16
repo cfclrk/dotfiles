@@ -440,22 +440,21 @@
     (interactive)
     (transient-quit-one)
     (message "Running my/magit-prune-and-cleanup")
-    (magit-fetch-all '("--prune" "--force"))
+    (magit-git "fetch" "--all" "--prune" "--force")
     (magit-checkout (magit-main-branch))
-
-    ;; Pull and wait for it to complete before deleting branches
     (magit-git "pull")
 
     ;; Delete branches without upstream
     (let ((branches (magit-list-local-branch-names)))
       (dolist (branch branches)
-        ;; If there is no corresponding upstream branch, delete the local branch
         (unless (magit-get-upstream-branch branch)
-          (message "If already merged, deleting local branch %s" branch)
-          (let ((result (magit-git-string "branch" "-d" branch)))
-            (unless result
-              ;; This branch is unmerged, ask if you really want to delete it
-              (when (y-or-n-p (format "Branch %s is not fully merged. Force delete? " branch))
+          (let* ((cmd "gh pr list --state merged --search %s --json headRefName --jq '.[].headRefName'")
+                 (gh-output (shell-command-to-string (format cmd (shell-quote-argument branch)))))
+            (if (string= branch (string-trim gh-output))
+                (progn
+                  (message "Branch %s was merged on GitHub, deleting" branch)
+                  (magit-run-git "branch" "-D" branch))
+              (when (y-or-n-p (format "Branch %s has no upstream and no merged PR found. Force delete? " branch))
                 (magit-run-git "branch" "-D" branch)))))))
 
     (message "my/magit-prune-and-cleanup completed"))
