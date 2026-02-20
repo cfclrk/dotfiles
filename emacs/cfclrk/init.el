@@ -256,15 +256,9 @@
   (setq agent-shell-preferred-agent-config
         (agent-shell-anthropic-make-claude-code-config))
 
-  (let (
-        ;; (home-auth (auth-source-pick-first-password
-        ;;               :service "api.anthropic.com"
-        ;;               :user "cfclrk@gmail.com"))
-        (work-auth (auth-source-pick-first-password
-                      :service "api.anthropic.com"
-                      :user "cclark@splashfinancial.com")))
-      (setq agent-shell-anthropic-authentication
-            (agent-shell-anthropic-make-authentication :api-key work-auth)))
+  ;; Login-based authentication
+  (setq agent-shell-anthropic-authentication
+      (agent-shell-anthropic-make-authentication :login t))
   :custom
   (agent-shell-prefer-viewport-interaction t)
   (agent-shell-highlight-blocks t))
@@ -448,7 +442,7 @@
     (let ((branches (magit-list-local-branch-names)))
       (dolist (branch branches)
         (unless (magit-get-upstream-branch branch)
-          (let* ((cmd "gh pr list --state merged --search %s --json headRefName --jq '.[].headRefName'")
+          (let* ((cmd "gh pr list --state merged --json headRefName | jq -r '.[].headRefName' | grep %s")
                  (gh-output (shell-command-to-string (format cmd (shell-quote-argument branch)))))
             (if (string= branch (string-trim gh-output))
                 (progn
