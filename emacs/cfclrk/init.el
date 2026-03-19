@@ -258,10 +258,17 @@
 
   ;; Login-based authentication
   (setq agent-shell-anthropic-authentication
-      (agent-shell-anthropic-make-authentication :login t))
+        (agent-shell-anthropic-make-authentication :login t))
+
+  (setq agent-shell-mcp-servers
+        '(((name . "atlassian")
+           (type . "http")
+           (headers . [])
+           (url . "https://mcp.atlassian.com/v1/mcp"))))
   :custom
   (agent-shell-prefer-viewport-interaction t)
-  (agent-shell-highlight-blocks t))
+  (agent-shell-highlight-blocks t)
+  (agent-shell-session-strategy 'prompt))
 
 ;;;; ansi-color
 
