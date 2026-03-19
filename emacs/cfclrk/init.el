@@ -746,12 +746,12 @@
 
 ;;;; Clojure
 
-(use-package clojure-mode
-  :mode "\\.cljstyle\\'"  ; Use clojure-mode for ".cljstyle" files
-  :hook ((clojure-mode . lsp)
-         (clojure-mode . my/lisp-mode-hook)
-         (clojure-mode . cljstyle-format-on-save-mode))
-  :bind (:map clojure-mode-map
+(use-package clojure-ts-mode
+  :init (add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode))
+  :hook ((clojure-ts-mode . lsp)
+         (clojure-ts-mode . my/lisp-mode-hook)
+         (clojure-ts-mode . cljstyle-format-on-save-mode))
+  :bind (:map clojure-ts-mode-map
               ("S-SPC" . just-one-space))
   :custom
   (clojure-indent-style 'always-indent) ; Indent arguments instead of aligning them
@@ -759,7 +759,6 @@
   (clojure-toplevel-inside-comment-form t))
 
 (use-package cider
-  :after clojure-mode
   :bind ((:map cider-mode-map
                ("C-t f" . cider-test-run-ns-tests)
                ("C-t p" . cider-test-show-report-other-window)
