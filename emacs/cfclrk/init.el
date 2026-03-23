@@ -243,8 +243,9 @@
   (defun my/agent-shell-viewport-hook ()
     (setq fill-column 100
           visual-fill-column-center-text t)
-
     (setq-local whitespace-style '(tabs empty trailing))
+
+    (smartparens-mode)
 
     ;; Restart whitespace-mode for the new settings to take effect.
     (whitespace-mode -1)

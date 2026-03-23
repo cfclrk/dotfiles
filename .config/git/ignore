@@ -2,4 +2,4 @@
 .projectile
 .clj-kondo
 .lsp
-splash/chris
+**/.claude/settings.local.json

@@ -7,8 +7,7 @@
   Install Homebrew. Then:
 
   #+begin_src sh
-    f="https://raw.githubusercontent.com/cfclrk/dotfiles/master/bootstrap.sh"
-    bash -c "$(curl -sSL $f)"
+    bash -c "$(curl -sSL https://raw.githubusercontent.com/cfclrk/dotfiles/master/bootstrap.sh)"
   #+end_src
 
   Install oh-my-zsh.
