@@ -75,7 +75,7 @@
 (size-indication-mode t)
 
 ;; Change all yes/no prompts to y/n
-(fset 'yes-or-no-p 'y-or-n-p)
+(setopt use-short-answers t)
 
 ;; Replace buffer-menu with ibuffer
 (global-set-key (kbd "C-x C-b") #'ibuffer)
@@ -301,7 +301,6 @@
 (use-package consult-xref-stack
   :ensure (consult-xref-stack
            :host github
-           :depth nil
            :repo "brett-lempereur/consult-xref-stack"))
 
 ;;;; csv-mode
@@ -613,6 +612,12 @@
   :config
   (load (expand-file-name "~/emacs/smartparens.el"))
   (my-smartparens-config))
+
+;;;; super-save
+
+(use-package super-save
+  :config
+  (super-save-mode t))
 
 ;;;; terraform
 
