@@ -945,3 +945,5 @@
   :custom
   (splash-stonehenge-dir "/Users/cclark/Work/stonehenge")
   (splash-website-dir "/Users/cclark/Work/Website"))
+
+(load (expand-file-name "work.el" user-emacs-directory))
