@@ -7,5 +7,6 @@
   "first-line-heading": false,
   "no-duplicate-heading": false,
   "line-length": false,
-  "blanks-around-lists": false
+  "blanks-around-lists": false,
+  "blanks-around-headings": false
 }
