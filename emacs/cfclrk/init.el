@@ -112,6 +112,12 @@
 ;; Use ripgrep for xref by default
 (setq xref-search-program 'ripgrep)
 
+(setq read-extended-command-predicate
+      #'command-completion-default-include-p)
+
+(setq treesit-language-source-alist
+  '((python "https://github.com/tree-sitter/tree-sitter-python")))
+
 ;; Clean up global-map
 (load (expand-file-name "clean-global-map.el" user-emacs-directory))
 
@@ -265,7 +271,12 @@
         '(((name . "atlassian")
            (type . "http")
            (headers . [])
-           (url . "https://mcp.atlassian.com/v1/mcp"))))
+           (url . "https://mcp.atlassian.com/v1/mcp"))
+
+          ((name . "datadog")
+           (type . "http")
+           (headers . [])
+           (url . "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp"))))
   :custom
   (agent-shell-prefer-viewport-interaction t)
   (agent-shell-highlight-blocks t)
@@ -535,6 +546,12 @@
 ;;;; markdown
 
 (load (expand-file-name "init-markdown.el" user-emacs-directory))
+
+;;;; mermaid
+
+(use-package mermaid-mode
+  :custom
+  (mermaid-output-format ".svg"))
 
 ;;;; occur
 
