@@ -115,9 +115,6 @@
 (setq read-extended-command-predicate
       #'command-completion-default-include-p)
 
-(setq treesit-language-source-alist
-  '((python "https://github.com/tree-sitter/tree-sitter-python")))
-
 ;; Clean up global-map
 (load (expand-file-name "clean-global-map.el" user-emacs-directory))
 
@@ -665,6 +662,14 @@
       (progn (lsp-treemacs-symbols)
              (other-window -1)))))
 
+;;;; treesit
+
+(use-package treesit
+  :ensure nil
+  :config
+  (setq treesit-language-source-alist
+        '((python . ("https://github.com/tree-sitter/tree-sitter-python")))))
+
 ;;;; undo-tree
 
 (use-package undo-tree
@@ -890,10 +895,12 @@
 
 ;;;; Python
 
-(use-package python-mode
+(use-package python-ts-mode
   :ensure nil
-  :hook (python-mode . my/python-mode-hook)
-  :config
+  :hook (python-ts-mode . my/python-mode-hook)
+  :init
+  (add-to-list 'major-mode-remap-alist
+               '(python-mode . python-ts-mode))
   (defun my/python-mode-hook ()
     "Customize `python-mode'."
     (setq fill-column 88
@@ -903,19 +910,20 @@
 
     ;; Restart whitespace-mode so that it properly uses `fill-column'
     (whitespace-mode -1)
-    (whitespace-mode +1)))
+    (whitespace-mode +1))
+  :config
+  (setq treesit-font-lock-level 4))
 
 ;; LSP using the pyright language server
 (use-package lsp-pyright
   :after lsp-mode
   :init (setq lsp-pyright-multi-root nil)
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp-deferred))))
+  :hook (python-ts-mode . (lambda ()
+                            (require 'lsp-pyright)
+                            (lsp-deferred))))
 
 ;; Code formatter
-(use-package python-black
-  :after python)
+(use-package python-black)
 
 ;; Sort imports
 (use-package python-isort
