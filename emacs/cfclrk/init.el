@@ -185,7 +185,7 @@
   :ensure nil
   :after (smartparens whitespace)
   :hook ((text-mode . my/text-mode-hook))
-  :config
+  :init
   (defun my/text-mode-hook ()
     (whitespace-mode)
     (delete-selection-mode)))
@@ -242,7 +242,7 @@
 (use-package agent-shell
   :hook ((agent-shell-viewport-edit-mode . my/agent-shell-viewport-hook)
          (agent-shell-viewport-view-mode . my/agent-shell-viewport-hook))
-  :config
+  :init
   (defun my/agent-shell-viewport-hook ()
     (setq fill-column 100
           visual-fill-column-center-text t)
@@ -256,7 +256,7 @@
 
     (visual-line-mode)
     (visual-fill-column-mode))
-
+  :config
   (setq agent-shell-preferred-agent-config
         (agent-shell-anthropic-make-claude-code-config))
 
