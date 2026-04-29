@@ -16,3 +16,6 @@ path=($HOME/bin
       $HOMEBREW_PREFIX/opt/openssl@1.1/bin
       $HOMEBREW_PREFIX/opt/texinfo/bin
       $path)
+
+# added by Snowflake SnowSQL installer v1.2
+export PATH=/Applications/SnowSQL.app/Contents/MacOS:$PATH
