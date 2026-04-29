@@ -103,6 +103,8 @@
 ;; C-c z to see full path of file in the current buffer
 (global-set-key (kbd "C-c z") 'my/show-buffer-file-name)
 
+(global-set-key (kbd "C-c b") 'browse-url-at-point)
+
 ;; Do not prompt about killing processes when closing Emacs
 (setq confirm-kill-processes nil)
 
