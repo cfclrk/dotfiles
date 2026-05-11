@@ -41,6 +41,13 @@ ln -svfn \
    ~/.ssh/config
 chmod 600 ~/.ssh/config
 
+# GPG
+mkdir -p ~/.gnupg
+ln -svfn \
+   "$DOTFILES_DIR/.gnupg/gpg-agent.conf" \
+   ~/.gnupg/gpg-agent.conf
+chmod 700 ~/.gnupg
+
 # Tmux
 if [[ ! -d ~/.tmux/plugins/tpm ]]; then
     echo "Tmux package manager is not installed. Installing!"
@@ -53,6 +60,33 @@ mkdir -p ~/.pyenv
 ln -svf \
    "$DOTFILES_DIR/.pyenv/default_packages" \
    ~/.pyenv/default-packages
+
+# Global NPM packages
+npm_packages=(
+    @agentclientprotocol/claude-agent-acp
+)
+
+printf "\nInstalling global npm packages"
+for package in "${npm_packages[@]}"; do
+    printf "\nInstalling %s\n" "$package"
+    npm install -g "$package"
+done
+
+# GPG signing key (stored in 1Password as "GPG Private Key (cfclrk)")
+GPG_SIGNING_KEY="7D9725559B0BC823"
+if ! gpg --list-secret-keys --keyid-format=long 2>/dev/null | grep -q "$GPG_SIGNING_KEY"; then
+    echo "GPG signing key not found. Importing from 1Password..."
+    op item get "GPG Private Key (cfclrk)" --fields notesPlain | gpg --import
+fi
+
+# Fish shell
+fish_path=$(which fish 2>/dev/null || true)
+if [[ -n "$fish_path" ]]; then
+    if ! grep -qF "$fish_path" /etc/shells; then
+        echo "Adding $fish_path to /etc/shells"
+        echo "$fish_path" | sudo tee -a /etc/shells > /dev/null
+    fi
+fi
 
 # Link the contents of a directory in the dotfiles repo in ~/emacs.
 #

@@ -134,7 +134,7 @@
 (set-face-attribute 'default nil
                     :family "Roboto Mono"
                     :weight 'normal
-                    :height 130)
+                    :height 140)
 
 (setq-default line-spacing 7)
 
@@ -786,8 +786,7 @@
 (use-package clojure-ts-mode
   :init (add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode))
   :hook ((clojure-ts-mode . lsp)
-         (clojure-ts-mode . my/lisp-mode-hook)
-         (clojure-ts-mode . cljstyle-format-on-save-mode))
+         (clojure-ts-mode . my/lisp-mode-hook))
   :bind (:map clojure-ts-mode-map
               ("S-SPC" . just-one-space))
   :custom
@@ -841,8 +840,9 @@
   (cider-repl-prompt-function (lambda (namespace)
                                 (format "%s\n> " namespace))))
 
-(use-package cljstyle-format
-  :after clojure-mode)
+(use-package apheleia
+  :config
+  (apheleia-global-mode +1))
 
 ;;;; CSS
 
@@ -852,7 +852,7 @@
   :config
   ;; This should probably be project-local.
   (setq lsp-css-experimental-custom-data
-      '("/Users/cclark/Projects/codenotes/css/lsp_tailwind_custom_data.json"))
+        '("/Users/cclark/Projects/codenotes/css/lsp_tailwind_custom_data.json"))
   :custom
   css-indent-offset 2)
 
