@@ -72,6 +72,13 @@ for package in "${npm_packages[@]}"; do
     npm install -g "$package"
 done
 
+# Intelephense licence key (stored in 1Password as "Intelephense License")
+if [[ ! -f ~/intelephense/licence.txt ]]; then
+    echo "Intelephense licence not found. Fetching from 1Password..."
+    mkdir -p ~/intelephense
+    op item get "Intelephense License" --fields notesPlain > ~/intelephense/licence.txt
+fi
+
 # GPG signing key (stored in 1Password as "GPG Private Key (cfclrk)")
 GPG_SIGNING_KEY="7D9725559B0BC823"
 if ! gpg --list-secret-keys --keyid-format=long 2>/dev/null | grep -q "$GPG_SIGNING_KEY"; then
