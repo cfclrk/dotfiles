@@ -16,6 +16,13 @@
 
   Run the command =emacs= from the terminal and pin the icon to the dock.
 
+* iTerm2
+
+  Open iTerm2 and go to Settings -> General -> Settings and tell it to
+
+  - Load preferences from the iTerm2 file in this repo
+  - Save changes when quitting
+
 * Notes
 
 ** tmux
