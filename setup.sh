@@ -86,6 +86,20 @@ if ! gpg --list-secret-keys --keyid-format=long 2>/dev/null | grep -q "$GPG_SIGN
     op item get "GPG Private Key (cfclrk)" --fields notesPlain | gpg --import
 fi
 
+# SSH keys (stored in 1Password)
+for key in codeberg github-home github-work gitlab; do
+    if [[ ! -f ~/.ssh/$key ]]; then
+        echo "SSH key $key not found. Fetching from 1Password..."
+        op read "op://Personal/$key SSH key/private key?ssh-format=openssh" > ~/.ssh/$key
+        chmod 600 ~/.ssh/$key
+    fi
+    if [[ ! -f ~/.ssh/$key.pub ]]; then
+        echo "SSH public key $key.pub not found. Fetching from 1Password..."
+        op read "op://Personal/$key SSH key/public key" > ~/.ssh/$key.pub
+        chmod 644 ~/.ssh/$key.pub
+    fi
+done
+
 # Fish shell
 fish_path=$(which fish 2>/dev/null || true)
 if [[ -n "$fish_path" ]]; then

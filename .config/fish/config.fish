@@ -70,4 +70,3 @@ end
 
 alias md5sum "md5 -r"
 source ~/.functions.fish
-source ~/Work/bin/fish.fish
