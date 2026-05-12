@@ -849,10 +849,6 @@
 (use-package css-mode
   :ensure nil
   :hook (css-mode . lsp)
-  :config
-  ;; This should probably be project-local.
-  (setq lsp-css-experimental-custom-data
-        '("/Users/cclark/Projects/codenotes/css/lsp_tailwind_custom_data.json"))
   :custom
   css-indent-offset 2)
 
@@ -969,8 +965,8 @@
 (use-package splash
   :ensure (splash :repo "~/Work/stonehenge"
                   :files ("development/emacs/splash.el"))
-  :custom
-  (splash-stonehenge-dir "/Users/cclark/Work/stonehenge")
-  (splash-website-dir "/Users/cclark/Work/Website"))
+  :config
+  (setq splash-stonehenge-dir (expand-file-name "~/Work/stonehenge"))
+  (setq splash-website-dir (expand-file-name "~/Work/Website")))
 
 (load (expand-file-name "work.el" user-emacs-directory))
