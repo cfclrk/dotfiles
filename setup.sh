@@ -34,19 +34,44 @@ for f in $xdgConfigs; do
        "$HOME/.config/$f"
 done
 
-# SSH
+# SSH config
 mkdir -p ~/.ssh
 ln -svfn \
    "$DOTFILES_DIR/.ssh/config" \
    ~/.ssh/config
 chmod 600 ~/.ssh/config
 
-# GPG
+# SSH keys (stored in 1Password)
+for key in codeberg github-home github-work gitlab; do
+    if [[ ! -f ~/.ssh/$key ]]; then
+        echo "SSH key $key not found. Fetching from 1Password..."
+        op read "op://Personal/$key SSH key/private key?ssh-format=openssh" > ~/.ssh/$key
+        chmod 600 ~/.ssh/$key
+    else
+        echo "SSH key $key already present."
+    fi
+    if [[ ! -f ~/.ssh/$key.pub ]]; then
+        echo "SSH public key $key.pub not found. Fetching from 1Password..."
+        op read "op://Personal/$key SSH key/public key" > ~/.ssh/$key.pub
+        chmod 644 ~/.ssh/$key.pub
+    else
+        echo "SSH public key $key.pub already present."
+    fi
+done
+
+# GPG config
 mkdir -p ~/.gnupg
 ln -svfn \
    "$DOTFILES_DIR/.gnupg/gpg-agent.conf" \
    ~/.gnupg/gpg-agent.conf
 chmod 700 ~/.gnupg
+
+# GPG signing key (stored in 1Password)
+GPG_SIGNING_KEY="7D9725559B0BC823"
+if ! gpg --list-secret-keys --keyid-format=long 2>/dev/null | grep -q "$GPG_SIGNING_KEY"; then
+    echo "GPG signing key not found. Importing from 1Password..."
+    op item get "GPG Private Key (cfclrk)" --fields notesPlain | gpg --import
+fi
 
 # Tmux
 if [[ ! -d ~/.tmux/plugins/tpm ]]; then
@@ -78,27 +103,6 @@ if [[ ! -f ~/intelephense/licence.txt ]]; then
     mkdir -p ~/intelephense
     op item get "Intelephense License" --fields notesPlain > ~/intelephense/licence.txt
 fi
-
-# GPG signing key (stored in 1Password as "GPG Private Key (cfclrk)")
-GPG_SIGNING_KEY="7D9725559B0BC823"
-if ! gpg --list-secret-keys --keyid-format=long 2>/dev/null | grep -q "$GPG_SIGNING_KEY"; then
-    echo "GPG signing key not found. Importing from 1Password..."
-    op item get "GPG Private Key (cfclrk)" --fields notesPlain | gpg --import
-fi
-
-# SSH keys (stored in 1Password)
-for key in codeberg github-home github-work gitlab; do
-    if [[ ! -f ~/.ssh/$key ]]; then
-        echo "SSH key $key not found. Fetching from 1Password..."
-        op read "op://Personal/$key SSH key/private key?ssh-format=openssh" > ~/.ssh/$key
-        chmod 600 ~/.ssh/$key
-    fi
-    if [[ ! -f ~/.ssh/$key.pub ]]; then
-        echo "SSH public key $key.pub not found. Fetching from 1Password..."
-        op read "op://Personal/$key SSH key/public key" > ~/.ssh/$key.pub
-        chmod 644 ~/.ssh/$key.pub
-    fi
-done
 
 # Fish shell
 fish_path=$(which fish 2>/dev/null || true)
