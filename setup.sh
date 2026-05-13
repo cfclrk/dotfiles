@@ -97,7 +97,7 @@ for package in "${npm_packages[@]}"; do
     npm install -g "$package"
 done
 
-# Intelephense licence key (stored in 1Password as "Intelephense License")
+# Intelephense licence key (stored in 1Password)
 if [[ ! -f ~/intelephense/licence.txt ]]; then
     echo "Intelephense licence not found. Fetching from 1Password..."
     mkdir -p ~/intelephense
