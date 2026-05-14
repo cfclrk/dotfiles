@@ -62,6 +62,7 @@
 (setq-default tab-width 4)
 (setq-default fill-column 80)
 (setq-default indent-tabs-mode nil)
+(setq-default require-final-newline t)
 
 (setq make-backup-files nil
       inhibit-splash-screen t
