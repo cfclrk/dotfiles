@@ -796,29 +796,25 @@
 
 (use-package cider
   :bind ((:map cider-mode-map
-               ("C-t f" . cider-test-run-ns-tests)
-               ("C-t p" . cider-test-show-report-other-window)
-               ("C-t t" . cider-test-run-test)
-               ("C-t r" . cider-test-rerun-test)
+               ;; ("C-t p" . cider-test-show-report-other-window)
+               ;; ("C-t r" . cider-test-rerun-test)
                ("C-c C-c" . cider-pprint-eval-defun-at-point)
                ("C-j" . cider-pprint-eval-last-sexp-to-comment)
-               ("C-c x" . cider-scratch))
-         ;; TODO: Update C-t to point to cider-test-commands-map, which shoul
-         ;; allow me to delete a lot of the stuff above.
-         ;; (:map cider-test-report-mode-map
-         ;;       ("C-c x" . cider-scratch))
-         ;; TODO: add scratch to cider-clojure-interaction-mode-map (defined in cider-scratch)
-         ;; (:map cider-clojure-interaction-mode-map
-         ;;       ("C-c x" . cider-scratch))
-         )
+               ("C-c x" . cider-scratch)))
   :hook ((cider-repl-mode . (lambda () (smartparens-mode)))
          (cider-repl-mode . (lambda () (rainbow-delimiters-mode)))
          (cider-test-report-mode . (lambda () (visual-line-mode)))
          (cider-stacktrace-mode . (lambda () (visual-line-mode)))
-         (cider-test-report-mode . (lambda () (smartparens-mode))))
+         (cider-test-report-mode . (lambda () (smartparens-mode)))
+         (cider-clojure-interaction-mode . my/lisp-mode-hook))
   :config
   ;; Unbind cider-macroexpand-1 (in favor of gptel-send)
   (keymap-unset cider-mode-map "C-c RET" 'remove)
+
+  (define-key cider-test-commands-map (kbd "f") #'cider-test-run-ns-tests)
+
+  ;; Make C-t is the key prefix for testing stuff
+  (define-key cider-mode-map (kbd "C-t") cider-test-commands-map)
 
   (defun cider-test-show-report-other-window ()
     "Show the test report buffer in other window, if one exists."
