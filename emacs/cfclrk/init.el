@@ -32,6 +32,12 @@
 (use-package s)
 (use-package f)
 
+;; Some packages require compat. They declare compat as a dependency, but that
+;; doesn't ensure compat is actually loaded before those other packages. I'm not
+;; sure what the approved solution is here, other than explicityl installing it
+;; before everything else.
+(use-package compat)
+
 (elpaca-wait)
 
 (load (expand-file-name "init-functions.el" user-emacs-directory))
