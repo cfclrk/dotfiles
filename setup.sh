@@ -120,6 +120,7 @@ if [[ ! -d ~/Projects/cfclrk.github.io ]]; then
     echo "Cloning cfclrk.github.io into ~/Projects/"
     git clone git@github.com:cfclrk/cfclrk.github.io.git ~/Projects/cfclrk.github.io
 fi
+ln -svfn ~/Projects/cfclrk.github.io/notes/org ~/notes
 
 # Update dotfiles remote from HTTPS to SSH if needed
 dotfiles_remote=$(git -C "$DOTFILES_DIR" remote get-url origin)
