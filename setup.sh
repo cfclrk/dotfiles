@@ -89,6 +89,7 @@ ln -svf \
 # Global NPM packages
 npm_packages=(
     @agentclientprotocol/claude-agent-acp
+    intelephense
 )
 
 printf "\nInstalling global npm packages"
@@ -111,6 +112,20 @@ if [[ -n "$fish_path" ]]; then
         echo "Adding $fish_path to /etc/shells"
         echo "$fish_path" | sudo tee -a /etc/shells > /dev/null
     fi
+fi
+
+# Projects
+mkdir -p ~/Projects
+if [[ ! -d ~/Projects/cfclrk.github.io ]]; then
+    echo "Cloning cfclrk.github.io into ~/Projects/"
+    git clone git@github.com:cfclrk/cfclrk.github.io.git ~/Projects/cfclrk.github.io
+fi
+
+# Update dotfiles remote from HTTPS to SSH if needed
+dotfiles_remote=$(git -C "$DOTFILES_DIR" remote get-url origin)
+if [[ "$dotfiles_remote" == "https://github.com/cfclrk/dotfiles.git" ]]; then
+    echo "Updating dotfiles remote from HTTPS to SSH..."
+    git -C "$DOTFILES_DIR" remote set-url origin git@github.com:cfclrk/dotfiles.git
 fi
 
 # Link the contents of a directory in the dotfiles repo in ~/emacs.

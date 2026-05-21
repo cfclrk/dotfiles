@@ -15,12 +15,13 @@ fi
 brew update
 brew upgrade
 
-# Make the ~/Projects dir if it's not already there.
 mkdir -p ~/Projects
 cd ~/Projects
 
+# This will clone using HTTPS since we don't have SSH set up yet
 git clone https://github.com/cfclrk/dotfiles.git
 
 cd ~/Projects/dotfiles
 brew bundle install --verbose
+
 ./setup.sh

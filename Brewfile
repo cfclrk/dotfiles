@@ -1,4 +1,5 @@
 brew "awscli"
+brew "clojure-lsp/brew/clojure-lsp-native"
 brew "coreutils"
 brew "fd"
 brew "fish"
