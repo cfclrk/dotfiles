@@ -532,7 +532,9 @@
 
 ;;;; jsonian
 
-(use-package jsonian)
+(use-package jsonian
+  :config
+  (add-to-list 'org-src-lang-modes '("json" . jsonian)))
 
 ;;;; LSP
 
