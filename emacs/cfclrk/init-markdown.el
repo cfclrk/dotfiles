@@ -20,7 +20,8 @@
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
   :bind ((:map markdown-mode-map
-               ("C-c C-z" . markdown-live-preview-switch-to-output))
+               ("C-c C-z" . markdown-live-preview-switch-to-output)
+               ("C-c C-," . markdown-insert-gfm-code-block))
          (:map markdown-mode-command-map
                ("v" . markdown-view-mode)))
   :custom

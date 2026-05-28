@@ -251,6 +251,8 @@
 (use-package agent-shell
   :hook ((agent-shell-viewport-edit-mode . my/agent-shell-viewport-hook)
          (agent-shell-viewport-view-mode . my/agent-shell-viewport-hook))
+  :bind (:map agent-shell-viewport-edit-mode-map
+              ("C-c C-," . markdown-insert-gfm-code-block))
   :init
   (defun my/agent-shell-viewport-hook ()
     (setq fill-column 100
