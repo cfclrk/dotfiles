@@ -204,9 +204,8 @@ end
 # Kubernetes
 # -----------------------------------------------------------------------------
 
-alias k "kubectl"
+alias k kubectl
 alias kn "kubectl config set-context (kubectl config current-context) --namespace"
-alias rk "rancher kubectl"
 
 function kEnvVars --description "Get all env vars for service"
     set serviceName $argv[1]
