@@ -234,7 +234,8 @@
 
 (use-package consult
   :bind (:map global-map
-              ("M-g g" . consult-goto-line)))
+              ("M-g g" . consult-goto-line)
+              ("C-x b" . consult-buffer)))
 
 ;;; Packages/Modes
 ;;  ----------------------------------------------------------------------------
@@ -799,9 +800,11 @@
   :bind (:map clojure-ts-mode-map
               ("S-SPC" . just-one-space))
   :custom
-  (clojure-indent-style 'always-indent) ; Indent arguments instead of aligning them
-  (clojure-docstring-fill-prefix-width 3) ; Was 2
-  (clojure-toplevel-inside-comment-form t))
+  (clojure-ts-indent-style 'fixed)
+  (clojure-docstring-fill-prefix-width 3)
+  (clojure-ts-docstring-fill-prefix-width 3) ; Was 2
+  (clojure-toplevel-inside-comment-form t)
+  (clojure-ts-toplevel-inside-comment-form t))
 
 (use-package cider
   :bind ((:map cider-mode-map
