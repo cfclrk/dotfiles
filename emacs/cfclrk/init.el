@@ -903,10 +903,13 @@
 
 (use-package python-ts-mode
   :ensure nil
-  :hook (python-ts-mode . my/python-mode-hook)
   :init
+  (unless (treesit-language-available-p 'python)
+    (treesit-install-language-grammar 'python))
+
   (add-to-list 'major-mode-remap-alist
                '(python-mode . python-ts-mode))
+
   (defun my/python-mode-hook ()
     "Customize `python-mode'."
     (setq fill-column 88
@@ -917,6 +920,8 @@
     ;; Restart whitespace-mode so that it properly uses `fill-column'
     (whitespace-mode -1)
     (whitespace-mode +1))
+
+  :hook (python-ts-mode . my/python-mode-hook)
   :config
   (setq treesit-font-lock-level 4))
 
@@ -938,7 +943,7 @@
 (use-package python-pytest
   ;; To run as "pytest -s", save "-s" opt to `transient-values-file'
   :after python
-  :bind (:map python-mode-map
+  :bind (:map python-ts-mode-map
               ("C-t t" . python-pytest-run-def-at-point-treesit)
               ("C-t f" . python-pytest-file)
               ("C-t c" . python-pytest-run-class-at-point-treesit)

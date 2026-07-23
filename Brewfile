@@ -23,6 +23,7 @@ brew "shellcheck"
 brew "sqlfluff"
 brew "tmux"
 brew "tree"
+brew "uv"
 brew "xmlstarlet"
 
 cask "1password-cli"
