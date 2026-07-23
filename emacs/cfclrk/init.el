@@ -850,6 +850,9 @@
 
 (use-package apheleia
   :config
+  (setf (alist-get 'clojure-mode apheleia-mode-alist) 'cljstyle)
+  (setf (alist-get 'clojure-ts-mode apheleia-mode-alist) 'cljstyle)
+
   (apheleia-global-mode +1))
 
 ;;;; CSS
