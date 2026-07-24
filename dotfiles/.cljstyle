@@ -1,0 +1,2 @@
+{:rules {:blank-lines {:max-consecutive 1
+                       :padding-lines 1}}}
