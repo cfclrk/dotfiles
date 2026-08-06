@@ -817,8 +817,10 @@
   :init (add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode))
   :hook ((clojure-ts-mode . lsp)
          (clojure-ts-mode . my/lisp-mode-hook))
-  :bind (:map clojure-ts-mode-map
-              ("S-SPC" . just-one-space))
+  :bind ((:map clojure-mode-map
+               ("S-SPC" . just-one-space))
+         (:map clojure-ts-mode-map
+               ("S-SPC" . just-one-space)))
   :custom
   (clojure-ts-indent-style 'fixed)
   (clojure-docstring-fill-prefix-width 3)
@@ -858,19 +860,15 @@
   ;; print "Error in sarray?" problems. How can I make zprint handle that? I
   ;; would love to use zprint.
   ;; (setq cider-print-fn 'zprint)
+  (cider-print-fn 'orchard)
 
   ;; Automatically save files before they are loaded in the repl
-  (cider-save-file-on-load t)
-
-  ;; Add a newline to the repl prompt
-  (cider-repl-prompt-function (lambda (namespace)
-                                (format "%s\n> " namespace))))
+  (cider-save-file-on-load t))
 
 (use-package apheleia
   :config
   (setf (alist-get 'clojure-mode apheleia-mode-alist) 'cljstyle)
   (setf (alist-get 'clojure-ts-mode apheleia-mode-alist) 'cljstyle)
-
   (apheleia-global-mode +1))
 
 ;;;; CSS
