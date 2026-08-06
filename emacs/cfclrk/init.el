@@ -124,6 +124,12 @@
 (setq read-extended-command-predicate
       #'command-completion-default-include-p)
 
+;; Turn on which-key mode
+(which-key-mode 1)
+
+;; Sure let's try it out
+(setq flymake-show-diagnostics-at-end-of-line 'short)
+
 ;; Clean up global-map
 (load (expand-file-name "clean-global-map.el" user-emacs-directory))
 
@@ -703,12 +709,6 @@
   :custom
   ;; Fix a problem where visual-fill-column cuts lines early
   (visual-fill-column-extra-text-width '(1 . 1)))
-
-;;;; which-key
-
-(use-package which-key
-  :config
-  (which-key-mode))
 
 ;;;; winner
 

@@ -73,7 +73,8 @@
   (org-src-window-setup 'split-window-below)
   (org-special-ctrl-a/e t)
   (org-babel-min-lines-for-block-output 40)
-  (org-hide-leading-stars t))
+  (org-hide-leading-stars t)
+  (org-export-backends '(ascii html icalendar latex md odt)))
 
 (use-package ob-mermaid
   :ensure (ob-mermaid
