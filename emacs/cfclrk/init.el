@@ -415,6 +415,23 @@
   :ensure (ejc-sql
            :depth nil))
 
+;;;; embark
+
+(use-package embark
+  :bind (("C-." . embark-act))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command)
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+;;;; embark-consult
+
+(use-package embark-consult)
+
 ;;;; environ
 
 (use-package environ
@@ -581,7 +598,10 @@
 
 ;;;; pdf-tools
 
-(use-package pdf-tools)
+(use-package pdf-tools
+  :defer t
+  :init
+  (pdf-loader-install))
 
 ;;;; prettier
 
@@ -808,8 +828,6 @@
 
 (use-package cider
   :bind ((:map cider-mode-map
-               ;; ("C-t p" . cider-test-show-report-other-window)
-               ;; ("C-t r" . cider-test-rerun-test)
                ("C-c C-c" . cider-pprint-eval-defun-at-point)
                ("C-j" . cider-pprint-eval-last-sexp-to-comment)
                ("C-c x" . cider-scratch)))
@@ -825,7 +843,7 @@
 
   (define-key cider-test-commands-map (kbd "f") #'cider-test-run-ns-tests)
 
-  ;; Make C-t is the key prefix for testing stuff
+  ;; Make C-t the key prefix for testing stuff
   (define-key cider-mode-map (kbd "C-t") cider-test-commands-map)
 
   (defun cider-test-show-report-other-window ()
