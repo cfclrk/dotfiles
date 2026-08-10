@@ -1,3 +1,6 @@
+tap "hashicorp/tap", trusted: true
+tap "clojure-lsp/brew", trusted: true
+
 brew "awscli"
 brew "clojure-lsp/brew/clojure-lsp-native"
 brew "coreutils"
@@ -9,6 +12,7 @@ brew "git"
 brew "go"
 brew "gnupg"
 brew "gnutls"
+brew "hashicorp/tap/terraform"
 brew "jq"
 brew "make"
 brew "node"
