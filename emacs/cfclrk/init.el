@@ -676,7 +676,8 @@
 
 (use-package terraform-mode
   :hook (terraform-mode . lsp)
-  :init (setq lsp-terraform-server '("terraform-ls" "serve")))
+  :init (setq lsp-terraform-server '("terraform-ls" "serve"))
+  :custom (terraform-format-on-save t))
 
 ;;;; tramp
 
