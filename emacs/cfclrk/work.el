@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun splash-tinker ()
   "Start tinker for Website."
   (interactive)

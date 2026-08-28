@@ -824,10 +824,11 @@
                ("S-SPC" . just-one-space)))
   :custom
   (clojure-ts-indent-style 'fixed)
-  (clojure-docstring-fill-prefix-width 3)
   (clojure-ts-docstring-fill-prefix-width 3) ; Was 2
+  (clojure-ts-toplevel-inside-comment-form t)
+
   (clojure-toplevel-inside-comment-form t)
-  (clojure-ts-toplevel-inside-comment-form t))
+  (clojure-docstring-fill-prefix-width 3))
 
 (use-package cider
   :bind ((:map cider-mode-map
