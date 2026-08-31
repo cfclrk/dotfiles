@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun my-smartparens-config ()
   ;; Activates show-smartparens-mode. Turn on visualization of matching pairs.
   (show-smartparens-global-mode t)
