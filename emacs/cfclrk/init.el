@@ -665,24 +665,6 @@
 
 (setq tramp-default-method "scp")
 
-;;;; treemacs
-
-(use-package treemacs)
-
-(use-package treemacs-nerd-icons
-  :config
-  (treemacs-load-theme "nerd-icons"))
-
-(use-package lsp-treemacs
-  :init
-  (defun my/lsp-treemacs-symbols-toggle ()
-    "Toggle the lsp-treemacs-symbols buffer."
-    (interactive)
-    (if (get-buffer "*LSP Symbols List*")
-        (kill-buffer "*LSP Symbols List*")
-      (progn (lsp-treemacs-symbols)
-             (other-window -1)))))
-
 ;;;; treesit
 
 (use-package treesit
