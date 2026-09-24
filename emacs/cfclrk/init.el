@@ -323,13 +323,6 @@
               ([C-tab] . bicycle-cycle)
               ([S-tab] . bicycle-cycle-global)))
 
-;;;; consult-xref-stack
-
-(use-package consult-xref-stack
-  :ensure (consult-xref-stack
-           :host github
-           :repo "brett-lempereur/consult-xref-stack"))
-
 ;;;; csv-mode
 
 (use-package csv-mode)
@@ -345,10 +338,6 @@
   :bind (([remap move-beginning-of-line] . crux-move-beginning-of-line)
          ("C-c D" . crux-delete-file-and-buffer)
          ("C-c f" . crux-recentf-find-file)))
-
-;;;; define-word
-
-(use-package define-word)
 
 ;;;; diff-hl
 
@@ -408,12 +397,6 @@
   :custom
   (ediff-split-window-function #'split-window-horizontally)
   (ediff-window-setup-function #'ediff-setup-windows-plain))
-
-;;;; ejc-sql
-
-(use-package ejc-sql
-  :ensure (ejc-sql
-           :depth nil))
 
 ;;;; embark
 
@@ -560,12 +543,6 @@
 ;;;; markdown
 
 (load (expand-file-name "init-markdown.el" user-emacs-directory))
-
-;;;; mermaid
-
-(use-package mermaid-mode
-  :custom
-  (mermaid-output-format ".svg"))
 
 ;;;; occur
 
