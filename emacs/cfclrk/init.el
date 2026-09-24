@@ -672,10 +672,6 @@
   ;; Fix a problem where visual-fill-column cuts lines early
   (visual-fill-column-extra-text-width '(1 . 1)))
 
-;;;; winner
-
-(winner-mode)
-
 ;;;; nxml
 
 (use-package nxml-mode
