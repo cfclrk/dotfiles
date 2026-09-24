@@ -751,21 +751,15 @@
 
 ;;;; Clojure
 
-(use-package clojure-ts-mode
-  :init (add-to-list 'major-mode-remap-alist '(clojure-mode . clojure-ts-mode))
-  :hook ((clojure-ts-mode . lsp)
-         (clojure-ts-mode . my/lisp-mode-hook))
+(use-package clojure-mode
+  :hook ((clojure-mode . lsp)
+         (clojure-mode . my/lisp-mode-hook))
   :bind ((:map clojure-mode-map
-               ("S-SPC" . just-one-space))
-         (:map clojure-ts-mode-map
                ("S-SPC" . just-one-space)))
   :custom
-  (clojure-ts-indent-style 'fixed)
-  (clojure-ts-docstring-fill-prefix-width 3) ; Was 2
-  (clojure-ts-toplevel-inside-comment-form t)
-
-  (clojure-toplevel-inside-comment-form t)
-  (clojure-docstring-fill-prefix-width 3))
+  (clojure-indent-style 'fixed)
+  (clojure-docstring-fill-prefix-width 3) ; Was 2
+  )
 
 (use-package cider
   :bind ((:map cider-mode-map
@@ -807,7 +801,6 @@
 (use-package apheleia
   :config
   (setf (alist-get 'clojure-mode apheleia-mode-alist) 'cljstyle)
-  (setf (alist-get 'clojure-ts-mode apheleia-mode-alist) 'cljstyle)
   (apheleia-global-mode +1))
 
 ;;;; CSS
