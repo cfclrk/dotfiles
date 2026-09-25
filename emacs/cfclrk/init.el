@@ -533,13 +533,6 @@
   :config
   (setq lsp-enable-file-watchers nil))
 
-(use-package lsp-ui
-  :commands lsp-ui
-  :custom
-  (lsp-ui-doc-enable nil)
-  (lsp-ui-sideline-show-diagnostics nil)
-  (lsp-ui-sideline-show-symbol nil))
-
 ;;;; markdown
 
 (load (expand-file-name "init-markdown.el" user-emacs-directory))
