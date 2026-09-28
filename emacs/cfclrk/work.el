@@ -16,3 +16,7 @@
     (browse-url url)))
 
 (global-set-key (kbd "C-c s") #'splash-bookmarks)
+
+(defun jira (key)
+  (interactive "sJira key: ")
+  (browse-url (concat "https://splashfinancial.atlassian.net/browse/" key)))
