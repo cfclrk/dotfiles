@@ -2,7 +2,7 @@ if not set -q TMUX
 
     # NOTE: Fish doesn't allow variables in commands, so to use EDITOR, run
     # "eval $EDITOR"
-    set -gx EMACS "emacs"
+    set -gx EMACS emacs
     set -gx EDITOR "$EMACS --with-profile minimal"
 
     eval (/opt/homebrew/bin/brew shellenv)
@@ -31,24 +31,23 @@ if not set -q TMUX
     # Setting XDG_CONFIG_HOME makes more programs use it
     set -gx XDG_CONFIG_HOME ~/.config
 
-    # Use the new Docker run engine
-	set -gx DOCKER_BUILDKIT 1
-
-    # nvm for managing node versions
-    set -gx NVM_DIR "$HOME/.nvm"
+    # fnm for managing node versions
+    if command -v fnm >/dev/null
+        fnm env --use-on-cd --version-file-strategy=recursive | source
+    end
 
     # frum for managing ruby versions - this prepends to $PATH
-    if command -v frum > /dev/null
+    if command -v frum >/dev/null
         frum init | source
     end
 
     # jenv for java - this prepends to $PATH
-    if command -v jenv > /dev/null
+    if command -v jenv >/dev/null
         jenv init - | source
     end
 
     # pyenv for python - this prepends to $PATH
-    if command -v pyenv > /dev/null
+    if command -v pyenv >/dev/null
         pyenv init --path | source
         pyenv init - | source
         pyenv virtualenv-init - | source
@@ -62,7 +61,7 @@ if not set -q TMUX
     switch $os
         case Darwin
             # pyinstaller
-            set -gx PYTHON_CONFIGURE_OPTS "--enable-framework"
+            set -gx PYTHON_CONFIGURE_OPTS --enable-framework
         case '*'
             echo "Set PYTHON_CONFIGURE_OPTS"
     end
