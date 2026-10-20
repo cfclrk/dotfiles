@@ -29,6 +29,7 @@ brew "shellcheck"
 brew "sqlfluff"
 brew "tmux"
 brew "tree"
+brew "typescript-language-server"
 brew "uv"
 brew "xmlstarlet"
 
