@@ -10,6 +10,14 @@
   (setq fill-column 90
         visual-fill-column-center-text t))
 
+(defun my/markdown-toggle-view-mode ()
+  "Toggle between `gfm-view-mode' and the file's normal editing mode."
+  (interactive)
+  (if (derived-mode-p 'markdown-view-mode 'gfm-view-mode)
+      (progn (read-only-mode -1)
+             (normal-mode))
+    (gfm-view-mode)))
+
 (use-package markdown-mode
   :after visual-fill-column
   :hook ((markdown-mode . my/markdown-mode-hook)
@@ -23,7 +31,8 @@
                ("C-c C-z" . markdown-live-preview-switch-to-output)
                ("C-c C-," . markdown-insert-gfm-code-block))
          (:map markdown-mode-command-map
-               ("v" . markdown-view-mode)))
+               ("v" . markdown-view-mode)
+               ("v" . my/markdown-toggle-view-mode)))
   :custom
   (markdown-split-window-direction 'right)
   (markdown-spaces-after-code-fence 0)
