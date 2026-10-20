@@ -915,7 +915,20 @@
   :hook ((typescript-mode . lsp)
          (typescript-mode . (lambda () (smartparens-mode))))
   :custom
-  (typescript-indent-level 2))
+  (typescript-indent-level 2)
+  (lsp-clients-typescript-prefer-use-project-ts-server t))
+
+(use-package jest-test-mode
+  :commands jest-test-mode
+  :hook ((typescript-mode js-mode typescript-tsx-mode) . jest-test-mode)
+  :custom
+  (jest-test-command-string "pnpm exec jest %.0s%s %s")
+  :bind (:map jest-test-mode-map
+              ("C-t t" . jest-test-run-at-point)   ; test at point
+              ("C-t f" . jest-test-run)            ; current file
+              ("C-t a" . jest-test-run-all-tests)  ; whole package
+              ("C-t r" . jest-test-rerun-test)     ; repeat last run
+              ("C-t d" . cfclrk/jest-test-debug-run-at-point)))
 
 ;;; Work
 
