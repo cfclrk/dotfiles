@@ -534,7 +534,26 @@
   :hook (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred)
   :config
-  (setq lsp-enable-file-watchers nil))
+  (setq lsp-enable-file-watchers nil)
+
+  ;; JetBrains' kotlin-lsp (brew install JetBrains/utils/kotlin-lsp). Priority
+  ;; 1 beats lsp-mode's built-in kotlin-ls client (priority -1).
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection
+                     (lambda ()
+                       (list "kotlin-lsp" "--stdio"
+                             (concat "--system-path="
+                                     (expand-file-name "kotlin-lsp" lsp-server-install-dir)))))
+    :major-modes '(kotlin-mode kotlin-ts-mode)
+    :priority 1
+    :server-id 'kotlin-lsp
+    ;; Silence "Unknown notification" warnings for IntelliJ-specific messages
+    :notification-handlers (lsp-ht ("intellij/workspaceImportState" #'ignore)
+                                   ("intellij/workspaceImportStatus" #'ignore)
+                                   ("intellij/importLog" #'ignore)
+                                   ("intellij/ready" #'ignore)
+                                   ("intellij/rocksDbStatisticsReport" #'ignore)))))
 
 ;;;; markdown
 
@@ -644,7 +663,8 @@
   :ensure nil
   :config
   (setq treesit-language-source-alist
-        '((python . ("https://github.com/tree-sitter/tree-sitter-python")))))
+        '((python . ("https://github.com/tree-sitter/tree-sitter-python"))
+          (kotlin . ("https://github.com/fwcd/tree-sitter-kotlin")))))
 
 ;;;; undo-tree
 
@@ -821,6 +841,15 @@
   :hook (js-mode . lsp)
   :custom
   (js-indent-level 2))
+
+;;;; Kotlin
+
+(use-package kotlin-ts-mode
+  :mode "\\.kts?\\'"
+  :hook (kotlin-ts-mode . lsp-deferred)
+  :init
+  (unless (treesit-language-available-p 'kotlin)
+    (treesit-install-language-grammar 'kotlin)))
 
 ;;;; PHP
 
