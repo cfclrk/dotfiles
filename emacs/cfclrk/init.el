@@ -256,6 +256,9 @@
 ;;;; agent-shell
 
 (use-package agent-shell
+  :preface
+  ;; Ensure `markdown-insert-gfm-code-block' is loaded
+  (autoload 'markdown-insert-gfm-code-block "markdown-mode" nil t)
   :hook ((agent-shell-viewport-edit-mode . my/agent-shell-viewport-hook)
          (agent-shell-viewport-view-mode . my/agent-shell-viewport-hook))
   :bind (:map agent-shell-viewport-edit-mode-map
