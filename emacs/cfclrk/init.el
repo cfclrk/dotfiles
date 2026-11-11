@@ -161,7 +161,6 @@
   (doom-modeline-buffer-file-name-style 'buffer-name)
   (doom-modeline-env-version nil)
   (doom-modeline-hud t)
-  (doom-modeline-project-detection 'projectile)
   (doom-modeline-vcs-max-length 15))
 
 ;;;; doom-themes
@@ -586,21 +585,6 @@
 (add-hook 'prog-mode-hook 'outline-minor-mode)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-
-;;;; projectile
-
-(use-package projectile
-  :demand t
-  :bind-keymap ("C-c p" . projectile-command-map)
-  :config
-  (projectile-mode)
-  (setq projectile-project-root-files-bottom-up
-        (-concat
-         '("go.mod")
-         projectile-project-root-files-bottom-up
-         projectile-project-root-files))
-  :custom
-  (projectile-use-git-grep t))
 
 ;;;; rainbow-delimiters
 
