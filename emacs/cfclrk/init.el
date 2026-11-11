@@ -297,7 +297,15 @@
   :custom
   (agent-shell-prefer-viewport-interaction t)
   (agent-shell-highlight-blocks t)
-  (agent-shell-session-strategy 'prompt))
+  (agent-shell-session-strategy 'prompt)
+  (agent-shell-anthropic-default-session-mode-id "bypassPermissions"))
+
+(use-package agent-shell-hq
+  :after agent-shell
+  :ensure (agent-shell-hq
+           :host github
+           :repo "SreenivasVRao/agent-shell-hq"
+           :depth nil))
 
 ;;;; ansi-color
 
