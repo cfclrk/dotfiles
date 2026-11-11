@@ -31,11 +31,6 @@ if not set -q TMUX
     # Setting XDG_CONFIG_HOME makes more programs use it
     set -gx XDG_CONFIG_HOME ~/.config
 
-    # fnm for managing node versions
-    if command -v fnm >/dev/null
-        fnm env --use-on-cd --version-file-strategy=recursive | source
-    end
-
     # frum for managing ruby versions - this prepends to $PATH
     if command -v frum >/dev/null
         frum init | source
