@@ -556,11 +556,12 @@
     :priority 1
     :server-id 'kotlin-lsp
     ;; Silence "Unknown notification" warnings for IntelliJ-specific messages
-    :notification-handlers (lsp-ht ("intellij/workspaceImportState" #'ignore)
-                                   ("intellij/workspaceImportStatus" #'ignore)
-                                   ("intellij/importLog" #'ignore)
+    :notification-handlers (lsp-ht ("intellij/importLog" #'ignore)
                                    ("intellij/ready" #'ignore)
-                                   ("intellij/rocksDbStatisticsReport" #'ignore)))))
+                                   ("intellij/ready-for-test" #'ignore)
+                                   ("intellij/rocksDbStatisticsReport" #'ignore)
+                                   ("intellij/workspaceImportState" #'ignore)
+                                   ("intellij/workspaceImportStatus" #'ignore)))))
 
 ;;;; markdown
 
