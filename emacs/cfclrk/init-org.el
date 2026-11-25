@@ -76,12 +76,6 @@
   (org-hide-leading-stars t)
   (org-export-backends '(ascii html icalendar latex md odt)))
 
-(use-package ob-mermaid
-  :ensure (ob-mermaid
-           :host github
-           :depth nil
-           :repo "cfclrk/ob-mermaid"))
-
 ;;; Functions
 
 (defun org-outline-tempdir (&optional empty)

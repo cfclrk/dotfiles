@@ -283,17 +283,6 @@
   ;; Login-based authentication
   (setq agent-shell-anthropic-authentication
         (agent-shell-anthropic-make-authentication :login t))
-
-  (setq agent-shell-mcp-servers
-        '(((name . "atlassian")
-           (type . "http")
-           (headers . [])
-           (url . "https://mcp.atlassian.com/v1/mcp"))
-
-          ((name . "datadog")
-           (type . "http")
-           (headers . [])
-           (url . "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp"))))
   :custom
   (agent-shell-prefer-viewport-interaction t)
   (agent-shell-highlight-blocks t)
@@ -313,16 +302,6 @@
   :ensure nil
   ;; Interpret ANSI color codes in compilation buffer
   :hook (compilation-filter . ansi-color-compilation-filter))
-
-;;;; bazel
-
-(use-package bazel
-  :ensure (bazel
-           :host github
-           :depth nil
-           :repo "cfclrk/emacs-bazel-mode")
-  :custom
-  (bazel-buildifier-before-save t))
 
 ;;;; bicycle
 
